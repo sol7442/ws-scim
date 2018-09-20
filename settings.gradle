@@ -1,0 +1,3 @@
+
+rootProject.name = 'ws-scim'
+include "ws-scim-server","ws-scim-core","ws-scim-agent","ws-scim-gw","ws-scim-hr"
