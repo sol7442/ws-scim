@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>WessionIM :: Manager</title>
+
+  <link rel="stylesheet" href="https://cdn.datatables.net/v/bs-3.3.7/jqc-1.12.4/dt-1.10.15/datatables.min.css"/>
+  <link rel="stylesheet" href="./css/style.css">
+  <style>
+	body {background-color:#eee;}
+	#form-signin {margin-top: 24%;color:#676a6c;}
+		fieldset {padding:50px;background-color:#fff;border-radius:3px;}
+			.form-group {margin-bottom:20px;}
+				.form-group .form-control {font-size:13px; background-color:#eee;}
+
+  </style>
+ </head>
+ <body>
+  <div id="wapper">
+	<nav class="navbar navbar-fixed-top navbar-inverse">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand"><div class='subtitle'>Manager</div><b>WessionIM</b></a>
+			</div>
+		</div>
+	</nav>
+    <div class="container">
+		<div class="col-sm-4 col-sm-offset-4">
+			<form name="login" id='form-signin'>
+				<h2>Login to WessionIM</h2>
+
+				<fieldset>
+					<div class="form-group">
+						<label for="puseri" class="sr-only">사용자 아이디</label>
+						<input type="text" class="form-control input-sm" name="puserid" id="puserid" placeholder="User ID">
+					</div>
+					<div class="form-group">
+						<label for="ppasswd" class="sr-only">비밀번호</label>
+						<input type="password" class="form-control input-sm" name="ppasswd" id="ppasswd" placeholder="Password">
+					</div>
+
+					<button class="btn btn-sm btn-info btn-block" type="button" id="signin">Sign in</button>
+				</fieldset>
+			  </form>
+		</div>
+	</div>
+
+	<footer class="footer navbar-inverse">
+		<div class="container">
+			<p class="text-muted">&copy; 2017 wowsanta.com, all right reserved.</p>
+		</div>
+	</footer>
+  </div> <!-- /container -->
+
+
+  <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+  <script>
+	$("#signin").click(function(){
+		login.action = "./authentication";
+		login.method = "post";
+		login.submit();
+	});
+  </script>
+ </body>
+</html>

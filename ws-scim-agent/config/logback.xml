@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false" scan="fasle" scanPeriod="3000 seconds">
+
+	<!-- PROPERTIES --> 
+  	<property name="LOG_PATH" value="./logs" />
+  	<property name="LOG_ARCHIVE" value="${LOG_PATH}/archive" />
+  	<if condition='isDefined("log.mode")'>
+  		<then>
+  			<property name="LOG_MODE" value="${log.mode}" />
+  		</then>
+  		<else>
+  			<property name="LOG_MODE" value="DEBUG" />
+  		</else>
+  	</if>
+  	
+  	
+    <!-- LOGGER -->    
+ 	<logger name="SystemLog" level="${LOG_MODE}" >
+		<appender-ref ref="STDOUT" />
+  	</logger>
+	<logger name="AccessLog" level="${LOG_MODE}" >
+		<appender-ref ref="STDOUT" />
+	</logger>
+	<logger name="ProcessLog" level="${LOG_MODE}" >
+		<appender-ref ref="STDOUT" />
+	</logger>
+	<logger name="ProvisionLog" level="${LOG_MODE}" >
+		<appender-ref ref="STDOUT" />
+	</logger>
+	<logger name="ScheduleLog" level="${LOG_MODE}" >
+		<appender-ref ref="STDOUT" />
+	</logger>
+	<logger name="auditLog" level="${LOG_MODE}" >
+		<appender-ref ref="STDOUT" />
+	</logger>
+  
+  <!-- APPENDER -->	
+  	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    	<layout class="ch.qos.logback.classic.PatternLayout">
+        	<pattern>%d{yyyy-MM-dd HH:mm:ss} [%-5p] [%F]%M\(%L\) : %m%n</pattern>
+      	</layout>
+  	</appender>
+</configuration>

@@ -1,0 +1,19 @@
+{
+	"elapsed":20198,
+	"ghost":[
+		{"companyID":"WS001234","telephone":"4351","id":"eun","title":"임원","scimID":null,"Name":"이은준"},
+		{"companyID":"W00S1103","telephone":"9140","id":"one","title":"과장","scimID":null,"Name":"임시원"},
+		{"companyID":"WS001588","telephone":"1411","id":"sooni","title":"임시","scimID":null,"Name":"향순이"}
+	],
+	"deactivate":[
+		{"companyID":"WS001234","telephone":"4351","id":"eun","title":"임원","scimID":null,"Name":"이은준", "lastLoginTime":"Mon Jun 12 14:28:33 KST 2017"},
+		{"companyID":"W00S1103","telephone":"9140","id":"one","title":"과장","scimID":null,"Name":"임시원", "lastLoginTime":"Mon Jun 12 14:28:33 KST 2017"},
+		{"companyID":"WS001588","telephone":"1411","id":"sooni","title":"임시","scimID":null,"Name":"향순이", "lastLoginTime":"Mon Jun 12 14:28:33 KST 2017"}
+	],
+	"count_update":0,
+	"members":1361,
+	"count_add":0,
+	"startTime":"Mon Jun 12 14:28:33 KST 2017",
+	"endTime":"Mon Jun 12 14:28:53 KST 2017",
+	"target":"BuddyOne"
+} 

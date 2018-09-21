@@ -1,0 +1,79 @@
+  {
+    "schemas":[
+    	"urn:wowsanta:wessionIM:config:ProvisioningConfig"
+    	],
+    	
+    "meta": {
+      "location": "http://yoursite.com/command/v1.0/ProvisioningConfig",
+      "resourceType": "ProvisioningConfig",
+      "created": "2010-01-23T04:56:22Z",
+      "lastModified": "2011-05-13T04:42:34Z",
+      "version": "W\/\"3694e05e9dff594\""
+    },
+    
+    "documentationUri": "http://yoursite.com/scim/v2.0/help/scim.html",
+    "status":"service", 
+    "status-comment":"service, conciliation, stop, initialize",
+    "provision-count":2,
+    "provision":[
+    	{
+    		"code":"GW",
+    		"name":"Groupware",
+    		"scim":{
+    			"support":false,
+    			"url":"http://localhost:5001/scim/v2.0"
+    		},
+    		"agent":{
+    			"support":false,
+    			"url":"http://localhost:5001/command"
+    		},
+    		"schedule":{
+    			"unit":"day",
+    			"unit-comment":"min, hour, day",
+    			"interval": 1,
+    			"start-base":[
+    				"03:00:00"
+    			],
+    			"skip":[
+    			    "Sun"
+    			]
+    		},
+    		"deprovision":{
+    			"support":false,
+    			"command":"delete",
+    			"command-commnet":"delete, deactivate"
+    		}
+    	},
+    	{
+    		"code":"IMS",
+    		"name":"BuddyOne",
+    		"scim":{
+    			"support":true,
+    			"url":"http://localhost:5001/scim/v2.0"
+    		},
+    		"agent":{
+    			"support":true,
+    			"url":"http://localhost:5001/command"
+    		},
+    		"schedule":{
+    			"unit":"min",
+    		    "unit-comment":"min, hour, day",
+    			"interval": 5,
+    			"start-base":[
+    				"01:00:00"
+    			],
+    			"skip":[
+    				["08:00:00", "10:00:00"],
+    			    "Sun",
+    			    ["Sat", "08:00:00", "10:00:00"]
+    			]
+    		},
+    		"deprovision":{
+    			"support":true,
+    			"command":"deactivate",
+    			"command-comment":"delete, deactivate"
+    		}
+    	}
+    ]
+    
+  }

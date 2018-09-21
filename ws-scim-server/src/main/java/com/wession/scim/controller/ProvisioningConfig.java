@@ -37,7 +37,7 @@ public class ProvisioningConfig {
 
 
 	private void init() {
-		String file_path = "./reference/ProvisioningConfig.json";
+		String file_path = "./config/ProvisioningConfig.json";
 		try {
 			obj = (JSONObject) JSONValue.parse(new FileReader(file_path));
 		} catch (FileNotFoundException e) {

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+	<property name="LOGS_ABSOLUTE_PATH" value="./logs" />
+	
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+			</Pattern>
+		</layout>
+	</appender>
+
+	<appender name="ROLLING_SYSTEM" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOGS_ABSOLUTE_PATH}/system.log</file>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOGS_ABSOLUTE_PATH}/system.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<charset>EUC-KR</charset>  
+			<pattern>[%d{yyyy-MM-dd}][%d{HH:mm:ss}][%level] %msg%n</pattern>
+		</encoder>
+		
+	</appender>
+	
+	<appender name="ROLLING_ACCESS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOGS_ABSOLUTE_PATH}/access.log</file>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOGS_ABSOLUTE_PATH}/access.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+		    <charset>EUC-KR</charset>  
+			<pattern>[%d{yyyy-MM-dd HH:mm:ss}] %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="ROLLING_PROCESS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOGS_ABSOLUTE_PATH}/process.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<charset>EUC-KR</charset>  
+			<pattern>[%d{yyyy-MM-dd}][%d{HH:mm:ss}][%level] %msg%n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOGS_ABSOLUTE_PATH}/process.log.%d{yyyy-MM-dd}
+			</fileNamePattern>
+		</rollingPolicy>
+	</appender>
+	
+	<appender name="ROLLING_PROVISIONING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOGS_ABSOLUTE_PATH}/provision.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<charset>EUC-KR</charset>  
+			<pattern>[%d{yyyy-MM-dd}][%d{HH:mm:ss}][%level] %msg%n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOGS_ABSOLUTE_PATH}/provision.log.%d{yyyy-MM-dd}
+			</fileNamePattern>
+		</rollingPolicy>
+	</appender>
+	
+	<appender name="ROLLING_SCHEDULE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOGS_ABSOLUTE_PATH}/scheduler.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<charset>EUC-KR</charset>  
+			<pattern>[%d{yyyy-MM-dd}][%d{HH:mm:ss}][%level] %msg%n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOGS_ABSOLUTE_PATH}/scheduler.log.%d{yyyy-MM-dd}
+			</fileNamePattern>
+		</rollingPolicy>
+	</appender>
+	
+	<appender name="ROLLING_AUDIT" class="ch.qos.logback.core.rolling.RollingFileAppender" prudent="true">
+		<file>${LOGS_ABSOLUTE_PATH}/audit/resources.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<charset>EUC-KR</charset>  
+			<pattern>[%d{yyyy-MM-dd}][%d{HH:mm:ss}][%level] %msg%n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOGS_ABSOLUTE_PATH}/audit/resources.log.%d{yyyy-MM-dd}
+			</fileNamePattern>
+		</rollingPolicy>
+	</appender>
+
+	<logger name="SystemLog" level="info" >
+		<appender-ref ref="ROLLING_SYSTEM" />
+	</logger>
+	<logger name="AccessLog" level="info" >
+		<appender-ref ref="ROLLING_ACCESS" />
+	</logger>
+	<logger name="ProcessLog" level="info" >
+		<appender-ref ref="ROLLING_PROCESS" />
+	</logger>
+	<logger name="ProvisionLog" level="info" >
+		<appender-ref ref="ROLLING_PROVISIONING" />
+	</logger>
+	<logger name="ScheduleLog" level="info" >
+		<appender-ref ref="ROLLING_SCHEDULE" />
+	</logger>
+	<logger name="auditLog" level="info" >
+		<appender-ref ref="ROLLING_AUDIT" />
+	</logger>
+
+	<root level="info">
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>

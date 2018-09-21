@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>WessionIM</title>
+
+  <link rel="stylesheet" href="https://cdn.datatables.net/v/bs-3.3.7/jqc-1.12.4/dt-1.10.15/datatables.min.css"/>
+  <style>
+	.table>tbody>tr:last-child>td {
+		border-bottom:4px solid #ddd;
+	}
+  </style>
+ </head>
+ <body>
+  <div id="wapper">
+	<nav class="navbar navbar-default navbar-static-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand">WessionIM - Web Admin</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="#">Account List</a></li>
+					<li><a href="#">Group List</a></li>
+					<li><a href="#">Provisioning</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="active"><a href="#">Login by EJ.Lee</a></li>
+					<li><a href="#">ServiceProvider</a></li>
+					<li><a href="#">Scheduler</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container">
+		<div id="tableWrapper">
+			<table id="dataTable" class="table">
+				<thead>
+					<tr>
+						<th>External ID</th>
+						<th>Department Name</th>
+						<th>User Name</th>
+						<th>Title</th>
+						<th>Emails</th>
+						<th>Line</th>
+						<th>IMS</th>
+						<th>ID</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+  </div>
+
+  <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://cdn.datatables.net/v/bs-3.3.7/jqc-1.12.4/dt-1.10.15/datatables.min.js"></script>
+  <script>
+			$("#dataTable").DataTable({
+				"processing": true,
+				"ajax" : {
+					"url": "/scim/v2.0/Users?attributes=externalId,title,userName,deptname,displayName,phoneNumbers,emails,ims&count=3500",
+					"dataSrc": "Resources"
+				},
+				"columns" : [
+					{"data":"externalId"},
+					{"data":"deptname"},
+					{"data":"userName"},
+					{"data":"title"},
+					{"data":"emails[0].value"},
+					{"data":"phoneNumbers[0].value"},
+					{"data":"ims[0].value"},
+					{"data":"id"}
+				]
+			});
+  </script>
+ </body>
+</html>

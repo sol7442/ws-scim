@@ -1,0 +1,41 @@
+{
+    "totalResults": 1392,
+    "startIndex": 1,
+    "itemsPerPage": 200,
+    "schemas": ["urn:ietf:params:scim:api:messages:2.0:ListResponse"],
+    "Resources": [{
+        "displayName": "기획부 이은준 임원",
+        "externalId": "WS001234",
+        "groups": [{
+            "display": "Groupware",
+            "value": "ce9c1b4e-6993-4558-a5a8-0f79b26cb7b3",
+            "$ref": "http:\/\/localhost:5000\/scim\/v2.0\/Groups\/ce9c1b4e-6993-4558-a5a8-0f79b26cb7b3"
+        }, {
+            "display": "BuddyOne",
+            "value": "8752fc15-5519-4ff3-af07-1198b0516f90",
+            "$ref": "http:\/\/localhost:5000\/scim\/v2.0\/Groups\/8752fc15-5519-4ff3-af07-1198b0516f90"
+        }],
+        "active": true,
+        "userName": "이은준",
+        "title": "임원",
+        "phoneNumbers": [{
+            "type": "work", "value": "4351"
+        }],
+        "ims": [{
+            "type": "work", "value": "eunjun3"
+        }],
+        "deptname": "기획부",
+        "emails": [{
+            "type": "work", "value": "eunjun.lee@wession.com"
+        }],
+        "meta": {
+            "created": "2017-05-29T08:03:44Z",
+            "location": "http:\/\/yoursite.com:8080\/scim\/v2.0\/Users\/72c610ce-177b-4492-aee1-e5d060822f39",
+            "lastModified": "2017-05-29T08:03:44Z",
+            "version": "W\/\"00399bf59cda0ded-002\"",
+            "resourceType": "User"
+        },
+        "schemas": ["urn:ietf:params:scim:schemas:core:2.0:User","urn:ietf:params:scim:schemas:core:2.0:User"],
+        "id": "2e0ddc0d-af69-44a6-a220-132e65dd8c30"
+    }]
+}

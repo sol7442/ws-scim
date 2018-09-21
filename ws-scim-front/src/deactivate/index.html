@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WessionIM :: Manager</title>
+
+  <link rel="stylesheet" href="https://cdn.datatables.net/v/bs-3.3.7/jqc-1.12.4/dt-1.10.15/datatables.min.css"/>
+  <link rel="stylesheet" href="../css/style.css">
+ </head>
+ <body>
+  <div id="wapper">
+	<nav class="navbar navbar-fixed-top navbar-inverse"></nav>
+
+	<div class="container">
+		<div class='breadcrumb'>
+			<span>WessionIM <i class='glyphicon glyphicon-menu-right'></i>  미사용계정</span>
+		</div>
+		<div id="tableWrapper">
+			<table id="dataTable" class="table table-bordered table-condensed">
+				<thead>
+					<tr>
+						<th>No</th>
+						<th>대상시스템</th>
+						<th>아이디</th>
+						<th>업무아이디</th>
+						<th>성명</th>
+						<th>직급</th>
+						<th>최종로그인시간</th>
+						<th>비고</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+
+	<footer class="footer navbar-inverse">
+		<div class="container">
+			<p class="text-muted">&copy; 2010 wowsanta.com, all right reserved.</p>
+		</div>
+	</footer>
+  </div>
+
+  <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://cdn.datatables.net/v/bs-3.3.7/jqc-1.12.4/dt-1.10.15/datatables.min.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="app.js"></script>
+ </body>
+</html>

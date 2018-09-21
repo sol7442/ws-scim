@@ -66,7 +66,7 @@ public class ServiceProviderConfig {
 	}
 
 	private void init() {
-		String file_path = "./reference/ServiceProviderConfig.json";
+		String file_path = "./config/ServiceProviderConfig.json";
 		try {
 			obj = (JSONObject) JSONValue.parse(new FileReader(file_path));
 			System.out.println("ServiceProviderConfig : \n" + obj.toJSONString());

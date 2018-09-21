@@ -1,0 +1,25 @@
+{
+	"data":[
+		{
+			"target":{
+			       "name":"Groupware",
+				"url":"http://gw.wession.com",
+				"ip":"10.10.10.1",
+				"agent":true,
+				"manager":"홍길동(02-454-4545)"
+			},
+		      "provisioning":{
+				"type":"MySQL",
+				"attributes":[
+				    "id",
+				    "externalId",
+				    "title",
+				    "displayName",
+				    "deptname",
+				    "emails"
+				]
+			}
+
+		}
+	]
+}

@@ -1,0 +1,55 @@
+[
+  {
+    "order": "0601-01",
+    "target": {
+      "name": "Groupware",
+      "url": "http://gw.wession.com",
+      "ip": "10.10.10.1",
+      "agent": true,
+      "manager": "홍길동(02-454-4545)"
+    },
+    "process": {
+      "startTime": "Mon Jun 12 14:28:33 KST 2017",
+      "endTime": "Mon Jun 12 14:28:53 KST 2017",
+      "elapsed": 20412,
+      "add": 5,
+      "delete": 1,
+      "deactivate": 14,
+      "modify": 8,
+      "ghost": 5,
+      "ghost-diff": 1,
+      "deactivate-diff": 0,
+      "record": [{
+          "order": "0601-01",
+          "count": 684,
+          "count-diff": 5
+        },{
+          "order": "0530-01",
+          "count": 679,
+          "count-diff": -2
+        }]
+    },
+    "add": [
+      {"display": "이은준(WS01213,기획부)"},
+      {"display": "이은준(WS01213,기획부)"}
+    ],
+    "delete": [
+      {"display": "이은준(WS01213,기획부)"}
+    ],
+    "modify": [
+      {"display": "이은준(WS01213,기획부)"},
+      {"display": "이은준(WS01213,기획부)"}
+    ],
+    "ghost": [
+      {"display": "이은준(eunjun.lee@wession.com)"},
+      {"display": "이은준(eunjun.lee@wession.com)"},
+      {"display": "이은준(eunjun.lee@wession.com)"},
+      {"display": "이은준(eunjun.lee@wession.com)"}
+    ],
+    "deactivate": [
+      {"display": "이은준(WS01213,기획부)"},
+      {"display": "이은준(WS01213,기획부)"}
+    ]
+  }
+]
+

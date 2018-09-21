@@ -24,7 +24,7 @@ public class WessionLog {
         lc.reset();
 
         try {
-            configurator.doConfigure("D:\\DEV_05\\WessionIM\\wession_logback.xml");
+            configurator.doConfigure("./config/logback.xml");
         } catch (JoranException e) {
             e.printStackTrace();
         }

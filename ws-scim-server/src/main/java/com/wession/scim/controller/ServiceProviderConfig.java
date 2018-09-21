@@ -1,5 +1,6 @@
 package com.wession.scim.controller;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -66,7 +67,12 @@ public class ServiceProviderConfig {
 	}
 
 	private void init() {
-		String file_path = "./reference/ServiceProviderConfig.json";
+		String file_path = "./config/ServiceProviderConfig.json";
+		
+		File file = new File(file_path);
+		System.out.println(file);
+		System.out.println(file.getAbsolutePath());
+		
 		try {
 			obj = (JSONObject) JSONValue.parse(new FileReader(file_path));
 			System.out.println("ServiceProviderConfig : \n" + obj.toJSONString());

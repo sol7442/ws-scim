@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WessionIM :: Manager</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/v/bs-3.3.7/jqc-1.12.4/dt-1.10.15/datatables.min.css"/>
+  <link rel="stylesheet" href="../css/style.css">
+ </head>
+ <body>
+  <div id="wapper">
+	<nav class="navbar navbar-fixed-top navbar-inverse"></nav>
+
+	<div class="container article-content">
+		<div class='breadcrumb'>
+			<span>WessionIM <i class='glyphicon glyphicon-menu-right'></i>  관리계정</span>
+		</div>
+		<div id="tableWrapper">
+			<table id="dataTable" class="table table-bordered table-condensed">
+				<thead>
+					<tr>
+						<th>No</th>
+						<th>사번</th>
+						<th>성명</th>
+						<th>생성일자</th>
+						<th>수정일자</th>
+						<th>그룹</th>
+						<th>상세보기</th>
+						<th>비고</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+
+	<footer class="footer navbar-inverse">
+		<p class="text-muted">&copy; 2010 wowsanta.com, all right reserved.</p>
+	</footer>
+  </div>
+  <div class='wrap-loading display-none'>
+	<div><i class='zmdi zmdi-refresh zmdi-hc-3x zmdi-hc-spin'></i></div>
+  </div>
+  <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://cdn.datatables.net/v/bs-3.3.7/jqc-1.12.4/dt-1.10.15/datatables.min.js"></script>
+  <script src="../js/tmpl.min.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="app.js"></script>
+  <div class="modal fade" tabindex="-1" role="dialog"></div>
+ </body>
+</html>

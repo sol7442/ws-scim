@@ -1,0 +1,176 @@
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body" id="form-container" >
+		</div>
+		<div class="modal-footer">
+			<div class="pull-left">
+				<button type="button" class="btn btn-info btn-sm btn-save">저장</button>
+				<button type="button" class="btn btn-danger btn-sm btn-del">계정 삭제</button>
+			</div>
+			<button type="button" class="btn btn-info btn-sm btn-view-scim" >SCIM 보기</button>
+		</div>
+	</div>
+</div>
+<script type="text/x-tmpl" id="tmpl-manager">
+<form action='' class='form-horizontal' id='resource'>
+	<input type='hidden' name='pscimid' id='pscimid' value='{%=o.id%}'/>
+	<fieldset>
+		<div class='form-group'>
+			<label for='pversion' class='control-label col-sm-3'>version</label>
+			<div class='col-sm-7'>
+				<input type='text' name='pversion' id='pversion' value='{%=o.meta.version%}' class='form-control input-sm'>
+			</div>
+		</div>
+		<div class='form-group'>
+			<label for='pcreated' class='control-label col-sm-3'>created</label>
+			<div class='col-sm-7'>
+				<input type='text' name='pcreated' id='pcreated' value='{%=o.meta.created%}' class='form-control input-sm'>
+			</div>
+		</div>
+		<div class='form-group'>
+			<label for='plastmodified' class='control-label col-sm-3'>lastModified</label>
+			<div class='col-sm-7'>
+				<input type='text' name='plastmodified' id='plastmodified' value='{%=o.meta.lastModified%}' class='form-control input-sm'>
+			</div>
+		</div>
+		<div class='form-group'>
+			<label for='ptrue' class='control-label col-sm-3'>active</label>
+			<div class='col-sm-7 btn-group' data-toggle='buttons'>
+			{% if (o.active) { %}
+				<label class='btn btn-info active btn-sm'>
+					<input type='radio' name='active' id='ptrue' value='true' checked='checked'>ON
+				</label>
+				<label class='btn btn-default btn-sm'>
+					<input type='radio' name='active' id='pfalse' value='false'>OFF
+				</label>
+			{% } else { %}
+				<label class='btn btn-default btn-sm'>
+					<input type='radio' name='active' id='ptrue' value='true'>ON
+				</label>
+				<label class='btn btn-danger active btn-sm'>
+					<input type='radio' name='active' id='pfalse' value='false' checked='checked'>OFF
+				</label>
+			{% } %}
+			</div>
+		</div>
+		<div class='form-group'>
+			<label for='pexternalid' class='control-label col-sm-3'>externalId</label>
+			<div class='col-sm-7'>
+				<input type='text' name='pexternalid' id='pexternalid' value='{%=o.externalId%}' class='form-control input-sm'>
+			</div>
+		</div>
+		<div class='form-group'>
+			<label for='pusername' class='control-label col-sm-3'>userName</label>
+			<div class='col-sm-7'>
+				<input type='text' name='pusername' id='pusername' value='{%=o.userName%}' class='form-control input-sm'>
+			</div>
+		</div>
+		<div class='form-group'>
+			<label for='pdisplayname' class='control-label col-sm-3'>displayName</label>
+			<div class='col-sm-7'>
+				<input type='text' name='pdisplayname' id='pdisplayname' value='{%=o.displayName%}' class='form-control input-sm'>
+			</div>
+		</div>
+		<div class='form-group'>
+			<label for='ptitle' class='control-label col-sm-3'>title</label>
+			<div class='col-sm-7'>
+				<input type='text' name='ptitle' id='ptitle' value='{%=o.title%}' class='form-control input-sm'>
+			</div>
+		</div>
+		{% if (o.emails.length > 0) { %}
+			{% for (var i=0; i<o.emails.length; i++) { %}
+				<div class='form-group'>
+					<label for='pemails' class='control-label col-sm-3'>emails</label>
+					<div class='col-sm-7'>
+						<div class='input-group'>
+							<input type='text' name='pemails'  value='"{%=o.emails[i].type%}","{%=o.emails[i].value%}"' class='form-control input-sm'>
+							<div class='input-group-btn'>
+								<button class='btn btn-info btn-sm btn-add-email' type='button' title='add email'><i class='glyphicon glyphicon-plus'></i></button>
+							</div>
+						</div>
+					</div>
+				</div>
+			{% } %}
+		{% } else { %}
+			<div class='form-group'>
+				<label for='pemails' class='control-label col-sm-3'>emails</label>
+				<div class='col-sm-7'>
+					<div class='input-group'>
+						<input type='text' name='pemails'  value='' class='form-control input-sm'>
+						<div class='input-group-btn'>
+							<button class='btn btn-info btn-sm btn-add-email' type='button' title='add email'><i class='glyphicon glyphicon-plus'></i></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% } %}
+
+		{% if (o.ims.length > 0) { %}
+			{% for (var i=0; i<o.ims.length; i++) { %}
+				<div class='form-group'>
+					<label for='pims' class='control-label col-sm-3'>ims</label>
+					<div class='col-sm-7'>
+						<div class='input-group'>
+							<input type='text' name='pims'  value='"{%=o.ims[i].type%}","{%=o.ims[i].value%}"' class='form-control input-sm'>
+							<div class='input-group-btn'>
+								<button class='btn btn-info btn-sm btn-add-ims' type='button' title='add ims'><i class='glyphicon glyphicon-plus'></i></button>
+							</div>
+						</div>
+					</div>
+				</div>
+			{% } %}
+		{% } else { %}
+			<div class='form-group'>
+				<label for='pims' class='control-label col-sm-3'>ims</label>
+				<div class='col-sm-7'>
+					<div class='input-group'>
+						<input type='text' name='pims'  value='' class='form-control input-sm'>
+						<div class='input-group-btn'>
+							<button class='btn btn-info btn-sm btn-add-ims' type='button' title='add ims'><i class='glyphicon glyphicon-plus'></i></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% } %}
+
+		{% if (o.phoneNumbers && o.phoneNumbers.length > 0) { %}
+			{% for (var i=0; i<o.phoneNumbers.length; i++) { %}
+				<div class='form-group'>
+					<label for='pphonenumbers' class='control-label col-sm-3'>phoneNumbers</label>
+					<div class='col-sm-7'>
+						<div class='input-group'>
+							<input type='text' name='pphonenumbers'  value='"{%=o.phoneNumbers[i].type%}","{%=o.phoneNumbers[i].value%}"' class='form-control input-sm'>
+							<div class='input-group-btn'>
+								<button class='btn btn-info btn-sm btn-add-phonenumber' type='button' title='add phoneNumber'><i class='glyphicon glyphicon-plus'></i></button>
+							</div>
+						</div>
+					</div>
+				</div>
+			{% } %}
+		{% } else { %}
+			<div class='form-group'>
+				<label for='pphonenumbers' class='control-label col-sm-3'>phoneNumbers</label>
+				<div class='col-sm-7'>
+					<div class='input-group'>
+						<input type='text' name='pphonenumbers' value='' class='form-control input-sm'>
+						<div class='input-group-btn'>
+							<button class='btn btn-info btn-sm btn-add-phonenumber' type='button' title='add phoneNumber'><i class='glyphicon glyphicon-plus'></i></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% } %}
+		<div class='form-group'>
+			<label for='pgroups' class='control-label col-sm-3'>groups</label>
+			<div class='col-sm-7'>
+				<input type='text' name='pgroups' id='pgroups' value='' class='form-control input-sm'>
+			</div>
+		</div>
+	</fieldset>
+</form>
+</script>
