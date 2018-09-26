@@ -1,0 +1,32 @@
+
+.app-header {
+    height: 50px;
+    background-color: black;
+}
+
+
+.app-footer {
+     height: 40 px;
+    background-color: black;
+
+    color: #d1d1d1;
+    margin: auto;
+    padding: 10px 15px;
+    font-size: 12px;
+}
+.app-content{
+    height: 700px;
+}
+
+.app-brand {
+    line-height: 10px;
+    width: 135px;
+    margin-top: -5px;
+    color: #fff;
+    font-size: 20px
+}
+.app-subtitle{
+    font-size: 11px;
+    margin-bottom: 7px;
+    text-align: right;
+}

@@ -59,7 +59,7 @@ public class SparkMain {
 		
 		System.out.println(provision_config.getAsString("status"));
 		
-		systemLog.info("Start Spark Web Framework (WessionIM REST 웹서비스를 기동합니다.) ********************\n\n");
+		systemLog.info("Start Spark Web Framework (WessionIM REST �쎒�꽌鍮꾩뒪瑜� 湲곕룞�빀�땲�떎.) ********************\n\n");
 		
 		long startTime = System.currentTimeMillis();
 		
@@ -73,7 +73,7 @@ public class SparkMain {
 		//Spark.staticFileLocation("/html");
 		Spark.staticFiles.registerMimeType("ico", "ico");
 		Spark.staticFiles.externalLocation(server_config.getAsString("staticFiles"));
-		//Spark.staticFiles.externalLocation("/tmp/upload"); //외부경로사용? 쓰는방법확인!
+		//Spark.staticFiles.externalLocation("/tmp/upload"); //�쇅遺�寃쎈줈�궗�슜? �벐�뒗諛⑸쾿�솗�씤!
 		
 		//Spark.secure("deploy/jks_keystore", "wessionim", null, null);
 		
@@ -108,7 +108,7 @@ public class SparkMain {
 			req.attribute("RequestTime", System.currentTimeMillis()+"");
 /*
 			//System.out.println(req.pathInfo());
-			// localhost에서 올라온 것들은 검증하지 않음
+			// localhost�뿉�꽌 �삱�씪�삩 寃껊뱾�� 寃�利앺븯吏� �븡�쓬
 			String ip = req.ip();
 			if ("0:0:0:0:0:0:0:1".equals(ip) || "127.0.0.1".equals(ip)) {
 				System.out.println("Local Working. No Authentication accepted.");
@@ -172,7 +172,7 @@ public class SparkMain {
 		post("/scim/.search", (req, res) -> sm.search(req, res));
 		
 		// Search = GET 
-		// https://example.com/{v}/{resource}?ﬁlter={attribute}{op}{value}&sortBy={attributeName}&sortOrder={ascending|descending}
+		// https://example.com/{v}/{resource}?詮걄ter={attribute}{op}{value}&sortBy={attributeName}&sortOrder={ascending|descending}
 
 		get("/command/:version/:command", (req, res) -> sm.command(req, res));
 		get("/command/:version/ProvisioningConfig", (req, res) -> sm.provisioning(req, res));
@@ -297,10 +297,13 @@ public class SparkMain {
 
 
 	private String auth(Request req, Response res) {
-		// 정상로그인 시 manger로 이동
-		// 오류시 index.html로 다시 이동
+		// �젙�긽濡쒓렇�씤 �떆 manger濡� �씠�룞
+		// �삤瑜섏떆 index.html濡� �떎�떆 �씠�룞
 		String id = req.raw().getParameter("puserid");
 		String pwd = req.raw().getParameter("ppasswd");
+		
+		System.out.println("auth id : " + id);
+
 		
 		if (id.equals("111")) {
 			res.cookie("token", "eyJ0eXAiOiJKV1QiLCJpc3N1ZURhdGUiOjE0OTYxOTk5NjEyMzMsImFsZyI6IkhTMjU2In0.eyJzdWIiOiJTQ0lNL1VTRVIiLCJpc3MiOiJTQ0lNIiwiaWF0IjoxNDk2MTk5OTYxLCJleHAiOjE1Mjc3MzU5NjEsInByb3ZpZGVyIjoidHJ1ZSIsInNlcnZlcklwIjoiMTI3LjAuMC4xIiwiY29scGFydCI6IkEwMDEiLCJhcHBDb2RlIjoiRGVtb0hSIn0.utQJYMdIRCJUMM5On3-G6Ay0mKBZ2aWnLKvcQ68kCl0");
