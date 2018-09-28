@@ -6,9 +6,11 @@
 
 
 .app-footer {
-     height: 40 px;
+    height: 40 px;
+    width: 100%;
     background-color: black;
-
+    bottom: 0px;
+    position: absolute;
     color: #d1d1d1;
     margin: auto;
     padding: 10px 15px;

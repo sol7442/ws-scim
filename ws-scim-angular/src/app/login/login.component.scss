@@ -16,17 +16,17 @@
 .center      {
     position: relative;
     display: inline-block;
-    width: 70%;
+    width: 90%;
     padding: 1em;
-
 }
 .left .right{
     width: 20%;
 }
 
 .login-form{
-    width: 100%;
-    margin: 20px;
+    width: 350px;
+    margin: 20px auto;
+    text-align: center;
 }
 .login-input{
     width: 100%
