@@ -9,8 +9,6 @@ public class AdminFilter implements Filter {
 	@Override
 	public void handle(Request request, Response response) throws Exception {
 		String authorization = request.headers("Authorization");
-		System.out.println("admin authorization :  " + authorization);
-		System.out.println("admin filter --");
 	}
 
 }

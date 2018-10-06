@@ -22,6 +22,8 @@ export class LoginComponent implements OnInit{
     login(event){
         console.log(event);
         console.log(this.admin);
-        this.service.login(this.admin);
+        let result = this.service.login(this.admin);
+
+        console.log("result", result);
     }
 }

@@ -8,6 +8,7 @@ import {HomeComponent} from './home/home.component';
 const appRoutes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthComponent] },
     { path: 'login', component: LoginComponent },
+    { path: 'home', component: HomeComponent },
 
     // otherwise redirect to home
     { path: '**', redirectTo: '' }

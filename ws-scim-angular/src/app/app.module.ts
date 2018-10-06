@@ -5,24 +5,22 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {AuthComponent} from './auth/auth.component';
 import {SCIMService} from './service/service.component';
 import {LoginModule} from './login/login.module';
-
+import {HomeModule} from './home/home.module';
 
 import {AppComponent } from './app.component';
-import {HomeComponent } from './home/home.component';
 
-import {routing} from './app.router';
+import {routing} from './app-routing.module';
 
 
 
 
 @NgModule({
   declarations: [
-    AppComponent,    
-    HomeComponent
+    AppComponent    
   ],
   imports: [
     BrowserModule,HttpClientModule,    
-    LoginModule,
+    LoginModule,HomeModule,
     routing,
 
   ],
