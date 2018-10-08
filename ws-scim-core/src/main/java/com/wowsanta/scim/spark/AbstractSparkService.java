@@ -1,7 +1,5 @@
 package com.wowsanta.scim.spark;
 
-import com.wowsanta.scim.conf.SparkService;
-
 import spark.Spark;
 
 public abstract class AbstractSparkService {

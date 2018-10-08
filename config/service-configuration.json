@@ -1,0 +1,4 @@
+{
+  "serviceProviderPath": "../config/service-provider.json",
+  "serviceConsumerPath": "../config/service-consumer.json"
+}

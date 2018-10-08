@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders , HttpParams  } from '@angular/common/http';
 import { Admin } from '../model/admin';
-import { Router } from '@angular/router';
+
 
 import 'rxjs/add/operator/map'
 
@@ -10,11 +10,10 @@ import 'rxjs/add/operator/map'
 export class SCIMService {
     constructor(
         private http: HttpClient,
-        private router: Router,
 
     ) { }
     
-    login(admin:Admin){
+    post(url:string, admin:Admin){
         console.log("request : " , admin);
 
         let headers = new HttpHeaders();
@@ -25,14 +24,7 @@ export class SCIMService {
             .set ('puserid', admin.puserid)
             .set('ppasswd', admin.ppasswd);
 
-        this.http.post<any>('/admin/login',params)
-            .subscribe(data => {
-                this.router.navigate(["home"]);
-            },
-            error => {
-                console.log("Error", error);
-            }
-        );
+        return this.http.post<any>(url ,params);
     }
     logout(){
 

@@ -3,12 +3,12 @@ import { Routes, RouterModule } from '@angular/router';
 import {AuthComponent} from './auth/auth.component';
 
 import {LoginComponent } from './login/login.component';
-import {HomeComponent} from './home/home.component';
+import {MainComponent} from './main/main.component';
 
 const appRoutes: Routes = [
-    { path: '', component: HomeComponent, canActivate: [AuthComponent] },
+    { path: '', component: MainComponent, canActivate: [AuthComponent] },
     { path: 'login', component: LoginComponent },
-    { path: 'home', component: HomeComponent },
+    { path: 'main', component: MainComponent },
 
     // otherwise redirect to home
     { path: '**', redirectTo: '' }

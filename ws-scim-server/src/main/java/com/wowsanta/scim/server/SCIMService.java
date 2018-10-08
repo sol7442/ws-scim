@@ -2,9 +2,9 @@ package com.wowsanta.scim.server;
 
 import java.io.FileNotFoundException;
 
-import com.wowsanta.scim.conf.ServiceProvider;
-import com.wowsanta.scim.server.filter.AdminFilter;
-import com.wowsanta.scim.server.router.admin.AdminRouteGroup;
+import com.wowsanta.scim.server.auth.AuthenticationRoute;
+import com.wowsanta.scim.server.env.EnvironmentRoute;
+import com.wowsanta.scim.server.filter.AuthFilter;
 import com.wowsanta.scim.spark.AbstractSparkService;
 
 import static spark.Spark.*;
@@ -13,7 +13,7 @@ import static spark.Spark.*;
 
 public class SCIMService extends AbstractSparkService{
 
-	private ServiceProvider config;
+	private Configuration config;
 	
 	public static void main(String[] args) {
 		SCIMService service = new SCIMService();
@@ -25,9 +25,15 @@ public class SCIMService extends AbstractSparkService{
 
 	private void initialize(String config_file) {
 		try {
-			config = ServiceProvider.load(config_file);
+			
+			config = Configuration.load(config_file);
+			
+			ServiceProvider provider = ServiceProvider.load(config.getServiceProviderPath());
+			ServiceConsumer consumer = ServiceConsumer.load(config.getServiceConsumerPath());
+			
 			System.out.println(config);
-			initialize(config.getWessionIM());
+			System.out.println(consumer);
+			initialize(provider.getWessionIM());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -35,8 +41,11 @@ public class SCIMService extends AbstractSparkService{
 
 	@Override
 	public void setRouters() {
-		before("/admin/*",new AdminFilter());
-		path("/admin/", new AdminRouteGroup());
+		before("/*",new AuthFilter());
+		
+		path("/auth/", new AuthenticationRoute());		
+		path("/evn/", new EnvironmentRoute());		
+		path("/scim/", new AuthenticationRoute());
 		
 		
 	}

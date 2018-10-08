@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import {SCIMService} from '../service/service.component';
 import {Admin} from '../model/admin';
@@ -12,7 +13,8 @@ export class LoginComponent implements OnInit{
     admin:Admin;
 
     constructor(
-        private service:SCIMService
+        private service:SCIMService,
+        private router: Router
     ){}
 
     ngOnInit(){
@@ -22,8 +24,11 @@ export class LoginComponent implements OnInit{
     login(event){
         console.log(event);
         console.log(this.admin);
-        let result = this.service.login(this.admin);
-
-        console.log("result", result);
+        this.service.post('/auth/login',this.admin).subscribe(result =>{
+            this.router.navigate(["main"]);
+        },
+        error => {
+            console.log("Error", error);
+        });
     }
 }

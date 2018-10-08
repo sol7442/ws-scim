@@ -5,7 +5,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {AuthComponent} from './auth/auth.component';
 import {SCIMService} from './service/service.component';
 import {LoginModule} from './login/login.module';
-import {HomeModule} from './home/home.module';
+import {MainModule} from './main/main.module';
 
 import {AppComponent } from './app.component';
 
@@ -20,7 +20,7 @@ import {routing} from './app-routing.module';
   ],
   imports: [
     BrowserModule,HttpClientModule,    
-    LoginModule,HomeModule,
+    LoginModule,MainModule,
     routing,
 
   ],

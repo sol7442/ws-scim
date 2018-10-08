@@ -3,8 +3,6 @@
     height: 50px;
     background-color: black;
 }
-
-
 .app-footer {
     height: 40 px;
     width: 100%;
@@ -23,7 +21,7 @@
 .app-brand {
     line-height: 10px;
     width: 135px;
-    margin-top: -5px;
+    margin-top: 5px;
     color: #fff;
     font-size: 20px
 }
