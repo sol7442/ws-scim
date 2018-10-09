@@ -2,9 +2,12 @@ package com.wowsanta.scim.server;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +43,11 @@ public class ServiceConsumer {
 	}
 	
 	public void save(String file_name) throws IOException {
-		FileWriter writer = new FileWriter(new File(file_name));
+	
+		OutputStreamWriter writer = new OutputStreamWriter(
+				new FileOutputStream(
+						new File(file_name)),StandardCharsets.UTF_8);
+		
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		gson.toJson(this,writer);
 		writer.flush();

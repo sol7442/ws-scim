@@ -24,7 +24,9 @@ export class LoginComponent implements OnInit{
     login(event){
         console.log(event);
         console.log(this.admin);
-        this.service.post('/auth/login',this.admin).subscribe(result =>{
+        this.service.post('/auth/login',this.admin).subscribe(
+        result =>{
+            console.log(result)
             this.router.navigate(["main"]);
         },
         error => {

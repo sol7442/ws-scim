@@ -26,7 +26,7 @@ export class SCIMService {
 
         return this.http.post<any>(url ,params);
     }
-    logout(){
-
+    get(url:string){
+        return this.http.get<any>(url);
     }
 }

@@ -9,7 +9,7 @@ import {AccountComponent} from './account/account.component';
 import {PolicyComponent} from './policy/policy.component';
 import {AuditComponent} from './audit/audit.component';
 import {EnvironmentComponent} from './environment/environment.component';
-import {AgentComponent} from './environment/agent/agent.component';
+import {EnvAngentComponent} from './environment/env-angent/env-angent.component'
 
 const mainRoutes: Routes = [
     { path: 'main', 
@@ -21,7 +21,7 @@ const mainRoutes: Routes = [
           {path:'policy',component:PolicyComponent},
           {path:'audit',component:AuditComponent},
           {path:'environment',component:EnvironmentComponent},
-          {path:'env_agent',component:AgentComponent},
+          {path:'env_agent',component:EnvAngentComponent},
           
       ] 
     },

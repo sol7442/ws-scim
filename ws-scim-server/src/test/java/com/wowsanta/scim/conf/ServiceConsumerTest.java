@@ -20,13 +20,13 @@ public class ServiceConsumerTest {
 		t1.setName("GW");
 		
 		Target t2 = new Target();
-		t2.setName("업무포탈");
-		t2.setCode("PT");
+		t2.setName("그룹포탈");
+		t2.setCode("GP");
 		Target t3 = new Target();
 		t3.setName("재경시스템");
 		t3.setCode("JLK");
 		Target t31 = new Target();
-		t31.setName("재정시스템");
+		t31.setName("재무시스템");
 		t31.setCode("JK1");
 		Target t32 = new Target();
 		t32.setName("경영시스템");
@@ -47,11 +47,11 @@ public class ServiceConsumerTest {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void load() {
 		try {
 			ServiceConsumer targets = ServiceConsumer.load(this.config_file_name);
-			System.out.println(targets);
+			System.out.println(targets.toJson());
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

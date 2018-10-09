@@ -44,7 +44,7 @@ public class SCIMService extends AbstractSparkService{
 		before("/*",new AuthFilter());
 		
 		path("/auth/", new AuthenticationRoute());		
-		path("/evn/", new EnvironmentRoute());		
+		path("/env/", new EnvironmentRoute());		
 		path("/scim/", new AuthenticationRoute());
 		
 		

@@ -12,15 +12,17 @@ import {AccountComponent} from './account/account.component';
 import {PolicyComponent} from './policy/policy.component';
 import {AuditComponent} from './audit/audit.component';
 import {EnvironmentComponent} from './environment/environment.component';
-import {AgentComponent} from './environment/agent/agent.component';
+import {EnvAngentModule} from './environment/env-angent/env-angent.module'
 
 @NgModule({
     imports: [
         MenubarModule,TabMenuModule,
-        MainRoutingModule
+        MainRoutingModule,
+        EnvAngentModule
+
     ],
     declarations: [
-        MainComponent,WorkComponent,AccountComponent,PolicyComponent,AuditComponent,EnvironmentComponent,AgentComponent
+        MainComponent,WorkComponent,AccountComponent,PolicyComponent,AuditComponent,EnvironmentComponent
     ],
     exports: [        
         

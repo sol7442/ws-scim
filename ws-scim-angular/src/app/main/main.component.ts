@@ -19,7 +19,7 @@ export class MainComponent {
                 items:[
                     { label: '서버설정',routerLink:["environment"] },
                     { label: 'XX설정',routerLink:["environment"] },
-                    { label: '에이전트',routerLink:["environment"] },
+                    { label: '에이전트',routerLink:["env_agent"] },
                     { label: '관리자',routerLink:["env_agent"] },
                 ]
 
