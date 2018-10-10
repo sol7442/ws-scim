@@ -6,7 +6,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import com.wowsanta.scim.resource.Target;
-import com.wowsanta.scim.server.ServiceConsumer;
+import com.wowsanta.scim.service.ServiceConsumer;
 
 
 public class ServiceConsumerTest {
@@ -32,12 +32,11 @@ public class ServiceConsumerTest {
 		t32.setName("경영시스템");
 		t32.setCode("JK2");
 		
-		t3.putSubTarget(t31);
-		t3.putSubTarget(t32);
 		
 		targets.putTarget(t1);
 		targets.putTarget(t2);
-		targets.putTarget(t3);
+		targets.putTarget(t31);
+		targets.putTarget(t32);
 		try {
 			System.out.println(targets);
 			targets.save(this.config_file_name);

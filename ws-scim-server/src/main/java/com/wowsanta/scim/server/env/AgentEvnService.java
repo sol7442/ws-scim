@@ -3,7 +3,7 @@ package com.wowsanta.scim.server.env;
 import static spark.Spark.get;
 
 import com.wowsanta.scim.SystemManager;
-import com.wowsanta.scim.server.ServiceConsumer;
+import com.wowsanta.scim.service.ServiceConsumer;
 
 import spark.Request;
 import spark.Response;

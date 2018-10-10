@@ -1,33 +1,37 @@
+
 .login-context{
-    width: 80%;
-    height: 80%;
-    margin: 40px auto;
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    
+    background-color: blue;
 }
-.outer {
+.login-outer{
     display: table;
     width: 100%;
     height: 100%;
 }
-.inner {    
+.login-inner {    
+    width: 80%;
+    height: 80%;
     display: table-cell;
     vertical-align: middle;
-    text-align: center;
+    // background-color: gray
 }
-.center      {
+.login-body {
     position: relative;
     display: inline-block;
-    width: 90%;
-    padding: 1em;
-}
-.left .right{
-    width: 20%;
-}
+    width: 100%;
+    height: 70%;
+    // background-color: blue
 
+}
 .login-form{
     width: 350px;
-    margin: 20px auto;
-    text-align: center;
+    margin: 50px auto;
+    background-color: white;
 }
+
 .login-input{
     width: 100%
 }

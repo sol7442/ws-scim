@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.wowsanta.scim.server.Configuration;
+import com.wowsanta.scim.service.Configuration;
 
 public class ConfigurationTest {
 	

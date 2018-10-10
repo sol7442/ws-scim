@@ -1,8 +1,8 @@
 package com.wowsanta.scim;
 
-import com.wowsanta.scim.server.Configuration;
-import com.wowsanta.scim.server.ServiceConsumer;
-import com.wowsanta.scim.server.ServiceProvider;
+import com.wowsanta.scim.service.Configuration;
+import com.wowsanta.scim.service.ServiceConsumer;
+import com.wowsanta.scim.service.ServiceProvider;
 
 public class SystemManager {
 

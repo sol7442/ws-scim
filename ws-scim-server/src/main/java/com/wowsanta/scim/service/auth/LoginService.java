@@ -1,4 +1,4 @@
-package com.wowsanta.scim.server.auth.login;
+package com.wowsanta.scim.service.auth;
 
 
 import spark.Request;

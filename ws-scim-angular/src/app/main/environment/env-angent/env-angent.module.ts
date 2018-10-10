@@ -1,19 +1,22 @@
 // Angular Imports
 import { NgModule } from '@angular/core';
 
+import {TreeModule} from 'primeng/tree';
+import {ScrollPanelModule} from 'primeng/scrollpanel';
+
 // This Module's Components
 import { EnvAngentComponent } from './env-angent.component';
-import {TreeModule} from 'primeng/tree';
+
 
 @NgModule({
     imports: [
-        TreeModule
+        ScrollPanelModule
     ],
     declarations: [
         EnvAngentComponent,
     ],
     exports: [
-        EnvAngentComponent,TreeModule
+        EnvAngentComponent,ScrollPanelModule
     ]
 })
 export class EnvAngentModule {

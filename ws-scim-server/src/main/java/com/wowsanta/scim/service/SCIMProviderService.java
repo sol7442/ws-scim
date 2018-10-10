@@ -1,22 +1,23 @@
-package com.wowsanta.scim.server;
+package com.wowsanta.scim.service;
 
 import java.io.FileNotFoundException;
 
-import com.wowsanta.scim.server.auth.AuthenticationRoute;
 import com.wowsanta.scim.server.env.EnvironmentRoute;
 import com.wowsanta.scim.server.filter.AuthFilter;
+import com.wowsanta.scim.service.agent.AgentService;
+import com.wowsanta.scim.service.auth.AuthenticationRoute;
 import com.wowsanta.scim.spark.AbstractSparkService;
 
 import static spark.Spark.*;
 
 
 
-public class SCIMService extends AbstractSparkService{
+public class SCIMProviderService extends AbstractSparkService{
 
 	private Configuration config;
 	
 	public static void main(String[] args) {
-		SCIMService service = new SCIMService();
+		SCIMProviderService service = new SCIMProviderService();
 		service.initialize(System.getProperty("config.file"));
 		service.setRouters();
 	}
@@ -44,7 +45,7 @@ public class SCIMService extends AbstractSparkService{
 		before("/*",new AuthFilter());
 		
 		path("/auth/", new AuthenticationRoute());		
-		path("/env/", new EnvironmentRoute());		
+		path("/agent/", new AgentService());		
 		path("/scim/", new AuthenticationRoute());
 		
 		

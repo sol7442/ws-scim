@@ -1,9 +1,7 @@
-package com.wowsanta.scim.server.auth;
+package com.wowsanta.scim.service.auth;
 
 import spark.RouteGroup;
 import static spark.Spark.*;
-
-import com.wowsanta.scim.server.auth.login.LoginService;
 
 public class AuthenticationRoute implements RouteGroup{
 
