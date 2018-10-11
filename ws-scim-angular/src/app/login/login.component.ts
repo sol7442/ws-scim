@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit{
         this.service.post('/auth/login',this.admin).subscribe(
         result =>{
             console.log(result)
-            this.router.navigate(["main"]);
+            this.router.navigate(["home"]);
         },
         error => {
             console.log("Error", error);
