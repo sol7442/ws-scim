@@ -1,0 +1,15 @@
+{
+  "name": "GW-Conciliation-Scheduler",
+  "type": "Consiliation",
+  "jobInfo": {
+    "jobClass": "com.wowsanta.scim.scheduler.ConcilationJob"
+  },
+  "triggerInfo": {
+    "base": "cron",
+    "minute": 0,
+    "hour": 0,
+    "dayOfWeek": 0,
+    "dayOfMonth": 0,
+    "cronExp": "0/1 * * * * ?"
+  }
+}

@@ -1,17 +1,26 @@
 package com.wowsanta.scim.scheduler;
 
 import org.quartz.JobDetail;
+import static org.quartz.JobBuilder.newJob;
 
+@SuppressWarnings("rawtypes")
 public class JobInfo {
-
-	public JobDetail getJob() {
-		// TODO Auto-generated method stub
-		return null;
+	
+	private String jobClass;
+	
+	public String getJobClass() {
+		return jobClass;
 	}
 
-	public JobDetail build() {
-		// TODO Auto-generated method stub
-		return null;
+	public void setJobClass(String jobClass) {
+		this.jobClass = jobClass;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public JobDetail build() throws ClassNotFoundException {
+		Class cls = Class.forName(this.jobClass);
+		return newJob(cls).build();
 	}
 
 }
+

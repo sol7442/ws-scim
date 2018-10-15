@@ -7,7 +7,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
@@ -22,14 +25,11 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
-import com.wowsanta.scim.SystemManager;
-import com.wowsanta.scim.service.ServiceConsumer;
 
 public class DBCP {
 
-	private Class thisClass = DBCP.class;
-	
 	private String poolName;
+	
 	public String getPoolName() {
 		return poolName;
 	}
@@ -120,7 +120,27 @@ public class DBCP {
 	private int minIdle = 5;
 	private int maxTotal = 50;
 	
+	public static void close(Connection con, PreparedStatement pstmt, ResultSet rs){
+        try{
+            try{
+                if(rs != null){rs.close();}
+            }catch(Exception e){}
+            
+            try{
+                if(pstmt != null){ pstmt.close();}
+            }catch(Exception e){}
+
+            try{
+                if(con != null){con.close();}
+            }catch(Exception e){}
+            
+        }catch(Exception e){}
+    }
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void setUp() throws ClassNotFoundException, SQLException {
+		Class.forName(this.driverName);
+		
 		ConnectionFactory cf = new DriverManagerConnectionFactory(this.jdbcUrl,this.userName,this.password);
 		PoolableConnectionFactory pcf = new PoolableConnectionFactory(cf, null);
 		pcf.setValidationQuery(this.valiationQuery);
@@ -136,16 +156,15 @@ public class DBCP {
 		
 		Class.forName(PoolingDriver.class.getCanonicalName());
 		
-		PoolingDriver driver = (PoolingDriver)DriverManager.getDriver(this.driverName);
+		PoolingDriver driver = (PoolingDriver)DriverManager.getDriver("jdbc:apache:commons:dbcp:");
 		driver.registerPool(this.poolName,cp);
 	}
 	
-	public static Object load(String file_name) throws FileNotFoundException {
+	public static DBCP load(String file_name) throws FileNotFoundException {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		JsonReader reader = new JsonReader(new FileReader(file_name));
 		
-		DBCP dbcp = gson.fromJson(reader,DBCP.class);
-		return dbcp; 
+		return gson.fromJson(reader,DBCP.class); 
 	}
 	
 	public void save(String file_name) throws IOException {

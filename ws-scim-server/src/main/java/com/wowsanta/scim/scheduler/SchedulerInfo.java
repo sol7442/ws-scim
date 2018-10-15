@@ -65,7 +65,7 @@ public class SchedulerInfo {
 		this.scheduler = scheduler;
 	}
 	
-	public Scheduler build() throws SchedulerException, InterruptedException{
+	public Scheduler build() throws SchedulerException, InterruptedException, ClassNotFoundException{
 		this.scheduler = StdSchedulerFactory.getDefaultScheduler();
 		this.scheduler.start();
 		this.scheduler.scheduleJob(jobInfo.build(),triggerInfo.build());
