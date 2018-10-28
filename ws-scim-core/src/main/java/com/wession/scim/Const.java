@@ -6,6 +6,7 @@ import com.wession.scim.intf.schemas_name;
 
 public class Const implements schemas_name {
 
+	public final static String schemas = "urn:ietf:params:scim:schemas:core";
 	public final static String schemas_v20_user = "urn:ietf:params:scim:schemas:core:2.0:User";
 	public final static String schemas_v20_user_ext = "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User";
 	public final static String schemas_v20_group ="urn:ietf:params:scim:schemas:core:2.0:Group";
