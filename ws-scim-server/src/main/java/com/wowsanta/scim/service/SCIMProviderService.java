@@ -2,6 +2,7 @@ package com.wowsanta.scim.service;
 
 import java.io.FileNotFoundException;
 
+import com.wowsanta.scim.Configuration;
 import com.wowsanta.scim.server.env.EnvironmentRoute;
 import com.wowsanta.scim.server.filter.AuthFilter;
 import com.wowsanta.scim.service.agent.AgentService;

@@ -8,7 +8,7 @@ import java.util.Stack;
 
 import com.wowsanta.scim.exception.SCIMException;
 
-public class FilterParser {
+public class FilterParser2 {
 	private final String filterString;
 	private final String defaultSchema;
 	private int endPos;
@@ -78,7 +78,7 @@ public class FilterParser {
 		}
 	}
 
-	public FilterParser(final String filterString, final String defaultSchema) {
+	public FilterParser2(final String filterString, final String defaultSchema) {
 		this.filterString = filterString;
 		this.endPos = filterString.length();
 		this.currentPos = 0;

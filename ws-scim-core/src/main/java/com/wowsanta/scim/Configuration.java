@@ -1,4 +1,4 @@
-package com.wowsanta.scim.service;
+package com.wowsanta.scim;
 
 import java.io.File;
 import java.io.FileNotFoundException;

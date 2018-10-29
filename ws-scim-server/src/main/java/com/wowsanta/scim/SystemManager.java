@@ -1,6 +1,5 @@
 package com.wowsanta.scim;
 
-import com.wowsanta.scim.service.Configuration;
 import com.wowsanta.scim.service.ServiceConsumer;
 import com.wowsanta.scim.service.ServiceProvider;
 

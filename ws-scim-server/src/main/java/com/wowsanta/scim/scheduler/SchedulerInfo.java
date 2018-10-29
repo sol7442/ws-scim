@@ -15,7 +15,7 @@ import org.quartz.impl.StdSchedulerFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
-import com.wowsanta.scim.repository.DBCP;
+import com.wowsanta.scim.repo.DBCP;
 
 public class SchedulerInfo {
 	

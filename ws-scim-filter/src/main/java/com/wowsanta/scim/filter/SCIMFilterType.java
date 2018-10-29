@@ -10,9 +10,14 @@ public enum SCIMFilterType {
 	  GREATER_THAN("gt"),
 	  GREATER_OR_EQUAL("ge"),
 	  LESS_THAN("lt"),
-	  LESS_OR_EQUAL("le");
+	  LESS_OR_EQUAL("le"),
+	  UNKNOWN("", "unknown operator");
+	
 	private String stringValue;
 	
+	private SCIMFilterType(final String stringValue, String value){
+		this.stringValue = stringValue;
+	}
 	private SCIMFilterType(final String stringValue){
 		this.stringValue = stringValue;
 	}

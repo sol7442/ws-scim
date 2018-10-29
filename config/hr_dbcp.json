@@ -1,7 +1,7 @@
 {
   "poolName": "cp",
-  "driverName": "com.mysql.cj.jdbc.Driver",
-  "jdbcUrl": "jdbc:mysql://wession.com:3306/ws_scim_im?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC",
+  "driverName": "com.mysql.jdbc.Driver",
+  "jdbcUrl": "jdbc:mysql://wession.com:3306/ws_scim_hr1?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC",
   "userName": "root",
   "password": "wession@12",
   "valiationQuery": "select 1",

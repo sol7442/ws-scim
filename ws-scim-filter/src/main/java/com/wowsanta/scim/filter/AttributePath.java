@@ -79,19 +79,6 @@ public class AttributePath {
 	    }
 	  }
 
-
-
-	  /**
-	   * Parse an attribute path.
-	   *
-	   * @param path  The attribute path.
-	   * @param defaultSchema The default schema to assume for attributes that do
-	   *                      not have the schema part of the urn specified. The
-	   *                      'id', 'externalId', and 'meta' attributes will always
-	   *                      assume the SCIM Core schema.
-	   *
-	   * @return The parsed attribute path.
-	   */
 	  public static AttributePath parse(final String path,
 	                                    final String defaultSchema)
 	  {
@@ -108,29 +95,30 @@ public class AttributePath {
 	    final String attributeName = matcher.group(3);
 	    final String subAttributeName = matcher.group(5);
 
-	    if (attributeSchema != null)
-	    {
-	      return new AttributePath(attributeSchema, attributeName,
-	              subAttributeName);
-	    }
-	    else
-	    {
-	      if (attributeName.equalsIgnoreCase(
-	                  CoreSchema.ID_DESCRIPTOR.getName()) ||
-	          attributeName.equalsIgnoreCase(
-	                  CoreSchema.EXTERNAL_ID_DESCRIPTOR.getName()) ||
-	          attributeName.equalsIgnoreCase(
-	                  CoreSchema.META_DESCRIPTOR.getName()))
-	      {
-	        return new AttributePath(attributeSchema.SCHEMA_URI_CORE, attributeName,
-	                subAttributeName);
-	      }
-	      else
-	      {
-	        return new AttributePath(defaultSchema, attributeName,
-	                subAttributeName);
-	      }
-	    }
+	    return new AttributePath(attributeSchema, attributeName, subAttributeName);
+//	    if (attributeSchema != null)
+//	    {
+//	      return new AttributePath(attributeSchema, attributeName,
+//	              subAttributeName);
+//	    }
+//	    else
+//	    {
+//	      if (attributeName.equalsIgnoreCase(
+//	                  CoreSchema.ID_DESCRIPTOR.getName()) ||
+//	          attributeName.equalsIgnoreCase(
+//	                  CoreSchema.EXTERNAL_ID_DESCRIPTOR.getName()) ||
+//	          attributeName.equalsIgnoreCase(
+//	                  CoreSchema.META_DESCRIPTOR.getName()))
+//	      {
+//	        return new AttributePath(attributeSchema.SCHEMA_URI_CORE, attributeName,
+//	                subAttributeName);
+//	      }
+//	      else
+//	      {
+//	        return new AttributePath(defaultSchema, attributeName,
+//	                subAttributeName);
+//	      }
+//	    }
 	  }
 
 
@@ -157,7 +145,7 @@ public class AttributePath {
 	   */
 	  public void toString(final StringBuilder builder)
 	  {
-	    if (!attributeSchema.equalsIgnoreCase(attributeSchema.SCHEMA_URI_CORE))
+	    if (!attributeSchema.equalsIgnoreCase(Const.schemas))
 	    {
 	      builder.append(attributeSchema);
 	      builder.append(':');
