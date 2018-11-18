@@ -1,5 +1,10 @@
 package com.wowsanta.scim.obj;
 
-public interface SCIMObject {
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+
+
+public class SCIMObject {
+	private final HashMap<String,LinkedHashMap<String,SCIMAttribute>> attributes = new HashMap<String,LinkedHashMap<String,SCIMAttribute>>();
 
 }
