@@ -1,6 +1,17 @@
 package com.wowsanta.scim.repo.rdb;
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
 import com.wowsanta.scim.resource.Group;
 import com.wowsanta.scim.resource.RepositoryManager;
 import com.wowsanta.scim.resource.ResourceMapper;
@@ -88,4 +99,29 @@ public class RDBRepository implements RepositoryManager {
 	}
 
 
+	public void save(String file_name) throws IOException {
+		OutputStreamWriter writer = new OutputStreamWriter(
+				new FileOutputStream(
+						new File(file_name)),StandardCharsets.UTF_8);
+		
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		gson.toJson(this,writer);
+		writer.flush();
+		writer.close();
+	}
+	
+	public String toJson() {
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		return gson.toJson(this);
+	}
+	
+	public String toString() {
+		return toJson();
+	}
+	
+	public static RDBRepository load(String file_name) throws FileNotFoundException {
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		JsonReader reader = new JsonReader(new FileReader(file_name));
+		return gson.fromJson(reader,RDBRepository.class);
+	}
 }

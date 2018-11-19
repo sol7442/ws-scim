@@ -1,0 +1,4 @@
+{
+  "repositoryClass": "com.wowsanta.scim.repo.rdb.RDBRepository",
+  "repositoryConfig": "../config/sqlite_dbcp.json"
+}
