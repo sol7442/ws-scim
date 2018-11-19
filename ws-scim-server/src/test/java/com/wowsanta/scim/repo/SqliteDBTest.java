@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.wowsanta.scim.repository.DBCP;
+
 public class SqliteDBTest {
 	private final String config_file_name = "../config/sqlite_dbcp.json";
 
@@ -31,7 +33,7 @@ public class SqliteDBTest {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void make() {
 		DBCP dbcp = new DBCP();
 		

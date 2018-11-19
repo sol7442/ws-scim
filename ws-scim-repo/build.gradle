@@ -3,6 +3,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 	
 dependencies {
+	compile project(':ws-scim-core')
 	compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.25.2'
 }
 

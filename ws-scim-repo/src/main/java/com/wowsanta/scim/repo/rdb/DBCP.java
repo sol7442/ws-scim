@@ -1,4 +1,4 @@
-package com.wowsanta.scim.repo;
+package com.wowsanta.scim.repo.rdb;
 
 import java.io.File;
 import java.io.FileNotFoundException;

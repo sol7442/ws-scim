@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.wowsanta.scim.repository.DBCP;
+
 public class DBCPTest {
 	
 	private final String config_file_name = "../config/dbcp.json";

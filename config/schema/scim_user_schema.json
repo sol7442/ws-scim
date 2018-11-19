@@ -1,0 +1,826 @@
+{
+  "schemas": [
+    "urn:ietf:params:scim:schemas:core:2.0:User"
+  ],
+  "attributes": {
+    "profileUrl": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:User:profileUrl",
+      "name": "profileUrl",
+      "type": "REFERENCE",
+      "multiValued": false,
+      "description": "A fully qualified URL pointing to a page\nrepresenting the User\u0027s online profile.",
+      "required": false,
+      "caseExact": false,
+      "mutability": "READ_WRITE",
+      "returned": "DEFAULT",
+      "uniqueness": "NONE",
+      "referenceTypes": [
+        "EXTERNAL"
+      ]
+    },
+    "entitlements": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:User:entitlements",
+      "name": "entitlements",
+      "type": "COMPLEX",
+      "multiValued": true,
+      "description": "A list of entitlements for the User that represent a thing the User has.",
+      "required": false,
+      "caseExact": false,
+      "mutability": "READ_WRITE",
+      "returned": "DEFAULT",
+      "uniqueness": "NONE",
+      "subAttributes": [
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:entitlements.value",
+          "name": "value",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "The value of an entitlement.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:entitlements.display",
+          "name": "display",
+          "type": "REFERENCE",
+          "multiValued": false,
+          "description": "A human-readable name, primarily used for display purposes.  READ-ONLY.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE",
+          "referenceTypes": [
+            "USER",
+            "GROUP"
+          ]
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:entitlements.type",
+          "name": "type",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "A label indicating the attribute\u0027s function.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:entitlements.primary",
+          "name": "primary",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "A Boolean value indicating the \u0027primary\u0027 or preferred attribute value for this attribute.  The primary\nattribute value \u0027true\u0027 MUST appear no more than once.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        }
+      ]
+    },
+    "x509Certificates": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:User:x509Certificates",
+      "name": "x509Certificates",
+      "type": "COMPLEX",
+      "multiValued": true,
+      "description": "A list of certificates issued to the User.",
+      "required": false,
+      "caseExact": false,
+      "mutability": "READ_WRITE",
+      "returned": "DEFAULT",
+      "uniqueness": "NONE",
+      "subAttributes": [
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:x509certificates.value",
+          "name": "value",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "The value of an X.509 certificate.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:x509certificates.display",
+          "name": "display",
+          "type": "REFERENCE",
+          "multiValued": false,
+          "description": "A human-readable name, primarily used for display purposes.  READ-ONLY.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:x509certificates.type",
+          "name": "type",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "A label indicating the attribute\u0027s function.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:x509certificates.primary",
+          "name": "primary",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "A Boolean value indicating the \u0027primary\u0027 or preferred attribute value for this attribute.The primary attribute value \u0027true\u0027 MUST appear no more than once.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        }
+      ]
+    },
+    "preferredLanguage": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:User:preferredLanguage",
+      "name": "preferredLanguage",
+      "type": "STRING",
+      "multiValued": false,
+      "description": "Indicates the User\u0027s preferred written or\nspoken language.  Generally used for selecting a localized user interface; e.g., \u0027en_US\u0027 specifies the language English and country",
+      "required": false,
+      "caseExact": false,
+      "mutability": "READ_WRITE",
+      "returned": "DEFAULT",
+      "uniqueness": "NONE"
+    },
+    "addresses": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:User:addresses",
+      "name": "addresses",
+      "type": "COMPLEX",
+      "multiValued": true,
+      "description": "A physical mailing address for this User.\nCanonical type values of \u0027work\u0027, \u0027home\u0027, and \u0027other\u0027.  This attribute is a complex type with the following sub-attributes.",
+      "required": false,
+      "caseExact": false,
+      "mutability": "READ_WRITE",
+      "returned": "DEFAULT",
+      "uniqueness": "NONE",
+      "subAttributes": [
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:addresses.formatted",
+          "name": "formatted",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "The full mailing address, formatted for display or use with a mailing label.  This attribute MAY contain\nnewlines.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:addresses.streetAddress",
+          "name": "streetAddress",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "The full street address component, which may include house number, street name, P.O. box, and multi-line\nextended street address information.  This attribute MAY contain newlines.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:addresses.locality",
+          "name": "locality",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "The city or locality component.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:addresses.region",
+          "name": "region",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "The state or region component.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:addresses.postalCode",
+          "name": "postalCode",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "The zip code or postal code component.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:addresses.country",
+          "name": "country",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "The country name component.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:addresses.type",
+          "name": "type",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "A label indicating the attribute\u0027s function, e.g., \u0027work\u0027 or \u0027home\u0027.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE",
+          "canonicalValues": [
+            "work",
+            "home",
+            "other"
+          ]
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:addresses.primary",
+          "name": "primary",
+          "type": "BOOLEAN",
+          "multiValued": false,
+          "description": "A Boolean value indicating the \u0027primary\u0027 or preferred attribute value for this attribute.  The primary\nattribute value \u0027true\u0027 MUST appear no more than once.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        }
+      ]
+    },
+    "displayName": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:User:displayName",
+      "name": "displayName",
+      "type": "STRING",
+      "multiValued": false,
+      "description": "The name of the User, suitable for display\nto end-users.  The name SHOULD be the full name of the User being described, if known.",
+      "required": false,
+      "caseExact": false,
+      "mutability": "READ_WRITE",
+      "returned": "DEFAULT",
+      "uniqueness": "NONE"
+    },
+    "nickName": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:User:nickName",
+      "name": "nickName",
+      "type": "STRING",
+      "multiValued": false,
+      "description": "The casual way to address the user in real life, e.g., \u0027Bob\u0027 or \u0027Bobby\u0027 instead of \u0027Robert\u0027.  This attribute\nSHOULD NOT be used to represent a User\u0027s username (e.g., \u0027bjensen\u0027 or \u0027mpepperidge\u0027).",
+      "required": false,
+      "caseExact": false,
+      "mutability": "READ_WRITE",
+      "returned": "DEFAULT",
+      "uniqueness": "NONE"
+    },
+    "timezone": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:User:timezone",
+      "name": "timezone",
+      "type": "STRING",
+      "multiValued": false,
+      "description": "The User\u0027s time zone in the \u0027Olson\u0027 time zone\ndatabase format, e.g., \u0027America/Los_Angeles\u0027.",
+      "required": false,
+      "caseExact": false,
+      "mutability": "READ_WRITE",
+      "returned": "DEFAULT",
+      "uniqueness": "NONE"
+    },
+    "roles": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:User:roles",
+      "name": "roles",
+      "type": "COMPLEX",
+      "multiValued": true,
+      "description": "A list of roles for the User that collectively represent who the User is, e.g., \u0027Student\u0027, \u0027Faculty\u0027.",
+      "required": false,
+      "caseExact": false,
+      "mutability": "READ_WRITE",
+      "returned": "DEFAULT",
+      "uniqueness": "NONE",
+      "subAttributes": [
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:roles.value",
+          "name": "value",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "The value of a role.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:roles.display",
+          "name": "display",
+          "type": "REFERENCE",
+          "multiValued": false,
+          "description": "A human-readable name, primarily used for display purposes.  READ-ONLY.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:roles.type",
+          "name": "type",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "A label indicating the attribute\u0027s function.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:roles.primary",
+          "name": "primary",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "A Boolean value indicating the \u0027primary\u0027 or preferred attribute value for this attribute.  The primary attribute value \u0027true\u0027 MUST appear no more than once.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        }
+      ]
+    },
+    "externalId": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:externalId",
+      "name": "externalId",
+      "type": "STRING",
+      "multiValued": false,
+      "description": "A String that is an identifier for the resource as defined by the provisioning client. The service provider MUST always interpret the externalId as scoped to the provisioning domain.",
+      "required": false,
+      "caseExact": true,
+      "mutability": "READ_WRITE",
+      "returned": "DEFAULT",
+      "uniqueness": "NONE"
+    },
+    "active": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:User:active",
+      "name": "active",
+      "type": "BOOLEAN",
+      "multiValued": false,
+      "description": "A Boolean value indicating the User\u0027s administrative status.",
+      "required": false,
+      "caseExact": false,
+      "mutability": "READ_WRITE",
+      "returned": "DEFAULT",
+      "uniqueness": "NONE"
+    },
+    "groups": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:User:groups",
+      "name": "groups",
+      "type": "COMPLEX",
+      "multiValued": true,
+      "description": "A list of groups to which the user belongs,\neither through direct membership, through nested groups, or dynamically calculated.",
+      "required": false,
+      "caseExact": false,
+      "mutability": "READ_ONLY",
+      "returned": "DEFAULT",
+      "uniqueness": "NONE",
+      "subAttributes": [
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:groups.value",
+          "name": "value",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "The identifier of the User\u0027s group.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_ONLY",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:groups.$ref",
+          "name": "$ref",
+          "type": "REFERENCE",
+          "multiValued": false,
+          "description": "The uri of the corresponding \u0027Group\u0027 resource to which the user belongs.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_ONLY",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE",
+          "referenceTypes": [
+            "USER",
+            "GROUP"
+          ]
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:groups.display",
+          "name": "display",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "A human-readable name, primarily used for display purposes. READ-ONLY.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_ONLY",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:groups.type",
+          "name": "type",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "A label indicating the attribute\u0027s function, e.g., \u0027direct\u0027 or \u0027indirect\u0027.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE",
+          "canonicalValues": [
+            "direct",
+            "indirect"
+          ]
+        }
+      ]
+    },
+    "userName": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:User:userName",
+      "name": "userName",
+      "type": "STRING",
+      "multiValued": false,
+      "description": "A service provider\u0027s unique identifier for the user, typically\nused by the user to directly authenticate to the service provider.Each User MUST include a non-empty userName value.  This identifier\nMUST be unique across the service provider\u0027s entire set of Users.",
+      "required": true,
+      "caseExact": false,
+      "mutability": "READ_WRITE",
+      "returned": "DEFAULT",
+      "uniqueness": "SERVER"
+    },
+    "title": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:User:title",
+      "name": "title",
+      "type": "STRING",
+      "multiValued": false,
+      "description": "The user\u0027s title, such as \\\"Vice President.\\\"",
+      "required": false,
+      "caseExact": false,
+      "mutability": "READ_WRITE",
+      "returned": "DEFAULT",
+      "uniqueness": "NONE"
+    },
+    "locale": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:User:locale",
+      "name": "locale",
+      "type": "STRING",
+      "multiValued": false,
+      "description": "Used to indicate the User\u0027s default location\nfor purposes of localizing items such as currency, date time format, or numerical representations.",
+      "required": false,
+      "caseExact": false,
+      "mutability": "READ_WRITE",
+      "returned": "DEFAULT",
+      "uniqueness": "NONE"
+    },
+    "phoneNumbers": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:User:phoneNumbers",
+      "name": "phoneNumbers",
+      "type": "COMPLEX",
+      "multiValued": true,
+      "description": "Phone numbers for the User.  The value SHOULD be canonicalized by the service provider according to the\nformat specified in RFC 3966, e.g., \u0027tel:+1-201-555-0123\u0027.Canonical type values of \u0027work\u0027, \u0027home\u0027, \u0027mobile\u0027, \u0027fax\u0027, \u0027pager",
+      "required": false,
+      "caseExact": false,
+      "mutability": "READ_WRITE",
+      "returned": "DEFAULT",
+      "uniqueness": "NONE",
+      "subAttributes": [
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:phoneNumbers.value",
+          "name": "value",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "Phone number of the User.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:phoneNumbers.display",
+          "name": "display",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "A human-readable name, primarily used for display purposes.  READ-ONLY.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:phoneNumbers.type",
+          "name": "type",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "A label indicating the attribute\u0027s function, e.g., \u0027work\u0027, \u0027home\u0027, \u0027mobile\u0027.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE",
+          "canonicalValues": [
+            "work",
+            "home",
+            "other",
+            "fax",
+            "mobile",
+            "pager"
+          ]
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:phoneNumbers.primary",
+          "name": "primary",
+          "type": "BOOLEAN",
+          "multiValued": false,
+          "description": "A Boolean value indicating the \u0027primary\u0027 or preferred attribute value for this attribute, e.g., the preferred\nphone number or primary phone number.  The primary attribute value \u0027true\u0027 MUST appear no more than once.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        }
+      ]
+    },
+    "emails": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:User:emails",
+      "name": "emails",
+      "type": "COMPLEX",
+      "multiValued": true,
+      "description": "Email addresses for the user.  The value SHOULD be canonicalized by the service provider, e.g.,\n\u0027bjensen@example.com\u0027 instead of \u0027bjensen@EXAMPLE.COM\u0027.Canonical type values of \u0027work\u0027, \u0027home\u0027, and \u0027other\u0027.",
+      "required": false,
+      "caseExact": false,
+      "mutability": "READ_WRITE",
+      "returned": "DEFAULT",
+      "uniqueness": "NONE",
+      "subAttributes": [
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:emails.value",
+          "name": "value",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "Email addresses for the user.  The value SHOULD be canonicalized by the service provider, e.g.,\n\u0027bjensen@example.com\u0027 instead of \u0027bjensen@EXAMPLE.COM\u0027.Canonical type values of \u0027work\u0027, \u0027home\u0027, and \u0027other\u0027.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:emails.display",
+          "name": "display",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "A human-readable name, primarily used for display purposes.  READ-ONLY.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_ONLY",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:emails.type",
+          "name": "type",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "A label indicating the attribute\u0027s function, e.g., \u0027work\u0027 or \u0027home\u0027.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE",
+          "canonicalValues": [
+            "work",
+            "home",
+            "other"
+          ]
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:emails.primary",
+          "name": "primary",
+          "type": "BOOLEAN",
+          "multiValued": false,
+          "description": "A Boolean value indicating the \u0027primary\u0027 or preferred attribute value for this attribute, e.g., the psreferred mailing address or primary email address.  The primary attribute value \u0027true\u0027 MUST appear no more than once.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        }
+      ]
+    },
+    "password": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:User:password",
+      "name": "password",
+      "type": "STRING",
+      "multiValued": false,
+      "description": "The User\u0027s cleartext password.  This attribute is intended to be used as a means to specify an initial\npassword when creating a new User or to reset an existing User\u0027s password.",
+      "required": false,
+      "caseExact": false,
+      "mutability": "WRITE_ONLY",
+      "returned": "NEVER",
+      "uniqueness": "NONE"
+    },
+    "meta": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:meta",
+      "name": "meta",
+      "type": "COMPLEX",
+      "multiValued": false,
+      "description": "A complex attribute containing resource metadata.",
+      "required": false,
+      "caseExact": false,
+      "mutability": "READ_ONLY",
+      "returned": "DEFAULT",
+      "uniqueness": "NONE",
+      "subAttributes": [
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:meta.resourceType",
+          "name": "resourceType",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "The name of the resource type of the resource.",
+          "required": false,
+          "caseExact": true,
+          "mutability": "READ_ONLY",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:meta.created",
+          "name": "created",
+          "type": "DATE_TIME",
+          "multiValued": false,
+          "description": "The \"DateTime\" that the resource was added to the service provider.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_ONLY",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:meta.lastModified",
+          "name": "lastModified",
+          "type": "DATE_TIME",
+          "multiValued": false,
+          "description": "The most recent DateTime that the details of this resource were updated at the service provider.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_ONLY",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:meta.location",
+          "name": "location",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "Location  The uri of the resource being returned",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_ONLY",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:meta.version",
+          "name": "version",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "The version of the resource being returned.",
+          "required": false,
+          "caseExact": true,
+          "mutability": "READ_ONLY",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        }
+      ]
+    },
+    "name": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:User:name",
+      "name": "name",
+      "type": "COMPLEX",
+      "multiValued": false,
+      "description": "The components of the user\u0027s real name.Providers MAY return just the full name as a single string in the\nformatted sub-attribute, or they MAY return just the individual component attributes using the other sub-attributes, or they MAY\nreturn both.  If both variants are returned, they SHOULD be describing the same name, with the formatted name indicating how the\ncomponent attributes should be combined.",
+      "required": false,
+      "caseExact": false,
+      "mutability": "READ_WRITE",
+      "returned": "DEFAULT",
+      "uniqueness": "NONE",
+      "subAttributes": [
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:name.formatted",
+          "name": "formatted",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "The full name, including all middle names, titles, and suffixes as appropriate, formatted for display\n(e.g., \u0027Ms. Barbara J Jensen, III\u0027).",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:name.familyName",
+          "name": "familyName",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "The family name of the User, or last name in most Western languages (e.g., \u0027Jensen\u0027 given the full\nname \u0027Ms. Barbara J Jensen, III\u0027).",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:name.givenName",
+          "name": "givenName",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "The given name of the User, or first name in most Western languages (e.g., \u0027Barbara\u0027 given the\nfull name \u0027Ms. Barbara J Jensen, III\u0027).",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:name.middleName",
+          "name": "middleName",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "The middle name(s) of the User (e.g., \u0027Jane\u0027 given the full name \u0027Ms. Barbara J Jensen, III\u0027).",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:name.honorificPrefix",
+          "name": "honorificPrefix",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "The honorific prefix(es) of the User, or title in most Western languages (e.g., \u0027Ms.\u0027 given the full name\n\u0027Ms. Barbara J Jensen, III\u0027).",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:name.honorificSuffix",
+          "name": "honorificSuffix",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "The honorific suffix(es) of the User, or suffix in most Western languages (e.g., \u0027III\u0027 given the full name\n\u0027Ms. Barbara J Jensen, III\u0027).",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        }
+      ]
+    },
+    "id": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:id",
+      "name": "id",
+      "type": "STRING",
+      "multiValued": false,
+      "description": "Unique identifier for the SCIM Resource as defined by the Service Provider.",
+      "required": true,
+      "caseExact": true,
+      "mutability": "READ_ONLY",
+      "returned": "ALWAYS",
+      "uniqueness": "SERVER"
+    }
+  }
+}

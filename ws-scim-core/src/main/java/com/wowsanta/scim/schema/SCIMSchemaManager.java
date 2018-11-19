@@ -15,4 +15,7 @@ public class SCIMSchemaManager {
 		return instance;
 	}
 	
+	public void load(String schema_path) {
+		
+	}
 }

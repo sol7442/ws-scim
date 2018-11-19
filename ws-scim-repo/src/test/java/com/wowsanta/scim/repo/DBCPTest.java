@@ -1,4 +1,7 @@
+
+
 package com.wowsanta.scim.repo;
+
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -11,11 +14,12 @@ import java.sql.SQLException;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.wowsanta.scim.repository.DBCP;
+import com.wowsanta.scim.repo.rdb.DBCP;
 
 
-public class CreateRandomUserTest {
-	private final String config_file_name = "../config/hr_dbcp.json";
+public class DBCPTest {
+	
+	private final String config_file_name = "../config/dbcp.json";
 
 	private DBCP dbcp;
 	
@@ -32,15 +36,14 @@ public class CreateRandomUserTest {
 			e.printStackTrace();
 		}
 	}
-	
-//	@Test
+	//@Test
 	public void make() {
 		DBCP dbcp = new DBCP();
 		
-		dbcp.setJdbcUrl("jdbc:mysql://wession.com:3306/ws_scim_hr1?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC");
+		dbcp.setJdbcUrl("jdbc:mysql://wession.com:3306/ws-scim-im");
 		dbcp.setUserName("root");
 		dbcp.setPassword("wession@12");
-		dbcp.setDriverName(com.mysql.cj.jdbc.Driver.class.getCanonicalName());
+		dbcp.setDriverName(com.mysql.jdbc.Driver.class.getCanonicalName());
 		dbcp.setPoolName("cp");
 	
 		try {
@@ -49,32 +52,25 @@ public class CreateRandomUserTest {
 			e.printStackTrace();
 		}
 	}
-	
-	//@Test
-	public void create_user() {
+	@Test
+	public void query() {
 		Connection connection = null;
 		PreparedStatement statement = null;
-	    ResultSet resultSet = null;
-	    int count = 0;
+	    ResultSet resultSet = null;        
+
+
         try {
         	connection =  DriverManager.getConnection("jdbc:apache:commons:dbcp:cp");
-        	statement  = connection.prepareStatement("INSERT INTO USER (USER_ID, USER_NAME, USER_ORG, USER_ROLE, USER_POS) VALUES (?,?,?,?,?)");
-        	while(count < 100) {
-        		statement.setString(1, "USER_" + count);
-            	statement.setString(2, "NAME_" + count);
-            	statement.setString(3, "ORG");
-            	statement.setString(4, "ROLE");
-            	statement.setString(5, "POS");
-            	
-            	statement.executeUpdate();
-            	count++;
+        	statement  = connection.prepareStatement("select * from account");
+        	resultSet  = statement.executeQuery();
+			
+        	while(resultSet.next()) {
+        		System.out.println("namge : " + resultSet.getString("accountname"));
         	}
-        	
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
 			DBCP.close(connection, statement, resultSet);
 		}
-        System.out.println("create user ["+count+"]");
 	}
 }

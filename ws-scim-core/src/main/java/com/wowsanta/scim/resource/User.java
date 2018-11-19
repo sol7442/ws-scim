@@ -1,6 +1,5 @@
 package com.wowsanta.scim.resource;
 
-import java.lang.instrument.Instrumentation;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;

@@ -87,7 +87,7 @@ public class SCIMResourceTypeSchema implements Serializable{
 		return gson.toJson(this);
 	}
 	
-	public static Object load(String file_name) throws FileNotFoundException {
+	public static SCIMResourceTypeSchema load(String file_name) throws FileNotFoundException {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		JsonReader reader = new JsonReader(new FileReader(file_name));
 		return gson.fromJson(reader,SCIMResourceTypeSchema.class);
