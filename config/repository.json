@@ -1,4 +1,12 @@
 {
-  "repositoryClass": "com.wowsanta.scim.repo.rdb.RDBRepository",
-  "repositoryConfig": "../config/sqlite_dbcp.json"
+  "dbcp": {
+    "poolName": "cp",
+    "driverName": "org.sqlite.JDBC",
+    "jdbcUrl": "jdbc:sqlite:D:\\workspace\\git\\ws-scim\\ws-scim-repo\\data\\scim.db",
+    "valiationQuery": "select 1",
+    "timeBetweenEvictionRunsMillis": 60000,
+    "testWhileIdle": true,
+    "minIdle": 5,
+    "maxTotal": 50
+  }
 }
