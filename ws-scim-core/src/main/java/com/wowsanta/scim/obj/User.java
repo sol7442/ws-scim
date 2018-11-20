@@ -8,9 +8,14 @@ import java.util.Set;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wowsanta.scim.attribute.Attribute;
+import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
 public class User extends SCIMObject{
 	private static final long serialVersionUID = 1629646333520103312L;
+	
+	public User(SCIMResourceTypeSchema schema) {
+		createAttribute(schema);
+	}
 	
 	public String toJson() {
 		Set<Entry<String,Attribute>> entry_set =  this.attributes.entrySet();
@@ -19,8 +24,6 @@ public class User extends SCIMObject{
 			
 			System.out.println(entry.getValue());
 		}
-		
-		
 		
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		return gson.toJson(this);

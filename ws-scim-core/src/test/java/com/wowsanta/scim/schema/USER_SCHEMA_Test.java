@@ -54,8 +54,10 @@ public class USER_SCHEMA_Test {
 				System.out.println("key : " + key);
 			}
 			
-			SCIMAttributeSchema attribute_schema = user_schema.getAttribute("addresses");
-			System.out.println(attribute_schema.getUri() + " : " + attribute_schema.toJson());
+//			SCIMAttributeSchema attribute_schema = user_schema.getAttribute("addresses");
+//			System.out.println(attribute_schema.getUri() + " : " + attribute_schema.toJson());
+			
+			System.out.println(user_schema.toJson());
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

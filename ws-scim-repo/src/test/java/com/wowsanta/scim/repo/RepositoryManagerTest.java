@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.wowsanta.scim.attribute.SimpleAttribute;
 import com.wowsanta.scim.obj.User;
 import com.wowsanta.scim.repo.rdb.DBCP;
@@ -11,6 +13,7 @@ import com.wowsanta.scim.repo.rdb.RDBRepository;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.RepositoryManager;
 import com.wowsanta.scim.schema.SCIMDefinitions;
+import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 import com.wowsanta.scim.schema.SCIMSchemaDefinitions;
 
 public class RepositoryManagerTest {
@@ -46,18 +49,21 @@ public class RepositoryManagerTest {
 			repo_mgr.initialize(repositoryClass,this.conf_file);
 			
 			
+			SCIMResourceTypeSchema user_schema = SCIMResourceTypeSchema.load("../config/schema/scim_user_schema.json");
+			
 			RepositoryManager repository = repo_mgr.getRepositoryManger();
-			User user = new User();
+			User user = new User(user_schema);
 			SimpleAttribute name = new SimpleAttribute(SCIMSchemaDefinitions.SCIMUserSchemaDefinition.NAME.getName(),"tester_name");
 			user.addAttribute(name.getName(), name);
 			
-			SimpleAttribute id = new SimpleAttribute(SCIMSchemaDefinitions.ID.getName(),"tester_id");
+			SimpleAttribute id = new SimpleAttribute(SCIMSchemaDefinitions.ID.getName(),null);
 			user.addAttribute(id.getName(), id);
 			
-			System.out.println(user.toString());
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			System.out.println(gson.toJson(user.encode(true)));
 			
 			repository.createUser(user);
-			System.out.println(repo_mgr.getRepositoryManger());
+//			System.out.println(repo_mgr.getRepositoryManger());
 			
 		} catch (Exception e) {
 			e.printStackTrace();

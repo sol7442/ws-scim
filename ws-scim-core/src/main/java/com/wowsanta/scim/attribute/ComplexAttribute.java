@@ -1,8 +1,11 @@
 package com.wowsanta.scim.attribute;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.wowsanta.scim.exception.SCIMException;
 
 public class ComplexAttribute extends AbstractAttribute {
@@ -14,6 +17,7 @@ public class ComplexAttribute extends AbstractAttribute {
 	}
 
 	public ComplexAttribute() {
+		
 	}
 	public Map<String, Attribute> getSubAttributesList() {
 		return subAttributesList;
@@ -42,5 +46,14 @@ public class ComplexAttribute extends AbstractAttribute {
 	}
 	public void setSubAttribute(Attribute subAttribute) throws SCIMException {
 		subAttributesList.put(subAttribute.getName(), subAttribute);
+	}
+	
+	@Override
+	public JsonElement encode(boolean nullable) {
+		JsonObject json = new JsonObject();
+		for (Attribute value : this.subAttributesList.values()) {
+			json.add(value.getName(),value.encode(nullable));
+		}
+		return json;
 	}
 }

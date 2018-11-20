@@ -3,8 +3,11 @@ package com.wowsanta.scim.attribute;
 
 import java.io.Serializable;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.schema.SCIMDefinitions;
+
 
 public interface Attribute extends Serializable {
 
@@ -31,5 +34,7 @@ public interface Attribute extends Serializable {
     public Attribute getSubAttribute(String attributeName) throws SCIMException;
 
     public void deleteSubAttributes() throws SCIMException;
+
+	public JsonElement encode(boolean nullable);
 
 }

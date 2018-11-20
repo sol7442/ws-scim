@@ -4,17 +4,30 @@ package com.wowsanta.scim.attribute;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Set;
+
+import org.codehaus.janino.Java.Instanceof;
+
 import java.util.Map.Entry;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.schema.SCIMAttributeSchema;
 import com.wowsanta.scim.schema.SCIMDefinitions;
+
+import net.minidev.json.JSONObject;
 
 public class SimpleAttribute extends AbstractAttribute {
 	private static final long serialVersionUID = 3307670169212954126L;
 	private Object value;
 
+	public SimpleAttribute(String attributeName) {
+		this.name = attributeName;
+	}
+	
 	public SimpleAttribute(String attributeName, Object value) {
 		this.name = attributeName;
 		this.value = value;
@@ -78,5 +91,32 @@ public class SimpleAttribute extends AbstractAttribute {
 		buffer.append(this.value);
 		buffer.append("\"");
 		return this.name + ":" + this.value;
+	}
+	
+	@Override
+	public JsonElement encode(boolean nullable) {
+//		if(this.value != null) {
+//			if (this.value instanceof Instant) {
+//				Instant time_value = (Instant) this.value;
+//				root.addProperty(this.name, time_value.toString());
+//			}else {
+//				root.addProperty(this.name, this.value.toString());
+//			}	
+//		}else {
+//			if(nullable) {
+//				root.addProperty(this.name, "");
+//			}
+//		}
+		
+		JsonObject json = new JsonObject();
+		if(nullable) {
+			json.addProperty(this.name, "");
+		}
+		return json;
+	}
+
+	public static Attribute create(SCIMAttributeSchema attr_schema) {
+		SimpleAttribute attribute = new SimpleAttribute(attr_schema.getName());
+		return attribute;
 	}
 }

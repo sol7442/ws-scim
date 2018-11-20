@@ -2,6 +2,8 @@ package com.wowsanta.scim.attribute;
 
 import com.wowsanta.scim.schema.SCIMDefinitions;
 
+import net.minidev.json.JSONObject;
+
 @SuppressWarnings("serial")
 public abstract class AbstractAttribute implements Attribute {
     protected String uri;
