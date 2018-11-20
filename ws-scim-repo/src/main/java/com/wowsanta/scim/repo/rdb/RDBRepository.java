@@ -12,10 +12,10 @@ import java.nio.charset.StandardCharsets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
+import com.wowsanta.scim.obj.User;
 import com.wowsanta.scim.resource.Group;
 import com.wowsanta.scim.resource.RepositoryManager;
 import com.wowsanta.scim.resource.ResourceMapper;
-import com.wowsanta.scim.resource.User;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
 public class RDBRepository implements RepositoryManager {

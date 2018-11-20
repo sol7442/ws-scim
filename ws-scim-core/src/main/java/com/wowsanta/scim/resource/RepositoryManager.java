@@ -1,6 +1,7 @@
 package com.wowsanta.scim.resource;
 
 
+import com.wowsanta.scim.obj.User;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
 public interface RepositoryManager {

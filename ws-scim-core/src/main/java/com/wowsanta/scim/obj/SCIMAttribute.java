@@ -1,20 +1,20 @@
 package com.wowsanta.scim.obj;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.wowsanta.scim.attribute.Attribute;
+
 
 public class SCIMAttribute {
-	  private final AttributeDescriptor attributeDescriptor;
-	  private final SCIMAttributeValue[] values;
+	private  Map<String, Attribute> attributes = new HashMap<String, Attribute>();
 
-	  public SCIMAttribute(AttributeDescriptor attributeDescriptor, SCIMAttributeValue[] values) {
-		  this.attributeDescriptor = attributeDescriptor;
-		  this.values = values;
-	  }
-
-	public AttributeDescriptor getAttributeDescriptor() {
-		return attributeDescriptor;
+	public Map<String, Attribute> getAttributes() {
+		return attributes;
 	}
 
-	public SCIMAttributeValue[] getValues() {
-		return values;
+	public void setAttributes(Map<String, Attribute> attributes) {
+		this.attributes = attributes;
 	}
+	
 }
