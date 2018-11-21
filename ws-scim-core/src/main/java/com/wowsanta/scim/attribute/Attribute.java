@@ -37,4 +37,5 @@ public interface Attribute extends Serializable {
 
 	public JsonElement encode(boolean nullable);
 
+	public boolean isNull();
 }

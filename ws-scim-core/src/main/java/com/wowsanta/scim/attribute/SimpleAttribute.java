@@ -24,13 +24,14 @@ public class SimpleAttribute extends AbstractAttribute {
 	private static final long serialVersionUID = 3307670169212954126L;
 	private Object value;
 
-	public SimpleAttribute(String attributeName) {
-		this.name = attributeName;
+
+	public static Attribute create(SCIMAttributeSchema attr_schema) {
+		SimpleAttribute attribute = new SimpleAttribute(attr_schema);
+		return attribute;
 	}
-	
-	public SimpleAttribute(String attributeName, Object value) {
-		this.name = attributeName;
-		this.value = value;
+
+	public SimpleAttribute(SCIMAttributeSchema schema) {
+		super(schema);
 	}
 
 	public Object getValue() {
@@ -76,6 +77,10 @@ public class SimpleAttribute extends AbstractAttribute {
 		this.value = value;
 	}
 	
+	public boolean isNull() {
+		return this.value == null ;
+	}
+	
 	public String toJson() {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		return gson.toJson(this);
@@ -95,28 +100,14 @@ public class SimpleAttribute extends AbstractAttribute {
 	
 	@Override
 	public JsonElement encode(boolean nullable) {
-//		if(this.value != null) {
-//			if (this.value instanceof Instant) {
-//				Instant time_value = (Instant) this.value;
-//				root.addProperty(this.name, time_value.toString());
-//			}else {
-//				root.addProperty(this.name, this.value.toString());
-//			}	
-//		}else {
-//			if(nullable) {
-//				root.addProperty(this.name, "");
-//			}
-//		}
-		
 		JsonObject json = new JsonObject();
-		if(nullable) {
-			json.addProperty(this.name, "");
+		if(this.value != null) {
+			json.addProperty(this.name,this.value.toString());
+		}else {
+			if(nullable) {
+				json.addProperty(this.name,"");
+			}
 		}
 		return json;
-	}
-
-	public static Attribute create(SCIMAttributeSchema attr_schema) {
-		SimpleAttribute attribute = new SimpleAttribute(attr_schema.getName());
-		return attribute;
 	}
 }

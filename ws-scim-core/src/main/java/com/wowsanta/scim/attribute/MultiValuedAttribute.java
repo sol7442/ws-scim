@@ -18,49 +18,41 @@ public class MultiValuedAttribute extends AbstractAttribute {
     protected List<Object> attributePrimitiveValues = new ArrayList<Object>();
     
 	public static Attribute create(SCIMAttributeSchema attr_schema) {
-		MultiValuedAttribute attribute = new MultiValuedAttribute(attr_schema.getName());
+		MultiValuedAttribute attribute = new MultiValuedAttribute(attr_schema);
 		if(attr_schema.getType() == SCIMDefinitions.DataType.COMPLEX) {
-			for (SCIMAttributeSchema sub_attri_schema : attr_schema.getSubAttributes()) {
-				Attribute sub_attribute = null;
-				if(sub_attri_schema.getMultiValued()) {
-					sub_attribute = MultiValuedAttribute.create(sub_attri_schema);
-				}else {
-					//System.out.println(attr_schema.getMultiValued() + "..vvv..." + sub_attri_schema.getType());
-					if(sub_attri_schema.getType() == SCIMDefinitions.DataType.COMPLEX) {
-						
-					}else {
-						sub_attribute = SimpleAttribute.create(sub_attri_schema);
-					}
-				}
-				if(sub_attribute != null) {
-					attribute.addAttribute(sub_attribute);
-				}
-			}
-			
-//			System.out.println("o00...." + attr_schema.getSubAttributes());
-			
-//			for (SCIMAttributeSchema attr_schema : schema.getAttributes().values()) {
-//				Attribute attribute = null;
-//				if(attr_schema.getMultiValued()){
-//					
-//				}
+			attribute.addAttribute(ComplexAttribute.create(attr_schema));
 		}else {
-			System.out.println("obb...." + attr_schema.getSubAttributes());
+			attribute.addAttribute(SimpleAttribute.create(attr_schema));
 		}
+//			
+//			
+//			
+////			for (SCIMAttributeSchema sub_attri_schema : attr_schema.getSubAttributes()) {
+////				Attribute sub_attribute = null;
+////				if(sub_attri_schema.getMultiValued()) {
+////					sub_attribute = MultiValuedAttribute.create(sub_attri_schema);
+////				}else {
+////					if(sub_attri_schema.getType() == SCIMDefinitions.DataType.COMPLEX) {
+////						sub_attribute = ComplexAttribute.create(sub_attri_schema);
+////					}else {
+////						sub_attribute = SimpleAttribute.create(sub_attri_schema);
+////					}
+////				}
+////				if(sub_attribute != null) {
+////					attribute.addAttribute(sub_attribute);
+////				}
+////			}
+//		}else {
+//			System.out.println("obb...." + attr_schema.getSubAttributes());
+//		}
 		return attribute;
 	}
 	
-    public MultiValuedAttribute(String attributeName, List<Attribute> attributeValues) {
-        this.name = attributeName;
-        this.attributeValues = attributeValues;
-    }
-    public  MultiValuedAttribute(){}
+    public MultiValuedAttribute(SCIMAttributeSchema schema) {
+    	super(schema);
+	}
 
-    public MultiValuedAttribute(String attributeName) {
-        this.name = attributeName;
-    }
-
-    public List<Attribute> getAttributeValues() {
+	public List<Attribute> getAttributeValues() {
         return attributeValues;
     }
 
@@ -81,11 +73,11 @@ public class MultiValuedAttribute extends AbstractAttribute {
     public void deletePrimitiveValues() throws SCIMException {
         attributePrimitiveValues.clear();
     }
-    public void setComplexValueWithSetOfSubAttributes(Map<String, Attribute> subAttributes) {
-        ComplexAttribute complexValue = new ComplexAttribute();
-        complexValue.setSubAttributesList(subAttributes);
-        this.attributeValues.add(complexValue);
-    }
+//    public void setComplexValueWithSetOfSubAttributes(Map<String, Attribute> subAttributes) {
+//        ComplexAttribute complexValue = new ComplexAttribute();
+//        complexValue.setSubAttributesList(subAttributes);
+//        this.attributeValues.add(complexValue);
+//    }
     public List<Object> getAttributePrimitiveValues() {
         return attributePrimitiveValues;
     }
@@ -102,6 +94,10 @@ public class MultiValuedAttribute extends AbstractAttribute {
         attributePrimitiveValues.add(obj);
     }
     
+	public boolean isNull() {
+		return this.attributeValues.size() == 0 && this.attributePrimitiveValues.size() == 0 ;
+	}
+	
 	@Override
 	public JsonElement encode(boolean nullable) {
 		JsonArray array = new JsonArray();

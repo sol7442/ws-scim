@@ -53,14 +53,14 @@ public class RepositoryManagerTest {
 			
 			RepositoryManager repository = repo_mgr.getRepositoryManger();
 			User user = new User(user_schema);
-			SimpleAttribute name = new SimpleAttribute(SCIMSchemaDefinitions.SCIMUserSchemaDefinition.NAME.getName(),"tester_name");
+			SimpleAttribute name = new SimpleAttribute(SCIMSchemaDefinitions.SCIMUserSchemaDefinition.NAME);//''.getName(),"tester_name");
 			user.addAttribute(name.getName(), name);
 			
-			SimpleAttribute id = new SimpleAttribute(SCIMSchemaDefinitions.ID.getName(),null);
+			SimpleAttribute id = new SimpleAttribute(SCIMSchemaDefinitions.ID);//.getName(),null);
 			user.addAttribute(id.getName(), id);
 			
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			System.out.println(gson.toJson(user.encode(true)));
+			System.out.println(gson.toJson(user.encode()));
 			
 			repository.createUser(user);
 //			System.out.println(repo_mgr.getRepositoryManger());

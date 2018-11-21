@@ -1,5 +1,6 @@
 package com.wowsanta.scim.attribute;
 
+import com.wowsanta.scim.schema.SCIMAttributeSchema;
 import com.wowsanta.scim.schema.SCIMDefinitions;
 
 import net.minidev.json.JSONObject;
@@ -17,7 +18,20 @@ public abstract class AbstractAttribute implements Attribute {
     protected SCIMDefinitions.Returned returned;
     protected SCIMDefinitions.Uniqueness uniqueness;
 
-    public String getURI() {
+    public AbstractAttribute(SCIMAttributeSchema schema) {
+	    this.uri    = schema.getUri();
+	    this.name   = schema.getName();
+	    this.type   = schema.getType();
+	    this.multiValued = schema.getMultiValued();
+	    this.description = schema.getDescription();
+	    this.required    = schema.getRequired();
+	    this.caseExact   = schema.getCaseExact();
+	    this.mutability  = schema.getMutability();
+	    this.returned    = schema.getReturned();
+	    this.uniqueness  = schema.getUniqueness();
+	}
+
+	public String getURI() {
         return uri; }
 
     public void setURI(String uri) {

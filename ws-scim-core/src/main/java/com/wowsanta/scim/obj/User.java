@@ -21,7 +21,6 @@ public class User extends SCIMObject{
 		Set<Entry<String,Attribute>> entry_set =  this.attributes.entrySet();
 		for (Entry<String,Attribute> entry : entry_set) {
 			System.out.println(entry.getKey() + " : " + entry.getValue());
-			
 			System.out.println(entry.getValue());
 		}
 		
