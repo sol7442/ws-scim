@@ -8,11 +8,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.wowsanta.scim.obj.User;
+import com.wowsanta.scim.repository.QueryManager;
 import com.wowsanta.scim.resource.Group;
 import com.wowsanta.scim.resource.RepositoryManager;
 import com.wowsanta.scim.resource.ResourceMapper;
@@ -22,12 +27,25 @@ public class RDBRepository implements RepositoryManager {
 	
 	private RDBQueryMapper queryMapper ;
 	private ResourceMapper resourceMapper;
+	private RDBQueryManager queryManager;
 	private DBCP dbcp;
 	
 	@Override
 	public void initialize() {
-		
+		try {
+			this.dbcp.setUp();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
+	
+	@Override
+	public void setQueryManager(QueryManager quer_mgr) {
+		this.queryManager = (RDBQueryManager) quer_mgr;
+	}
+	
 	public void initDBCP(DBCP dbcp, RDBQueryMapper queryMapper) {
 		this.dbcp = dbcp;
 		this.queryMapper = queryMapper;
@@ -46,7 +64,25 @@ public class RDBRepository implements RepositoryManager {
 
 	@Override
 	public User createUser(User user) {
-		// TODO Auto-generated method stub
+		System.out.println("======createUser==========================");
+		Connection connection = null;
+		try {
+			 connection =  DriverManager.getConnection("jdbc:apache:commons:dbcp:cp");
+			 
+			 
+			 List<RDBQuery> query_list = this.queryManager.getInsert();
+			 for (RDBQuery query : query_list) {
+				 query.getTable();
+				 
+			}
+			 
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		System.out.println("======createUser==========================");
 		return null;
 	}
 
@@ -124,4 +160,5 @@ public class RDBRepository implements RepositoryManager {
 		JsonReader reader = new JsonReader(new FileReader(file_name));
 		return gson.fromJson(reader,RDBRepository.class);
 	}
+
 }

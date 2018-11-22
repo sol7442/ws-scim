@@ -5,13 +5,13 @@ import java.lang.reflect.Method;
 
 import com.wowsanta.scim.resource.RepositoryManager;
 
-public class SCIMRepositoryManager {
-	private static SCIMRepositoryManager instance = null;
+public class SCIMResouceManager {
+	private static SCIMResouceManager instance = null;
 	private RepositoryManager repositoryManger;
 	
-	public static SCIMRepositoryManager getInstance() {
+	public static SCIMResouceManager getInstance() {
 		if(instance == null) {
-			instance = new SCIMRepositoryManager();
+			instance = new SCIMResouceManager();
 		}
 		return instance;
 	}
@@ -20,6 +20,7 @@ public class SCIMRepositoryManager {
 		try {
 			Method load_method = Class.forName(repositoryClass).getDeclaredMethod("load",String.class);
 			this.repositoryManger = (RepositoryManager)load_method.invoke(null,repositoryConfig);
+			this.repositoryManger.initialize();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {

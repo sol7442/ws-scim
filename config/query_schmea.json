@@ -1,0 +1,32 @@
+{
+  "select": {
+    "table": "USER",
+    "columns": [
+      {
+        "columnType": "SCIMATTRIBUTE",
+        "name": "name"
+      },
+      {
+        "columnType": "SCIMATTRIBUTE",
+        "name": "age"
+      }
+    ]
+  },
+  "insert": [
+    {
+      "table": "USER",
+      "columns": [
+        {
+          "columnType": "SCIMATTRIBUTE",
+          "name": "name"
+        },
+        {
+          "columnType": "SCIMATTRIBUTE",
+          "name": "name"
+        }
+      ]
+    }
+  ],
+  "delete": [],
+  "update": []
+}

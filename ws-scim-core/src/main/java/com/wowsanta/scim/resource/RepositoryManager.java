@@ -2,6 +2,7 @@ package com.wowsanta.scim.resource;
 
 
 import com.wowsanta.scim.obj.User;
+import com.wowsanta.scim.repository.QueryManager;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
 public interface RepositoryManager {
@@ -19,4 +20,6 @@ public interface RepositoryManager {
 	public Group getGroup(String groupId);
 	public Group updateGroup(Group group);
 	public void deleteGroup(String groupId);
+
+	public void setQueryManager(QueryManager quer_mgr);
 }

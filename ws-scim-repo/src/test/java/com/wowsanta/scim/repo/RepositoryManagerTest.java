@@ -9,8 +9,10 @@ import com.google.gson.GsonBuilder;
 import com.wowsanta.scim.attribute.SimpleAttribute;
 import com.wowsanta.scim.obj.User;
 import com.wowsanta.scim.repo.rdb.DBCP;
+import com.wowsanta.scim.repo.rdb.RDBQueryManager;
 import com.wowsanta.scim.repo.rdb.RDBRepository;
-import com.wowsanta.scim.repository.SCIMRepositoryManager;
+import com.wowsanta.scim.repo.rdb.UserQueryManager;
+import com.wowsanta.scim.repository.SCIMResouceManager;
 import com.wowsanta.scim.resource.RepositoryManager;
 import com.wowsanta.scim.schema.SCIMDefinitions;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
@@ -45,20 +47,26 @@ public class RepositoryManagerTest {
 		try {
 			
 			String repositoryClass = "com.wowsanta.scim.repo.rdb.RDBRepository";
-			SCIMRepositoryManager repo_mgr = SCIMRepositoryManager.getInstance();			
+			SCIMResouceManager repo_mgr = SCIMResouceManager.getInstance();			
 			repo_mgr.initialize(repositoryClass,this.conf_file);
+			RDBQueryManager quer_mgr = RDBQueryManager.load("../config/query_schmea.json");
+			System.out.println(quer_mgr.toJson());
 			
-			
-			SCIMResourceTypeSchema user_schema = SCIMResourceTypeSchema.load("../config/schema/scim_user_schema.json");
-			
+			SCIMResourceTypeSchema user_schema = SCIMResourceTypeSchema.load("../config/schema/local_user_schema.json");			
 			RepositoryManager repository = repo_mgr.getRepositoryManger();
+			repository.setQueryManager(quer_mgr);
+			
+			
 			User user = new User(user_schema);
+			
 			SimpleAttribute name = new SimpleAttribute(SCIMSchemaDefinitions.SCIMUserSchemaDefinition.NAME);//''.getName(),"tester_name");
-			user.addAttribute(name.getName(), name);
-			
+			name.setValue("테스터");
 			SimpleAttribute id = new SimpleAttribute(SCIMSchemaDefinitions.ID);//.getName(),null);
-			user.addAttribute(id.getName(), id);
+			id.setValue("00001");
 			
+			user.addAttribute(name.getName(), name);
+			user.addAttribute(id.getName(), id);
+			 
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 			System.out.println(gson.toJson(user.encode()));
 			

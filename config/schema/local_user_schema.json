@@ -1,0 +1,101 @@
+{
+	"schemas": [
+		"urn:wowsanta:scim:schemas:core:2.0:User"
+	],
+	"attributes": {
+	"phoneNumbers": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:User:phoneNumbers",
+      "name": "phoneNumbers",
+      "type": "COMPLEX",
+      "multiValued": true,
+      "description": "Phone numbers for the User.  The value SHOULD be canonicalized by the service provider according to the\nformat specified in RFC 3966, e.g., \u0027tel:+1-201-555-0123\u0027.Canonical type values of \u0027work\u0027, \u0027home\u0027, \u0027mobile\u0027, \u0027fax\u0027, \u0027pager",
+      "required": false,
+      "caseExact": false,
+      "mutability": "READ_WRITE",
+      "returned": "DEFAULT",
+      "uniqueness": "NONE",
+      "subAttributes": [
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:phoneNumbers.value",
+          "name": "value",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "Phone number of the User.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },        
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:User:phoneNumbers.type",
+          "name": "type",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "A label indicating the attribute\u0027s function, e.g., \u0027work\u0027, \u0027home\u0027, \u0027mobile\u0027.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_WRITE",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE",
+          "canonicalValues": [
+            "work",
+            "home",
+            "other",
+            "fax",
+            "mobile",
+            "pager"
+          ]
+        }        
+      ]
+    },
+	"email": {
+			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:email",
+			"name": "email",
+			"type": "STRING",
+			"multiValued": false,
+			"description": "Email addresses for the user.  The value SHOULD be canonicalized by the service provider, e.g.,\n\u0027bjensen@example.com\u0027 instead of \u0027bjensen@EXAMPLE.COM\u0027.Canonical type values of \u0027work\u0027, \u0027home\u0027, and \u0027other\u0027.",
+			"required": false,
+			"caseExact": false,
+			"mutability": "READ_WRITE",
+			"returned": "DEFAULT",
+			"uniqueness": "NONE"
+		},
+		"address": {
+			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:address",
+			"name": "address",
+			"type": "STRING",
+			"multiValued": false,
+			"description": "The full mailing address, formatted for display or use with a mailing label.  This attribute MAY contain\nnewlines.",
+			"required": false,
+			"caseExact": false,
+			"mutability": "READ_WRITE",
+			"returned": "DEFAULT",
+			"uniqueness": "NONE"
+		},
+		"name": {
+			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:name",
+			"name": "name",
+			"type": "STRING",
+			"multiValued": false,
+			"description": "The honorific suffix(es) of the User, or suffix in most Western languages (e.g., \u0027III\u0027 given the full name\n\u0027Ms. Barbara J Jensen, III\u0027).",
+			"required": false,
+			"caseExact": false,
+			"mutability": "READ_WRITE",
+			"returned": "DEFAULT",
+			"uniqueness": "NONE"
+		},
+		"id": {
+			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:id",
+			"name": "id",
+			"type": "INTEGER",
+			"multiValued": false,
+			"description": "Unique identifier for the SCIM Resource as defined by the Service Provider.",
+			"required": true,
+			"caseExact": true,
+			"mutability": "READ_ONLY",
+			"returned": "ALWAYS",
+			"uniqueness": "SERVER"
+		}
+	}
+}
