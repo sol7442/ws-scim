@@ -6,6 +6,7 @@ import java.util.List;
 public class RDBQuery {
 	
 	private String table;
+	private String queryString;
 	private List<RDBColumn> columns = new ArrayList<RDBColumn>();
 	public String getTable() {
 		return table;
@@ -23,5 +24,7 @@ public class RDBQuery {
 		this.columns.add(column);
 	}
 	
-	
+	public String getQueryString() {
+		return queryString;
+	}
 }

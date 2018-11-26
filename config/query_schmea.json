@@ -15,6 +15,7 @@
   "insert": [
     {
       "table": "USER",
+      "queryString":"INISERT INTO () VALUES ()",
       "columns": [
         {
           "columnType": "SCIMATTRIBUTE",
