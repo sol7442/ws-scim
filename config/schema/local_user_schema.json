@@ -3,6 +3,80 @@
 		"urn:wowsanta:scim:schemas:core:2.0:User"
 	],
 	"attributes": {
+	"meta": {
+      "uri": "urn:ietf:params:scim:schemas:core:2.0:meta",
+      "name": "meta",
+      "type": "COMPLEX",
+      "multiValued": false,
+      "description": "A complex attribute containing resource metadata.",
+      "required": false,
+      "caseExact": false,
+      "mutability": "READ_ONLY",
+      "returned": "DEFAULT",
+      "uniqueness": "NONE",
+      "subAttributes": [
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:meta.resourceType",
+          "name": "resourceType",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "The name of the resource type of the resource.",
+          "required": false,
+          "caseExact": true,
+          "mutability": "READ_ONLY",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:meta.created",
+          "name": "created",
+          "type": "DATE_TIME",
+          "multiValued": false,
+          "description": "The \"DateTime\" that the resource was added to the service provider.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_ONLY",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:meta.lastModified",
+          "name": "lastModified",
+          "type": "DATE_TIME",
+          "multiValued": false,
+          "description": "The most recent DateTime that the details of this resource were updated at the service provider.",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_ONLY",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:meta.location",
+          "name": "location",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "Location  The uri of the resource being returned",
+          "required": false,
+          "caseExact": false,
+          "mutability": "READ_ONLY",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        },
+        {
+          "uri": "urn:ietf:params:scim:schemas:core:2.0:meta.version",
+          "name": "version",
+          "type": "STRING",
+          "multiValued": false,
+          "description": "The version of the resource being returned.",
+          "required": false,
+          "caseExact": true,
+          "mutability": "READ_ONLY",
+          "returned": "DEFAULT",
+          "uniqueness": "NONE"
+        }
+      ]
+    },
 	"phoneNumbers": {
       "uri": "urn:ietf:params:scim:schemas:core:2.0:User:phoneNumbers",
       "name": "phoneNumbers",

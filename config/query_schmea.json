@@ -4,18 +4,34 @@
     "columns": [
       {
         "columnType": "SCIMATTRIBUTE",
+        "name": "id"
+      },
+      {
+        "columnType": "SCIMATTRIBUTE",
         "name": "name"
       },
       {
         "columnType": "SCIMATTRIBUTE",
-        "name": "age"
+        "name": "address"
+      },
+      {
+        "columnType": "SCIMATTRIBUTE",
+        "name": "email"
+      },
+      {
+        "columnType": "SCIMATTRIBUTE",
+        "name": "homephone"
+      },
+      {
+        "columnType": "SCIMATTRIBUTE",
+        "name": "officehone"
       }
     ]
   },
   "insert": [
     {
       "table": "USER",
-      "queryString":"INISERT INTO () VALUES ()",
+      "queryString":"INISERT INTO (id,name,address,email,hoemphone,offecphone) VALUES (?,?,?,?,?,?)",
       "columns": [
         {
           "columnType": "SCIMATTRIBUTE",

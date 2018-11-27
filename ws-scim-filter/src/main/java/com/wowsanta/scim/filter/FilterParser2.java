@@ -90,7 +90,7 @@ public class FilterParser2 {
 		try {
 			return readFilter();
 		} catch (Exception e) {
-			throw new SCIMException();
+			throw new SCIMException(e.getMessage());
 		}
 	}
 
