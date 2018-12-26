@@ -10,7 +10,7 @@ import com.wowsanta.scim.attribute.SimpleAttribute;
 import com.wowsanta.scim.obj.User;
 import com.wowsanta.scim.repo.rdb.DBCP;
 import com.wowsanta.scim.repo.rdb.RDBQueryManager;
-import com.wowsanta.scim.repo.rdb.RDBRepository;
+import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.repo.rdb.UserQueryManager;
 import com.wowsanta.scim.repository.SCIMResouceManager;
 import com.wowsanta.scim.resource.RepositoryManager;
@@ -25,7 +25,7 @@ public class RepositoryManagerTest {
 	//@Test
 	public void make() {
 		try {
-			RDBRepository repository = new RDBRepository();
+			AbstractRDBRepository repository = new AbstractRDBRepository();
 			DBCP dbcp = DBCP.load("../config/sqlite_dbcp.json");
 			repository.initDBCP(dbcp, null);
 			repository.save(conf_file);

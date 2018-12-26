@@ -20,7 +20,6 @@ public class SCIMResouceManager {
 		try {
 			Method load_method = Class.forName(repositoryClass).getDeclaredMethod("load",String.class);
 			this.repositoryManger = (RepositoryManager)load_method.invoke(null,repositoryConfig);
-			this.repositoryManger.initialize();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {

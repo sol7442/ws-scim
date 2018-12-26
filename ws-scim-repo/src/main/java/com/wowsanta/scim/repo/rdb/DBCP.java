@@ -25,6 +25,7 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
+import com.wowsanta.scim.repo.exception.RepositoryException;
 
 public class DBCP {
 
@@ -160,11 +161,15 @@ public class DBCP {
 		driver.registerPool(this.poolName,cp);
 	}
 	
-	public static DBCP load(String file_name) throws FileNotFoundException {
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		JsonReader reader = new JsonReader(new FileReader(file_name));
-		
-		return gson.fromJson(reader,DBCP.class); 
+	public static DBCP load(String file_name) throws RepositoryException {
+		try {
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			JsonReader reader;
+			reader = new JsonReader(new FileReader(file_name));
+			return gson.fromJson(reader,DBCP.class);
+		} catch (FileNotFoundException e) {
+			throw new RepositoryException("DBCP Config File ["+ file_name +"] does not Exist", e);
+		}
 	}
 	
 	public void save(String file_name) throws IOException {
