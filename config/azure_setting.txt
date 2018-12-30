@@ -1,0 +1,129 @@
+
+참고 사이트 : https://docs.microsoft.com/ko-kr/azure/virtual-machines/workloads/oracle/oracle-database-quick-create
+
+rg : wowsanta
+vm : name : oracle
+     ip   : 137.116.134.125
+     user/pw : wowsanta/1q2w3e4r5t!@
+
+     
+
+start : lsnrctl start
+
+dbca -silent \
+       -createDatabase \
+       -templateName General_Purpose.dbc \
+       -gdbname scim \
+       -sid scim \
+       -responseFile NO_VALUE \
+       -characterSet AL32UTF8 \
+       -sysPassword 1q2w3e4r5T \
+       -systemPassword 1q2w3e4r5T \
+       -createAsContainerDatabase true \
+       -numberOfPDBs 1 \
+       -pdbName pdb1 \
+       -pdbAdminPassword 1q2w3e4r5T \
+       -databaseType MULTIPURPOSE \
+       -automaticMemoryManagement false \
+       -storageType FS \
+       -ignorePreReqs
+
+
+ORACLE_SID=scim; export ORACLE_SID
+https://137.116.134.125:5502/em
+
+
+
+
+
+
+
+alter user "c##scim_im" identified by "1q2w3e4r5T";
+
+conn "c##scim_im"/"1q2w3e4r5T"
+conn c##scim_im/1q2w3e4r5T
+conn "c##scim_im"/1q2w3e4r5T
+
+52.163.186.76
+
+
+ALTER USER c##scim_im IDENTIFIED BY 1q2w3e4r5T
+drop user "c##scim_im" cascade; 
+
+CREATE TABLESPACE scimgw
+DATAFILE '/u01/app/oracle/oradata/scim/scimgw.dbf'
+SIZE 100M
+AUTOEXTEND ON NEXT 10M;
+
+
+출처: http://blueray21.tistory.com/35 [블루레이]
+
+출처: http://blueray21.tistory.com/35 [블루레이]
+
+출처: http://blueray21.tistory.com/35 [블루레이]
+
+
+root password : 
+azure vm info
+ - name   : oracle12VM
+ - oracle : Oracle Database 12.2.0.1 Enterprise Edition
+ - user   : wowsanta
+ - 암호   : 1q2w3e4r5t!@
+
+
+Connecting to (ADDRESS=(PROTOCOL=tcp)(HOST=)(PORT=1521))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 12.2.0.1.0 - Production
+Start Date                27-DEC-2018 15:47:41
+Uptime                    0 days 0 hr. 0 min. 19 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Log File         /u01/app/oracle/diag/tnslsnr/oracle12VM/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=oracle12VM.zlb1nvru4f3eta4cise5txpjpa.ix.internal.cloudapp.net)(PORT=1521)))
+The listener supports no services
+The command completed successfully
+
+dbca -silent -createDatabase -templateName General_Purpose.dbc -gdbname scim -sid scim -responseFile NO_VALUE -characterSet AL32UTF8 -sysPassword WowsantaPassword1 -systemPassword WowsantaPassword1 -createAsContainerDatabase true -numberOfPDBs 1 -pdbName pdb1 -pdbAdminPassword WowsantaPassword1 -databaseType MULTIPURPOSE -automaticMemoryManagement false -storageType FS -ignorePreReqs
+
+
+dbca -silent \
+       -createDatabase \
+       -templateName General_Purpose.dbc \
+       -gdbname cdb1 \
+       -sid cdb1 \
+       -responseFile NO_VALUE \
+       -characterSet AL32UTF8 \
+       -sysPassword OraPasswd1 \
+       -systemPassword OraPasswd1 \
+       -createAsContainerDatabase true \
+       -numberOfPDBs 1 \
+       -pdbName pdb1 \
+       -pdbAdminPassword OraPasswd1 \
+       -databaseType MULTIPURPOSE \
+       -automaticMemoryManagement false \
+       -ignorePreReqs
+
+# Add ORACLE_HOME. 
+export ORACLE_HOME=/u01/app/oracle/product/12.2.0/dbhome_1 
+# Add ORACLE_SID. 
+export ORACLE_SID=cdb1
+
+
+CREATE TABLESPACE scim_gw
+DATAFILE '/u01/app/oracle/oradata/cdb1/scim_gw.dbf'
+SIZE 100M
+AUTOEXTEND ON NEXT 10M;
+
+alter session set "_ORACLE_SCRIPT"=true;
+
+
+CREATE USER "scim_gw"
+IDENTIFIED BY "1q2w3e4r5T"
+DEFAULT TABLESPACE "SCIM_GW"
+TEMPORARY TABLESPACE "TEMP";
+
+
