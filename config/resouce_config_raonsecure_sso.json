@@ -1,0 +1,14 @@
+{
+  "dbcp": {
+    "poolName": "sso_repo",
+    "driverName": "oracle.jdbc.driver.OracleDriver",
+    "jdbcUrl": "jdbc:oracle:thin:@137.116.134.125:1521:scim",
+    "userName": "scim_sso",
+  	"password": "1q2w3e4r5T",
+    "valiationQuery": "select 1",
+    "timeBetweenEvictionRunsMillis": 60000,
+    "testWhileIdle": true,
+    "minIdle": 5,
+    "maxTotal": 50
+  }
+}

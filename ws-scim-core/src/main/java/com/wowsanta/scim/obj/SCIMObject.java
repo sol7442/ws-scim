@@ -56,7 +56,9 @@ public class SCIMObject implements Serializable{
 	public void setAttributes(Map<String, Attribute> attributes) {
 		this.attributes = attributes;
 	}
-	
+	public void addAttribute(Attribute attribute) {
+		this.attributes.put(attribute.getName(), attribute);
+	}
 	public void addAttribute(String key, Attribute attribute) {
 		this.attributes.put(key, attribute);
 	}

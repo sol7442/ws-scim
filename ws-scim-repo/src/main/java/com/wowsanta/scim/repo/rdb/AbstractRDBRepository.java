@@ -16,11 +16,12 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
-import com.wowsanta.scim.obj.User;
+import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.repository.QueryManager;
 import com.wowsanta.scim.resource.Group;
 import com.wowsanta.scim.resource.RepositoryManager;
 import com.wowsanta.scim.resource.ResourceMapper;
+import com.wowsanta.scim.resource.SCIMUser;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
 public abstract class AbstractRDBRepository implements RepositoryManager {
@@ -31,13 +32,11 @@ public abstract class AbstractRDBRepository implements RepositoryManager {
 	private DBCP dbcp;
 	
 	@Override
-	public void initialize() {
+	public void initialize() throws SCIMException {
 		try {
 			this.dbcp.setUp();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			throw new SCIMException("DBCP Setup Error ",e);
 		}
 	}
 	
@@ -155,10 +154,10 @@ public abstract class AbstractRDBRepository implements RepositoryManager {
 //		return toJson();
 //	}
 //	
-//	public static AbstractRDBRepository load(String file_name) throws FileNotFoundException {
-//		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//		JsonReader reader = new JsonReader(new FileReader(file_name));
-//		return gson.fromJson(reader,AbstractRDBRepository.class);
-//	}
+	public static AbstractRDBRepository load(String file_name) throws FileNotFoundException {
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		JsonReader reader = new JsonReader(new FileReader(file_name));
+		return gson.fromJson(reader,AbstractRDBRepository.class);
+	}
 
 }

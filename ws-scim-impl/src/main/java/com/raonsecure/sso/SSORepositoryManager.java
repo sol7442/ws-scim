@@ -1,29 +1,38 @@
 package com.raonsecure.sso;
 
-import com.wowsanta.scim.obj.User;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
-import com.wowsanta.scim.repository.QueryManager;
 import com.wowsanta.scim.resource.Group;
-import com.wowsanta.scim.resource.RepositoryManager;
-import com.wowsanta.scim.resource.ResourceMapper;
+import com.wowsanta.scim.resource.SCIMUser;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
-public class RepositoryManagerImpl extends AbstractRDBRepository {
+public class SSORepositoryManager extends AbstractRDBRepository {
 
+	public static SSORepositoryManager load(String file_name) throws FileNotFoundException {
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		JsonReader reader = new JsonReader(new FileReader(file_name));
+		return gson.fromJson(reader,SSORepositoryManager.class);
+	}
+	
 	@Override
-	public User createUser(User user) {
+	public SCIMUser createUser(SCIMUser user) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public User getUser(String userId) {
+	public SCIMUser getUser(String userId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public User updateUser(User updatedUser) {
+	public SCIMUser updateUser(SCIMUser updatedUser) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -63,6 +72,4 @@ public class RepositoryManagerImpl extends AbstractRDBRepository {
 		// TODO Auto-generated method stub
 		
 	}
-
-
 }

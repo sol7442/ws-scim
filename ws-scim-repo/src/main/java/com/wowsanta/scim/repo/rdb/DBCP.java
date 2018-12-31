@@ -25,6 +25,7 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
+import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.repo.exception.RepositoryException;
 
 public class DBCP {
@@ -159,6 +160,8 @@ public class DBCP {
 		
 		PoolingDriver driver = (PoolingDriver)DriverManager.getDriver("jdbc:apache:commons:dbcp:");
 		driver.registerPool(this.poolName,cp);
+		
+		SCIMLogger.sys("load dbcp => {} : {}",this.poolName, this.jdbcUrl);
 	}
 	
 	public static DBCP load(String file_name) throws RepositoryException {

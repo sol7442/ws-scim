@@ -1,4 +1,4 @@
-package com.wowsanta.scim.obj;
+package com.wowsanta.scim.resource;
 
 
 import java.util.Collection;
@@ -8,24 +8,26 @@ import java.util.Set;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wowsanta.scim.attribute.Attribute;
+import com.wowsanta.scim.obj.SCIMObject;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
-public class User extends SCIMObject{
+public class SCIMUser extends SCIMObject{
 	private static final long serialVersionUID = 1629646333520103312L;
 	
-	public User(SCIMResourceTypeSchema schema) {
+	public SCIMUser(SCIMResourceTypeSchema schema) {
 		createAttribute(schema);
 	}
 	
 	public String toJson() {
-		Set<Entry<String,Attribute>> entry_set =  this.attributes.entrySet();
-		for (Entry<String,Attribute> entry : entry_set) {
-			System.out.println(entry.getKey() + " : " + entry.getValue());
-			System.out.println(entry.getValue());
-		}
-		
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		return gson.toJson(this);
+//		Set<Entry<String,Attribute>> entry_set =  this.attributes.entrySet();
+//		for (Entry<String,Attribute> entry : entry_set) {
+//			System.out.println(entry.getKey() + " : " + entry.getValue());
+//			System.out.println(entry.getValue());
+//		}
+//		
+//		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//		return gson.toJson(this);
+		return encode().toString();
 	}
 	
 	public String toString() {
@@ -37,8 +39,8 @@ public class User extends SCIMObject{
 		return buffer.toString();
 	}
 	
-	public static User parse(String strJson)  {
+	public static SCIMUser parse(String strJson)  {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		return gson.fromJson(strJson,User.class);
+		return gson.fromJson(strJson,SCIMUser.class);
 	}
 }

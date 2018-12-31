@@ -1,4 +1,5 @@
 dependencies {
 	compile project(':ws-scim-repo')
+	compile files('../libs/ojdbc6.jar')
 }
 

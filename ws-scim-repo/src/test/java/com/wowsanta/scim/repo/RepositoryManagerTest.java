@@ -7,13 +7,13 @@ import org.junit.Test;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wowsanta.scim.attribute.SimpleAttribute;
-import com.wowsanta.scim.obj.User;
 import com.wowsanta.scim.repo.rdb.DBCP;
 import com.wowsanta.scim.repo.rdb.RDBQueryManager;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.repo.rdb.UserQueryManager;
 import com.wowsanta.scim.repository.SCIMResouceManager;
 import com.wowsanta.scim.resource.RepositoryManager;
+import com.wowsanta.scim.resource.SCIMUser;
 import com.wowsanta.scim.schema.SCIMDefinitions;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 import com.wowsanta.scim.schema.SCIMSchemaDefinitions;
@@ -57,7 +57,7 @@ public class RepositoryManagerTest {
 			repository.setQueryManager(quer_mgr);
 			
 			
-			User user = new User(user_schema);
+			SCIMUser user = new SCIMUser(user_schema);
 			
 			SimpleAttribute name = new SimpleAttribute(SCIMSchemaDefinitions.SCIMUserSchemaDefinition.NAME);//''.getName(),"tester_name");
 			name.setValue("테스터");
