@@ -1,8 +1,9 @@
-package com.raonsecure.sso;
+package com.ehyundai.sso;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
+import com.ehyundai.im.Meta;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
@@ -21,7 +22,10 @@ public class SSORepositoryManager extends AbstractRDBRepository {
 	
 	@Override
 	public SCIMUser createUser(SCIMUser user) {
-		// TODO Auto-generated method stub
+		
+		Meta meta = (Meta)user.getMeta();
+		System.out.println(meta.getVersion());
+		
 		return null;
 	}
 

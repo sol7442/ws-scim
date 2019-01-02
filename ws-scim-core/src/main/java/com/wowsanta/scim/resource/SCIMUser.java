@@ -1,46 +1,19 @@
 package com.wowsanta.scim.resource;
 
+import java.io.Serializable;
+import java.util.List;
 
-import java.util.Collection;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.wowsanta.scim.attribute.Attribute;
-import com.wowsanta.scim.obj.SCIMObject;
-import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
-
-public class SCIMUser extends SCIMObject{
-	private static final long serialVersionUID = 1629646333520103312L;
+public interface SCIMUser extends Serializable {
+	public void setSchemas(List<String> urls);
+	public List<String> getSchemas();
 	
-	public SCIMUser(SCIMResourceTypeSchema schema) {
-		createAttribute(schema);
-	}
+	public void setId(String id);
+	public String getId();
 	
-	public String toJson() {
-//		Set<Entry<String,Attribute>> entry_set =  this.attributes.entrySet();
-//		for (Entry<String,Attribute> entry : entry_set) {
-//			System.out.println(entry.getKey() + " : " + entry.getValue());
-//			System.out.println(entry.getValue());
-//		}
-//		
-//		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//		return gson.toJson(this);
-		return encode().toString();
-	}
 	
-	public String toString() {
-		StringBuffer buffer = new StringBuffer();
-		Collection<Attribute> atts = this.attributes.values();
-		for (Attribute attribute : atts) {
-			buffer.append(attribute.toString());
-		}
-		return buffer.toString();
-	}
+	public void setGroup(List<SCIMGroup> groups);
+	public List<SCIMGroup> getGroups();
 	
-	public static SCIMUser parse(String strJson)  {
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		return gson.fromJson(strJson,SCIMUser.class);
-	}
+	public void setMeta(SCIMMeta meta);
+	public SCIMMeta getMeta();
 }

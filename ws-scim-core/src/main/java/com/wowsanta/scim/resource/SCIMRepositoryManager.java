@@ -5,7 +5,7 @@ import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.repository.QueryManager;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
-public interface RepositoryManager {
+public interface SCIMRepositoryManager {
 	public void initialize() throws SCIMException;
 	
 	public void setMapper(ResourceMapper mapper);

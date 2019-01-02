@@ -20,9 +20,7 @@ import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 import com.wowsanta.scim.schema.SCIMSchemaDefinitions;
 
 
-
-
-public class SCIMObject implements Serializable{
+public class SCIMObject2 implements Serializable{
 	private static final long serialVersionUID = -7757000188475144311L;
 	
 	protected List<String> schmeas;

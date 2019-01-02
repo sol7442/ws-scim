@@ -19,12 +19,12 @@ import com.google.gson.stream.JsonReader;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.repository.QueryManager;
 import com.wowsanta.scim.resource.Group;
-import com.wowsanta.scim.resource.RepositoryManager;
+import com.wowsanta.scim.resource.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.ResourceMapper;
-import com.wowsanta.scim.resource.SCIMUser;
+import com.wowsanta.scim.resource.SCIMUser2;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
-public abstract class AbstractRDBRepository implements RepositoryManager {
+public abstract class AbstractRDBRepository implements SCIMRepositoryManager {
 	
 	private RDBQueryMapper queryMapper ;
 	private ResourceMapper resourceMapper;

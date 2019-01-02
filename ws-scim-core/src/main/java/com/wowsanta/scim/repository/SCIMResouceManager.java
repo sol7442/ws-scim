@@ -3,11 +3,11 @@ package com.wowsanta.scim.repository;
 import java.lang.reflect.Method;
 
 import com.wowsanta.scim.exception.SCIMException;
-import com.wowsanta.scim.resource.RepositoryManager;
+import com.wowsanta.scim.resource.SCIMRepositoryManager;
 
 public class SCIMResouceManager {
 	private static SCIMResouceManager instance = null;
-	private RepositoryManager repositoryManger;
+	private SCIMRepositoryManager repositoryManger;
 	
 	public static SCIMResouceManager getInstance() {
 		if(instance == null) {
@@ -16,10 +16,10 @@ public class SCIMResouceManager {
 		return instance;
 	}
 
-	public RepositoryManager loadRepositoryManager(String repository_class, String repository_config) throws SCIMException {
+	public SCIMRepositoryManager loadRepositoryManager(String repository_class, String repository_config) throws SCIMException {
 		try {
 			Method load_method = Class.forName(repository_class).getDeclaredMethod("load",String.class);
-			this.repositoryManger = (RepositoryManager)load_method.invoke(null,repository_config);
+			this.repositoryManger = (SCIMRepositoryManager)load_method.invoke(null,repository_config);
 		} catch (Exception e) {
 			throw new SCIMException("RepositoryManager Load Error ["+repository_class+"]["+repository_config+"]",e);
 		} 
@@ -28,11 +28,11 @@ public class SCIMResouceManager {
 	
 	
 
-	public RepositoryManager getRepositoryManger() {
+	public SCIMRepositoryManager getRepositoryManger() {
 		return repositoryManger;
 	}
 
-	public void setRepositoryManger(RepositoryManager repositoryManger) {
+	public void setRepositoryManger(SCIMRepositoryManager repositoryManger) {
 		this.repositoryManger = repositoryManger;
 	}
 

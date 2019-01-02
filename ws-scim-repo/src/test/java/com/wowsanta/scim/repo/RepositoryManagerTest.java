@@ -12,8 +12,8 @@ import com.wowsanta.scim.repo.rdb.RDBQueryManager;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.repo.rdb.UserQueryManager;
 import com.wowsanta.scim.repository.SCIMResouceManager;
-import com.wowsanta.scim.resource.RepositoryManager;
-import com.wowsanta.scim.resource.SCIMUser;
+import com.wowsanta.scim.resource.SCIMRepositoryManager;
+import com.wowsanta.scim.resource.SCIMUser2;
 import com.wowsanta.scim.schema.SCIMDefinitions;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 import com.wowsanta.scim.schema.SCIMSchemaDefinitions;
@@ -53,11 +53,11 @@ public class RepositoryManagerTest {
 			System.out.println(quer_mgr.toJson());
 			
 			SCIMResourceTypeSchema user_schema = SCIMResourceTypeSchema.load("../config/schema/local_user_schema.json");			
-			RepositoryManager repository = repo_mgr.getRepositoryManger();
+			SCIMRepositoryManager repository = repo_mgr.getRepositoryManger();
 			repository.setQueryManager(quer_mgr);
 			
 			
-			SCIMUser user = new SCIMUser(user_schema);
+			SCIMUser2 user = new SCIMUser2(user_schema);
 			
 			SimpleAttribute name = new SimpleAttribute(SCIMSchemaDefinitions.SCIMUserSchemaDefinition.NAME);//''.getName(),"tester_name");
 			name.setValue("테스터");
