@@ -9,11 +9,16 @@ public class SCIMResouceManager {
 	private static SCIMResouceManager instance = null;
 	private SCIMRepositoryManager repositoryManger;
 	
+	private boolean load = false;
 	public static SCIMResouceManager getInstance() {
 		if(instance == null) {
 			instance = new SCIMResouceManager();
 		}
 		return instance;
+	}
+
+	public boolean isLoad() {
+		return this.load;
 	}
 
 	public SCIMRepositoryManager loadRepositoryManager(String repository_class, String repository_config) throws SCIMException {
@@ -23,6 +28,8 @@ public class SCIMResouceManager {
 		} catch (Exception e) {
 			throw new SCIMException("RepositoryManager Load Error ["+repository_class+"]["+repository_config+"]",e);
 		} 
+		
+		this.load = true;
 		return this.repositoryManger;
 	}
 	

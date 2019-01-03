@@ -1,5 +1,5 @@
 {
-  "poolName": "cp",
+  "poolName": "sso",
   "driverName": "oracle.jdbc.driver.OracleDriver",
   "jdbcUrl": "jdbc:mysql://wession.com:3306/ws_scim_im?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC",
   "userName": "root",

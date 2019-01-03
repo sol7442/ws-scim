@@ -10,10 +10,10 @@ public interface SCIMRepositoryManager {
 	
 	public void setMapper(ResourceMapper mapper);
 	public void setUserSchema(SCIMResourceTypeSchema userSchema);
-	public SCIMUser createUser(SCIMUser user);
+	public SCIMUser createUser(SCIMUser user) throws SCIMException;
 	public SCIMUser getUser(String userId);
 	public SCIMUser updateUser(SCIMUser updatedUser);
-	public void deleteUser(String userId);
+	public void deleteUser(String userId) throws SCIMException;
 	
 	public void setGroupSchema(SCIMResourceTypeSchema groupSchema);
 	public Group createGroup(Group group);

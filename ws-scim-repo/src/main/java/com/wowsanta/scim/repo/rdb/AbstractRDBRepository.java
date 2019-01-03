@@ -55,6 +55,18 @@ public abstract class AbstractRDBRepository implements SCIMRepositoryManager {
 		this.resourceMapper = resoureMapper;
 	}
 	
+	
+	public Connection getConnection() {
+		Connection connection = null;
+		try {
+			connection = DriverManager.getConnection(this.dbcp.getPoolName());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return connection;
+	}
+	
+	
 	@Override
 	public void setUserSchema(SCIMResourceTypeSchema userSchema) {
 		// TODO Auto-generated method stub

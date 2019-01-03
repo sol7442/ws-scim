@@ -33,7 +33,8 @@ public class DBCP {
 	private String poolName;
 	
 	public String getPoolName() {
-		return poolName;
+		//return poolName;
+		return "jdbc:apache:commons:dbcp:" + this.poolName;
 	}
 
 	public void setPoolName(String poolName) {

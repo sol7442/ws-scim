@@ -3,9 +3,11 @@ package com.ehyundai.im;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wowsanta.scim.resource.SCIMGroup;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.wowsanta.scim.resource.SCIMMeta;
 import com.wowsanta.scim.resource.SCIMUser;
+import com.wowsanta.scim.resource.SCIMUserGroup;
 
 public class User implements SCIMUser {
 	/**
@@ -17,6 +19,7 @@ public class User implements SCIMUser {
 	private String id;
 	private String userName;
 	private Meta meta;
+	private List<UserGroup> groups = new ArrayList<UserGroup>();
 	
 	@Override
 	public void setSchemas(List<String> urls) {
@@ -47,16 +50,27 @@ public class User implements SCIMUser {
 	public SCIMMeta getMeta() {
 		return this.meta;
 	}
-
+	
 	@Override
-	public void setGroup(List<SCIMGroup> groups) {
+	public void addGroup(SCIMUserGroup group) {
+		this.groups.add((UserGroup) group);
 	}
-
+	
 	@Override
-	public List<SCIMGroup> getGroups() {
-		return null;
+	public List<SCIMUserGroup> getGroups() {
+		List<SCIMUserGroup> groups = new ArrayList<SCIMUserGroup>();
+		groups.addAll(this.groups);
+		return groups;
 	}
-
+	
+	@Override
+	public void setGroups(List<SCIMUserGroup> groups) {
+		this.groups.clear();
+		for(SCIMUserGroup group : groups) {
+			this.groups.add((UserGroup) group);
+		}
+	}
+	
 	public String getUserName() {
 		return userName;
 	}
@@ -65,4 +79,8 @@ public class User implements SCIMUser {
 		this.userName = userName;
 	}
 
+	public String toString() {
+		Gson gson = new GsonBuilder().create();
+		return gson.toJson(this);
+	}
 }

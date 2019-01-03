@@ -19,6 +19,7 @@ public class SCIMResouceFactory {
 	
 	private SCIMResourceTypeSchema userResourceSchema;
 	private String userResourceClass ;
+	private String usergroupResourceClass;
 	
 	public static SCIMResouceFactory getInstance() {
 		if(instance == null) {
@@ -30,10 +31,36 @@ public class SCIMResouceFactory {
 	public void setUserResourceSchema(SCIMResourceTypeSchema schema) {
 		this.userResourceSchema = schema;
 	}
-	
 	public void setUserResourceClass(String className) {
 		this.userResourceClass = className;
 	}
+	public void setUserGroupResoureClass(String className) {
+		this.usergroupResourceClass = className;
+	}
+	
+	public String encode(Object obj) {
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		return gson.toJson(obj);
+	}
+	public <T> T decoedUser(String data) {
+		try {
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			@SuppressWarnings("unchecked")
+			Class<T> user_class = (Class<T>) Class.forName(this.userResourceClass);
+			return gson.fromJson(data,user_class);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;	
+	}
+	
+	public String toJsonString(Object obj) {
+		Gson gson = new GsonBuilder().create();
+		return gson.toJson(obj);
+	}
+	
+	
+	
 	
 	public Map<String, Attribute> createAttribute(SCIMResourceTypeSchema schema) {
 		Map<String, Attribute> resouce_attributes = new HashMap<String, Attribute>();
@@ -53,8 +80,7 @@ public class SCIMResouceFactory {
 		return resouce_attributes;
 	}
 	
-	public SCIMUser createUser() throws  SCIMException{
-		
+	public SCIMUser createUser() throws SCIMException{
 		SCIMUser user = null;
 		try {
 			user = (SCIMUser) Class.forName(this.userResourceClass).newInstance();
@@ -66,12 +92,16 @@ public class SCIMResouceFactory {
 		return user;
 	}
 	
-	public String toJson(Object obj) {
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		return gson.toJson(obj);
-	}
-	public String toJsonString(Object obj) {
-		Gson gson = new GsonBuilder().create();
-		return gson.toJson(obj);
+
+	public SCIMUserGroup createUserGroup(String value) throws SCIMException{
+		SCIMUserGroup usergroup = null;
+		try {
+			usergroup = (SCIMUserGroup) Class.forName(this.usergroupResourceClass).newInstance();
+			usergroup.setRefValue("https://192.168.11:80/scim", value);
+		} catch (Exception e) {
+			throw new SCIMException("Create UserGroup Error ",e);
+		}
+	
+		return usergroup;
 	}
 }

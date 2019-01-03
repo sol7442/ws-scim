@@ -79,7 +79,13 @@ public class BranchNode extends FilterNode
         
         if( leftNode != null )
         {
+        	if(leftNode.hasChild()) {
+        		sb.append( "(" );	
+        	}
             sb.append( leftNode );
+            if(leftNode.hasChild()) {
+        		sb.append( ")" );	
+        	}
         }
         
         if( super.getOperator() == Operator.AND )
@@ -93,7 +99,13 @@ public class BranchNode extends FilterNode
         
         if( rightNode != null )
         {
+        	if(rightNode.hasChild()) {
+        		sb.append( "(" );
+        	}
             sb.append( rightNode );
+            if(rightNode.hasChild()) {
+        		sb.append( ")" );
+        	}
         }
         
         return sb.toString();
