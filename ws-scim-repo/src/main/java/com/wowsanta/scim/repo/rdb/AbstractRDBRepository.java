@@ -1,34 +1,21 @@
 package com.wowsanta.scim.repo.rdb;
 
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.wowsanta.scim.exception.SCIMException;
-import com.wowsanta.scim.repository.QueryManager;
-import com.wowsanta.scim.resource.Group;
 import com.wowsanta.scim.resource.SCIMRepositoryManager;
-import com.wowsanta.scim.resource.ResourceMapper;
-import com.wowsanta.scim.resource.SCIMUser2;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
 public abstract class AbstractRDBRepository implements SCIMRepositoryManager {
-	
-	private RDBQueryMapper queryMapper ;
-	private ResourceMapper resourceMapper;
-	private RDBQueryManager queryManager;
+
 	private DBCP dbcp;
 	
 	@Override
@@ -40,21 +27,9 @@ public abstract class AbstractRDBRepository implements SCIMRepositoryManager {
 		}
 	}
 	
-	@Override
-	public void setQueryManager(QueryManager quer_mgr) {
-		this.queryManager = (RDBQueryManager) quer_mgr;
-	}
-	
-	public void initDBCP(DBCP dbcp, RDBQueryMapper queryMapper) {
+	public void initDBCP(DBCP dbcp) {
 		this.dbcp = dbcp;
-		this.queryMapper = queryMapper;
 	}
-	
-	@Override
-	public void setMapper(ResourceMapper resoureMapper) {
-		this.resourceMapper = resoureMapper;
-	}
-	
 	
 	public Connection getConnection() {
 		Connection connection = null;

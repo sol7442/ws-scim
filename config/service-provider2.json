@@ -58,7 +58,7 @@
        }
     ],
     
-    "server": {
+    "wessionIM": {
     	"baseURL":"http://127.0.0.1:5000/scim/",
     	"servicePort":5000,
     	"maxThreads":3000,

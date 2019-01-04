@@ -4,6 +4,9 @@ targetCompatibility = 1.8
 	
 dependencies {
 	compile project(':ws-scim-core')
+	
+	compile group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.5.0'
+	
 	compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.25.2'	
 }
 

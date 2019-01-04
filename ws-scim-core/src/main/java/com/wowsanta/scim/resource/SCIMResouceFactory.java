@@ -1,17 +1,8 @@
 package com.wowsanta.scim.resource;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.wowsanta.scim.attribute.Attribute;
-import com.wowsanta.scim.attribute.ComplexAttribute;
-import com.wowsanta.scim.attribute.MultiValuedAttribute;
-import com.wowsanta.scim.attribute.SimpleAttribute;
 import com.wowsanta.scim.exception.SCIMException;
-import com.wowsanta.scim.schema.SCIMAttributeSchema;
-import com.wowsanta.scim.schema.SCIMDefinitions;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
 public class SCIMResouceFactory {
@@ -59,26 +50,25 @@ public class SCIMResouceFactory {
 		return gson.toJson(obj);
 	}
 	
-	
-	
-	
-	public Map<String, Attribute> createAttribute(SCIMResourceTypeSchema schema) {
-		Map<String, Attribute> resouce_attributes = new HashMap<String, Attribute>();
-		for (SCIMAttributeSchema attr_schema : schema.getAttributes().values()) {
-			Attribute attribute = null;
-			if(attr_schema.getMultiValued()){
-				attribute = MultiValuedAttribute.create(attr_schema);
-			}else {
-				if(attr_schema.getType() == SCIMDefinitions.DataType.COMPLEX){
-					attribute = ComplexAttribute.create(attr_schema);
-				}else {
-					attribute = SimpleAttribute.create(attr_schema);
-				}
-			}
-			resouce_attributes.put(attr_schema.getName(),attribute);
-		};
-		return resouce_attributes;
-	}
+//	
+//	
+//	public Map<String, Attribute> createAttribute(SCIMResourceTypeSchema schema) {
+//		Map<String, Attribute> resouce_attributes = new HashMap<String, Attribute>();
+//		for (SCIMAttributeSchema attr_schema : schema.getAttributes().values()) {
+//			Attribute attribute = null;
+//			if(attr_schema.getMultiValued()){
+//				attribute = MultiValuedAttribute.create(attr_schema);
+//			}else {
+//				if(attr_schema.getType() == SCIMDefinitions.DataType.COMPLEX){
+//					attribute = ComplexAttribute.create(attr_schema);
+//				}else {
+//					attribute = SimpleAttribute.create(attr_schema);
+//				}
+//			}
+//			resouce_attributes.put(attr_schema.getName(),attribute);
+//		};
+//		return resouce_attributes;
+//	}
 	
 	public SCIMUser createUser() throws SCIMException{
 		SCIMUser user = null;

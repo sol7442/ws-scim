@@ -1,10 +1,8 @@
-package com.ehyundai.im;
+package com.wowsanta.scim.resource;
 
 import java.util.Date;
 
-import com.wowsanta.scim.resource.SCIMMeta;
-
-public class Meta implements SCIMMeta{
+public class ServiceProviderMeta implements SCIMMeta {
 	/**
 	 * 
 	 */

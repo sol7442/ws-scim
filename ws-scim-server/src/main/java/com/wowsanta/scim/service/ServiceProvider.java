@@ -9,29 +9,37 @@ import java.io.IOException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
-import com.wowsanta.scim.SystemManager;
-import com.wowsanta.scim.resource.Meta;
-import com.wowsanta.scim.spark.SparkService;
+import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.log.SCIMLogger;
+import com.wowsanta.scim.resource.ServiceProviderMeta;
+import com.wowsanta.scim.resource.SCIMMeta;
+import com.wowsanta.scim.server.spark.SparkServer;
 
-public class ServiceProvider {
+public class ServiceProvider implements SCIMServiceProvider {
 
 	private String[] schemas;
 	private String documentationUri;
 	
-	private Meta meta;
-	private SparkService wessionIM;;
+	private ServiceProviderMeta meta;
+	private SparkServer server;;
 	
-	public SparkService getWessionIM() {
-		return this.wessionIM;
+	@Override
+	public SCIMServiceServer getServer() {
+		return this.server;
 	}
-	public void setWessionIM(SparkService service) {
-		this.wessionIM = service;
+	
+	public void setServer(SCIMServiceServer server) {
+		this.server = (SparkServer) server;
 	}
-	public Meta getMeta() {
+	
+	@Override
+	public SCIMMeta getMeta() {
 		return this.meta;
 	}
-	public void setMeta(Meta meta) {
-		this.meta = meta;
+	
+	@Override
+	public void setMeta(SCIMMeta meta) {
+		this.meta = (ServiceProviderMeta)meta;
 	}
 	
 	public String getDocumentationUri() {
@@ -57,15 +65,18 @@ public class ServiceProvider {
 			return "";
 		}
 	}
-	public static ServiceProvider load(String file_name) throws FileNotFoundException {
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		JsonReader reader = new JsonReader(new FileReader(file_name));
-		
-		ServiceProvider sp = gson.fromJson(reader,ServiceProvider.class);
-		
-		SystemManager.getInstance().setServiceProvider(sp);
-		
-		return sp;
+	public static ServiceProvider load(String file_name) throws SCIMException  {
+		SCIMLogger.sys("LOAD SERVICE PROVIDER : {} ", file_name);
+		ServiceProvider service_provider = null;
+		try {
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			JsonReader reader = new JsonReader(new FileReader(file_name));
+			service_provider = gson.fromJson(reader,ServiceProvider.class);
+		} catch (FileNotFoundException e) {
+			throw new SCIMException("ServiceProvider Loade : ",e);
+		}
+		SCIMLogger.sys("SERVICE PROVIDER INFO : {} ", service_provider);
+		return service_provider;
 	}
 	
 	public void save(String file_name) throws IOException {
@@ -80,5 +91,6 @@ public class ServiceProvider {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		return gson.toJson(this);
 	}
+
 
 }

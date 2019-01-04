@@ -110,8 +110,7 @@ public class SCIMSchemaDefinitions {
                     false,
                     SCIMDefinitions.Mutability.READ_ONLY, SCIMDefinitions.Returned.DEFAULT,
                     SCIMDefinitions.Uniqueness.NONE, null, null,
-                    new ArrayList<SCIMAttributeSchema>(Arrays.asList(RESOURCE_TYPE, CREATED, LAST_MODIFIED, LOCATION,
-                            VERSION)));
+                    new ArrayList<SCIMAttributeSchema>(Arrays.asList(RESOURCE_TYPE, CREATED, LAST_MODIFIED, LOCATION, VERSION)));
 
 
     /**

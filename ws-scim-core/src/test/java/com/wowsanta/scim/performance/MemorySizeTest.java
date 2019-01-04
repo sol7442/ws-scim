@@ -6,7 +6,6 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.junit.Test;
 
-import com.wowsanta.scim.resource.SCIMUser2;
 import com.wowsanta.scim.util.ObjectSizeFetcher;
 
 public class MemorySizeTest {

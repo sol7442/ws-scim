@@ -25,6 +25,8 @@ public class SCIMConstants {
 	public static final String LOCATION_HEADER = "Location";
 	public static final String CONTENT_TYPE_HEADER = "Content-Type";
 
+	public static final String SERVICE_PROVIDER_CONFIG = "ServiceProviderConfig";
+	
 	public static final String DEFAULT = "default";
 
 	public static class CommonSchemaConstants {

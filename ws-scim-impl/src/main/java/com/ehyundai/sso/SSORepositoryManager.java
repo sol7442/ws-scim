@@ -10,13 +10,15 @@ import java.sql.SQLException;
 
 import com.ehyundai.im.Meta;
 import com.ehyundai.im.User;
+import com.ehyundai.im.UserGroup;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.repo.rdb.DBCP;
-import com.wowsanta.scim.resource.Group;
+import com.wowsanta.scim.resource.SCIMGroup;
+import com.wowsanta.scim.resource.SCIMResouceFactory;
 import com.wowsanta.scim.resource.SCIMUser;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
@@ -30,6 +32,9 @@ public class SSORepositoryManager extends AbstractRDBRepository {
 			+ "(?,?,?,?,?)";
 
 	private static final String deleteSQL = "DELETE " + USER_TABLE			
+			+ " WHERE ID = ?";
+	
+	private static final String selectSQL = "SELECT ID, NAME, ORG_ID FROM " + USER_TABLE			
 			+ " WHERE ID = ?";
 	
 	public static SSORepositoryManager load(String file_name) throws FileNotFoundException {
@@ -70,9 +75,34 @@ public class SSORepositoryManager extends AbstractRDBRepository {
 
 
 	@Override
-	public SCIMUser getUser(String userId) {
-		// TODO Auto-generated method stub
-		return null;
+	public SCIMUser getUser(String userId) throws SCIMException {
+		User selected_user = (User)SCIMResouceFactory.getInstance().createUser();;
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
+
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(selectSQL);
+        	statement.setString(1, userId);
+        	resultSet = statement.executeQuery();
+        	if(resultSet.next()) {
+        		selected_user.setId(resultSet.getString("ID"));
+        		selected_user.setUserName(resultSet.getString("NAME"));
+        		UserGroup group = (UserGroup)SCIMResouceFactory.getInstance().createUserGroup(resultSet.getString("ORG_ID"));
+        		selected_user.addGroup(group);
+        		
+//        		selected_user.setMeta(meta);
+//        		selected_user.addGroup(group);
+        	}
+		} catch (SQLException e) {
+			throw new SCIMException(selectSQL, e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+        
+		return selected_user;
 	}
 
 	@Override
@@ -109,19 +139,19 @@ public class SSORepositoryManager extends AbstractRDBRepository {
 	}
 
 	@Override
-	public Group createGroup(Group group) {
+	public SCIMGroup createGroup(SCIMGroup group) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Group getGroup(String groupId) {
+	public SCIMGroup getGroup(String groupId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Group updateGroup(Group group) {
+	public SCIMGroup updateGroup(SCIMGroup group) {
 		// TODO Auto-generated method stub
 		return null;
 	}
