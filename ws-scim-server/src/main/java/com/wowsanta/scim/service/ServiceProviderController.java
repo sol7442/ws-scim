@@ -8,10 +8,11 @@ import static spark.Spark.post;
 import static spark.Spark.put;
 import static spark.Spark.delete;
 import static spark.Spark.patch;
+import static com.wowsanta.scim.service.JsonUtil.*;
 
-import com.mchange.v2.c3p0.impl.DefaultConnectionTester.QuerylessTestRunner;
 import com.wowsanta.scim.control.SCIMServiceController;
 import com.wowsanta.scim.log.SCIMLogger;
+import com.wowsanta.scim.service.admin.LoginService;
 
 public class ServiceProviderController implements SCIMServiceController{
 	private String version;
@@ -27,9 +28,6 @@ public class ServiceProviderController implements SCIMServiceController{
 		regist_after();
 	}
 	private void regist_before() {
-		
-	}
-	private void regist_admin() {
 		path("/admin", () -> {
 			before("", (req, res) -> {
 				
@@ -37,9 +35,13 @@ public class ServiceProviderController implements SCIMServiceController{
 			before("/*", (req, res) -> {
 				String authentication = req.headers("Authorization");
 				System.out.println("authentication token : " + authentication);
-			});		
+			});
 		});
-		
+	}
+	private void regist_admin() {
+		path("/admin", () -> {
+			post  ("/login", new LoginService(), json());
+		});
 	}
 	private void regist_scim() {
 		path("/scim/" + version, () -> {

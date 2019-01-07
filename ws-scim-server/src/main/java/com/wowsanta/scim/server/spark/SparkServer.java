@@ -1,7 +1,9 @@
 package com.wowsanta.scim.server.spark;
 
+import com.wowsanta.scim.controller.AdminController;
 import com.wowsanta.scim.service.SCIMServiceServer;
 import com.wowsanta.scim.service.ServiceProviderController;
+import com.wowsanta.scim.service.admin.AdminService;
 
 import spark.Spark;
 
@@ -70,8 +72,12 @@ public class SparkServer implements SCIMServiceServer{
 		Spark.staticFiles.registerMimeType("ico", "ico");
 		Spark.staticFiles.externalLocation(this.staticFiles);
 		
-		ServiceProviderController controller = new ServiceProviderController();
-		controller.regist();
+//		new UserController();
+//		new GroupController();
+		new AdminController(new AdminService());
+		
+//		ServiceProviderController controller = new ServiceProviderController();
+//		controller.regist();
 		
 	}
 }
