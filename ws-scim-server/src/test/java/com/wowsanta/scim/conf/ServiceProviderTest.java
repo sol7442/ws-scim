@@ -1,11 +1,11 @@
 package com.wowsanta.scim.conf;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.junit.Test;
 
-import com.wowsanta.scim.service.ServiceProvider;
+import com.wowsanta.scim.resource.ServiceProvider;
+
 
 public class ServiceProviderTest {
 	
@@ -27,8 +27,7 @@ public class ServiceProviderTest {
 		try {
 			ServiceProvider sp = ServiceProvider.load(this.config_file_name);
 			System.out.println(sp);
-			
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		

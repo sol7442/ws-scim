@@ -11,11 +11,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.wowsanta.scim.exception.SCIMException;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
+import com.wowsanta.scim.resource.SCIMRepository;
+import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
-public abstract class AbstractRDBRepository implements SCIMRepositoryManager {
-
+public abstract class AbstractRDBRepository implements SCIMRepository {
+	private String repositoryClass;
+	private String repositoryType;
+	
 	private DBCP dbcp;
 	
 	@Override
@@ -25,6 +28,19 @@ public abstract class AbstractRDBRepository implements SCIMRepositoryManager {
 		} catch (Exception e) {
 			throw new SCIMException("DBCP Setup Error ",e);
 		}
+	}
+	
+	public void setRepositoryClass(String className) {
+		this.repositoryClass = className;
+	}
+	public String getRepositoryClass() {
+		return this.repositoryClass;
+	}
+	public void setRepositoryType(String type) {
+		this.repositoryType = type;
+	}
+	public String getRepositoryType() {
+		return this.repositoryType;
 	}
 	
 	public void initDBCP(DBCP dbcp) {
@@ -40,13 +56,7 @@ public abstract class AbstractRDBRepository implements SCIMRepositoryManager {
 		}
 		return connection;
 	}
-	
-	
-	@Override
-	public void setUserSchema(SCIMResourceTypeSchema userSchema) {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 //	@Override
 //	public User createUser(User user) {

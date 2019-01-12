@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {AuthComponent} from './auth/auth.component';
 import {SCIMService} from './service/service.component';
+import {SCIMAuthService} from './service/SCIMAuth.service';
 import {LoginModule} from './login/login.module';
 
 import {AppComponent } from './app.component';
@@ -34,7 +35,8 @@ import {PanelMenuModule} from 'primeng/panelmenu';
    ],
    providers: [
       AuthComponent,
-      SCIMService
+      SCIMService,
+      SCIMAuthService
    ],
    bootstrap: [
       AppComponent

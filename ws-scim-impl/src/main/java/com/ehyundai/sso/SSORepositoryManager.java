@@ -19,10 +19,11 @@ import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.repo.rdb.DBCP;
 import com.wowsanta.scim.resource.SCIMGroup;
 import com.wowsanta.scim.resource.SCIMResouceFactory;
+import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.resource.SCIMUser;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
-public class SSORepositoryManager extends AbstractRDBRepository {
+public class SSORepositoryManager extends AbstractRDBRepository implements SCIMResourceRepository {
 
 	private static final String USER_TABLE = "WA3_USER";
 	
@@ -43,6 +44,11 @@ public class SSORepositoryManager extends AbstractRDBRepository {
 		return gson.fromJson(reader,SSORepositoryManager.class);
 	}
 	
+	@Override
+	public void setUserSchema(SCIMResourceTypeSchema userSchema) {
+		// TODO Auto-generated method stub
+		
+	}
 	@Override
 	public SCIMUser createUser(SCIMUser user) throws SCIMException {
 		//Meta meta = (Meta)user.getMeta();

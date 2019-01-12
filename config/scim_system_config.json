@@ -1,0 +1,32 @@
+{
+	"systemRepository": {
+		"repositoryClass": "com.wowsanta.scim.repository.SystemRepository",
+		"repositoryType": "RDB",
+		"dbcp": {
+			"poolName": "system",
+			"driverName": "org.sqlite.JDBC",
+			"jdbcUrl": "jdbc:sqlite:C:\\Work\\git\\ws-scim\\im_provider.db",
+			"valiationQuery": "select 1",
+			"timeBetweenEvictionRunsMillis": 60000,
+			"testWhileIdle": true,
+			"minIdle": 5,
+			"maxTotal": 50
+		}
+	},
+	"resourceRepository": {
+		"repositoryClass": "com.ehyundai.sso.SSORepositoryManager",
+		"repositoryType": "RDB",
+		"dbcp": {
+			"poolName": "sso",
+			"driverName": "oracle.jdbc.driver.OracleDriver",
+			"jdbcUrl": "jdbc:oracle:thin:@137.116.134.125:1521:scim",
+			"userName": "c##scim_sso",
+			"password": "1q2w3e4r5T",
+			"valiationQuery": "select 1",
+			"timeBetweenEvictionRunsMillis": 60000,
+			"testWhileIdle": true,
+			"minIdle": 5,
+			"maxTotal": 50
+		}
+	}
+}

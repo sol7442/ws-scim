@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.wowsanta.scim.repo.exception.RepositoryException;
 import com.wowsanta.scim.repo.rdb.DBCP;
 
 
@@ -21,12 +22,10 @@ public class SqliteDBTest {
 	private DBCP dbcp;
 	
 	@Before
-	public void load() {
+	public void load() throws RepositoryException {
 		try {
 			this.dbcp =  DBCP.load(config_file_name);
 			this.dbcp.setUp();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {

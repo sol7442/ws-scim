@@ -19,7 +19,7 @@ import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 
 import com.google.gson.Gson;
-import com.wowsanta.scim.service.admin.LoginRequest;
+import com.wowsanta.scim.service.auth.LoginRequest;
 
 public class ProviderServiceTest {
 

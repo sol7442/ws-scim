@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.wowsanta.scim.repo.exception.RepositoryException;
 import com.wowsanta.scim.repo.rdb.DBCP;
 
 
@@ -24,12 +25,10 @@ public class DBCPTest {
 	private DBCP dbcp;
 	
 	@Before
-	public void load() {
+	public void load() throws RepositoryException {
 		try {
 			this.dbcp =  DBCP.load(config_file_name);
 			this.dbcp.setUp();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -43,7 +42,7 @@ public class DBCPTest {
 		dbcp.setJdbcUrl("jdbc:mysql://wession.com:3306/ws-scim-im");
 		dbcp.setUserName("root");
 		dbcp.setPassword("wession@12");
-		dbcp.setDriverName(com.mysql.jdbc.Driver.class.getCanonicalName());
+		dbcp.setDriverName("com.mysql.cj.jdbc.Driver");
 		dbcp.setPoolName("cp");
 	
 		try {

@@ -1,6 +1,8 @@
 package com.ehyundai.sso;
 
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.Date;
 
 import org.junit.Before;
@@ -12,7 +14,7 @@ import com.ehyundai.im.UserGroup;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wowsanta.scim.exception.SCIMException;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
+import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.resource.SCIMResouceFactory;
 import com.wowsanta.scim.resource.SCIMResourceManager;
 import com.wowsanta.scim.resource.SCIMUser;
@@ -37,13 +39,21 @@ public class TestRepositoryManager {
 
 				
 				SCIMResourceManager resouce_mgr = SCIMResourceManager.getInstance();
-				SCIMRepositoryManager  repository_mgr = resouce_mgr.loadRepositoryManager(repositoryClass, resource_config);
+				SCIMResourceRepository  repository_mgr = resouce_mgr.loadRepositoryManager(repositoryClass, resource_config);
 				repository_mgr.initialize();
 				
 				SCIMResouceFactory user_factory = SCIMResouceFactory.getInstance();
 				user_factory.setUserResourceClass(scimUserClass);
 				user_factory.setUserGroupResoureClass(scimUserGroupClass);			
 				user_factory.setUserResourceSchema(user_schema);
+			
+				String file_name = "../config/scim_server_config.json";
+				
+				FileWriter writer = new FileWriter(new File(file_name));
+				Gson gson = new GsonBuilder().setPrettyPrinting().create();
+				gson.toJson(resouce_mgr,writer);
+				writer.flush();
+				writer.close();
 				
 				System.out.println("===[init  SCIMResouceManager end]========================");
 			}

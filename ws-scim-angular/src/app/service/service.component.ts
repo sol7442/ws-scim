@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders , HttpParams  } from '@angular/common/http';
 import { Admin } from '../model/admin';
-
-
 import 'rxjs/add/operator/map'
 
 
@@ -17,14 +15,16 @@ export class SCIMService {
         console.log("request : " , admin);
 
         let headers = new HttpHeaders();
-        headers = headers.append("Content-Type", 'application/x-www-form-urlencoded;charset=UTF-8');
-        headers.append("content", "application/json");
-
+        headers = headers.append("Content-Type", 'application/json;charset=UTF-8');
+        let login_request = {"id":admin.puserid,"pw":admin.ppasswd};
+        
+        /*
         const params = new HttpParams()
             .set ('puserid', admin.puserid)
             .set('ppasswd', admin.ppasswd);
+        */
 
-        return this.http.post<any>(url ,params);
+        return this.http.post<any>(url ,JSON.stringify(login_request) );
     }
     get(url:string){
         return this.http.get<any>(url);

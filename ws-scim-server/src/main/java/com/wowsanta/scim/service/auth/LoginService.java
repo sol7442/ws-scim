@@ -1,24 +1,39 @@
 package com.wowsanta.scim.service.auth;
 
+import com.wowsanta.scim.SystemManager;
+import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.resource.SCIMAdmin;
+import com.wowsanta.scim.resource.SCIMRepository;
+import com.wowsanta.scim.resource.SCIMSystemRepository;
+import com.wowsanta.scim.resource.ServiceAdmin;
+import com.wowsanta.scim.sec.SCIMJWTToken;
+import com.wowsanta.scim.service.SCIMAuthService;
+import com.wowsanta.scim.service.SCIMRequest;
+import com.wowsanta.scim.service.SCIMResponse;
 
-import spark.Request;
-import spark.Response;
-import spark.Route;
+public class LoginService  {
 
-public class LoginService implements Route{
-
-	
-	@Override
-	public Object handle(Request request, Response response) throws Exception {
-		String user_id = request.raw().getParameter("puserid");
-		String passwod = request.raw().getParameter("ppasswd");
-		System.out.println("admin-login");
-		System.out.println("id : " + user_id + ",pw :" + passwod);
+	SCIMSystemRepository repository;
+	public LoginService() {
+		this.repository = SystemManager.getInstance().getSystemRepository();
+	}
+	public SCIMAdmin login(String id, String pw) throws SCIMException{
+		ServiceAdmin admin = (ServiceAdmin) this.repository.getAdmin(id);
 		
-		LoginResponse res = new LoginResponse();
-		res.setUrl("home");
+		//this.repository = (SCIMSystemRepository) SystemManager.getInstance().getSystemRepository();
+//		
+//		System.out.println("id : " + request.getId());
+//		System.out.println("pw : " + request.getPw());
+//		
+//		// 
+//		SCIMJWTToken token = new SCIMJWTToken();
+//		String str_token = token.issue("ServiceName","SCIM_KEY_@1234");
+//		
+//		LoginResponse result = new LoginResponse();
+//		result.setCode(100);
+//		result.setToken(str_token);
 		
-		return res.toString();
+		return admin;
 	}
 
 }

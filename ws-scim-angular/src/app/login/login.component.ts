@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import {SCIMService} from '../service/service.component';
+//import {SCIMService} from '../service/service.component';
+import {SCIMAuthService} from '../service/SCIMAuth.service';
 import {Admin} from '../model/admin';
 
 @Component({
@@ -13,7 +14,7 @@ export class LoginComponent implements OnInit{
     admin:Admin;
 
     constructor(
-        private service:SCIMService,
+        private service:SCIMAuthService,
         private router: Router
     ){}
 
@@ -24,7 +25,7 @@ export class LoginComponent implements OnInit{
     login(event){
         console.log(event);
         console.log(this.admin);
-        this.service.post('/auth/login',this.admin).subscribe(
+        this.service.login(this.admin.puserid,this.admin.ppasswd).subscribe(
         result =>{
             console.log(result)
             this.router.navigate(["home"]);

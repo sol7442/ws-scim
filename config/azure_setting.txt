@@ -1,12 +1,44 @@
 
-¬¸∞Ì ªÁ¿Ã∆Æ : https://docs.microsoft.com/ko-kr/azure/virtual-machines/workloads/oracle/oracle-database-quick-create
+ÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩ∆Æ : https://docs.microsoft.com/ko-kr/azure/virtual-machines/workloads/oracle/oracle-database-quick-create
 
 rg : wowsanta
 vm : name : oracle
      ip   : 137.116.134.125
      user/pw : wowsanta/1q2w3e4r5t!@
 
+
+sudo su - oracle
+
+sqlplus / as sysdba
+
+conn "c##scim_im"/"1q2w3e4r5T" 
+
      
+CREATE TABLE SCIM_USER (
+       ID               VARCHAR2(20)  NOT NULL,
+       PW        		VARCHAR2(20),
+       TYPE             VARCHAR2(20),
+      CONSTRAINT SCIM_USER_PK PRIMARY KEY (ID)
+);
+
+
+
+CREATE TABLE SCIM_USER_PROFILE (
+       ID               VARCHAR2(20),
+       KEY        		VARCHAR2(20),
+       VALUE            VARCHAR2(256),
+       CONSTRAINT SCIM_USER_PROFILE_FK FOREIGN KEY (ID) REFERENCES SCIM_USER(ID) ON DELETE CASCADE
+);
+
+
+
+,ON DELETE CASCADE
+      CONSTRAINT PLAYER_FK FOREIGN KEY (TEAM_ID) REFERENCES TEAM(TEAM_ID)
+    
+);
+
+
+Ï∂úÏ≤ò: http://hyeonstorage.tistory.com/291 [Í∞úÎ∞úÏù¥ ÌïòÍ≥† Ïã∂Ïñ¥Ïöî]
 
 start : lsnrctl start
 
@@ -56,11 +88,11 @@ SIZE 100M
 AUTOEXTEND ON NEXT 10M;
 
 
-√‚√≥: http://blueray21.tistory.com/35 [∫Ì∑Á∑π¿Ã]
+ÔøΩÔøΩ√≥: http://blueray21.tistory.com/35 [ÔøΩÔøΩÁ∑πÔøΩÔøΩ]
 
-√‚√≥: http://blueray21.tistory.com/35 [∫Ì∑Á∑π¿Ã]
+ÔøΩÔøΩ√≥: http://blueray21.tistory.com/35 [ÔøΩÔøΩÁ∑πÔøΩÔøΩ]
 
-√‚√≥: http://blueray21.tistory.com/35 [∫Ì∑Á∑π¿Ã]
+ÔøΩÔøΩ√≥: http://blueray21.tistory.com/35 [ÔøΩÔøΩÁ∑πÔøΩÔøΩ]
 
 
 root password : 
@@ -68,7 +100,7 @@ azure vm info
  - name   : oracle12VM
  - oracle : Oracle Database 12.2.0.1 Enterprise Edition
  - user   : wowsanta
- - æœ»£   : 1q2w3e4r5t!@
+ - ÔøΩÔøΩ»£   : 1q2w3e4r5t!@
 
 
 Connecting to (ADDRESS=(PROTOCOL=tcp)(HOST=)(PORT=1521))
