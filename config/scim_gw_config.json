@@ -1,6 +1,6 @@
 {
 	"systemRepository": {
-		"repositoryClass": "com.ehyundai.im.IMRepository",
+		"repositoryClass": "com.ehyundai.im.GWRepository",
 		"repositoryType": "RDB",
 		"dbcp": {
 			"poolName": "im",
@@ -21,7 +21,7 @@
 		"dbcp": {
 			"poolName": "gw",
 			"driverName": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-			"jdbcUrl": "jdbc:microsoft:sqlserver://scim-mysql.database.windows.net:1433;database=scim_mssql;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30",
+			"jdbcUrl": "jdbc:sqlserver://scim-mysql.database.windows.net:1433;database=scim_mssql",
 			"userName": "wowsanta@scim-mysql",
 			"password": "1q2w3e4r5t!@",
 			"valiationQuery": "select 1",
@@ -31,22 +31,4 @@
 			"maxTotal": 50
 		}
 	}
-	/*
-	"resourceRepository": {
-		"repositoryClass": "com.ehyundai.sso.SSORepositoryManager",
-		"repositoryType": "RDB",
-		"dbcp": {
-			"poolName": "sso",
-			"driverName": "oracle.jdbc.driver.OracleDriver",
-			"jdbcUrl": "jdbc:oracle:thin:@137.116.134.125:1521:scim",
-			"userName": "c##scim_sso",
-			"password": "1q2w3e4r5T",
-			"valiationQuery": "select 1",
-			"timeBetweenEvictionRunsMillis": 60000,
-			"testWhileIdle": true,
-			"minIdle": 5,
-			"maxTotal": 50
-		}
-	}
-	*/
 }

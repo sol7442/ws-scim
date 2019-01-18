@@ -1,5 +1,9 @@
 dependencies {
 	compile project(':ws-scim-repo')
 	compile files('../libs/ojdbc6.jar')
+	compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.6'
+	compile group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '7.0.0.jre8'
+
+	
 }
 
