@@ -12,7 +12,6 @@ import com.google.gson.stream.JsonReader;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.resource.ServiceProviderMeta;
-import com.wowsanta.scim.resource.SCIMMeta;
 import com.wowsanta.scim.server.SparkServer;
 import com.wowsanta.scim.service.SCIMServiceProvider;
 import com.wowsanta.scim.service.SCIMServiceServer;

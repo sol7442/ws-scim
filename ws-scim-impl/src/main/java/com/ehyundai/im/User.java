@@ -1,86 +1,141 @@
 package com.ehyundai.im;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.wowsanta.scim.resource.SCIMMeta;
-import com.wowsanta.scim.resource.SCIMUser;
-import com.wowsanta.scim.resource.SCIMUserGroup;
+import com.wowsanta.scim.obj.DefaultEnterpriseUser;
 
-public class User implements SCIMUser {
+public class User extends DefaultEnterpriseUser{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6709617785615904142L;
-	
-	private List<String> schemas = new ArrayList<String>();
-	private String id;
-	private String userName;
-	private Meta meta;
-	private List<UserGroup> groups = new ArrayList<UserGroup>();
-	
-	@Override
-	public void setSchemas(List<String> urls) {
-		this.schemas = urls;
+	public User() {
+		addSchema("urn:ehyundai:params:scim:schemas:extension:enterprise:2.0:User");
 	}
 	
-	@Override
-	public List<String> getSchemas(){
-		return this.schemas;
+//	
+	private String companyCode;
+	
+	private String groupCode;
+	private String groupName;
+	
+	private String positionCode;
+	private String position;
+	
+	private String jobCode;
+	private String job;
+	
+	private String rankCode;
+	private String rank;
+	
+	private Date   joinDate;
+	private Date   retireDate;
+	
+	private String active;
+	private String eMail;
+	
+	public String getCompanyCode() {
+		return companyCode;
 	}
 
-	@Override
-	public void setId(String id) {
-		this.id = id;
+	public void setCompanyCode(String companyCode) {
+		this.companyCode = companyCode;
 	}
 
-	@Override
-	public String getId() {
-		return this.id;
+	public String getGroupCode() {
+		return groupCode;
 	}
 
-	@Override
-	public void setMeta(SCIMMeta meta) {
-		this.meta = (Meta)meta;
+	public void setGroupCode(String groupCode) {
+		this.groupCode = groupCode;
 	}
 
-	@Override
-	public SCIMMeta getMeta() {
-		return this.meta;
-	}
-	
-	@Override
-	public void addGroup(SCIMUserGroup group) {
-		this.groups.add((UserGroup) group);
-	}
-	
-	@Override
-	public List<SCIMUserGroup> getGroups() {
-		List<SCIMUserGroup> groups = new ArrayList<SCIMUserGroup>();
-		groups.addAll(this.groups);
-		return groups;
-	}
-	
-	@Override
-	public void setGroups(List<SCIMUserGroup> groups) {
-		this.groups.clear();
-		for(SCIMUserGroup group : groups) {
-			this.groups.add((UserGroup) group);
-		}
-	}
-	
-	public String getUserName() {
-		return userName;
+	public String getGroupName() {
+		return groupName;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
 	}
 
-	public String toString() {
-		Gson gson = new GsonBuilder().create();
-		return gson.toJson(this);
+	public String getPositionCode() {
+		return positionCode;
 	}
+
+	public void setPositionCode(String positionCode) {
+		this.positionCode = positionCode;
+	}
+
+	public String getPosition() {
+		return position;
+	}
+
+	public void setPosition(String position) {
+		this.position = position;
+	}
+
+	public String getJobCode() {
+		return jobCode;
+	}
+
+	public void setJobCode(String jobCode) {
+		this.jobCode = jobCode;
+	}
+
+	public String getJob() {
+		return job;
+	}
+
+	public void setJob(String job) {
+		this.job = job;
+	}
+
+	public String getRankCode() {
+		return rankCode;
+	}
+
+	public void setRankCode(String rankCode) {
+		this.rankCode = rankCode;
+	}
+
+	public String getRank() {
+		return rank;
+	}
+
+	public void setRank(String rank) {
+		this.rank = rank;
+	}
+
+	public Date getJoinDate() {
+		return joinDate;
+	}
+
+	public void setJoinDate(Date joinDate) {
+		this.joinDate = joinDate;
+	}
+
+	public Date getRetireDate() {
+		return retireDate;
+	}
+
+	public void setRetireDate(Date retireDate) {
+		this.retireDate = retireDate;
+	}
+
+	public String getActive() {
+		return active;
+	}
+
+	public void setActive(String active) {
+		this.active = active;
+	}
+
+	public String geteMail() {
+		return eMail;
+	}
+
+	public void seteMail(String eMail) {
+		this.eMail = eMail;
+	}
+
 }

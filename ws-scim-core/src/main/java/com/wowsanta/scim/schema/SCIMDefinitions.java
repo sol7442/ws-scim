@@ -16,5 +16,7 @@ public class SCIMDefinitions {
     public static enum ReferenceType {
         USER, GROUP, EXTERNAL, URI
     }
-
+    public static enum ResoureType {
+        USER, GROUP, Schema,ResourceType;
+    }
 }

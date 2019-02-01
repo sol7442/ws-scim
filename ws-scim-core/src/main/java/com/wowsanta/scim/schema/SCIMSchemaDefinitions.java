@@ -1128,6 +1128,17 @@ public class SCIMSchemaDefinitions {
 
     }
 
+    public static class SCIMEnterpriseUserSchemaDefinition {
+    	//A physical mailing address for this User.
+        public static final SCIMAttributeSchema EMPLOYEE_NUMBER =
+                new SCIMAttributeSchema(SCIMConstants.EnterpriseUserSchemaConstants.EMPLOYEE_NUMBER_URL,
+                        SCIMConstants.EnterpriseUserSchemaConstants.EMPLOYEE_NUMBER,
+                        SCIMDefinitions.DataType.STRING, false, "",
+                        false, false,
+                        SCIMDefinitions.Mutability.READ_WRITE, SCIMDefinitions.Returned.DEFAULT,
+                        SCIMDefinitions.Uniqueness.NONE, null, null,null);
+        
+    }
     /**
      * SCIM defined resourceType  schemas.
      */
@@ -1258,10 +1269,10 @@ public class SCIMSchemaDefinitions {
 //                    SCIMGroupSchemaDefinition.DISPLAY_NAME,
 //                    SCIMGroupSchemaDefinition.MEMBERS);
 //
-//    /*
-//     * **********SCIM defined Service Provider Config Resource Schema.****************************
-//     */
-//
+    /*
+     * **********SCIM defined Service Provider Config Resource Schema.****************************
+     */
+
 //    public static final SCIMResourceTypeSchema SCIM_SERVICE_PROVIDER_CONFIG_SCHEMA =
 //            SCIMResourceTypeSchema.createSCIMResourceSchema(
 //                    new ArrayList<String>(Arrays.asList(SCIMConstants.SERVICE_PROVIDER_CONFIG_SCHEMA_URI)),

@@ -13,9 +13,9 @@ import com.google.gson.GsonBuilder;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.repo.sample.*;
 import com.wowsanta.scim.resource.SCIMResourceRepository;
+import com.wowsanta.scim.resource.SCIMUser;
 import com.wowsanta.scim.resource.SCIMResouceFactory;
 import com.wowsanta.scim.resource.SCIMResourceManager;
-import com.wowsanta.scim.resource.SCIMUser;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
 public class TestRepositoryManager {

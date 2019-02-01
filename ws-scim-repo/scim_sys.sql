@@ -1,0 +1,1 @@
+select * from DBA_USERS where account_status = 'OPEN'; gf, hris, ec, fe, dt, 

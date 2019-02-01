@@ -83,15 +83,15 @@ public class SCIMResouceFactory {
 	}
 	
 
-	public SCIMUserGroup createUserGroup(String value) throws SCIMException{
-		SCIMUserGroup usergroup = null;
-		try {
-			usergroup = (SCIMUserGroup) Class.forName(this.usergroupResourceClass).newInstance();
-			usergroup.setRefValue("https://192.168.11:80/scim", value);
-		} catch (Exception e) {
-			throw new SCIMException("Create UserGroup Error ",e);
-		}
-	
-		return usergroup;
-	}
+//	public SCIMUserGroup createUserGroup(String value) throws SCIMException{
+//		SCIMUserGroup usergroup = null;
+//		try {
+//			usergroup = (SCIMUserGroup) Class.forName(this.usergroupResourceClass).newInstance();
+//			usergroup.setRefValue("https://192.168.11:80/scim", value);
+//		} catch (Exception e) {
+//			throw new SCIMException("Create UserGroup Error ",e);
+//		}
+//	
+//		return usergroup;
+//	}
 }

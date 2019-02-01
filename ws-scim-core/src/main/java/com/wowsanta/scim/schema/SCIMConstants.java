@@ -4,6 +4,8 @@ public class SCIMConstants {
 
 	public static final String CORE_SCHEMA_URI = "urn:ietf:params:scim:schemas:core:2.0";
 	public static final String USER_CORE_SCHEMA_URI = "urn:ietf:params:scim:schemas:core:2.0:User";
+	public static final String ENTERPRISEUSER_CORE_SCHEMA_URI = "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User";
+	
 	public static final String GROUP_CORE_SCHEMA_URI = "urn:ietf:params:scim:schemas:core:2.0:Group";
 	public static final String LISTED_RESOURCE_CORE_SCHEMA_URI = "urn:ietf:params:scim:api:messages:2.0:ListResponse";
 	public static final String SERVICE_PROVIDER_CONFIG_SCHEMA_URI = "urn:ietf:params:scim:schemas:core:2.0:ServiceProviderConfig";
@@ -21,7 +23,7 @@ public class SCIMConstants {
 	public static final String USER_ENDPOINT = "/Users";
 	public static final String GROUP_ENDPOINT = "/Groups";
 	public static final String SERVICE_PROVIDER_CONFIG_ENDPOINT = "/ServiceProviderConfig";
-	public static final String RESOURCE_TYPE_ENDPOINT = "/RESOURCE_TYPES";
+	public static final String RESOURCE_TYPE_ENDPOINT = "/ResourceType";
 	public static final String LOCATION_HEADER = "Location";
 	public static final String CONTENT_TYPE_HEADER = "Content-Type";
 
@@ -368,6 +370,27 @@ public class SCIMConstants {
 				+ "The primary attribute value 'true' MUST appear no more than once.";
 	}
 
+	
+	public static class EnterpriseUserSchemaConstants {
+		public static final String EMPLOYEE_NUMBER = "employeeNumber";
+		public static final String EMPLOYEE_NUMBER_URL = "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User:employeeNumber";
+		
+		public static final String COST_CENTER = "constCenter";
+		public static final String COST_CENTER_URL = "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User:costCenter";
+		
+		public static final String ORGANIZATION = "organization";
+		public static final String ORGANIZATION_URL = "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User:organization";
+		
+		public static final String DIVISION = "division";
+		public static final String DIVISION_URL = "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User:division";
+		
+		public static final String DEPARTMENT = "department";
+		public static final String DEPARTMENT_URL = "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User:department";
+		
+		public static final String MANAGER = "manager";
+		public static final String MANAGER_URL = "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User:manager";
+	}
+	
 	/**
 	 * Constants found in group schema.
 	 */

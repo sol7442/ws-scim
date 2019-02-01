@@ -13,12 +13,11 @@ public class USER_SCHEMA_Test {
 	public void make() {
 		SCIMResourceTypeSchema user_schema = new SCIMResourceTypeSchema();		
 		user_schema.addSchema(SCIMConstants.USER_CORE_SCHEMA_URI);		
-		user_schema.putAttribute(SCIMSchemaDefinitions.ID);
-		user_schema.putAttribute(SCIMSchemaDefinitions.EXTERNAL_ID);
+		user_schema.putAttribute(SCIMSchemaDefinitions.ID);		
 		user_schema.putAttribute(SCIMSchemaDefinitions.META);
+		user_schema.putAttribute(SCIMSchemaDefinitions.EXTERNAL_ID);
 		user_schema.putAttribute(SCIMSchemaDefinitions.SCIMUserSchemaDefinition.USERNAME);
 		user_schema.putAttribute(SCIMSchemaDefinitions.SCIMUserSchemaDefinition.NAME);
-		user_schema.putAttribute(SCIMSchemaDefinitions.SCIMUserSchemaDefinition.USERNAME);
 		user_schema.putAttribute(SCIMSchemaDefinitions.SCIMUserSchemaDefinition.DISPLAY_NAME);
 		user_schema.putAttribute(SCIMSchemaDefinitions.SCIMUserSchemaDefinition.NICK_NAME);
 		user_schema.putAttribute(SCIMSchemaDefinitions.SCIMUserSchemaDefinition.PROFILE_URL);
@@ -44,7 +43,7 @@ public class USER_SCHEMA_Test {
 			e.printStackTrace();
 		}
 	}
-	@Test
+	//@Test
 	public void load() {
 		try {
 			SCIMResourceTypeSchema user_schema = SCIMResourceTypeSchema.load(this.config_file_name);

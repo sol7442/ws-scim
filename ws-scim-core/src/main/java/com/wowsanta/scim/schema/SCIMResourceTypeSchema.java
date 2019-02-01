@@ -28,6 +28,7 @@ public class SCIMResourceTypeSchema implements Serializable{
 	private Map<String,SCIMAttributeSchema> attributes = new HashMap<String,SCIMAttributeSchema>(); 
 
 
+	
 	public List<String> getSchemas() {
 		return schemas;
 	}
