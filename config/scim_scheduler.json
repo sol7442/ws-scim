@@ -1,0 +1,38 @@
+{
+  "schedulerList": [
+    {
+      "name": "TestScheduler1",
+      "description": "Scheduler 1 Test",
+      "job": {
+        "className": "com.wowsanta.scim.scheduler.SampleSchedulerJob"
+      },
+      "subJobs": [
+        "com.wowsanta.scim.scheduler.SampleSubJob1",
+        "com.wowsanta.scim.scheduler.SampleSubJob2"
+      ],
+      "trigger": {
+        "minute": 30,
+        "hour": 18,
+        "base": "day",
+        "className": "com.wowsanta.scim.scheduler.SCIMDayTrigger"
+      }
+    },
+    {
+      "name": "TestScheduler2",
+      "description": "Scheduler 2 Test",
+      "job": {
+        "className": "com.wowsanta.scim.scheduler.SampleSchedulerJob"
+      },
+      "subJobs": [
+        "com.wowsanta.scim.scheduler.SampleSubJob1",
+        "com.wowsanta.scim.scheduler.SampleSubJob2"
+      ],
+      "trigger": {
+        "minute": 31,
+        "hour": 18,
+        "base": "day",
+        "className": "com.wowsanta.scim.scheduler.SCIMDayTrigger"
+      }
+    }
+  ]
+}

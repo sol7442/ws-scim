@@ -18,3 +18,7 @@ CREATE TABLE "BASE_OBJECT_UR" (
 	"RegistDate" DATE NULL,
 	"ModifyDate" DATE NULL
 );
+
+SELECT COUNT(*) FROM BASE_OBJECT_UR
+
+SELECT UR_Code, DisplayName , EnterDate, RegistDate, RetireDate,  ModifyDate FROM BASE_OBJECT_UR WHERE RetireDate IS NOT NULL ORDER BY ModifyDate
