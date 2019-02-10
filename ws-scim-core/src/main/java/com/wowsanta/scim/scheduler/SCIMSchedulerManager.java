@@ -40,23 +40,23 @@ public class SCIMSchedulerManager extends AbstractJsonObject{
 		this.schedulerList = schedulerList;
 	}
 
-	public void load(String config_file) throws SCIMException{
-		try {
-			JsonReader reader = new JsonReader(new FileReader(config_file));
-			JsonObject jsonObject = new JsonParser().parse(reader).getAsJsonObject();
-			JsonArray scheduler_list_json = jsonObject.get("schedulerList").getAsJsonArray();
-			for (JsonElement jsonElement : scheduler_list_json) {
-				System.out.println(jsonElement);
-				SCIMScheduler scheduler = (SCIMScheduler) SCIMScheduler.load(jsonElement.toString());
-				scheduler.build();
-				this.schedulerList.add(scheduler);
-			}
-			
-		} catch (FileNotFoundException e) {
-			throw new SCIMException("Scheduler Manager Load Failed : "+config_file,e);
-		}
-		
-	}
+//	public void load(String config_file) throws SCIMException{
+//		try {
+//			JsonReader reader = new JsonReader(new FileReader(config_file));
+//			JsonObject jsonObject = new JsonParser().parse(reader).getAsJsonObject();
+//			JsonArray scheduler_list_json = jsonObject.get("schedulerList").getAsJsonArray();
+//			for (JsonElement jsonElement : scheduler_list_json) {
+//				System.out.println(jsonElement);
+//				SCIMScheduler scheduler = (SCIMScheduler) SCIMScheduler.load(jsonElement.toString());
+//				scheduler.build();
+//				this.schedulerList.add(scheduler);
+//			}
+//			
+//		} catch (FileNotFoundException e) {
+//			throw new SCIMException("Scheduler Manager Load Failed : "+config_file,e);
+//		}
+//		
+//	}
 	public void close() throws SCIMException {
 		for (SCIMScheduler scimScheduler : schedulerList) {
 			scimScheduler.shutdown();

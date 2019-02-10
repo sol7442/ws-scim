@@ -1,6 +1,6 @@
 package com.wowsanta.scim.obj;
 
-import com.wowsanta.scim.SCIMSystemInfo;
+import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.resource.SCIMMeta;
 import com.wowsanta.scim.schema.SCIMDefinitions;
 
@@ -22,11 +22,6 @@ public class DefaultMeta implements SCIMMeta {
 		return resourceType;
 	}
 
-//	@Override
-//	public void setResourceType(String type) {
-//		this.resourceType = type;
-//	}
-
 	@Override
 	public String getLocation() {
 		return this.location;
@@ -35,13 +30,11 @@ public class DefaultMeta implements SCIMMeta {
 	@Override
 	public void setLocation(String location) {
 		if(SCIMDefinitions.ResoureType.USER.toString().equals(this.resourceType)) {
-			this.location = SCIMSystemInfo.getInstance().getUserEndpoint() + "/" + location;
+			this.location = SCIMSystemManager.getInstance().getServiceProvider().getSystemInfo().getUserEndpoint() + "/" + location;
 		}else if(SCIMDefinitions.ResoureType.GROUP.toString().equals(this.resourceType)) {
-			this.location = SCIMSystemInfo.getInstance().getGroupEndpoint() + "/" + location;
+			this.location = SCIMSystemManager.getInstance().getServiceProvider().getSystemInfo().getGroupEndpoint() + "/" + location;
 		}else if(SCIMDefinitions.ResoureType.ResourceType.toString().equals(this.resourceType)) {
-			this.location = SCIMSystemInfo.getInstance().getResoureTypeEndpoint() + "/" + location;
+			this.location = SCIMSystemManager.getInstance().getServiceProvider().getSystemInfo().getResoureTypeEndpoint() + "/" + location;
 		}
-		
 	}
-
 }

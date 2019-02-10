@@ -17,8 +17,4 @@ public interface SCIMUser extends Serializable {
 	
 	public void setMeta(SCIMMeta meta);
 	public SCIMMeta getMeta();
-	
-//	public void addGroup(SCIMUserGroup group);
-//	public List<SCIMUserGroup> getGroups();
-//	public void setGroups(List<SCIMUserGroup> groups);
 }

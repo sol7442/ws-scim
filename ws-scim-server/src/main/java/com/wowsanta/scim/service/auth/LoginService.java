@@ -1,6 +1,6 @@
 package com.wowsanta.scim.service.auth;
 
-import com.wowsanta.scim.SystemManager;
+import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.resource.SCIMAdmin;
 import com.wowsanta.scim.resource.SCIMRepository;
@@ -15,7 +15,7 @@ public class LoginService  {
 
 	SCIMSystemRepository repository;
 	public LoginService() {
-		this.repository = SystemManager.getInstance().getSystemRepository();
+		//this.repository SystemManager.getInstance().getSystemRepository();
 	}
 	public SCIMAdmin login(String id, String pw) throws SCIMException{
 		ServiceAdmin admin = (ServiceAdmin) this.repository.getAdmin(id);

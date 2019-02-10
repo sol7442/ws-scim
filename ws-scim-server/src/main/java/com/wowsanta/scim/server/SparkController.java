@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.JsonObject;
-import com.wowsanta.scim.SystemManager;
+import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.resource.SCIMAdmin;

@@ -1,11 +1,17 @@
 
+
 buildscript {
 	repositories {
 		mavenCentral()
 	}
 }
 
-subprojects {
+//project.ext.baseName   	= 'ws'
+//project.ext.appendix   	= 'scim'
+//project.ext.version    	= '1.0.0'
+//project.ext.classifier 	= 'alpha' //alpha,beta
+
+allprojects{
 	apply plugin: 'java'
 	apply plugin: 'java-library'
 	
@@ -13,11 +19,31 @@ subprojects {
 	targetCompatibility = 1.8
 	
 	compileJava.options.encoding = 'UTF-8'
-	
+
 	repositories {	
 		mavenCentral()
 	}
+}
+
+/*	
+allprojects{
+
+	task copyRuntimeLibs(type: Copy,group:'Build Setup', description : 'Copy Depends Library') {
+	    from configurations.runtime
+	    into "$buildDir/libs/"
+	}
 	
+	task jar_daemon(type:Jar, group:'Build', dependsOn: compileJava, description : 'Default Build'){
+		baseName   = project.baseName
+		appendix   = project.appendix
+		version    = project.version
+		classifier = project.classifier 
+		
+		with jar
+	}
+}
+*/
+subprojects {
 	task initSourceFolders {
 	    sourceSets*.java.srcDirs*.each {
 	        if( !it.exists() ) {
@@ -31,7 +57,7 @@ subprojects {
 	        }
 	    }
 	}
-
+	
 	dependencies {
 	/*		
 		compile group: 'com.github.fge', name: 'json-schema-validator', version: '2.2.6'

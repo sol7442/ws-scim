@@ -2,23 +2,22 @@ package com.wowsanta.scim.resource;
 
 import java.util.Date;
 
-public class ServiceProviderMeta implements SCIMMeta {
+import com.wowsanta.scim.obj.DefaultMeta;
+
+public class ServiceProviderConfigMeta extends DefaultMeta {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -880138764728219411L;
-	private String resourceType;
 	private Date created;
 	private Date lastModified;
-	private String location;
 	private String version;
 	
-	public String getResourceType() {
-		return resourceType;
+	public ServiceProviderConfigMeta(String type) {
+		super("ServiceProviderConfig");
 	}
-	public void setResourceType(String resourceType) {
-		this.resourceType = resourceType;
-	}
+	
 	public Date getCreated() {
 		return created;
 	}
@@ -30,12 +29,6 @@ public class ServiceProviderMeta implements SCIMMeta {
 	}
 	public void setLastModified(Date lastModified) {
 		this.lastModified = lastModified;
-	}
-	public String getLocation() {
-		return location;
-	}
-	public void setLocation(String location) {
-		this.location = location;
 	}
 	public String getVersion() {
 		return version;

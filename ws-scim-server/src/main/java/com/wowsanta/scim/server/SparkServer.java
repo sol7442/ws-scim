@@ -10,6 +10,9 @@ public class SparkServer implements SCIMServiceServer{
 	private int servicePort;
 	private int maxThreads;
 	private int minThreads;
+	private int idleTimeoutMills;
+	private String[] version;
+	private String staticFiles;
 	
 	public String getBaseURL() {
 		return baseURL;
@@ -53,9 +56,6 @@ public class SparkServer implements SCIMServiceServer{
 	public void setStaticFiles(String staticFiles) {
 		this.staticFiles = staticFiles;
 	}
-	private int idleTimeoutMills;
-	private String[] version;
-	private String staticFiles;
 	
 	public void start() {
 		Spark.awaitInitialization();

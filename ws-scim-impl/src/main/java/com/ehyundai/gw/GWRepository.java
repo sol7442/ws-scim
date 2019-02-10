@@ -21,15 +21,15 @@ import com.wowsanta.scim.resource.SCIMSystemRepository;
 import com.wowsanta.scim.resource.SCIMUser;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
-public class GWRepository extends AbstractRDBRepository implements SCIMSystemRepository, SCIMResourceRepository{
+public class GWRepository extends AbstractRDBRepository implements SCIMResourceRepository, SCIMSystemRepository{
 
 	//SELECT UR_Code, DN_ID, DN_Code, GR_Code, DisplayName, RegistDate, ModifyDate FROM BASE_OBJECT_UR WHERE IsUse = 'Y' AND ModifyDate > '21:40:00'
 	
-	@Override
-	public SCIMAdmin getAdmin(String id) throws SCIMException {
-		// TODO Auto-generated method stub
-		return null;
+	public GWRepository() {
+		super();
+		setClassName(GWRepository.class.getCanonicalName());
 	}
+	
 	//SELECT UR_CODE, MODIFYDATE FROM BASE_OBJECT_UR WHERE MODIFYDATE > '2019-01-14 23:17:36'
 
 	@Override
@@ -141,9 +141,9 @@ public class GWRepository extends AbstractRDBRepository implements SCIMSystemRep
         		((DefaultUserMeta)gw_user.getMeta()).setLastModified(resultSet.getDate("ModifyDate"));
         	}
         	
-        	if(gw_user == null) {
-        		throw new SCIMException("RESOURCE NOT FOUND : " + userId);
-        	}
+//        	if(gw_user == null) {
+//        		throw new SCIMException("RESOURCE NOT FOUND : " + userId);
+//        	}
 		} catch (SQLException e) {
 			throw new SCIMException(selectSQL, e);
 		}finally {
@@ -263,6 +263,14 @@ public class GWRepository extends AbstractRDBRepository implements SCIMSystemRep
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public SCIMAdmin getAdmin(String id) throws SCIMException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 
 
 

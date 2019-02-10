@@ -11,6 +11,7 @@ public class SCIMLogger {
 	private static Logger error = LoggerFactory.getLogger("error");
 	private static Logger audit = LoggerFactory.getLogger("audit");
 	private static Logger access = LoggerFactory.getLogger("acccess");
+	private static Logger debug  = LoggerFactory.getLogger("root");
 	
 	public static void sys(String msg, Object ... params) {
 		sys.info(msg, params);
@@ -20,8 +21,8 @@ public class SCIMLogger {
 		proc.info(msg, params);
 	}
 	
-	public static void error(String msg, Object ... params) {
-		error.info(msg, params);
+	public static void error(String msg,Throwable t) {
+		error.error(msg, t);
 	}
 	
 	public static void audit(String msg, Object ... params) {
@@ -30,5 +31,9 @@ public class SCIMLogger {
 
 	public static void access(String msg, Object ... params) {
 		access.info(msg, params);
+	}
+	
+	public static void debug(String msg, Object ... params) {
+		debug.debug(msg, params);
 	}
 }

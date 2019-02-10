@@ -1,12 +1,5 @@
 package com.wowsanta.scim.repo.rdb;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -22,18 +15,18 @@ import org.apache.commons.dbcp2.PoolingDriver;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.stream.JsonReader;
+import com.wowsanta.scim.json.AbstractJsonObject;
 import com.wowsanta.scim.log.SCIMLogger;
-import com.wowsanta.scim.repo.exception.RepositoryException;
 
-public class DBCP {
+public class DBCP extends AbstractJsonObject{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4682406830216930831L;
 	private String poolName;
 	
 	public String getPoolName() {
-		//return poolName;
 		return "jdbc:apache:commons:dbcp:" + this.poolName;
 	}
 
@@ -165,31 +158,31 @@ public class DBCP {
 		SCIMLogger.sys("load dbcp => {} : {}",this.poolName, this.jdbcUrl);
 	}
 	
-	public static DBCP load(String file_name) throws RepositoryException {
-		try {
-			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			JsonReader reader;
-			reader = new JsonReader(new FileReader(file_name));
-			return gson.fromJson(reader,DBCP.class);
-		} catch (FileNotFoundException e) {
-			throw new RepositoryException("DBCP Config File ["+ file_name +"] does not Exist", e);
-		}
-	}
-	
-	public void save(String file_name) throws IOException {
-	
-		OutputStreamWriter writer = new OutputStreamWriter(
-				new FileOutputStream(
-						new File(file_name)),StandardCharsets.UTF_8);
-		
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		gson.toJson(this,writer);
-		writer.flush();
-		writer.close();
-	}
-
-	public String toJson() {
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		return gson.toJson(this);
-	}
+//	public static DBCP load(String file_name) throws RepositoryException {
+//		try {
+//			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//			JsonReader reader;
+//			reader = new JsonReader(new FileReader(file_name));
+//			return gson.fromJson(reader,DBCP.class);
+//		} catch (FileNotFoundException e) {
+//			throw new RepositoryException("DBCP Config File ["+ file_name +"] does not Exist", e);
+//		}
+//	}
+//	
+//	public void save(String file_name) throws IOException {
+//	
+//		OutputStreamWriter writer = new OutputStreamWriter(
+//				new FileOutputStream(
+//						new File(file_name)),StandardCharsets.UTF_8);
+//		
+//		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//		gson.toJson(this,writer);
+//		writer.flush();
+//		writer.close();
+//	}
+//
+//	public String toJson() {
+//		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//		return gson.toJson(this);
+//	}
 }

@@ -17,7 +17,9 @@ import com.google.gson.stream.JsonReader;
 import com.wowsanta.scim.SCIMSystemInfo;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.DefaultUserMeta;
+import com.wowsanta.scim.resource.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.SCIMUser;
+import com.wowsanta.scim.scheduler.SCIMSchedulerManager;
 import com.wowsanta.scim.util.Random;
 
 public class TestGwRepository {
@@ -29,6 +31,68 @@ public class TestGwRepository {
 		sys_info.setVersion("v2");
 	}
 	
+	
+	
+	private final String config_file = "../config/scim_repository.json";
+	
+	//@Test
+	public void create_repository_manager_config_test() {
+		SCIMRepositoryManager repository_mgr = SCIMRepositoryManager.getInstance();
+		
+		//GWRepository resource_repo = new GWRepository();
+		JsonObject system_conf = load_system_conf();
+		GWRepository gw_repo = load_repository(system_conf, "resourceRepository");
+		
+		repository_mgr.setSystemRepository(gw_repo);
+		repository_mgr.setResourceRepository(gw_repo);
+		
+		try {
+			System.out.println(repository_mgr.toString(true));
+			repository_mgr.save(config_file);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void run_repository_manager_config_test() {
+		try {
+			SCIMRepositoryManager repository_mgr = SCIMRepositoryManager.getInstance();
+			repository_mgr.load(config_file);
+			
+			GWRepository gw_repo = (GWRepository) repository_mgr.getResourceRepository();
+			
+			System.out.println(gw_repo);
+			
+			Calendar cal = Calendar.getInstance();
+			Date to = cal.getTime();
+			cal.add(Calendar.DATE, -7);
+			Date from = cal.getTime();
+			
+			System.out.println("Date ["+from+"]["+to+"]");
+			
+			try {
+				List<SCIMUser> user_list = gw_repo.getUsers(from,to);
+				System.out.println("===["+user_list.size()+"]========================");
+				for (SCIMUser scimUser : user_list) {
+					//User gw_user = (User)scimUser;
+					System.out.println(scimUser.toString());
+				}
+				System.out.println("===["+user_list.size()+"]========================");
+				
+				
+				repository_mgr.close();
+				
+				Thread.sleep(1000 * 30 );
+				
+			} catch (SCIMException e) {
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
 	
 	
 	// @Before
@@ -75,14 +139,14 @@ public class TestGwRepository {
 	}
 	
 	
-	@Test
+	//@Test
 	public void getUsers() {
 		JsonObject system_conf = load_system_conf();
 		GWRepository gw_repo = load_repository(system_conf, "resourceRepository");
 		
 		Calendar cal = Calendar.getInstance();
 		Date to = cal.getTime();
-		cal.add(Calendar.DATE, -1);
+		cal.add(Calendar.DATE, -7);
 		Date from = cal.getTime();
 		
 		System.out.println("Date ["+from+"]["+to+"]");

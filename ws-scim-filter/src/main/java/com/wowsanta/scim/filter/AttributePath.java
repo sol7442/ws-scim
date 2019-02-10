@@ -3,7 +3,6 @@ package com.wowsanta.scim.filter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.wession.scim.Const;
 
 
 public class AttributePath {
@@ -75,7 +74,7 @@ public class AttributePath {
 	    }
 	    else
 	    {
-	      return new AttributePath(Const.schemas, attributeName,subAttributeName);
+	      return null;// new AttributePath(Const.schemas, attributeName,subAttributeName);
 	    }
 	  }
 
@@ -145,18 +144,18 @@ public class AttributePath {
 	   */
 	  public void toString(final StringBuilder builder)
 	  {
-	    if (!attributeSchema.equalsIgnoreCase(Const.schemas))
-	    {
-	      builder.append(attributeSchema);
-	      builder.append(':');
-	    }
-
-	    builder.append(attributeName);
-	    if (subAttributeName != null)
-	    {
-	      builder.append('.');
-	      builder.append(subAttributeName);
-	    }
+//	    if (!attributeSchema.equalsIgnoreCase(Const.schemas))
+//	    {
+//	      builder.append(attributeSchema);
+//	      builder.append(':');
+//	    }
+//
+//	    builder.append(attributeName);
+//	    if (subAttributeName != null)
+//	    {
+//	      builder.append('.');
+//	      builder.append(subAttributeName);
+//	    }
 	  }
 
 

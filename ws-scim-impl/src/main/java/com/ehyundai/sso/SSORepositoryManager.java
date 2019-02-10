@@ -7,6 +7,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
+import java.util.List;
 
 import com.ehyundai.im.Meta;
 import com.ehyundai.im.User;
@@ -58,22 +60,22 @@ public class SSORepositoryManager extends AbstractRDBRepository implements SCIMR
 		PreparedStatement statement = null;
 	    ResultSet resultSet = null;        
 
-        try {
-        	connection = getConnection();
-        	statement  = connection.prepareStatement(insertSQL);
-        	statement.setString(1, im_user.getId());
-        	statement.setString(2, im_user.getUserName());
-        	statement.setString(3, "div_id");
-        	statement.setString(4, im_user.getGroups().get(0).getValue());
-        	statement.setString(5, "path_id");
-
-        	statement.execute();
-        	        	
-		} catch (SQLException e) {
-			throw new SCIMException(insertSQL, e);
-		}finally {
-			DBCP.close(connection, statement, resultSet);
-		}
+//        try {
+//        	connection = getConnection();
+//        	statement  = connection.prepareStatement(insertSQL);
+//        	statement.setString(1, im_user.getId());
+//        	statement.setString(2, im_user.getUserName());
+//        	statement.setString(3, "div_id");
+//        	statement.setString(4, im_user.getGroups().get(0).getValue());
+//        	statement.setString(5, "path_id");
+//
+//        	statement.execute();
+//        	        	
+//		} catch (SQLException e) {
+//			throw new SCIMException(insertSQL, e);
+//		}finally {
+//			DBCP.close(connection, statement, resultSet);
+//		}
         
 		return user;
 	}
@@ -88,25 +90,25 @@ public class SSORepositoryManager extends AbstractRDBRepository implements SCIMR
 		PreparedStatement statement = null;
 	    ResultSet resultSet = null;        
 
-        try {
-        	connection = getConnection();
-        	statement  = connection.prepareStatement(selectSQL);
-        	statement.setString(1, userId);
-        	resultSet = statement.executeQuery();
-        	if(resultSet.next()) {
-        		selected_user.setId(resultSet.getString("ID"));
-        		selected_user.setUserName(resultSet.getString("NAME"));
-        		UserGroup group = (UserGroup)SCIMResouceFactory.getInstance().createUserGroup(resultSet.getString("ORG_ID"));
-        		selected_user.addGroup(group);
-        		
-//        		selected_user.setMeta(meta);
+//        try {
+//        	connection = getConnection();
+//        	statement  = connection.prepareStatement(selectSQL);
+//        	statement.setString(1, userId);
+//        	resultSet = statement.executeQuery();
+//        	if(resultSet.next()) {
+//        		selected_user.setId(resultSet.getString("ID"));
+//        		selected_user.setUserName(resultSet.getString("NAME"));
+//        		UserGroup group = (UserGroup)SCIMResouceFactory.getInstance().createUserGroup(resultSet.getString("ORG_ID"));
 //        		selected_user.addGroup(group);
-        	}
-		} catch (SQLException e) {
-			throw new SCIMException(selectSQL, e);
-		}finally {
-			DBCP.close(connection, statement, resultSet);
-		}
+//        		
+////        		selected_user.setMeta(meta);
+////        		selected_user.addGroup(group);
+//        	}
+//		} catch (SQLException e) {
+//			throw new SCIMException(selectSQL, e);
+//		}finally {
+//			DBCP.close(connection, statement, resultSet);
+//		}
         
 		return selected_user;
 	}
@@ -166,5 +168,17 @@ public class SSORepositoryManager extends AbstractRDBRepository implements SCIMR
 	public void deleteGroup(String groupId) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<SCIMUser> getUsers(Date from, Date to) throws SCIMException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<SCIMUser> getUsers(String where) throws SCIMException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

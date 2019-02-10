@@ -17,7 +17,7 @@ import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.resource.SCIMUser;
 import com.wowsanta.scim.resource.SCIMResouceFactory;
-import com.wowsanta.scim.resource.SCIMResourceManager;
+import com.wowsanta.scim.resource.SCIMRepositoryManager;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
 public class TestRepositoryManager {
@@ -26,7 +26,7 @@ public class TestRepositoryManager {
 	@Before
 	public void load() {
 		try {
-			if(SCIMResourceManager.getInstance().isLoad() == false) {
+			if(SCIMRepositoryManager.getInstance().isLoad() == false) {
 				
 				System.out.println("===[init  SCIMResouceManager start]========================");
 				
@@ -38,7 +38,7 @@ public class TestRepositoryManager {
 				SCIMResourceTypeSchema user_schema = SCIMResourceTypeSchema.load("../config/schema/scim_user_schema.json");
 
 				
-				SCIMResourceManager resouce_mgr = SCIMResourceManager.getInstance();
+				SCIMRepositoryManager resouce_mgr = SCIMRepositoryManager.getInstance();
 				SCIMResourceRepository  repository_mgr = resouce_mgr.loadRepositoryManager(repositoryClass, resource_config);
 				repository_mgr.initialize();
 				
@@ -70,7 +70,7 @@ public class TestRepositoryManager {
 		
 		String user_id = "testId0";
 		try {
-			User selected_user = (User)SCIMResourceManager.getInstance().getRepositoryManger().getUser(user_id);
+			User selected_user = (User)SCIMRepositoryManager.getInstance().getRepositoryManger().getUser(user_id);
 			
 			System.out.println("selected :  ["+ user_id +"]" + selected_user);
 			
@@ -88,7 +88,7 @@ public class TestRepositoryManager {
 		User decoed_user = SCIMResouceFactory.getInstance().decoedUser(data);
 
 		try {
-			SCIMResourceManager.getInstance().getRepositoryManger().deleteUser(decoed_user.getId());
+			SCIMRepositoryManager.getInstance().getRepositoryManger().deleteUser(decoed_user.getId());
 		} catch (SCIMException e) {
 			e.printStackTrace();
 		}
@@ -117,7 +117,7 @@ public class TestRepositoryManager {
 				UserGroup group = (UserGroup)SCIMResouceFactory.getInstance().createUserGroup("총무부");
 				user.addGroup(group);
 				
-				User created_user = (User)SCIMResourceManager.getInstance().getRepositoryManger().createUser(user);
+				User created_user = (User)SCIMRepositoryManager.getInstance().getRepositoryManger().createUser(user);
 				System.out.println("created ["+ count +"]" + created_user);
 				count++;			
 			}
@@ -147,7 +147,7 @@ public class TestRepositoryManager {
 			
 			
 			
-			User created_user = (User)SCIMResourceManager.getInstance().getRepositoryManger().createUser(user);
+			User created_user = (User)SCIMRepositoryManager.getInstance().getRepositoryManger().createUser(user);
 			
 			System.out.println(created_user);
 			

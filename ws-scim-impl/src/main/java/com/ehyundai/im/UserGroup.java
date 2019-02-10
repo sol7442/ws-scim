@@ -3,29 +3,42 @@ package com.ehyundai.im;
 import com.wowsanta.scim.resource.SCIMUserGroup;
 
 public class UserGroup implements SCIMUserGroup {
-	
-	private String display;
-	private String value;
-	private String $ref;
-	
-	public String getDisplay() {
-		return display;
-	}
-	public void setDisplay(String display) {
-		this.display = display;
-	}
-	
-	@Override
-	public void setRefValue(String ref, String value) {
-		this.$ref = ref + "/Group/" + value;
-		this.value = value;
-	}
+
 	@Override
 	public String getValue() {
-		return this.value;
+		// TODO Auto-generated method stub
+		return null;
 	}
+
+	@Override
+	public void setValue(String value) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	@Override
 	public String getRef() {
-		return this.$ref;
+		// TODO Auto-generated method stub
+		return null;
 	}
+
+	@Override
+	public void setRef() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getDisplay() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setDisplay(String display) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 }

@@ -12,16 +12,20 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.resource.SCIMRepository;
-import com.wowsanta.scim.resource.SCIMResourceRepository;
-import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
-public abstract class AbstractRDBRepository implements SCIMRepository {
-	private String repositoryClass;
-	private String repositoryType;
+public abstract class AbstractRDBRepository extends SCIMRepository {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private DBCP dbcp;
 	
+	public AbstractRDBRepository() {
+		setType("RDB");
+	}
 	@Override
 	public void initialize() throws SCIMException {
 		try {
@@ -31,17 +35,9 @@ public abstract class AbstractRDBRepository implements SCIMRepository {
 		}
 	}
 	
-	public void setRepositoryClass(String className) {
-		this.repositoryClass = className;
-	}
-	public String getRepositoryClass() {
-		return this.repositoryClass;
-	}
-	public void setRepositoryType(String type) {
-		this.repositoryType = type;
-	}
-	public String getRepositoryType() {
-		return this.repositoryType;
+	@Override
+	public void close() {
+		SCIMLogger.sys("CLOSE DBCP {} ", this.dbcp.getPoolName());
 	}
 	
 	public void initDBCP(DBCP dbcp) {

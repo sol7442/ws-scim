@@ -1,67 +1,105 @@
 package com.wowsanta.scim;
 
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.File;
 import java.util.Date;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import com.wowsanta.scim.exception.SCIMException;
+import org.apache.commons.daemon.Daemon;
+import org.apache.commons.daemon.DaemonContext;
+import org.apache.commons.daemon.DaemonController;
+import org.apache.commons.daemon.DaemonInitException;
+
 import com.wowsanta.scim.log.SCIMLogger;
-import com.wowsanta.scim.resource.ServiceProvider;
-import com.wowsanta.scim.service.SCIMServiceProvider;
 
-public class SCIMServer extends Thread {
 
-	
-	public static void main(String[] args) {
-		
-		String config_file_name = "../config/service-provider.json";
-		SCIMServer server = new SCIMServer();
-		server.initialize(config_file_name);
+
+public class SCIMServer  implements Daemon {
+
+	private static final SCIMServer server = new SCIMServer();
+
+	private ExecutorService executorService = Executors.newSingleThreadExecutor();
+	public static void main(String[] args) throws DaemonInitException, Exception {
+		System.setProperty("logback.configurationFile", "../config/logback.xml");
+		System.setProperty("logback.path", "../logs");
+		System.setProperty("logback.mode", "debug");
+		server.init(new DaemonContextImpl(args));
 		server.start();
-		
 	}
 	
-	private SCIMServiceProvider serviceProvider;
-	private boolean run = true;
-	public SCIMServer() {
-		super("SCIMServer");
-	}
-	public void initialize(String config_file_name) {
-		try {
-			this.serviceProvider = ServiceProvider.load(config_file_name);
-			
-			
-			String file_name = "../config/scim_system_config.json";
-			SystemManager mgr = SystemManager.getInstance();
-			mgr.load(file_name);
-			mgr.initialize();
-			
-		} catch (SCIMException e) {
-			SCIMLogger.error("SCIMServer INITIALIZE ERROR : ",e);
+	public static void start(String [] args){
+        try {
+        	server.init(new DaemonContextImpl(args));
+        	server.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static void stop(String [] args){
+        try {
+        	server.stop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+	@Override
+	public void init(DaemonContext context) throws DaemonInitException, Exception {
+		String config_file_path = "";
+		if(context.getArguments().length == 0) {
+			File current_path  = new File(System.getProperty("user.dir"));
+			config_file_path = current_path.getParent() + File.separator + "config" +File.separator + "scim-service-provider.json"; 
 		}
+		
+		SCIMSystemManager.getInstance().load(config_file_path);
+		SCIMSystemManager.getInstance().getServiceProvider().getServer().initialize();
+		
 	}
-	public void run() {
-		SCIMLogger.sys("SCIMServer start : [{}]================================", new Date());
-		
-		this.serviceProvider.getServer().initialize();
-		
-		while(this.run) {
-			try {
-				System.out.println("Enter Command -- wait : ");
-				BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-				String command = reader.readLine();
-				
-				if(command.equals("exit")) {
-					this.serviceProvider.getServer().stop();
-					this.run = false;
+	@Override
+	public void start() throws Exception {
+		SCIMLogger.sys("SYSTEM START : {} ======== ",new Date());
+		SCIMSystemManager.getInstance().getServiceProvider().getServer().start();
+		this.executorService.execute(new Runnable() {
+			CountDownLatch latch = new CountDownLatch(1);
+			@Override
+			public void run() {
+				try {
+					latch.await();
+				} catch (InterruptedException e) {
+					SCIMLogger.debug("Thread interrupted, probably means we're shutting down now.");
 				}
-				
-			} catch (Exception e) {
-				SCIMLogger.error("SCIMServiceProvider Main Thread ERROR : ",e);
 			}
-		}
+		});
+	}
+	@Override
+	public void stop() throws Exception {
+		SCIMSystemManager.getInstance().getServiceProvider().getServer().stop();
+		this.executorService.shutdown();
+		SCIMLogger.sys("SYSTEM SHUTDOWN : {} ======== ",new Date());
+		System.exit(0);
+	}
+	@Override
+	public void destroy() {
+		SCIMLogger.sys("SYSTEM Destroying daemon....bye..");
+	}
+	
+	private static final class DaemonContextImpl implements DaemonContext{
+		private final String[] args;
 		
-		SCIMLogger.sys("SCIMServer stop  : [{}]================================", new Date());
+		public DaemonContextImpl(String[] args) {
+			this.args = args;
+		}
+		@Override
+		public DaemonController getController() {
+			return null;
+		}
+
+		@Override
+		public String[] getArguments() {
+			return this.args;
+		}
 	}
 }

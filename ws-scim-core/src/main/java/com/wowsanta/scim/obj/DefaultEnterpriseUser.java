@@ -9,9 +9,10 @@ public class DefaultEnterpriseUser extends DefaultUser implements SCIMEnterprise
 	 * 
 	 */
 	private static final long serialVersionUID = -2560987662892106687L;
+
+	private String schema = SCIMConstants.ENTERPRISEUSER_CORE_SCHEMA_URI;
 	
 	private String employeeNumber;
-	
 	public DefaultEnterpriseUser() {
 		super();
 		addSchema(SCIMConstants.ENTERPRISEUSER_CORE_SCHEMA_URI);
@@ -24,6 +25,13 @@ public class DefaultEnterpriseUser extends DefaultUser implements SCIMEnterprise
 	@Override
 	public String getEmployeeNumber() {
 		return this.employeeNumber;
+	}
+	
+	public String getSchema() {
+		return schema;
+	}
+	public void setSchema(String schema) {
+		this.schema = schema;
 	}
 
 }

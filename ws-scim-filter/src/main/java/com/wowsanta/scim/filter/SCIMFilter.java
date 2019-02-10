@@ -3,7 +3,6 @@ package com.wowsanta.scim.filter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wession.scim.Const;
 import com.wowsanta.scim.exception.SCIMException;
 
 public class SCIMFilter {
@@ -24,8 +23,9 @@ public class SCIMFilter {
 	}
 
 	public static SCIMFilter parse(final String filterString) throws SCIMException {
-		final FilterParser2 parser = new FilterParser2(filterString, Const.schemas);
-		return parser.parse();
+//		final FilterParser2 parser = new FilterParser2(filterString, Const.schemas);
+//		return parser.parse();
+		return null;
 	}
 
 	public static SCIMFilter createAndFilter(final List<SCIMFilter> filterComponents) {

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.wowsanta.scim.resource.ServiceProvider;
+import com.wowsanta.scim.ServiceProvider;
 
 
 public class ServiceProviderTest {

@@ -12,10 +12,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
-import com.wowsanta.scim.SystemManager;
+import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.resource.SCIMResourceRepository;
-import com.wowsanta.scim.resource.SCIMResourceManager;
+import com.wowsanta.scim.resource.SCIMRepositoryManager;
 
 public class SystemManagerTest {
 
@@ -23,7 +23,7 @@ public class SystemManagerTest {
 	
 	//@Test
 	public void save() {
-		SystemManager mgr = SystemManager.getInstance();
+		SCIMSystemManager mgr = SCIMSystemManager.getInstance();
 		
 		
 		System.out.println("===[init  SystemManagerTest start]========================");
@@ -75,7 +75,7 @@ public class SystemManagerTest {
 	@Test
 	public void load() {
 		try {
-			SystemManager mgr = SystemManager.getInstance();
+			SCIMSystemManager mgr = SCIMSystemManager.getInstance();
 			mgr.load(file_name);
 			mgr.initialize();
 			

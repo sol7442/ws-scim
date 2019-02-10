@@ -7,7 +7,7 @@ import org.junit.Test;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
-import com.wowsanta.scim.resource.SCIMResourceManager;
+import com.wowsanta.scim.resource.SCIMRepositoryManager;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
 public class SCIMServerTest {
@@ -22,7 +22,7 @@ public class SCIMServerTest {
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 			JsonReader reader = new JsonReader(new FileReader(file_name));
 
-			SCIMResourceManager resouce_mgr = gson.fromJson(reader,SCIMResourceManager.class);
+			SCIMRepositoryManager resouce_mgr = gson.fromJson(reader,SCIMRepositoryManager.class);
 
 			System.out.println(resouce_mgr);
 			

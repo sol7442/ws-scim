@@ -1,6 +1,7 @@
 package com.wowsanta.scim.json;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.OutputStreamWriter;
@@ -10,8 +11,10 @@ import java.nio.charset.StandardCharsets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.service.SCIMServiceProvider;
 
 public class AbstractJsonObject implements Serializable{
 	/**
@@ -46,10 +49,19 @@ public class AbstractJsonObject implements Serializable{
 		
 		return object;
 	}
+	public static AbstractJsonObject load(File json_file) throws SCIMException {
+		try {
+			JsonReader reader = new JsonReader(new FileReader(json_file));
+			return load(new JsonParser().parse(reader).getAsJsonObject());
+		} catch (FileNotFoundException e) {
+			throw new SCIMException("Json File load Exception ["+json_file.getName()+"]",e);
+		}
+	}
 	public static <T> T  load(JsonObject jsonObject, Class<T> classOfT) {
 		Gson gson = new GsonBuilder().create();
 		return gson.fromJson(jsonObject, classOfT); 
 	}
+
 	public static <T> T load(String file_name, Class<T> classOfT) throws SCIMException {
 		try {
 		

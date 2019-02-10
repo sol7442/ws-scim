@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logback.path}/ws-scim.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logback.path}/ws-scim.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}  %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+	<appender name="SYSTEM_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logback.path}/ws-scim-system.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logback.path}/ws-scim-system.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}  %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+	<appender name="PROCESS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logback.path}/ws-scim-process.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logback.path}/ws-scim-process.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}  %logger{35} - %caller{1..2} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logback.path}/ws-scim-error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logback.path}/ws-scim-error.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}  %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="AUDIT_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logback.path}/ws-scim-audit.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logback.path}/ws-scim-audit.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}  %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="ACCEESS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logback.path}/ws-scim-access.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logback.path}/ws-scim-access.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} - %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <logger name="system" level="info"  additivity="false">
+    	<appender-ref ref="SYSTEM_FILE"/>
+    </logger>
+    <logger name="process" level="info"  additivity="false">
+    	<appender-ref ref="PROCESS_FILE"/>
+    </logger>
+    <logger name="error" level="error"  additivity="false">
+    	<appender-ref ref="ERROR_FILE"/>
+    </logger>
+    <logger name="audit" level="info"  additivity="false">
+    	<appender-ref ref="AUDIT_FILE"/>
+    </logger>
+    <logger name="acccess" level="info"  additivity="false">
+    	<appender-ref ref="ACCEESS_FILE"/>
+    </logger>
+    <root level="${logback.mode}">
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>
