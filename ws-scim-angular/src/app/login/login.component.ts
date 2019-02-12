@@ -23,12 +23,14 @@ export class LoginComponent implements OnInit{
     }
 
     login(event){
-        console.log(event);
-        console.log(this.admin);
         this.service.login(this.admin.puserid,this.admin.ppasswd).subscribe(
         result =>{
-            console.log(result)
-            this.router.navigate(["home"]);
+            console.log("login-result : ",result)
+            if(result.code == "0001"){
+                this.router.navigate(["home"]);
+            }else{
+                // ignore...
+            }
         },
         error => {
             console.log("Error", error);

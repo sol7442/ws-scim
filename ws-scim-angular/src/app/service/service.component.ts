@@ -12,18 +12,10 @@ export class SCIMService {
     ) { }
     
     post(url:string, admin:Admin){
-        console.log("request : " , admin);
-
         let headers = new HttpHeaders();
         headers = headers.append("Content-Type", 'application/json;charset=UTF-8');
-        let login_request = {"id":admin.puserid,"pw":admin.ppasswd};
+        let login_request = {"id":admin.puserid,"pw":admin.ppasswd};        
         
-        /*
-        const params = new HttpParams()
-            .set ('puserid', admin.puserid)
-            .set('ppasswd', admin.ppasswd);
-        */
-
         return this.http.post<any>(url ,JSON.stringify(login_request) );
     }
     get(url:string){
