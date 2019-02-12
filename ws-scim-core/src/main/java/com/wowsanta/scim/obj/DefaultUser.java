@@ -3,12 +3,8 @@ package com.wowsanta.scim.obj;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wowsanta.scim.json.AbstractJsonObject;
-import com.wowsanta.scim.resource.SCIMMeta;
-import com.wowsanta.scim.resource.SCIMUser;
-import com.wowsanta.scim.schema.SCIMConstants;
 
-public class DefaultUser extends AbstractJsonObject implements SCIMUser {
+public class DefaultUser extends SCIMUser {
 	/**
 	 * 
 	 */

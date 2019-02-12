@@ -5,4 +5,7 @@
 /.settings/
 .metadata
 .log
+.project
+.settings
+.project
 /build/

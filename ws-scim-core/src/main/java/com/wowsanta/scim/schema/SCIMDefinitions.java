@@ -19,4 +19,8 @@ public class SCIMDefinitions {
     public static enum ResoureType {
         USER, GROUP, Schema,ResourceType;
     }
+    
+    public static enum MethodType {
+    	GET,POST,PUT,PATCH,DELETE
+    }
 }

@@ -3,7 +3,7 @@ package com.wowsanta.scim.obj;
 import com.wowsanta.scim.resource.SCIMEnterpriseUser;
 import com.wowsanta.scim.schema.SCIMConstants;
 
-public class DefaultEnterpriseUser extends DefaultUser implements SCIMEnterpriseUser {
+public class DefaultEnterpriseUser extends DefaultUser{
 
 	/**
 	 * 

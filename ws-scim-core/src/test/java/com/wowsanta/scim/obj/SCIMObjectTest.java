@@ -8,7 +8,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.wowsanta.scim.SCIMSystemInfo;
+import com.wowsanta.scim.json.SCIMJsonObject;
 import com.wowsanta.scim.resource.SCIMResourceType;
 import com.wowsanta.scim.resource.SCIMSchemaExtension;
 import com.wowsanta.scim.schema.SCIMConstants;
@@ -44,18 +46,18 @@ public class SCIMObjectTest {
 		System.out.println(gson.toJson(resType));
 	}
 	
-	//@Test
-	public void default_object_test() {
-		DefaultEnterpriseUser employeer = new DefaultEnterpriseUser();
-		employeer.setId("12345");
-		
-		DefaultUserMeta meta = (DefaultUserMeta)employeer.getMeta();
-		meta.setCreated(new Date());
-		meta.setLocation(employeer.getId());
-		meta.setLastModified(new Date());
-		
-		System.out.println(employeer.toString(true));
-	}
+//	//@Test
+//	public void default_object_test() {
+//		DefaultEnterpriseUser employeer = new DefaultEnterpriseUser();
+//		employeer.setId("12345");
+//		
+//		DefaultUserMeta meta = (DefaultUserMeta)employeer.getMeta();
+//		meta.setCreated(new Date());
+//		meta.setLocation(employeer.getId());
+//		meta.setLastModified(new Date());
+//		
+//		System.out.println(employeer.toString(true));
+//	}
 	
 	@Test
 	public void test_user_object() {
@@ -71,9 +73,17 @@ public class SCIMObjectTest {
 		System.out.println(user);
 		System.out.println(user.toString());
 		System.out.println(user.toString(true));
+		
+		EnterpriseUser p_user = new EnterpriseUser();
+		p_user.parse(user.toString());
+		
+		System.out.println("=====================");
+		
+		System.out.println(p_user.toString(true));
+		
 	}
 	
-	public class USER extends SCIMObject{
+	public class USER extends SCIMUser{
 		/**
 		 * 
 		 */
@@ -88,19 +98,20 @@ public class SCIMObjectTest {
 		}
 
 		@Override
-		public void parse(String json_str) {
+		public JsonObject parse(String json_str) {
+			JsonObject json_obj = super.parse(json_str);
 			
+			this.id 		= JsonUtil.toString(json_obj.get("id"));
+			this.externalId = JsonUtil.toString(json_obj.get("externalId"));
+			this.userName 	= JsonUtil.toString(json_obj.get("userName"));
+			
+			return json_obj;
 		}
 
 		@Override
 		public JsonObject encode() {
-			JsonObject json_object = new JsonObject();
-			JsonArray json_schemas = new JsonArray();
-			for (String schema : getSchemas()) {
-				json_schemas.add(schema);
-			}
-
-			json_object.add("schemas",json_schemas);
+			JsonObject json_object = super.encode();
+			
 			json_object.addProperty("id",this.id);
 			json_object.addProperty("externalId",this.externalId);
 			json_object.addProperty("userName",this.userName);
@@ -120,6 +131,17 @@ public class SCIMObjectTest {
 		public EnterpriseUser() {
 			super();
 			addSchema(SCIMConstants.ENTERPRISEUSER_CORE_SCHEMA_URI);
+		}
+		
+		@Override
+		public JsonObject parse(String json_str) {
+			JsonObject json_user = super.parse(json_str);
+			JsonObject json_enterprise = json_user.get(SCIMConstants.ENTERPRISEUSER_CORE_SCHEMA_URI).getAsJsonObject();
+			if(!json_enterprise.isJsonNull()){
+				this.employeeNumber = JsonUtil.toString(json_enterprise.get("employeeNumber"));
+				this.organization	= JsonUtil.toString(json_enterprise.get("organization"));
+			}
+			return json_user;
 		}
 		
 		public JsonObject encode() {

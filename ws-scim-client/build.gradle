@@ -1,0 +1,12 @@
+
+version    	= '1.0.1'
+
+dependencies {
+	compile project(':ws-scim-core')
+	compile project(':ws-scim-impl')
+	
+	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.6'
+	
+}
+
+

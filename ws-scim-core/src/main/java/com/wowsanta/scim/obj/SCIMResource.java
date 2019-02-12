@@ -1,4 +1,4 @@
-package com.wowsanta.scim.message;
+package com.wowsanta.scim.obj;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,17 +7,21 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.wowsanta.scim.json.SCIMJsonObject;
-import com.wowsanta.scim.obj.JsonUtil;
-import com.wowsanta.scim.obj.SCIMUserMeta;
 
-
-public abstract class SCIMMessage extends SCIMJsonObject{
+public class SCIMResource extends SCIMJsonObject{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 4506364327193996264L;
 	private List<String> schemas = new ArrayList<String>();
 	
+	public SCIMResource(){}
+	public SCIMResource(JsonObject json_obj) {
+		JsonArray json_schemas = json_obj.get("schemas").getAsJsonArray();
+		for (JsonElement jsonElement : json_schemas) {
+			this.schemas.add(jsonElement.getAsString());
+		}
+	}
 	public void addSchema(String schema) {
 		this.schemas.add(schema);
 	}
@@ -31,13 +35,13 @@ public abstract class SCIMMessage extends SCIMJsonObject{
 	@Override
 	public JsonObject parse(String json_str) {
 		this.schemas.clear();
-		
+
 		JsonObject json_obj = super.parse(json_str);
 		JsonArray json_schemas = json_obj.get("schemas").getAsJsonArray();
 		for (JsonElement jsonElement : json_schemas) {
 			this.schemas.add(jsonElement.getAsString());
 		}
-
+		
 		return json_obj;
 	}
 
@@ -53,5 +57,4 @@ public abstract class SCIMMessage extends SCIMJsonObject{
 		
 		return json_obj ;
 	}
-	
 }

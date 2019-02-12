@@ -2,6 +2,10 @@ package com.wowsanta.scim.schema;
 
 public class SCIMConstants {
 
+	public static final String VERSION = "v2";
+	
+	public static final String ERROR_SCHEMA_URI = "urn:ietf:params:scim:api:messages:2.0:Error";
+	
 	public static final String CORE_SCHEMA_URI = "urn:ietf:params:scim:schemas:core:2.0";
 	public static final String USER_CORE_SCHEMA_URI = "urn:ietf:params:scim:schemas:core:2.0:User";
 	public static final String ENTERPRISEUSER_CORE_SCHEMA_URI = "urn:ietf:params:scim:schemas:extension:enterprise:2.0:User";
@@ -11,6 +15,7 @@ public class SCIMConstants {
 	public static final String SERVICE_PROVIDER_CONFIG_SCHEMA_URI = "urn:ietf:params:scim:schemas:core:2.0:ServiceProviderConfig";
 	public static final String RESOURCE_TYPE_SCHEMA_URI = "urn:ietf:params:scim:schemas:core:2.0:ResourceType";
 	public static final String SEARCH_SCHEMA_URI = "urn:ietf:params:scim:api:messages:2.0:SearchRequest";
+	public static final String BULK_REQUEST_URI = "urn:ietf:params:scim:api:messages:2.0:BulkRequest";
 	public static final String BULK_RESPONSE_URI = "urn:ietf:params:scim:api:messages:2.0:BulkResponse";
 
 	public static final String JSON = "json";
@@ -27,6 +32,7 @@ public class SCIMConstants {
 	public static final String LOCATION_HEADER = "Location";
 	public static final String CONTENT_TYPE_HEADER = "Content-Type";
 
+	
 	public static final String SERVICE_PROVIDER_CONFIG = "ServiceProviderConfig";
 	
 	public static final String DEFAULT = "default";

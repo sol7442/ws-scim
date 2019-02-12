@@ -1,16 +1,22 @@
 package com.wowsanta.scim.resource;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.util.List;
+
+import com.google.gson.JsonObject;
 import com.wowsanta.scim.exception.SCIMException;
-import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
+import com.wowsanta.scim.obj.SCIMEnterpriseUser;
+import com.wowsanta.scim.obj.SCIMResource;
+import com.wowsanta.scim.obj.SCIMUser;
+import com.wowsanta.scim.schema.SCIMConstants;
 
 public class SCIMResouceFactory {
 	private static SCIMResouceFactory instance = null;
 	
-	private SCIMResourceTypeSchema userResourceSchema;
-	private String userResourceClass ;
-	private String usergroupResourceClass;
+	private String userClass;
+	private String userSchema;
+	
+	private String groupClass;
+	private String groupSchema;
 	
 	public static SCIMResouceFactory getInstance() {
 		if(instance == null) {
@@ -18,80 +24,62 @@ public class SCIMResouceFactory {
 		}
 		return instance;
 	}
-	
-	public void setUserResourceSchema(SCIMResourceTypeSchema schema) {
-		this.userResourceSchema = schema;
+	public void setUserClass(String schema, String className){
+		this.userSchema = schema;
+		this.userClass  = className;
 	}
-	public void setUserResourceClass(String className) {
-		this.userResourceClass = className;
+	public void setGroupClass(String schema, String className){
+		this.groupSchema = schema;
+		this.groupClass = className;
 	}
-	public void setUserGroupResoureClass(String className) {
-		this.usergroupResourceClass = className;
-	}
-	
-	public String encode(Object obj) {
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		return gson.toJson(obj);
-	}
-	public <T> T decoedUser(String data) {
-		try {
-			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			@SuppressWarnings("unchecked")
-			Class<T> user_class = (Class<T>) Class.forName(this.userResourceClass);
-			return gson.fromJson(data,user_class);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+	public SCIMResource newUserResource(String schema) throws SCIMException{
+		SCIMResource resource = null;
+		
+		if(SCIMConstants.USER_CORE_SCHEMA_URI.equals(schema)){
+			resource = new SCIMUser();
+		}else if(SCIMConstants.ENTERPRISEUSER_CORE_SCHEMA_URI.equals(schema)){
+			resource = new SCIMEnterpriseUser();
+		}else if(this.userSchema.equals(schema)){
+			try {
+				resource = (SCIMResource) Class.forName(this.userClass).newInstance();
+			} catch (Exception e) {
+				throw new SCIMException("NEW RESOURCE INSTANCE CREATE FAILED : " + schema, e);
+			}
 		}
-		return null;	
+		return resource;
 	}
 	
-	public String toJsonString(Object obj) {
-		Gson gson = new GsonBuilder().create();
-		return gson.toJson(obj);
-	}
-	
-//	
-//	
-//	public Map<String, Attribute> createAttribute(SCIMResourceTypeSchema schema) {
-//		Map<String, Attribute> resouce_attributes = new HashMap<String, Attribute>();
-//		for (SCIMAttributeSchema attr_schema : schema.getAttributes().values()) {
-//			Attribute attribute = null;
-//			if(attr_schema.getMultiValued()){
-//				attribute = MultiValuedAttribute.create(attr_schema);
-//			}else {
-//				if(attr_schema.getType() == SCIMDefinitions.DataType.COMPLEX){
-//					attribute = ComplexAttribute.create(attr_schema);
-//				}else {
-//					attribute = SimpleAttribute.create(attr_schema);
-//				}
-//			}
-//			resouce_attributes.put(attr_schema.getName(),attribute);
-//		};
-//		return resouce_attributes;
-//	}
-	
-	public SCIMUser createUser() throws SCIMException{
-		SCIMUser user = null;
-		try {
-			user = (SCIMUser) Class.forName(this.userResourceClass).newInstance();
-			user.setSchemas(this.userResourceSchema.getSchemas());
-		} catch (Exception e) {
-			throw new SCIMException("Create User Error ",e);
+	public SCIMResource newUserResource(List<String> schemas) throws SCIMException{
+		SCIMResource resource = null;
+		
+		if(schemas.contains(this.userSchema)){
+			try {
+				resource = (SCIMResource) Class.forName(this.userClass).newInstance();
+			} catch (Exception e) {
+				throw new SCIMException("NEW RESOURCE INSTANCE CREATE FAILED : " + this.userClass, e);
+			}
+		}else {
+			if(schemas.contains(SCIMConstants.ENTERPRISEUSER_CORE_SCHEMA_URI)){
+				resource = new SCIMEnterpriseUser();
+			}else{
+				resource = new SCIMUser();
+			}
 		}
 		
-		return user;
+		return resource;
 	}
-	
-
-//	public SCIMUserGroup createUserGroup(String value) throws SCIMException{
-//		SCIMUserGroup usergroup = null;
-//		try {
-//			usergroup = (SCIMUserGroup) Class.forName(this.usergroupResourceClass).newInstance();
-//			usergroup.setRefValue("https://192.168.11:80/scim", value);
-//		} catch (Exception e) {
-//			throw new SCIMException("Create UserGroup Error ",e);
-//		}
-//	
-//		return usergroup;
-//	}
+	public SCIMResource newUserResource(JsonObject json_obj) throws SCIMException {
+		SCIMResource resource = newUserResource(new SCIMResource(json_obj).getSchemas());
+		resource.parse(json_obj.toString());
+		return resource;
+	}
+	public SCIMResource parse(String path, JsonObject json_obj) throws SCIMException {
+		SCIMResource resource = null;
+		if(path.equals(SCIMConstants.USER_ENDPOINT)){
+			resource = newUserResource(json_obj);//
+		}else {
+			
+		}
+		return resource;
+	}
 }
