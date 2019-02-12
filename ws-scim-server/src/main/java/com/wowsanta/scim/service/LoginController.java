@@ -8,7 +8,7 @@ import java.util.Map;
 import com.google.gson.JsonObject;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.log.SCIMLogger;
-import com.wowsanta.scim.resource.SCIMAdmin;
+import com.wowsanta.scim.obj.SCIMAdmin;
 import com.wowsanta.scim.resource.SCIMCode;
 import com.wowsanta.scim.resource.ServiceResult;
 import com.wowsanta.scim.sec.SCIMJWTToken;
@@ -32,12 +32,16 @@ public class LoginController implements Route {
 			String id = request_json.get("id").getAsString();
 			String pw = request_json.get("pw").getAsString();
 			
+			System.out.println(">>>>>>");
+			System.out.println(id);
+			System.out.println(pw);
+			System.out.println(">>>>>>");
+			
 			SCIMAdmin admin = this.service.login(id,pw);
 			
 			SCIMJWTToken token = new SCIMJWTToken();
 			token.setUserId(admin.getId());
-			token.setUserName(admin.getName());
-			token.setUserType(admin.getType());
+			token.setUserName(admin.getUserName());
 			
 			String str_token = token.issue("ServiceName","SCIM_KEY_@1234");
 	

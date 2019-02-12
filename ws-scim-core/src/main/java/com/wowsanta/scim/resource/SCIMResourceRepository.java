@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
 public interface SCIMResourceRepository {
@@ -17,6 +18,7 @@ public interface SCIMResourceRepository {
 	public List<SCIMUser> getUsers(String where)throws SCIMException;
 	
 	public void deleteUser(String userId) throws SCIMException;
+	public void lockUser(String userId) throws SCIMException;
 	
 	public void setGroupSchema(SCIMResourceTypeSchema groupSchema) throws SCIMException;
 	public SCIMGroup createGroup(SCIMGroup group) throws SCIMException;

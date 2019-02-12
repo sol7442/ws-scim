@@ -2,7 +2,8 @@ package com.wowsanta.scim.schema;
 
 public class SCIMConstants {
 
-	public static final String VERSION = "v2";
+	public static final String VERSION = "v2.0";
+	public static final String VERSION_ENDPINT = "/v2.0";
 	
 	public static final String ERROR_SCHEMA_URI = "urn:ietf:params:scim:api:messages:2.0:Error";
 	
@@ -17,6 +18,7 @@ public class SCIMConstants {
 	public static final String SEARCH_SCHEMA_URI = "urn:ietf:params:scim:api:messages:2.0:SearchRequest";
 	public static final String BULK_REQUEST_URI = "urn:ietf:params:scim:api:messages:2.0:BulkRequest";
 	public static final String BULK_RESPONSE_URI = "urn:ietf:params:scim:api:messages:2.0:BulkResponse";
+	
 
 	public static final String JSON = "json";
 	public static final String APPLICATION_JSON = "application/scim+json";
@@ -25,10 +27,13 @@ public class SCIMConstants {
 	public static final String USER = "User";
 	public static final String GROUP = "Group";
 	public static final String RESOURCE_TYPE = "ResourceType";
+	
 	public static final String USER_ENDPOINT = "/Users";
 	public static final String GROUP_ENDPOINT = "/Groups";
+	public static final String BULK_ENDPOINT = "/Bulk";
 	public static final String SERVICE_PROVIDER_CONFIG_ENDPOINT = "/ServiceProviderConfig";
 	public static final String RESOURCE_TYPE_ENDPOINT = "/ResourceType";
+	
 	public static final String LOCATION_HEADER = "Location";
 	public static final String CONTENT_TYPE_HEADER = "Content-Type";
 
@@ -36,7 +41,19 @@ public class SCIMConstants {
 	public static final String SERVICE_PROVIDER_CONFIG = "ServiceProviderConfig";
 	
 	public static final String DEFAULT = "default";
-
+	
+	public static class SatusConstants {
+		public static final String SCUESS_CODE 		 = "200";
+		public static final String invalidSyntax 	 = "400";
+		public static final String uniqueness 		 = "409";
+		
+		public static final String uniqueness_DETAIL = "user id must be unique.";
+		public static final String invalidSyntax_DETAIL = "Request is unparsable, syntactically incorrect, or violates schema.";
+	}
+	
+	public static class WowsantaConstansts{
+		public static final String WOWSANAT_BULK_REQUEST_URI = "urn:wowsanta:params:scim:api:messages:2.0:BulkRequest";
+	}
 	public static class CommonSchemaConstants {
 
 		public static final String SCHEMAS = "schemas";
@@ -606,5 +623,11 @@ public class SCIMConstants {
 		public static final String PUT = "PUT";
 		public static final String PATCH = "PATCH";
 
+	}
+	
+	public static class HtppConstants {
+		public static final int OK = 200;
+		public static final int CREATED = 201;
+		public static final int IM_Used = 266;
 	}
 }

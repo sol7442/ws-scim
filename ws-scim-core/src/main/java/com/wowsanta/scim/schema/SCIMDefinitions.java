@@ -23,4 +23,10 @@ public class SCIMDefinitions {
     public static enum MethodType {
     	GET,POST,PUT,PATCH,DELETE
     }
+    public static enum UserType{
+    	IM_ADMIN,IM_OPERATOR,SYS_ADMIN,SYS_OPERATOR,USER
+    }
+	public static enum ErrorType{
+		uniqueness, invalidSyntax
+	}
 }

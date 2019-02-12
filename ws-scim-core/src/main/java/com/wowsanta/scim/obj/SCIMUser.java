@@ -1,12 +1,7 @@
 package com.wowsanta.scim.obj;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.wowsanta.scim.json.SCIMJsonObject;
 import com.wowsanta.scim.schema.SCIMConstants;
 
 public class SCIMUser extends SCIMResource {
@@ -17,9 +12,9 @@ public class SCIMUser extends SCIMResource {
 	
 	
 	
-	private String id;
 	private String userName;
 	private boolean active;
+	private String password;
 	
 	private SCIMUserMeta meta;
 	
@@ -30,10 +25,9 @@ public class SCIMUser extends SCIMResource {
 	@Override
 	public JsonObject parse(String json_str) {
 		JsonObject json_obj = super.parse(json_str);
-		
-		this.id 		= JsonUtil.toString(json_obj.get("id"));
 		this.userName 	= JsonUtil.toString(json_obj.get("userName"));
 		this.active  	= JsonUtil.toBoolean(json_obj.get("active"));
+		this.password   = JsonUtil.toString(json_obj.get("password"));
 		
 		if(json_obj.get("meta") != null){
 			this.meta       = new SCIMUserMeta();
@@ -46,23 +40,15 @@ public class SCIMUser extends SCIMResource {
 	public JsonObject encode() {
 		JsonObject json_obj = super.encode();
 
-		json_obj.addProperty("id",this.id);
 		json_obj.addProperty("userName",this.userName);
 		json_obj.addProperty("active", this.active);
+		json_obj.addProperty("password", this.password);
 		
 		if(this.meta != null){
 			json_obj.add("meta", this.meta.encode());
 		}
 		
 		return json_obj ;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public String getUserName() {
@@ -76,7 +62,9 @@ public class SCIMUser extends SCIMResource {
 	public boolean isActive() {
 		return active;
 	}
-
+	public int getActive() {
+		if(active) {return 1;}else {return 0;}
+	}
 	public void setActive(boolean active) {
 		this.active = active;
 	}
@@ -87,5 +75,13 @@ public class SCIMUser extends SCIMResource {
 
 	public void setMeta(SCIMUserMeta meta) {
 		this.meta = meta;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

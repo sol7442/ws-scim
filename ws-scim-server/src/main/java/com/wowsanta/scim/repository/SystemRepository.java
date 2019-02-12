@@ -6,9 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.obj.SCIMAdmin;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.repo.rdb.DBCP;
-import com.wowsanta.scim.resource.SCIMAdmin;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
 import com.wowsanta.scim.resource.ServiceAdmin;
 

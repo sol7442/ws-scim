@@ -7,7 +7,7 @@ import com.wowsanta.scim.exception.SCIMException;
 public class JWTTokenTest {
 
 	private final String issuer_name = "SCIM";
-	private final String issuer_key = "SCIM_KEY_@1234";
+	private final String issuer_key  = "SCIM_KEY_@1234";
 	
 	private final String expired_str_token = "eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJpc3MiOiJTQ0lNIiwiaWF0IjoxNTQ2OTUxNDE0LCJleHAiOjE1NDY5NTE0NzQsInVzZXJJZCI6InVzZXJJZCIsInVzZXJOYW1lIjoidXNlck5hbWUifQ._MKwES_MfbIpAeIYRJZGoreZvmAsdvd139QxJN4EK5I";
 	

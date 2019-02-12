@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.quartz.JobExecutionContext;
 
-import com.ehyundai.im.User;
+import com.ehyundai.object.User;
 import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.log.SCIMLogger;

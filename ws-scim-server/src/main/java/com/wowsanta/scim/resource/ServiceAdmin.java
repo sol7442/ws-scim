@@ -1,5 +1,7 @@
 package com.wowsanta.scim.resource;
 
+import com.wowsanta.scim.obj.SCIMAdmin;
+
 public class ServiceAdmin implements SCIMAdmin{
 
 	private String id;

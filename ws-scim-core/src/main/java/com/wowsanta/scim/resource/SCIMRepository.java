@@ -10,6 +10,10 @@ public abstract class SCIMRepository extends AbstractJsonObject {
 	
 	private static final long serialVersionUID = 1L;
 	
+	public static int RESULT_DUPLICATE_ENTRY = 1;
+	public static int RESULT_IS_NULL = 2;
+	
+	
 	private String type;
 	public abstract void initialize() throws SCIMException;
 	public abstract void close();

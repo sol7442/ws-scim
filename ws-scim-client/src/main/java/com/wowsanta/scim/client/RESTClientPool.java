@@ -1,8 +1,12 @@
 package com.wowsanta.scim.client;
 
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.PoolingClientConnectionManager;
-import org.apache.http.params.HttpParams;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+
+import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.sec.SCIMJWTToken;
 
 public class RESTClientPool {
 	private static class Singleton {
@@ -13,18 +17,28 @@ public class RESTClientPool {
 		return Singleton.instance;
 	}
 	
-	DefaultHttpClient httpClient; 
+	
+	private PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
+	private CloseableHttpClient client;
+	private SCIMJWTToken scim_wt_token = new SCIMJWTToken();
+	
 	
 	public RESTClientPool() {
-		httpClient = new DefaultHttpClient();
-		PoolingClientConnectionManager pool = new   PoolingClientConnectionManager(httpClient.getConnectionManager().getSchemeRegistry());
-		pool.setMaxTotal(5000);
-		pool.setDefaultMaxPerRoute(500);
-		HttpParams params = httpClient.getParams();
-		httpClient = new DefaultHttpClient(pool, params);
+		connectionManager.setMaxTotal(100);		
+		connectionManager.setDefaultMaxPerRoute(10);
+		this.client = HttpClients.custom().setConnectionManager(connectionManager).build();
 	}
 	
-	public DefaultHttpClient get() {
-		return httpClient;
+	public HttpClient get() {
+		return this.client;
+	}
+	
+	public String generateAuthorizationToken() throws SCIMException {
+		return this.scim_wt_token.issue();
+	}
+	public  void setUserInfo(String userId, String userName, int time) {
+		scim_wt_token.setUserId(userId);
+		scim_wt_token.setUserName(userName);
+		scim_wt_token.setExpireTime(time);
 	}
 }

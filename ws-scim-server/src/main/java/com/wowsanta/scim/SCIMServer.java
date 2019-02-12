@@ -13,6 +13,8 @@ import org.apache.commons.daemon.DaemonController;
 import org.apache.commons.daemon.DaemonInitException;
 
 import com.wowsanta.scim.log.SCIMLogger;
+import com.wowsanta.scim.resource.SCIMRepositoryManager;
+import com.wowsanta.scim.resource.SCIMResouceFactory;
 
 
 
@@ -50,12 +52,22 @@ public class SCIMServer  implements Daemon {
 	public void init(DaemonContext context) throws DaemonInitException, Exception {
 		String config_file_path = "";
 		if(context.getArguments().length == 0) {
+			String instance_name = System.getProperty("scim.instance");
+			if(instance_name == null) {
+				instance_name = "";
+			}else {
+				instance_name = instance_name + "_";
+			}
+			
 			File current_path  = new File(System.getProperty("user.dir"));
-			config_file_path = current_path.getParent() + File.separator + "config" +File.separator + "scim-service-provider.json"; 
+			config_file_path = current_path.getParent() + File.separator + "config" +File.separator + instance_name +"scim-service-provider.json"; 
 		}
-		
+		System.out.println(config_file_path);
 		SCIMSystemManager.getInstance().load(config_file_path);
 		SCIMSystemManager.getInstance().getServiceProvider().getServer().initialize();
+		
+		
+		SCIMRepositoryManager.getInstance().initailze();
 		
 	}
 	@Override

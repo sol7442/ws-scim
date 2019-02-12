@@ -44,7 +44,10 @@ public class SCIMRepositoryManager extends AbstractJsonObject {
 		}
 	}
 	
-	
+	public void initailze() throws SCIMException {
+		resourceRepository.initialize();
+		systemRepository.initialize();
+	}
 	public void setResourceRepository(SCIMResourceRepository repo) {
 		this.resourceRepository = (SCIMRepository) repo;
 	}
@@ -62,4 +65,6 @@ public class SCIMRepositoryManager extends AbstractJsonObject {
 		this.resourceRepository.close();
 		this.systemRepository.close();
 	}
+
+
 }

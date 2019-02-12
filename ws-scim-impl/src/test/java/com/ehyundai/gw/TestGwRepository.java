@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.ehyundai.im.Meta;
-import com.ehyundai.im.User;
+import com.ehyundai.object.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -18,7 +18,6 @@ import com.wowsanta.scim.SCIMSystemInfo;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.DefaultUserMeta;
 import com.wowsanta.scim.resource.SCIMRepositoryManager;
-import com.wowsanta.scim.resource.SCIMUser;
 import com.wowsanta.scim.scheduler.SCIMSchedulerManager;
 import com.wowsanta.scim.util.Random;
 

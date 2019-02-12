@@ -1,8 +1,8 @@
 package com.wowsanta.scim.repo;
 
 import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.obj.SCIMAdmin;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
-import com.wowsanta.scim.resource.SCIMAdmin;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
 
 public class SqlLiteSystemRepository extends AbstractRDBRepository implements SCIMSystemRepository{

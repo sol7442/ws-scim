@@ -134,7 +134,7 @@ public class SparkMain {
 			} else {
 				JSONObject resJson = sm.checkToken(req, res);
 				if(!"0".equals(resJson.getAsString("status"))) {
-					//halt(401, resJson.toJSONString());
+					halt(401, resJson.toJSONString());
 				}
 			}
 		});

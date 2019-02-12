@@ -1,0 +1,35 @@
+{
+	"className": "com.wowsanta.scim.resource.SCIMRepositoryManager",
+	"resourceRepository": {
+		"className": "com.ehyundai.im.IMRepository",
+		"type": "RDB",
+		"dbcp": {
+			"poolName": "im",
+			"driverName": "oracle.jdbc.driver.OracleDriver",
+			"jdbcUrl": "jdbc:mysql://wession.com:3306/ws_scim_im?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC",
+			"userName": "root",
+			"password": "wession@12",
+			"valiationQuery": "select 1",
+			"timeBetweenEvictionRunsMillis": 60000,
+			"testWhileIdle": true,
+			"minIdle": 5,
+			"maxTotal": 50
+		}
+	},
+	"systemRepository": {
+		"className": "com.ehyundai.im.IMRepository",
+		"type": "RDB",
+		"dbcp": {
+			"poolName": "im",
+			"driverName": "oracle.jdbc.driver.OracleDriver",
+			"jdbcUrl": "jdbc:mysql://wession.com:3306/ws_scim_im?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC",
+			"userName": "root",
+			"password": "wession@12",
+			"valiationQuery": "select 1",
+			"timeBetweenEvictionRunsMillis": 60000,
+			"testWhileIdle": true,
+			"minIdle": 5,
+			"maxTotal": 50
+		}
+	}
+}

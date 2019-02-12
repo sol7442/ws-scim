@@ -1,7 +1,5 @@
 package com.wowsanta.scim.message;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.json.SCIMJsonObject;
@@ -11,17 +9,19 @@ import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.resource.SCIMResouceFactory;
 import com.wowsanta.scim.schema.SCIMConstants;
 
-public class SCIMBulkOperastion extends SCIMJsonObject{
+public class SCIMOperation extends SCIMJsonObject{
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -2290817678960481644L;
+	private static final long serialVersionUID = 6173234519005676647L;
 	
 	private String method;
 	private String path;
-	private String bulkId;
 	private SCIMResource data;
-	
+	private String location;
+	private String status;
+	private SCIMError response;
 	public String getMethod() {
 		return method;
 	}
@@ -34,12 +34,6 @@ public class SCIMBulkOperastion extends SCIMJsonObject{
 	public void setPath(String path) {
 		this.path = path;
 	}
-	public String getBulkId() {
-		return bulkId;
-	}
-	public void setBulkId(String bulkId) {
-		this.bulkId = bulkId;
-	}
 	public SCIMResource getData() {
 		return data;
 	}
@@ -49,22 +43,47 @@ public class SCIMBulkOperastion extends SCIMJsonObject{
 		}else{
 			this.path = SCIMConstants.GROUP_ENDPOINT;
 		}
-		
 		this.data = data;
+	}
+	public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public SCIMError getResponse() {
+		return response;
+	}
+	public void setResponse(SCIMError response) {
+		this.response = response;
 	}
 	
 	@Override
 	public JsonObject parse(String json_str) {
 		JsonObject json_obj = super.parse(json_str);
-		
+
 		this.method = JsonUtil.toString(json_obj.get("method"));
 		this.path 	= JsonUtil.toString(json_obj.get("path"));
-		this.bulkId = JsonUtil.toString(json_obj.get("bulkId"));
+		if(json_obj.get("data") != null) {
+			try {
+				this.data = SCIMResouceFactory.getInstance().parse(this.path,json_obj.get("data").getAsJsonObject());
+			} catch (SCIMException e) {
+				e.printStackTrace();
+			}
+		}
 		
-		try {
-			this.data = SCIMResouceFactory.getInstance().parse(this.path,json_obj.get("data").getAsJsonObject());
-		} catch (SCIMException e) {
-			e.printStackTrace();
+		this.location = JsonUtil.toString(json_obj.get("location"));
+		this.status = JsonUtil.toString(json_obj.get("status"));
+		
+		if(json_obj.get("response") != null) {
+			this.response = new SCIMError();
+			this.response.parse(json_obj.get("response").toString());
 		}
 		
 		return json_obj;
@@ -76,13 +95,17 @@ public class SCIMBulkOperastion extends SCIMJsonObject{
 		
 		json_obj.addProperty("method",	this.method);
 		json_obj.addProperty("path",	this.path);
-		json_obj.addProperty("bulkId",	this.bulkId);
 		
 		if(this.data != null){
 			json_obj.add("data",	this.data.encode());
 		}
-		
+		json_obj.addProperty("location",	this.location);
+		json_obj.addProperty("status",	this.status);
+		if(this.response != null) {
+			json_obj.add("response",this.response.encode());
+		}
 		return json_obj ;
 	}
+	
 	
 }

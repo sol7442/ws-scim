@@ -30,6 +30,7 @@ public abstract class AbstractRDBRepository extends SCIMRepository {
 	public void initialize() throws SCIMException {
 		try {
 			this.dbcp.setUp();
+			SCIMLogger.sys("Repository initialize : {}", this.dbcp.getPoolName());
 		} catch (Exception e) {
 			throw new SCIMException("DBCP Setup Error ",e);
 		}
@@ -44,12 +45,15 @@ public abstract class AbstractRDBRepository extends SCIMRepository {
 		this.dbcp = dbcp;
 	}
 	
-	public Connection getConnection() {
+	public Connection getConnection() throws SCIMException {
 		Connection connection = null;
 		try {
+			System.out.println(">>>");
+			System.out.println(this.dbcp.getPoolName());
+			System.out.println(">>>");
 			connection = DriverManager.getConnection(this.dbcp.getPoolName());
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new SCIMException("DBCP CONNECTION FAILED : " + this.dbcp.getPoolName(), e);
 		}
 		return connection;
 	}
@@ -61,6 +65,22 @@ public abstract class AbstractRDBRepository extends SCIMRepository {
 			return null;
 		}	
 	}
+	public java.sql.Timestamp toSqlTimestamp(Date date) {
+		if(date != null) {
+			return new java.sql.Timestamp(date.getTime());
+		}else {
+			return null;
+		}	
+	}
+	
+	public Date toJavaDate(java.sql.Timestamp date) {
+		if(date != null) {
+			return new Date(date.getTime());
+		}else {
+			return null;
+		}	
+	}
+	
 	public Date toJavaDate(java.sql.Date date) {
 		if(date != null) {
 			return new Date(date.getTime());
@@ -68,6 +88,8 @@ public abstract class AbstractRDBRepository extends SCIMRepository {
 			return null;
 		}	
 	}
+	
+	
 	
 	public static AbstractRDBRepository load(String file_name) throws FileNotFoundException {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();

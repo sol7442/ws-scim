@@ -29,6 +29,9 @@ public class SCIMJWTToken {
 	private int status;
 	private String detail;
 
+	private String key 		= "WS-SCIM@12334";
+	private String issuer 	= "ws-scim";
+	
 	public void setUserId(String id) {
 		this.userId = id;
 	}
@@ -69,6 +72,10 @@ public class SCIMJWTToken {
 	public void setUserType(String type) {
 		this.userType = type;
 	}
+	public String issue() throws SCIMException {
+		return issue(this.issuer, this.key);
+	}
+	
 	public String issue(String issuer, String key) throws SCIMException {
 		JwtBuilder builder = Jwts.builder();
 
@@ -88,6 +95,9 @@ public class SCIMJWTToken {
 		return builder.signWith(SignatureAlgorithm.HS256, key.getBytes()).compact();
 	}
 
+	public void verify(String token) throws SCIMException {
+		verify(token, this.key);
+	}
 	public void verify(String token, String key) throws SCIMException {
 		try {
 			Jws<Claims> claims = Jwts.parser().setSigningKey(key.getBytes()).parseClaimsJws(token);

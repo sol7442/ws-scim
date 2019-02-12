@@ -11,8 +11,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.ehyundai.im.Meta;
-import com.ehyundai.im.User;
 import com.ehyundai.im.UserGroup;
+import com.ehyundai.object.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;

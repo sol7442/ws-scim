@@ -9,16 +9,15 @@ import java.util.Date;
 import java.util.List;
 
 import com.ehyundai.im.Admin;
-import com.ehyundai.im.User;
+import com.ehyundai.object.User;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.DefaultUserMeta;
+import com.wowsanta.scim.obj.SCIMAdmin;
+import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.repo.rdb.DBCP;
-import com.wowsanta.scim.resource.SCIMAdmin;
-import com.wowsanta.scim.resource.SCIMGroup;
 import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
-import com.wowsanta.scim.resource.SCIMUser;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
 public class GWRepository extends AbstractRDBRepository implements SCIMResourceRepository, SCIMSystemRepository{
@@ -74,13 +73,13 @@ public class GWRepository extends AbstractRDBRepository implements SCIMResourceR
         	statement.setString(10, gw_user.getJob());
         	statement.setString(11, gw_user.getRankCode());
         	statement.setString(12, gw_user.getRank());
-        	statement.setString(13, gw_user.getActive());
+        	statement.setBoolean(13, gw_user.isActive());
         	statement.setString(14, gw_user.geteMail());
         	
         	statement.setDate(15, toSqlDate(gw_user.getJoinDate()));
         	statement.setDate(16, toSqlDate(gw_user.getRetireDate()));
-        	statement.setDate(17, toSqlDate(((DefaultUserMeta)gw_user.getMeta()).getCreated()));
-        	statement.setDate(18, toSqlDate(((DefaultUserMeta)gw_user.getMeta()).getLastModified()));
+        	statement.setDate(17, toSqlDate(gw_user.getMeta().getCreated()));
+        	statement.setDate(18, toSqlDate(gw_user.getMeta().getLastModified()));
         	
         	statement.execute();
         	connection.commit();

@@ -1,6 +1,6 @@
 package com.ehyundai.im;
 
-import com.wowsanta.scim.resource.SCIMAdmin;
+import com.wowsanta.scim.obj.SCIMAdmin;
 
 public class Admin implements SCIMAdmin{
 

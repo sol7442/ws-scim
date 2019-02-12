@@ -12,11 +12,8 @@ import com.wowsanta.scim.schema.SCIMConstants;
 public class SCIMResouceFactory {
 	private static SCIMResouceFactory instance = null;
 	
-	private String userClass;
-	private String userSchema;
-	
-	private String groupClass;
-	private String groupSchema;
+	private SCIMResoureDefinition user;
+	private SCIMResoureDefinition group;
 	
 	public static SCIMResouceFactory getInstance() {
 		if(instance == null) {
@@ -25,12 +22,14 @@ public class SCIMResouceFactory {
 		return instance;
 	}
 	public void setUserClass(String schema, String className){
-		this.userSchema = schema;
-		this.userClass  = className;
+		this.user = new SCIMResoureDefinition();
+		this.user.setSchema(schema);
+		this.user.setClassName(className);
 	}
 	public void setGroupClass(String schema, String className){
-		this.groupSchema = schema;
-		this.groupClass = className;
+		this.group = new SCIMResoureDefinition();
+		this.group.setSchema(schema);
+		this.group.setClassName(className);
 	}
 	public SCIMResource newUserResource(String schema) throws SCIMException{
 		SCIMResource resource = null;
@@ -39,9 +38,9 @@ public class SCIMResouceFactory {
 			resource = new SCIMUser();
 		}else if(SCIMConstants.ENTERPRISEUSER_CORE_SCHEMA_URI.equals(schema)){
 			resource = new SCIMEnterpriseUser();
-		}else if(this.userSchema.equals(schema)){
+		}else if(this.user.getSchema().equals(schema)){
 			try {
-				resource = (SCIMResource) Class.forName(this.userClass).newInstance();
+				resource = (SCIMResource) Class.forName(this.user.getClassName()).newInstance();
 			} catch (Exception e) {
 				throw new SCIMException("NEW RESOURCE INSTANCE CREATE FAILED : " + schema, e);
 			}
@@ -51,12 +50,11 @@ public class SCIMResouceFactory {
 	
 	public SCIMResource newUserResource(List<String> schemas) throws SCIMException{
 		SCIMResource resource = null;
-		
-		if(schemas.contains(this.userSchema)){
+		if(schemas.contains(this.user.getSchema())){
 			try {
-				resource = (SCIMResource) Class.forName(this.userClass).newInstance();
+				resource = (SCIMResource) Class.forName(this.user.getClassName()).newInstance();
 			} catch (Exception e) {
-				throw new SCIMException("NEW RESOURCE INSTANCE CREATE FAILED : " + this.userClass, e);
+				throw new SCIMException("NEW RESOURCE INSTANCE CREATE FAILED : " + this.user, e);
 			}
 		}else {
 			if(schemas.contains(SCIMConstants.ENTERPRISEUSER_CORE_SCHEMA_URI)){
@@ -65,7 +63,6 @@ public class SCIMResouceFactory {
 				resource = new SCIMUser();
 			}
 		}
-		
 		return resource;
 	}
 	public SCIMResource newUserResource(JsonObject json_obj) throws SCIMException {

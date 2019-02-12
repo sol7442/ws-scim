@@ -4,12 +4,11 @@ import java.util.Date;
 
 import org.junit.Test;
 
-import com.ehyundai.im.User;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 
 public class EhyunDaiScimObjectTest {
 
-	@Test
+	//@Test
 	public void user_object_test() {
 		System.out.println("create user object and parse >>>>>>>>>>>>>>>>>>>>>>>>>>");
 		User user = create_user_test (

@@ -1,10 +1,16 @@
 package com.wowsanta.scim.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.wowsanta.scim.SCIMSystemInfo;
 import com.wowsanta.scim.json.AbstractJsonObject;
 import com.wowsanta.scim.resource.SCIMMeta;
 import com.wowsanta.scim.resource.SCIMRepository;
 import com.wowsanta.scim.resource.SCIMRepositoryManager;
+import com.wowsanta.scim.resource.SCIMResoureDefinition;
 
 public abstract class SCIMServiceProvider extends AbstractJsonObject {
 	/**
@@ -18,6 +24,7 @@ public abstract class SCIMServiceProvider extends AbstractJsonObject {
 	private String documentationUri;
 	
 	private String repositoryConfig;
+	private Map<String, SCIMResoureDefinition> resources = new HashMap<String,SCIMResoureDefinition>();
 	
 	public abstract SCIMMeta getMeta();
 	public abstract void setMeta(SCIMMeta meta);
@@ -50,5 +57,11 @@ public abstract class SCIMServiceProvider extends AbstractJsonObject {
 	}
 	public void setRepositoryConfig(String repositoryConfig) {
 		this.repositoryConfig = repositoryConfig;
+	}
+	public Map<String,SCIMResoureDefinition> getResources() {
+		return resources;
+	}
+	public void setResources(Map<String, SCIMResoureDefinition> resources) {
+		this.resources = resources;
 	}
 }

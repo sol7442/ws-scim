@@ -10,6 +10,7 @@ import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.resource.SCIMRepository;
 import com.wowsanta.scim.resource.SCIMRepositoryManager;
+import com.wowsanta.scim.resource.SCIMResouceFactory;
 import com.wowsanta.scim.service.SCIMServiceProvider;
 
 public class SCIMSystemManager {
@@ -29,8 +30,11 @@ public class SCIMSystemManager {
 		try {
 			this.serviceProvider = (SCIMServiceProvider) SCIMServiceProvider.load(config_file);
 			
-			load_repository(this.serviceProvider.getRepositoryConfig());
+			SCIMResouceFactory.getInstance().setUserClass(
+					this.serviceProvider.getResources().get("user").getSchema(),
+					this.serviceProvider.getResources().get("user").getClassName());
 			
+			load_repository(this.serviceProvider.getRepositoryConfig());
 			
 			
 		} catch (Exception e) {
