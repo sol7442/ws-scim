@@ -1,0 +1,8 @@
+{
+    "debugging": true,
+    "provider":{
+        "id":"scim-im",
+        "name":"scim-im-sys",
+        "url":"http://127.0.0.1:5000"
+    }
+}

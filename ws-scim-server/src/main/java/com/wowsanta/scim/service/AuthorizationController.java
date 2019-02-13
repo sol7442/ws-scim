@@ -2,6 +2,7 @@ package com.wowsanta.scim.service;
 
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.SCIMAdmin;
+import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.resource.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
 import com.wowsanta.scim.sec.SCIMJWTToken;
@@ -23,9 +24,9 @@ public class AuthorizationController implements Filter {
 			verify_token.verify(request.headers("Authorization"));
 			
 			SCIMSystemRepository systemRepository = SCIMRepositoryManager.getInstance().getSystemRepository();
-			SCIMAdmin admin = systemRepository.getAdmin(verify_token.getUserId());
+			SCIMUser user = systemRepository.getLoginUser(verify_token.getUserId());
 
-			request.session(true).attribute("user",admin);
+			request.session(true).attribute("user",user);
 			
 		} catch (SCIMException e) {
 			response.status(401);

@@ -30,7 +30,7 @@ public class IMRepository extends AbstractRDBRepository implements SCIMSystemRep
 
 
 	@Override
-	public SCIMAdmin getAdmin(String id) throws SCIMException {
+	public SCIMUser getLoginUser(String id) throws SCIMException {
 		//final String selectSQL = "SELECT A.adminId, B.userName,  A.adminType, A.adminPw FROM SCIM_ADMIN A, SCIM_USER B WHERE A.adminId = B.userId AND A.adminId = ?";
 		final String selectSQL = "SELECT U.userId, U.userName, U.password, SA.systemId FROM SCIM_USER U , SCIM_SYSTEM_ADMIN SA WHERE U.userId = SA.userId AND U.userId = ?";
 				
@@ -38,18 +38,17 @@ public class IMRepository extends AbstractRDBRepository implements SCIMSystemRep
 		PreparedStatement statement = null;
 	    ResultSet resultSet = null;        
 
-	    SCIMAdmin admin = null;
+	    SCIMUser login_user = null;
         try {
         	connection = getConnection();
         	statement  = connection.prepareStatement(selectSQL);
         	statement.setString(1, id);
         	resultSet = statement.executeQuery();
         	if(resultSet.next()) {
-        		admin = new SCIMAdmin();
-        		admin.setId(resultSet.getString("userId"));
-        		admin.setUserName(resultSet.getString("userName"));
-        		admin.setPassword(resultSet.getString("password"));
-        		admin.setSystemId(resultSet.getString("systemId"));
+        		login_user = new SCIMUser();
+        		login_user.setId(resultSet.getString("userId"));
+        		login_user.setUserName(resultSet.getString("userName"));
+        		login_user.setPassword(resultSet.getString("password"));
         	}else {
         		throw new SCIMException("ADMIN NOT FOUND : " + id, RESULT_IS_NULL);
         	}
@@ -59,7 +58,7 @@ public class IMRepository extends AbstractRDBRepository implements SCIMSystemRep
 			DBCP.close(connection, statement, resultSet);
 		}
         
-		return admin;
+		return login_user;
 	}
 
 	@Override

@@ -9,11 +9,11 @@
                     </mat-card-title>
                     <div class="ui-inputgroup login-input-group">
                         <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
-                        <input class="login-input" [(ngModel)]="admin.puserid" type="text" pInputText placeholder="Username" >         
+                        <input class="login-input" [(ngModel)]="user.id" type="text" pInputText placeholder="Username" >         
                     </div>
                     <div class="ui-inputgroup login-input-group">
                         <span class="ui-inputgroup-addon"><i class="fa fa-key"></i></span>
-                        <input class="login-input" [(ngModel)]="admin.ppasswd" type="text" pInputText placeholder="Password"> 
+                        <input class="login-input" [(ngModel)]="user.passwd" type="text" pInputText placeholder="Password"> 
                     </div>
                     <div class="ui-inputgroup login-input-group">
                         <button class="login-input" pButton type="button" label="Sign in" (click)="login($event)"></button>

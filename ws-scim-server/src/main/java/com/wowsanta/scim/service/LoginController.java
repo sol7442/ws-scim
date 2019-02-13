@@ -8,7 +8,7 @@ import java.util.Map;
 import com.google.gson.JsonObject;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.log.SCIMLogger;
-import com.wowsanta.scim.obj.SCIMAdmin;
+import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.resource.SCIMCode;
 import com.wowsanta.scim.resource.ServiceResult;
 import com.wowsanta.scim.sec.SCIMJWTToken;
@@ -37,30 +37,31 @@ public class LoginController implements Route {
 			System.out.println(pw);
 			System.out.println(">>>>>>");
 			
-			SCIMAdmin admin = this.service.login(id,pw);
+			SCIMUser user = this.service.login(id,pw);
 			
 			SCIMJWTToken token = new SCIMJWTToken();
-			token.setUserId(admin.getId());
-			token.setUserName(admin.getUserName());
+			token.setUserId(user.getId());
+			token.setUserName(user.getUserName());
 			
+			user.setPassword("");
 			String str_token = token.issue("ServiceName","SCIM_KEY_@1234");
 	
 			Map<String,Object> response_map = new HashMap<String, Object>();
 			response_map.put("token", str_token);
-			response_map.put("admin", admin);
+			response_map.put("user", user);
 			
 			result.setCode(SCIMCode.SUCCESS);
 			result.setMessage("sucess");
 			result.setData(response_map);
 			
-			request.session(true).attribute("admin",admin);
+			request.session(true).attribute("user",user);
 			
 		}catch(SCIMException e) {
 			result.setCode(SCIMCode.FAILED);
 			result.setMessage("failed : " + e.getMessage());
 			result.setData(e);
 			
-			request.session().removeAttribute("admin");
+			request.session().removeAttribute("user");
 		}finally {
 			SCIMLogger.proc("Login Result : {}", result);
 		}
