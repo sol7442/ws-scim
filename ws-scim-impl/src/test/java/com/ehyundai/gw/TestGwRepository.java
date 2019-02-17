@@ -40,7 +40,7 @@ public class TestGwRepository {
 		
 		//GWRepository resource_repo = new GWRepository();
 		JsonObject system_conf = load_system_conf();
-		GWRepository gw_repo = load_repository(system_conf, "resourceRepository");
+		GWResoureRepository gw_repo = load_repository(system_conf, "resourceRepository");
 		
 		repository_mgr.setSystemRepository(gw_repo);
 		repository_mgr.setResourceRepository(gw_repo);
@@ -59,7 +59,7 @@ public class TestGwRepository {
 			SCIMRepositoryManager repository_mgr = SCIMRepositoryManager.getInstance();
 			repository_mgr.load(config_file);
 			
-			GWRepository gw_repo = (GWRepository) repository_mgr.getResourceRepository();
+			GWResoureRepository gw_repo = (GWResoureRepository) repository_mgr.getResourceRepository();
 			
 			System.out.println(gw_repo);
 			
@@ -108,14 +108,14 @@ public class TestGwRepository {
 		return config;
 	}
 	
-	private GWRepository load_repository(JsonObject system_conf, String repository_name) {
-		GWRepository repository = null;
+	private GWResoureRepository load_repository(JsonObject system_conf, String repository_name) {
+		GWResoureRepository repository = null;
 		try {
 			JsonObject repo_json = system_conf.get(repository_name).getAsJsonObject();
 			String class_name = repo_json.get("repositoryClass").getAsString();
 			Gson gson = new GsonBuilder().create();
 			
-			repository = (GWRepository)gson.fromJson(repo_json, Class.forName(class_name));
+			repository = (GWResoureRepository)gson.fromJson(repo_json, Class.forName(class_name));
 			repository.initialize();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -127,7 +127,7 @@ public class TestGwRepository {
 	//@Test
 	public void getUser() {
 		JsonObject system_conf = load_system_conf();
-		GWRepository gw_repo = load_repository(system_conf, "resourceRepository");
+		GWResoureRepository gw_repo = load_repository(system_conf, "resourceRepository");
 		
 		try {
 			User gw_user = (User)gw_repo.getUser("65836156");
@@ -141,7 +141,7 @@ public class TestGwRepository {
 	//@Test
 	public void getUsers() {
 		JsonObject system_conf = load_system_conf();
-		GWRepository gw_repo = load_repository(system_conf, "resourceRepository");
+		GWResoureRepository gw_repo = load_repository(system_conf, "resourceRepository");
 		
 		Calendar cal = Calendar.getInstance();
 		Date to = cal.getTime();
@@ -168,7 +168,7 @@ public class TestGwRepository {
 	public void createUsers() {
 		
 		JsonObject system_conf = load_system_conf();
-		GWRepository gw_repo = load_repository(system_conf, "resourceRepository");
+		GWResoureRepository gw_repo = load_repository(system_conf, "resourceRepository");
 		
 		for(int i= 0; i< 20000; i++) {
 			User user = new User();
@@ -218,7 +218,7 @@ public class TestGwRepository {
 	//@Test
 	public void get() {
 		JsonObject system_conf = load_system_conf();
-		GWRepository gw_repo = load_repository(system_conf, "resourceRepository");
+		GWResoureRepository gw_repo = load_repository(system_conf, "resourceRepository");
 		
 		try {
 			SCIMUser user = gw_repo.getUser("UR_Code_0000");

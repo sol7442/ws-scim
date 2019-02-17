@@ -1,3 +1,45 @@
-<p>
-  system-management works!
-</p>
+<div class="context-wrapper">
+  <div class="context-left" id="context-left-box">
+    <p-listbox [style]="{'width':'100%'}" [options]="systems" (onChange)="onSelect($event)"  optionLabel="systemName">
+      <p-header>
+        <p>시스템 목록</p>
+      </p-header>
+    </p-listbox>
+  </div>
+  <div class="context-right">
+    <p-panel>
+        <p-header>
+            <div class="ui-helper-clearfix">
+                <span class="ui-panel-title context-header-text" style="display:inline-block;margin-top:4px;font-weight:bold">
+                  시스템 연결 정보
+                </span>
+                <p-button class="context-header-button" label="Save" icon="pi pi-check" (onClick)="save()"></p-button>
+            </div>
+        </p-header>
+        <div class="form-input-text-box">
+          <div><label>ID</label></div>
+          <div><input type="text" style='width:70%' [(ngModel)]="selectedSystem.systemId" [disabled]="true" pInputText></div>
+
+          <div><label>NAME</label></div>
+          <div><input type="text" style='width:70%' [(ngModel)]="selectedSystem.systemName" pInputText></div>
+          
+          <div><label>DESCRIPTION</label></div>
+          <div><input type="text" style='width:70%' [(ngModel)]="selectedSystem.systemDesc" pInputText></div>
+
+          <div><label>URL</label></div>
+          <div><input type="text" style='width:70%' [(ngModel)]="selectedSystem.systemUrl" pInputText></div>
+          
+        </div>
+        <p-footer>
+            
+        </p-footer>
+    </p-panel>
+
+    <p-panel header="Godfather I" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
+        The story begins as Don Vito Corleone, the head of a New York Mafia family, oversees his daughter's wedding.
+        His beloved son Michael has just come home from the war, but does not intend to become part of his father's business.
+        Through Michael's life the nature of the family business becomes clear. The business of the family is just like the head of the family,
+        kind and benevolent to those who give respect, but given to ruthless violence whenever anything stands against the good of the family.
+    </p-panel>
+  </div>
+</div>

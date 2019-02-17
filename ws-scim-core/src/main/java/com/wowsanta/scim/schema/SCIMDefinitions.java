@@ -29,4 +29,7 @@ public class SCIMDefinitions {
 	public static enum ErrorType{
 		uniqueness, invalidSyntax
 	}
+	public static enum TriggerType{
+		DAY,WEEK,MONTH
+	}
 }

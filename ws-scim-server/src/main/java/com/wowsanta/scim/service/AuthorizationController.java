@@ -21,6 +21,8 @@ public class AuthorizationController implements Filter {
 		
 		try {
 			SCIMJWTToken verify_token = new SCIMJWTToken();
+			System.out.println("Authorization : " + request.headers("Authorization"));
+			
 			verify_token.verify(request.headers("Authorization"));
 			
 			SCIMSystemRepository systemRepository = SCIMRepositoryManager.getInstance().getSystemRepository();

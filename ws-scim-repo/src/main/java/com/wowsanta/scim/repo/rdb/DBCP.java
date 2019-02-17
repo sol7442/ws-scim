@@ -157,32 +157,4 @@ public class DBCP extends AbstractJsonObject{
 		
 		SCIMLogger.sys("load dbcp => {} : {}",this.poolName, this.jdbcUrl);
 	}
-	
-//	public static DBCP load(String file_name) throws RepositoryException {
-//		try {
-//			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//			JsonReader reader;
-//			reader = new JsonReader(new FileReader(file_name));
-//			return gson.fromJson(reader,DBCP.class);
-//		} catch (FileNotFoundException e) {
-//			throw new RepositoryException("DBCP Config File ["+ file_name +"] does not Exist", e);
-//		}
-//	}
-//	
-//	public void save(String file_name) throws IOException {
-//	
-//		OutputStreamWriter writer = new OutputStreamWriter(
-//				new FileOutputStream(
-//						new File(file_name)),StandardCharsets.UTF_8);
-//		
-//		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//		gson.toJson(this,writer);
-//		writer.flush();
-//		writer.close();
-//	}
-//
-//	public String toJson() {
-//		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//		return gson.toJson(this);
-//	}
 }

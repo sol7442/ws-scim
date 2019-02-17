@@ -1,0 +1,8 @@
+.ui-toolbar	{
+    background-color: #444;
+}
+#title-button-area{
+    display: grid;    
+    width: 200px;
+    grid-template-columns: 1fr 1fr;
+}

@@ -30,7 +30,6 @@ public class RESTClient {
 		HttpResponse http_response = post(url, request);
 		int http_res_code = http_response.getStatusLine().getStatusCode();
 		if( http_res_code >= SCIMConstants.HtppConstants.OK && http_res_code <= SCIMConstants.HtppConstants.IM_Used) {
-			System.out.println("==================");
 			try {
 				response.parse(EntityUtils.toString(http_response.getEntity()));
 			} catch (ParseException e) {
@@ -38,7 +37,6 @@ public class RESTClient {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			System.out.println("==================");
 		}else {
 			try {
 				System.out.println("================== : " + http_res_code);
@@ -69,17 +67,20 @@ public class RESTClient {
 		}
 	}
 
-	public void get(String url) throws SCIMException {
-		HttpGet get = new HttpGet(url);
-		get.addHeader("Content-Type", "application/json");
-
-		execute(get);
-//		try {
-//			EntityUtils.toString(result_entity);
-//		} catch (ParseException | IOException e) {
-//			e.printStackTrace();
-//		}
-
+	public HttpResponse get(String url) throws SCIMException {
+		try {
+			
+			HttpGet get = new HttpGet(url);
+			get.addHeader("Content-Type", "application/json");
+			get.addHeader("Authorization", RESTClientPool.getInstance().generateAuthorizationToken());
+			
+			return execute(get);
+			
+		} catch (Exception e) {
+			throw new SCIMException("POST FAILED : " + url, e);
+		}
+		
+		
 	}
 
 	public void put(String url, SCIMJsonObject request) throws SCIMException {

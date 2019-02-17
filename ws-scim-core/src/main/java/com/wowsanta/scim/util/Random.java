@@ -29,6 +29,15 @@ public class Random {
 			return "N";
 		}
 	}
+	
+	public static boolean yn_boolean(int per) {
+		int value = (int) (Math.random() * 100);
+		if(value < per) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 	public static String position() {
 		String[] positions = {"사장","전무","상무","이사","부장","차장","과장","대리","사원"};
 		

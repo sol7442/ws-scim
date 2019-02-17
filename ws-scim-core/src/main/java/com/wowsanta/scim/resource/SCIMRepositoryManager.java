@@ -10,7 +10,7 @@ import com.google.gson.stream.JsonReader;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.json.AbstractJsonObject;
 
-public class SCIMRepositoryManager extends AbstractJsonObject {
+public class SCIMRepositoryManager {
 	
 	/**
 	 * 
@@ -28,19 +28,26 @@ public class SCIMRepositoryManager extends AbstractJsonObject {
 		return instance;
 	}
 	
-	public static void load(String json_file_path) throws SCIMException {
-		if(instance == null) {
-			try {
-				instance = new SCIMRepositoryManager();
-				
-				JsonReader reader = new JsonReader(new FileReader(json_file_path));
-				JsonObject config = new JsonParser().parse(reader).getAsJsonObject();
-				instance.resourceRepository = (SCIMRepository) load(config.get("resourceRepository").getAsJsonObject());
-				instance.systemRepository = (SCIMRepository) load(config.get("systemRepository").getAsJsonObject());
-			} catch (Exception e) {
-				instance = null;
-				throw new SCIMException("Repository Load Failed : " + json_file_path, e);
+	public void load(File config_file) throws SCIMException {
+		try {
+			
+			JsonReader reader = new JsonReader(new FileReader(config_file));
+			JsonObject json_object = new JsonParser().parse(reader).getAsJsonObject();
+			
+
+			JsonObject sys_rep_json_obj = json_object.get("systemRepository").getAsJsonObject();
+			if(sys_rep_json_obj != null) {
+				this.systemRepository  = (SCIMRepository) SCIMRepository.load(sys_rep_json_obj);;
 			}
+			
+			JsonObject res_rep_json_obj = json_object.get("resourceRepository").getAsJsonObject();
+			if(res_rep_json_obj != null) {
+				this.resourceRepository = (SCIMRepository) SCIMRepository.load(res_rep_json_obj);
+			}
+			
+		} catch (Exception e) {
+			instance = null;
+			throw new SCIMException("Repository Load Failed : " + config_file, e);
 		}
 	}
 	

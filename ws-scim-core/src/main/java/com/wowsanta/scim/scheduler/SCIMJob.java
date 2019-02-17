@@ -27,15 +27,18 @@ public abstract class SCIMJob extends AbstractJsonObject implements Job{
 	
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-        beforeExecute(context);
-        doExecute(context);
-        afterExecute(context);
-        scheduleNextJob(context);
+		SCIMScheduler scheudler = (SCIMScheduler) context.getJobDetail().getJobDataMap().get("scheduler");
+		
+        beforeExecute(scheudler);
+        doExecute(scheudler);
+        afterExecute(scheudler);
+        
+        //scheduleNextJob(context);
 	}
 
-	public abstract void doExecute(JobExecutionContext context) ;
-	public abstract void beforeExecute(JobExecutionContext context) ;
-	public abstract void afterExecute(JobExecutionContext context) ;
+	public abstract void doExecute(SCIMScheduler scheudler) ;
+	public abstract void beforeExecute(SCIMScheduler context) ;
+	public abstract void afterExecute(SCIMScheduler context) ;
 	
 	@SuppressWarnings("unchecked")
 	public void scheduleNextJob(JobExecutionContext context) {

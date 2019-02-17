@@ -10,6 +10,7 @@ export class SystemComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log("----load ---");
   }
 
 }

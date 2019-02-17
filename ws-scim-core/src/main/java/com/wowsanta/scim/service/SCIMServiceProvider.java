@@ -24,6 +24,8 @@ public abstract class SCIMServiceProvider extends AbstractJsonObject {
 	private String documentationUri;
 	
 	private String repositoryConfig;
+	private String schdulerConfig;
+	
 	private Map<String, SCIMResoureDefinition> resources = new HashMap<String,SCIMResoureDefinition>();
 	
 	public abstract SCIMMeta getMeta();
@@ -63,5 +65,11 @@ public abstract class SCIMServiceProvider extends AbstractJsonObject {
 	}
 	public void setResources(Map<String, SCIMResoureDefinition> resources) {
 		this.resources = resources;
+	}
+	public String getSchdulerConfig() {
+		return schdulerConfig;
+	}
+	public void setSchdulerConfig(String schdulerConfig) {
+		this.schdulerConfig = schdulerConfig;
 	}
 }

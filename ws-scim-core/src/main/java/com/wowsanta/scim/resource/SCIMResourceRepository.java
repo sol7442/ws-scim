@@ -25,7 +25,5 @@ public interface SCIMResourceRepository {
 	public SCIMGroup getGroup(String groupId) throws SCIMException;
 	public SCIMGroup updateGroup(SCIMGroup group) throws SCIMException;
 	public void deleteGroup(String groupId) throws SCIMException;
-
 	
-
 }

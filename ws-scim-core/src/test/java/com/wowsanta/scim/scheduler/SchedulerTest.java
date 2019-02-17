@@ -1,15 +1,49 @@
 package com.wowsanta.scim.scheduler;
 
+import java.io.File;
+
 import org.junit.Test;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 
+import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.obj.SCIMSystem;
+import com.wowsanta.scim.resource.SCIMRepositoryManager;
+import com.wowsanta.scim.resource.SCIMSystemRepository;
 
 public class SchedulerTest {
 
-	private final String config_file = "../config/scim_scheduler.json";
+	//private final String config_file = "../config/scim_scheduler.json";
 
+	private final String config_file = "../config/home_dev_scim-service-provider.json";
+	
+	//@Test
+	public void run_scheduler_manager_config_test() {
+		try {
+
+			SCIMSystemManager.getInstance().load(config_file);
+			SCIMRepositoryManager.getInstance().initailze();
+			SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
+
+			for (SCIMSystem system : system_repository.getSystemAll()) {
+				System.out.println(system.toString(true));
+			}
+			
+			
+//			SCIMSchedulerManager scheduler_mgr = SCIMSchedulerManager.getInstance();
+//			scheduler_mgr.load(config_file);
+//			//scheduler_mgr.load(config_file);
+//			Thread.sleep(1000 * 60 * 3);
+//			scheduler_mgr.close();
+//			
+//			Thread.sleep(1000 * 30 );
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
 	// @Test
 	public void create_scheduler_manager_config_test() {
 		SCIMScheduler scheduler1 = new SCIMScheduler();
@@ -55,29 +89,11 @@ public class SchedulerTest {
 		}
 	}
 
-	@Test
-	public void run_scheduler_manager_config_test() {
-		try {
-
-			SCIMSchedulerManager scheduler_mgr = SCIMSchedulerManager.getInstance();
-			scheduler_mgr.load(config_file);
-			
-			Thread.sleep(1000 * 60 * 3);
-
-			scheduler_mgr.close();
-			
-			Thread.sleep(1000 * 30 );
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
 	// @Test
 	public SCIMScheduler load_scheduler_config_test() {
 		SCIMScheduler scheduler = null;
 		try {
-			scheduler = SCIMScheduler.load(config_file);
+			scheduler = (SCIMScheduler) SCIMScheduler.load(new File(config_file));
 			System.out.println(scheduler.toString(true));
 		} catch (SCIMException e) {
 			e.printStackTrace();

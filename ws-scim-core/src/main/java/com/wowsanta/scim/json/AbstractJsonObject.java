@@ -49,6 +49,11 @@ public class AbstractJsonObject implements Serializable{
 		
 		return object;
 	}
+	
+	public static AbstractJsonObject load(String json_str) throws SCIMException {
+		return load(new JsonParser().parse(json_str).getAsJsonObject());
+	}
+	
 	public static AbstractJsonObject load(File json_file) throws SCIMException {
 		try {
 			JsonReader reader = new JsonReader(new FileReader(json_file));
@@ -62,18 +67,6 @@ public class AbstractJsonObject implements Serializable{
 		return gson.fromJson(jsonObject, classOfT); 
 	}
 
-	public static <T> T load(String file_name, Class<T> classOfT) throws SCIMException {
-		try {
-		
-			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			JsonReader reader = new JsonReader(new FileReader(file_name));
-			return gson.fromJson(reader,classOfT); 
-			
-		}catch(Exception e) {
-			throw new SCIMException("Json File load Exception ["+file_name+"]",e);
-		}
-	}
-	
 	public void save(String file_name) throws SCIMException {
 		try {
 			OutputStreamWriter writer = new OutputStreamWriter(

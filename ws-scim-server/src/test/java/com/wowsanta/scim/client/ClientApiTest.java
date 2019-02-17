@@ -2,16 +2,17 @@ package com.wowsanta.scim.client;
 
 import org.junit.Test;
 
-import com.ehyundai.message.EhyunDaiScimMessageTest;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.message.SCIMBulkRequest;
 import com.wowsanta.scim.message.SCIMBulkResponse;
 import com.wowsanta.scim.schema.SCIMConstants;
-import com.wowsanta.scim.sec.SCIMJWTToken;
 
-public class ClientApiTest extends EhyunDaiScimMessageTest {
+
+
+public class ClientApiTest {
 
 	private static final String url = "http://localhost:5000/scim";
+	
 	@Test
 	public void put_bulk_test() {
 		System.out.println("put bulk request >>>");

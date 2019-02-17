@@ -9,6 +9,7 @@ import com.wowsanta.scim.message.SCIMError;
 import com.wowsanta.scim.obj.SCIMResource;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.resource.SCIMLocationFactory;
+import com.wowsanta.scim.resource.SCIMRepository;
 import com.wowsanta.scim.resource.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.schema.SCIMConstants;
@@ -22,20 +23,33 @@ public class BlukService implements SCIMService {
 	@Override
 	public SCIMJsonObject execute(SCIMJsonObject request) {
 				
-		SCIMBulkOperation result = (SCIMBulkOperation) request;
+		SCIMBulkOperation result = null;//= (SCIMBulkOperation) request;
 		if (request instanceof SCIMBulkOperation) {
 			SCIMBulkOperation operation = (SCIMBulkOperation) request;
 			
 			String path = operation.getPath();
 			String method = operation.getMethod();
+			
 			if(path.equals(SCIMConstants.USER_ENDPOINT)) {
 				if(SCIMDefinitions.MethodType.PUT.toString().equals(method)) {
 					result = addUser(operation);
-				}else if(SCIMDefinitions.MethodType.DELETE.toString().equals(method)) {
-					result = deleteUser(operation);
 				}
+				else if(SCIMDefinitions.MethodType.PATCH.toString().equals(method)) {
+					//result = deleteUser(operation); ignore
+					result = addUser(operation);
+				}
+				else if(SCIMDefinitions.MethodType.POST.toString().equals(method)) {
+					//result = deleteUser(operation); ignore
+					result = addUser(operation);
+				}
+				else if(SCIMDefinitions.MethodType.DELETE.toString().equals(method)) {
+					result = deleteUser(operation);
+				}else {
+					System.out.println("--------un");
+				}
+				
 			}else {
-				// group service
+			
 			}
 		}
 		
@@ -56,7 +70,7 @@ public class BlukService implements SCIMService {
 		} catch (SCIMException e) {
 			SCIMError error = new SCIMError();
 			
-			if (e.getCode() == SCIMResourceRepository.RESULT_DUPLICATE_ENTRY) {
+			if (e.getCode() == SCIMRepository.RESULT_DUPLICATE_ENTRY) {
 				result.setStatus(SCIMConstants.SatusConstants.uniqueness);
 				
 				error.setStatus(SCIMConstants.SatusConstants.uniqueness);
@@ -92,7 +106,7 @@ public class BlukService implements SCIMService {
 			result.setStatus(SCIMConstants.SatusConstants.SCUESS_CODE);
 			
 		} catch (SCIMException e) {
-			if (e.getCode() == SCIMResourceRepository.RESULT_DUPLICATE_ENTRY) {
+			if (e.getCode() == SCIMRepository.RESULT_DUPLICATE_ENTRY) {
 				result.setStatus(SCIMConstants.SatusConstants.uniqueness);
 				SCIMError error = new SCIMError();
 			

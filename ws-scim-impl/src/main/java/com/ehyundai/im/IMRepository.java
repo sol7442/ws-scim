@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -14,7 +15,9 @@ import java.util.List;
 import com.ehyundai.object.User;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.message.SCIMOperation;
+import com.wowsanta.scim.obj.DefaultUserMeta;
 import com.wowsanta.scim.obj.SCIMAdmin;
+import com.wowsanta.scim.obj.SCIMSystem;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.repo.rdb.DBCP;
@@ -22,13 +25,61 @@ import com.wowsanta.scim.resource.SCIMGroup;
 import com.wowsanta.scim.resource.SCIMResouceFactory;
 import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
+import com.wowsanta.scim.scheduler.SCIMScheduler;
 import com.wowsanta.scim.schema.SCIMConstants;
 import com.wowsanta.scim.schema.SCIMDefinitions;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
 public class IMRepository extends AbstractRDBRepository implements SCIMSystemRepository, SCIMResourceRepository{
 
+	@Override
+	public List<SCIMScheduler> getSchdulerAll() throws SCIMException{
+		
+		final String selectSQL = "SELECT schedulerId, schedulerName, schedulerDesc, schedulerType,"
+				+ "jobClass, triggerType, dayOfMonth, dayOfWeek, hourOfDay, minuteOfHour,"
+				+ "sourceSystemId, targetSystemId, lastExecuteDate "
+				+ " FROM SCIM_SCHEDULER";
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
 
+	    List<SCIMScheduler> scheduler_list = new ArrayList<SCIMScheduler>();
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(selectSQL);
+        	resultSet = statement.executeQuery();
+        	while(resultSet.next()) {
+        		SCIMScheduler scheduler = new SCIMScheduler();
+        		
+        		scheduler.setSchedulerId(	resultSet.getString("schedulerId"));
+        		scheduler.setSchedulerName(	resultSet.getString("schedulerName"));
+        		scheduler.setSchedulerDesc(	resultSet.getString("schedulerDesc"));
+        		scheduler.setSchedulerType(	resultSet.getString("schedulerType"));
+        		scheduler.setJobClass(		resultSet.getString("jobClass"));
+        		scheduler.setTriggerType(	resultSet.getString("triggerType"));
+        		scheduler.setDayOfMonth(	resultSet.getInt("dayOfMonth"));
+        		scheduler.setDayOfWeek(		resultSet.getInt("dayOfWeek"));
+        		scheduler.setHourOfDay(		resultSet.getInt("hourOfDay"));
+        		scheduler.setMinuteOfHour(	resultSet.getInt("minuteOfHour"));
+        		
+        		scheduler.setSourceSystemId(resultSet.getString("sourceSystemId"));
+        		scheduler.setTargetSystemId(resultSet.getString("targetSystemId"));
+        		
+        		scheduler.setLastExecuteDate(toJavaDate (resultSet.getTimestamp("lastExecuteDate")));
+        		
+        		
+        		scheduler_list.add(scheduler);
+        	}
+		} catch (SQLException e) {
+			throw new SCIMException(selectSQL, e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+		return scheduler_list;
+	}
+
+	
 	@Override
 	public SCIMUser getLoginUser(String id) throws SCIMException {
 		//final String selectSQL = "SELECT A.adminId, B.userName,  A.adminType, A.adminPw FROM SCIM_ADMIN A, SCIM_USER B WHERE A.adminId = B.userId AND A.adminId = ?";
@@ -50,7 +101,7 @@ public class IMRepository extends AbstractRDBRepository implements SCIMSystemRep
         		login_user.setUserName(resultSet.getString("userName"));
         		login_user.setPassword(resultSet.getString("password"));
         	}else {
-        		throw new SCIMException("ADMIN NOT FOUND : " + id, RESULT_IS_NULL);
+        		throw new SCIMException("USER NOT FOUND : " + id, RESULT_IS_NULL);
         	}
 		} catch (SQLException e) {
 			throw new SCIMException(selectSQL, e);
@@ -267,5 +318,59 @@ public class IMRepository extends AbstractRDBRepository implements SCIMSystemRep
 		}finally {
 	    	DBCP.close(connection, statement, resultSet);
 	    }
+	}
+
+	//********************************************************
+	// SYSTEM - 
+	//********************************************************
+	
+	@Override
+	public List<SCIMSystem> getSystemAll() throws SCIMException {
+		final String selectSQL = "SELECT systemId,systemName,systemDesc,systemUrl"
+				+ " FROM SCIM_SYSTEM";
+	
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;              
+
+	    List<SCIMSystem> system_list = new ArrayList<SCIMSystem>();
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(selectSQL);
+        	
+        	resultSet = statement.executeQuery();
+        	while(resultSet.next()) {
+        		SCIMSystem system = new SCIMSystem();
+        		
+        		system.setSystemId(resultSet.getString("systemId"));
+        		system.setSystemName(resultSet.getString("systemName"));
+        		system.setSystemDesc(resultSet.getString("systemDesc"));
+        		system.setSystemUrl(resultSet.getString("systemUrl"));
+        		
+        		system_list.add(system);
+        	}
+        	
+		} catch (SQLException e) {
+			throw new SCIMException(selectSQL, e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+        
+		return system_list;
+	}
+
+
+	@Override
+	public SCIMSystem getSystem(String targetSystemId) throws SCIMException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void updateSchdulerLastExcuteDate(String schdulerId, Date date) throws SCIMException {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -15,6 +15,7 @@ import org.apache.commons.daemon.DaemonInitException;
 import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.resource.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.SCIMResouceFactory;
+import com.wowsanta.scim.scheduler.SCIMSchedulerManager;
 
 
 
@@ -64,11 +65,14 @@ public class SCIMServer  implements Daemon {
 		}
 		System.out.println(config_file_path);
 		SCIMSystemManager.getInstance().load(config_file_path);
+		
 		SCIMSystemManager.getInstance().getServiceProvider().getServer().initialize();
 		
-		
+		SCIMSystemManager.getInstance().loadRepositoryManager();
 		SCIMRepositoryManager.getInstance().initailze();
 		
+		SCIMSystemManager.getInstance().loadSchdulerManager();
+		//SCIMSchedulerManager.getInstance().initialize();
 	}
 	@Override
 	public void start() throws Exception {

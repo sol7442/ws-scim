@@ -29,8 +29,11 @@ public class BulkController implements Route {
 		
 		SCIMSystemRepository systemRepository = SCIMRepositoryManager.getInstance().getSystemRepository();
 		SCIMUser user = request.session().attribute("user");
+		if(user == null) {
+			user = new SCIMUser();
+			user.setId("sys-scim-admin");
+		}
 		
-//		bluk_request.getSchemas();
 		scim_bluk_request.parse(request.body());
 		for (SCIMBulkOperation operation : scim_bluk_request.getOperations()) {
 			SCIMBulkOperation result = (SCIMBulkOperation) this.service.execute(operation);

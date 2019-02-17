@@ -1,16 +1,18 @@
 import { Routes, RouterModule } from '@angular/router';
 
-import {AuthComponent} from './auth/auth.component';
+import {AuthGuard} from './guards/auth-guard';
 
+import {AppComponent } from './app.component';
 import {LoginComponent } from './login/login.component';
-//import {HomeComponent} from './home/home.component';
-import {MainComponent} from './main/main.component';
-//    path: 'lazy', loadChildren: 'app/player.module#PlayerModule'
+
+import {SystemManagementComponent} from './main/system/system-management/system-management.component';
+import {AccountComponent} from './main/account/account.component';
 
 const appRoutes: Routes = [
-    { path: '', component: MainComponent, canActivate: [AuthComponent] },
+    { path: '', component: AppComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
-    { path: 'main' , component: MainComponent},
+    { path: 'main/system',component:SystemManagementComponent},
+    { path: 'main/account',component:AccountComponent},    
     { path: '**', redirectTo: '' }
 ];
 

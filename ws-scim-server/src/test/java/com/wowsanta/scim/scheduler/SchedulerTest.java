@@ -1,89 +1,86 @@
 package com.wowsanta.scim.scheduler;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.junit.Test;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.SchedulerException;
 
-public class SchedulerTest {
+import com.wowsanta.scim.SCIMSystemManager;
+import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.repository.RepositoryManagerTest;
+import com.wowsanta.scim.resource.SCIMRepositoryManager;
+import com.wowsanta.scim.schema.SCIMDefinitions;
+public class SchedulerTest extends RepositoryManagerTest{
 
-	private final String config_file_name = "../config/scheduler.json";
-
+	private final String config_file = "../config/home_dev_scim-service-provider.json";
 	
 	//@Test
-	public void make() {
-		SchedulerInfo sc_info = new SchedulerInfo();
-		sc_info.setName("GW-Conciliation-Scheduler");
-		sc_info.setType("Consiliation");
-		
-		JobInfo job_info = new JobInfo();
-		TriggerInfo trigger_info = new TriggerInfo();
-		
-		job_info.setJobClass(ConcilationJob.class.getCanonicalName());
-		
-		trigger_info.setBase(TriggerInfo.CRON);
-		trigger_info.setCronExp("0/1 * * * * ?");
-		
-		sc_info.setJobInfo(job_info);
-		sc_info.setTriggerInfo(trigger_info);
-		
+	public void schduler_buil_test() {
 		try {
-			sc_info.save(this.config_file_name);
-		} catch (IOException e) {
+			load_schduler(config_file, SampleSchedulerJob.class.getCanonicalName());
+			SCIMSchedulerManager.getInstance().initialize();
+			
+			int count = SCIMSchedulerManager.getInstance().getSchedulerList().size();
+			
+			Thread.sleep(1000 * 60 * (count + 1));
+
+			SCIMSchedulerManager.getInstance().close();
+			
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}	
-	
-	@Test
-	public void load() {
-		try {
-			SchedulerInfo sc_info = SchedulerInfo.load(config_file_name);
-			sc_info.build();
-		
-			Thread.sleep(1000*60);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SchedulerException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
 	}
-//	
-//	private class GW_Concilation_Job extends AbstractJob{
+	
+	public void load_schduler(String config_file_path, String className) {
+		load_repository_manager(config_file_path);
+		try {
+			SCIMRepositoryManager.getInstance().initailze();
+			SCIMSystemManager.getInstance().loadSchdulerManager();
+			
+			
+			Date nowDate = new Date();   		// given date
+			Calendar calendar = GregorianCalendar.getInstance(); 
+			calendar.setTime(nowDate);   		 
+			
+			int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY); 
+			int minuteOfHour = calendar.get(Calendar.MINUTE);       
+			
+			// set sample job
+			List<SCIMScheduler> schudler_list = SCIMSchedulerManager.getInstance().getSchedulerList();
+			for (SCIMScheduler scimScheduler : schudler_list) {
+				scimScheduler.setJobClass(className);
+				scimScheduler.setTriggerType(SCIMDefinitions.TriggerType.DAY.toString());
+				
+				minuteOfHour++;
+				if(minuteOfHour > 59) {
+					minuteOfHour = 0;
+					hourOfDay++;
+				}
+				if(hourOfDay > 23) {
+					hourOfDay = 0;
+				}
+				
+				scimScheduler.setHourOfDay(hourOfDay);
+				scimScheduler.setMinuteOfHour(minuteOfHour);
+				
+				System.out.println(scimScheduler.toString(true));
+			}
+			
+		} catch (SCIMException e) {
+		
+			e.printStackTrace();
+		}
+	}
+	
+	//public
+//	SCIMSystemManager.getInstance().load(config_file);
+//	SCIMRepositoryManager.getInstance().initailze();
+//	SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
 //
-//		@Override
-//		public void beforeExecute(JobExecutionContext context) throws JobExecutionException {
-//			System.out.println("before : --");
-//		}
-//
-//		@Override
-//		public void doExecute(JobExecutionContext context) throws JobExecutionException {
-//			System.out.println("do exe : --");
-//		}
-//
-//		@Override
-//		public void afterExecute(JobExecutionContext context) throws JobExecutionException {
-//			System.out.println("after : --");
-//		}
-//
-//		@Override
-//		public String getName() {
-//			// TODO Auto-generated method stub
-//			return null;
-//		}
-//
-//		@Override
-//		public String getType() {
-//			// TODO Auto-generated method stub
-//			return null;
-//		}
-//		
+//	for (SCIMSystem system : system_repository.getSystemAll()) {
+//		System.out.println(system.toString(true));
 //	}
+	
 }

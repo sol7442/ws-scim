@@ -5,3 +5,10 @@ export class User {
     type:string;
     token:string;
 }
+
+export class System {
+    systemId: string;
+    systemName:string;
+    systemDesc:string;
+    systemUrl:string;
+}

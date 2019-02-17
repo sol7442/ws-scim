@@ -25,7 +25,7 @@
             "styles": [
               "src/styles.css",
               "node_modules/primeicons/primeicons.css",
-              "node_modules/primeng/resources/themes/nova-light/theme.css",
+              "src/css/primeng-nova-light-theme.css",
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/font-awesome/css/font-awesome.css",
               "node_modules/primeflex/primeflex.css"              
@@ -79,8 +79,9 @@
             "styles": [
               "src/styles.css",
               "/node_modules/primeicons/primeicons.css",
-              "/node_modules/primeng/resources/themes/nova-light/theme.css",
-              "/node_modules/primeng/resources/primeng.min.css"
+              "src/css/primeng-nova-light-theme.css",
+              "/node_modules/primeng/resources/primeng.min.css",
+              "/node_modules/primeflex/primeflex.css"              
             ],
             "scripts": [],
             "assets": [

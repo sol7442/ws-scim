@@ -1,13 +1,14 @@
-<div class="outer">
-  <div class="header">
-    <div id="title">
-      <p>WS-SCIM</p>
+  <div class="wrapper">
+    <div class="header">
+        <app-title></app-title>
+    </div>
+    <div class="menu">      
+        <app-tab-menu></app-tab-menu>
+      </div>
+    <div class="context">
+        <router-outlet></router-outlet>
+    </div>
+    <div class="footer">
+        <p>&copy; 2010 wowsanta.com, all right reserved.</p>
     </div>
   </div>
-  <div class="context">
-    <router-outlet></router-outlet>
-  </div>
-  <div class="footer">
-      <p>&copy; 2010 wowsanta.com, all right reserved.</p>
-  </div>
-</div>

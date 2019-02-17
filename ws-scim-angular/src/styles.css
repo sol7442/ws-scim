@@ -14,13 +14,6 @@ body{
     background-color: rgb(226, 226, 226);
 }
 
-.outer{
-    width: 100%;
-    height: 100%;
-    background-color: aqua;
-    display: table;
-    margin: 1px auto;
-}
 .context{
     width: 100%;
     height: 100%;
@@ -40,22 +33,13 @@ body{
     background-color: black;
     display: table-row;
 }
-/* .left{
-    width: 30%;
-    height: 100%;
-    background-color:pink;
-    float: left;
-}
-.center{
-    width: 100%;
-    height: 100%;
-    display: inline-block;
-}
-.right{
-    width: 30%;
-    height: 100%;
-    background-color:grey;
-    float:right;
-} */
 
-
+.context-wrapper {
+    display: grid;
+    height: 100%;
+    grid-gap: 1px;    
+    background-color: #fff;
+    color: #444;
+    grid-template-columns: 200px 1fr;
+    padding: 10px;
+}

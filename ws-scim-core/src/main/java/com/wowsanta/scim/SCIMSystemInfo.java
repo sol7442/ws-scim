@@ -9,6 +9,10 @@ public class SCIMSystemInfo extends AbstractJsonObject {
 	 * 
 	 */
 	private static final long serialVersionUID = 9066725581672501344L;
+	
+	private String systemId;
+	private String systemName;
+	
 	private String url;
 	private String ver;
 	
@@ -30,5 +34,17 @@ public class SCIMSystemInfo extends AbstractJsonObject {
 	}
 	public String getServiceProviderEndpoint() {
 		return this.url + "/" + ver + SCIMConstants.SERVICE_PROVIDER_CONFIG_ENDPOINT;
+	}
+	public String getSystemId() {
+		return systemId;
+	}
+	public void setSystemId(String systemId) {
+		this.systemId = systemId;
+	}
+	public String getSystemName() {
+		return systemName;
+	}
+	public void setSystemName(String systemName) {
+		this.systemName = systemName;
 	}
 }

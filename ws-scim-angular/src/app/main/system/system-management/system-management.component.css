@@ -1,0 +1,36 @@
+#context-left-box{
+    box-shadow: 1px 1px 10px 0px;
+}
+
+#context-list-box{
+    width: 100%;
+}
+
+.context-left{
+    width: 100%;
+}
+.context-right{
+    padding: 10px;       
+}
+
+.context-header-button{    
+    position: relative;
+    display: block;
+    zoom: 1;
+    float: right;
+}
+
+.context-header-text{    
+    font-family: "Open Sans", "Helvetica Neue", sans-serif;
+    font-size: 16px;
+    font-weight:bold;
+}
+
+.form-input-text-box{
+    display: grid;
+    box-shadow: 0px 0px 0px 1px;
+    color:rgb(47, 47, 47);
+    padding: 10px;
+    grid-gap: 12px;
+    grid-template-columns: 120px 1fr;
+}

@@ -1,51 +1,69 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
-import {ConfigService, ConfigModule} from './service/config.service';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
+import {TabMenuModule} from 'primeng/tabmenu';
 
+import {ConfigService, ConfigModule} from './service/config.service';
 import {AppComponent } from './app.component';
 import {AppRouteModule} from './app-route.module';
 
-import {AuthenticationService} from './service/authentication.service';
 
-import {AuthComponent} from './auth/auth.component';
-import {SCIMService} from './service/service.component';
-import {SCIMAuthService} from './service/SCIMAuth.service';
+import {AuthGuard} from './guards/auth-guard';
+import {AuthenticationService} from './service/authentication.service';
+import {AuthInterceptor} from './service/auth-interceptor';
+import {ScimApiService} from './service/scim-api.service';
+
+
+
 import {LoginModule} from './login/login.module';
 
+import {TabMenuComponent} from './menu/tab-menu/tab-menu.component';
+import {TitleComponent} from './title/title.component';
+import {SystemManagementComponent} from './main/system/system-management/system-management.component';
+import {AccountComponent} from './main/account/account.component';
+
+import {ToolbarModule} from 'primeng/toolbar';
+import {ButtonModule} from 'primeng/button';
+import {ListboxModule} from 'primeng/listbox';
+import {SplitButtonModule} from 'primeng/splitbutton';
+import {PanelModule} from 'primeng/panel';
 
 
-//import { HomeComponent } from './home/home.component';
-//import { MainComponent } from './main/main.component';
 
-//import {TabMenuComponent} from './menu/tab-menu/tab-menu.component';
-//import {BasicMenuComponent} from './menu/basic-menu/basic-menu.component';
 
-import { MainModule } from './main/main.module';
 
-//import {PanelMenuModule} from 'primeng/panelmenu';
-//import {TabMenuModule} from 'primeng/tabmenu';
+
+import 'rxjs/Rx';
 
 @NgModule({
    declarations: [
       AppComponent,
+      TabMenuComponent,TitleComponent,
+      SystemManagementComponent,AccountComponent
    ],
    imports: [
-      BrowserModule,BrowserAnimationsModule,AppRouteModule,
+      BrowserModule,FormsModule,
+      BrowserAnimationsModule,ReactiveFormsModule,
+      TabMenuModule,ToolbarModule,
+      ButtonModule,SplitButtonModule,PanelModule,
+      ListboxModule,
+      AppRouteModule,
       HttpClientModule,
       LoginModule,
-      MainModule          
    ],
    providers: [
-      ConfigService,ConfigModule.init(),
-      AuthenticationService,
-      AuthComponent,
-      SCIMService,
-      SCIMAuthService
+      {
+         provide:HTTP_INTERCEPTORS,
+         useClass:AuthInterceptor,
+         multi:true
+      },
+      ConfigService,
+      ConfigModule.init(),
+      AuthGuard,
+      AuthenticationService,ScimApiService
    ],
    bootstrap: [
       AppComponent

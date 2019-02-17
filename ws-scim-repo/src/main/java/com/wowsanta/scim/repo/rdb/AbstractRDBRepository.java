@@ -1,16 +1,13 @@
 package com.wowsanta.scim.repo.rdb;
 
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.stream.JsonReader;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.resource.SCIMRepository;
@@ -48,9 +45,6 @@ public abstract class AbstractRDBRepository extends SCIMRepository {
 	public Connection getConnection() throws SCIMException {
 		Connection connection = null;
 		try {
-			System.out.println(">>>");
-			System.out.println(this.dbcp.getPoolName());
-			System.out.println(">>>");
 			connection = DriverManager.getConnection(this.dbcp.getPoolName());
 		} catch (SQLException e) {
 			throw new SCIMException("DBCP CONNECTION FAILED : " + this.dbcp.getPoolName(), e);
@@ -73,6 +67,41 @@ public abstract class AbstractRDBRepository extends SCIMRepository {
 		}	
 	}
 	
+	public String toString(Date date) {
+		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		if(date == null) {
+			return "";
+		}else {
+			return transFormat.format(date);
+		}
+	}
+	
+	public Date toDate(String str) {
+		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		if(str == null) {
+			return null;
+		}else {
+			try {
+				return transFormat.parse(str);
+			} catch (ParseException e) {
+				return null;
+			}
+		}
+	}
+	public String toYN(boolean yn ) {
+		if(yn) {
+			return "Y";
+		}else {
+			return "N";
+		}
+	}
+	public boolean toBoolean(String yn) {
+		if(yn.equals("Y")) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 	public Date toJavaDate(java.sql.Timestamp date) {
 		if(date != null) {
 			return new Date(date.getTime());
@@ -88,13 +117,4 @@ public abstract class AbstractRDBRepository extends SCIMRepository {
 			return null;
 		}	
 	}
-	
-	
-	
-	public static AbstractRDBRepository load(String file_name) throws FileNotFoundException {
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		JsonReader reader = new JsonReader(new FileReader(file_name));
-		return gson.fromJson(reader,AbstractRDBRepository.class);
-	}
-
 }
