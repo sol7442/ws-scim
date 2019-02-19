@@ -46,65 +46,79 @@
         
         <p-dataView #dv [value]="schedulers">
             <ng-template let-scheduler pTemplate="listItem">
-              <div id="context-scheduler-box">
-                  <div>schduler ID </div>         <div> : </div> <div> {{scheduler.schedulerId}}</div>
-                  <div>schduler Name </div>       <div> : </div> <div> {{scheduler.schedulerName}}</div>
-                  <div>schduler Description</div> <div> : </div> <div> {{scheduler.schedulerDesc}}</div>
-                  <div>schduler Type </div>       <div> : </div> <div> {{scheduler.schedulerType}}</div>
-                  <div id="context-scheduler-button-area">
-                      <button pButton type="button" icon="pi pi-search" style="width:100%;margin: 10px" (click)="showSchedulerLog($event, scheduler)"></button>
-                      <button pButton type="button" icon="pi pi-refresh" style="width:100%;margin: 10px" (click)="runScheduler($event, scheduler)"></button>
-                  </div>
-              </div>
+                <div class="p-grid context-scheduler-box">
+                    <div class="p-col-5" >
+                        <div class="p-grid">
+                          <div class="p-col-3">ID</div>
+                          <div class="p-col-1 context-label-seperator" >:</div>
+                          <div class="p-col-8">{{scheduler.schedulerId}}</div>
+                          <div class="p-col-3">Name</div>
+                          <div class="p-col-1 context-label-seperator" >:</div>
+                          <div class="p-col-8">{{scheduler.schedulerName}}</div>
+                          <div class="p-col-3">Description</div>
+                          <div class="p-col-1 context-label-seperator" >:</div>
+                          <div class="p-col-8">{{scheduler.schedulerDesc}}</div>
+                          <div class="p-col-3">Job Class</div>
+                          <div class="p-col-1 context-label-seperator" >:</div>
+                          <div class="p-col-8">{{scheduler.jobClass}}</div>
+                        </div>             
+                    </div>
+                    <div class="p-col-5" >
+                        <div class="p-grid">
+                            <div class="p-col-6">실행 주기</div>
+                            <div class="p-col-1 context-label-seperator" >:</div>
+                            <div class="p-col-5">{{scheduler.triggerType}}</div>
+                            <div class="p-col-6">실행 시간(월/주/시/분)</div>
+                            <div class="p-col-1 context-label-seperator" >:</div>
+                            <div class="p-col-5 ">{{scheduler.dayOfMonth}}/{{scheduler.dayOfWeek}}/{{scheduler.hourOfDay}}/{{scheduler.minuteOfHour}}</div>
+                        </div> 
+                    </div>
+                    <div class="p-col-2 p-align-center vertical-container" >
+                        <div class="p-grid">
+                            <div class="p-col-12" >
+                                <button class="context-scheduler-button-area" pButton type="button" icon="pi pi-check" label="실행 이력"   (click)="showSchedulerLog($event, scheduler)"></button>
+                            </div>
+                            <div class="p-col-12">
+                                <button class="context-scheduler-button-area" pButton type="button" icon="pi pi-check" label="즉시 실행"  (click)="runScheduler($event, scheduler)"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </ng-template>
         </p-dataView>
-        
         <p-footer>
-          <button pButton type="button" icon="pi pi-plus"  label="New" class="ui-button-info" style="margin-right: .25em"></button>
-          <button pButton type="button" icon="pi pi-minus" label="Del" class="ui-button-success"></button>
         </p-footer>
       </p-panel>
     </div>
   </div>
   
-  <p-dialog header="Scheduler History" [(visible)]="displayDialog" [responsive]="true" [modal]="true" [style]="{width: '300px'}"  (onAfterHide)="onDialogHide()">
-      <div class="ui-g" *ngIf="selectedScheduler">       
-          <p-table [value]="schedulerHistorys">
-              <ng-template pTemplate="header">
-                  <tr>
-                      <th>date</th>
-                      
-                      <th>req put </th>
-                      <th>req post </th>
-                      <th>req patch </th>
-                      <th>req delete </th>
-                      
-                      <th>res put </th>
-                      <th>res post </th>
-                      <th>res patch </th>
-                      <th>res delete </th>
   
-                      <th>total</th>
-                  </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-history>
-                  <tr>
-                      <td>{{history.workDate}}</td>
-  
-                      <td>{{history.reqPut}}</td>
-                      <td>{{history.reqPost}}</td>
-                      <td>{{history.reqPatch}}</td>
-                      <td>{{history.reqDelete}}</td>
-  
-                      <td>{{history.resPut}}</td>
-                      <td>{{history.resPost}}</td>
-                      <td>{{history.resPatch}}</td>
-                      <td>{{history.resDelete}}</td>
-  
-                      <td> {{history.reqPut + history.reqPost}}/{{history.resPut + history.resPost}}</td>
-                  </tr>
-              </ng-template>
-          </p-table>
-      </div>
-      <p-paginator [rows]="10" [totalRecords]="100"></p-paginator>
-  </p-dialog>
+<p-dialog header="스케줄러 실행 이력" [(visible)]="displayDialog" [responsive]="true" [modal]="true" [style]="{'margin-left':'80px', 'margin-right':'80px'}"  (onAfterHide)="onDialogHide()">
+    <div class="ui-g" *ngIf="selectedScheduler">       
+        <p-table class="text-center" [value]="schedulerHistorys">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>실행 시간</th>
+                    
+                    <th>계정 생성 (성공/시도)</th>
+                    <th>계정 변경 (성공/시도)</th>
+                    <th>계정 삭제 (성공/시도)</th>
+                    
+                    <th>합계 (성공/시도)</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-history>
+                <tr>
+                    <td>{{history.workDate}}</td>
+
+                    <td>{{history.reqPut - history.resPut}}/{{history.reqPut}}</td>
+                    <td>{{history.reqPost + history.reqPatch - history.resPost - history.resPatch }}/{{history.reqPost + history.reqPatch}}</td>
+                    <td>{{history.reqDelete - history.resDelete}}/{{history.reqDelete}}</td>
+
+                    <td> {{history.reqPut + history.reqPost + history.reqPatch + history.reqDelete - history.resPut - history.resPost - history.resPatch - history.resDelete }}/{{history.reqPut + history.reqPost + history.reqPatch + history.reqDelete}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <p-paginator [rows]="10" [totalRecords]="100"></p-paginator>
+</p-dialog>

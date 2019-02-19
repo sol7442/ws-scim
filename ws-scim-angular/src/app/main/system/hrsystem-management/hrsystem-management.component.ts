@@ -42,6 +42,8 @@ export class HrsystemManagementComponent implements OnInit {
 
   onSelect(event){
     this.selectedSystem = event.value;
+    
+    console.log(">>>this.selectedSystem.systemId : " + this.selectedSystem.systemId);
 
     this.scimApiService.getSystemScheduler(this.selectedSystem.systemId)
     .pipe(first())
