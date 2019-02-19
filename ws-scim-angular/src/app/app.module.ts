@@ -26,6 +26,9 @@ import {SystemManagementComponent} from './main/system/system-management/system-
 import {HrsystemManagementComponent} from './main/system/hrsystem-management/hrsystem-management.component';
 import {AccountComponent} from './main/account/account.component';
 
+import {SystemAccountComponent} from './main/account/system-account/system-account.component';
+import {AccountManagementComponent} from './main/account/account-management/account-management.component';
+
 import {ToolbarModule} from 'primeng/toolbar';
 import {ButtonModule} from 'primeng/button';
 import {ListboxModule} from 'primeng/listbox';
@@ -48,7 +51,7 @@ import 'rxjs/Rx';
       AppComponent,
       TabMenuComponent,TitleComponent,
       SystemManagementComponent,HrsystemManagementComponent,
-      AccountComponent
+      AccountComponent,SystemAccountComponent,AccountManagementComponent
    ],
    imports: [
       BrowserModule,FormsModule,

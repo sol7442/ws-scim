@@ -41,3 +41,9 @@ export class SchedulerHistory {
 
     workDate:string;
 }
+
+export class TableMap {
+    sysColumn:string;
+    imColumn:string;
+    hrColum:string;
+}

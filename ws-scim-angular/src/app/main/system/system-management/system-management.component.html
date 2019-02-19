@@ -64,6 +64,28 @@
         <button pButton type="button" icon="pi pi-minus" label="Del" class="ui-button-success"></button>
       </p-footer>
     </p-panel>
+    
+    <p-panel header="테이블 메핑 정보" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
+        <p-table >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>시스템명</th>
+                    <th>통합계정관리 </th>
+                    <th>인사시스템 </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-history>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+
+    </p-panel>
+      
   </div>
 </div>
 

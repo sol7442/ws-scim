@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ScimApiService } from './../../../service/scim-api.service';
-import { System , Scheduler , SchedulerHistory} from '../../../model/model';
+import { System , Scheduler , SchedulerHistory, TableMap} from '../../../model/model';
 
 import { first } from 'rxjs/operators';
 
@@ -19,6 +19,7 @@ export class SystemManagementComponent implements OnInit {
   private schedulers:Scheduler[];
   private selectedScheduler:Scheduler;
   private schedulerHistorys:SchedulerHistory[];
+  private tableMaps:TableMap[];
 
   private displayDialog: boolean = false;
 
@@ -26,6 +27,11 @@ export class SystemManagementComponent implements OnInit {
     private scimApiService:ScimApiService,
   ) { 
     this.displayDialog = false;
+
+    // this.tableMaps = [
+    //   {sysColumn:'NAME', imColumn:'userName', hrColumn :'displayName'},
+    //   {'sysColumn':'','imColumn':'','hrColumn':''}
+    // ]
   }
 
   ngOnInit() {
