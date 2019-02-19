@@ -1,0 +1,41 @@
+<div class="context-wrapper">
+    <div class="context-left" id="context-left-box">
+      <p-listbox [style]="{'width':'100%'}" [options]="systems" (onChange)="onSelect($event)"  optionLabel="systemName">
+        <p-header>
+          <p>시스템 목록</p>
+        </p-header>
+      </p-listbox>
+    </div>
+    <div class="context-right">
+      <p-panel>
+          <p-header>
+              <div class="ui-helper-clearfix">
+                  <span class="ui-panel-title context-header-text" style="display:inline-block;margin-top:4px;font-weight:bold">
+                    계정 리스트
+                  </span>
+                  <p-button class="context-header-button" label="Save" icon="pi pi-check" (onClick)="save()"></p-button>
+              </div>
+          </p-header>
+          <div class="form-input-text-box">
+                        
+          </div>
+          <p-footer>
+              
+          </p-footer>
+      </p-panel>
+  
+      <p-panel>
+        <p-header>
+            <div class="ui-helper-clearfix">
+                <span class="ui-panel-title context-header-text" style="display:inline-block;margin-top:4px;font-weight:bold">
+                  계정 이력
+                </span>
+            </div>
+        </p-header>
+        
+        <p-footer>
+        </p-footer>
+      </p-panel>
+    </div>
+  </div>
+  

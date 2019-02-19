@@ -26,7 +26,7 @@ public class SCIMServer  implements Daemon {
 	private ExecutorService executorService = Executors.newSingleThreadExecutor();
 	public static void main(String[] args) throws DaemonInitException, Exception {
 		System.setProperty("logback.configurationFile", "../config/logback.xml");
-		System.setProperty("logback.path", "../logs");
+		//System.setProperty("logback.path", "../logs");
 		System.setProperty("logback.mode", "debug");
 		server.init(new DaemonContextImpl(args));
 		server.start();

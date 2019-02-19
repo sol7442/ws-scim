@@ -34,18 +34,46 @@ public class SparkController {
 		login();
 		scim_v2();
 		system();
+		hrsystem();
+		scheduler();
+		api();
+	}
+
+	private void scheduler() {
+		path("/scheduler", () -> {
+			get("/:systemId"   ,SystemApiService.getSystemScheduler(), json());
+			get("/history/:schedulerId"   ,SystemApiService.getSchedulerHistory(), json());
+			post("/run/:schedulerId"   ,SystemApiService.runSystemScheduler(), json());
+		});
+		
+	}
+
+	private void hrsystem() {
+		path("/hrsystem", () -> {
+			get("/"   ,SystemApiService.getProviderSystems(), json());
+			get("/:id",SystemApiService.getSystem(), json());
+		});
+	}
+
+	private void api() {
+		path("/api/:systemId", () -> {
+			scim_v2();
+			path("/scheduler", () -> {
+				post("/run/:schedulerId"   ,SystemApiService.runSystemScheduler(), json());
+			});
+		});
 	}
 
 	private void system() {
 		path("/system", () -> {
-			get("/"   ,SystemApiService.getAllSystems(), json());
+			get("/"   ,SystemApiService.getConsumerSystems(), json());
 			get("/:id",SystemApiService.getSystem(), json());
 		});
 	}
 
 	private void scim_v2() {		
 		path("/scim/" + SCIMConstants.VERSION, () -> {
-			post  ("/Bulk",new BulkController(new BlukService()), json());
+			post  ("/Bulk",BlukService.execute(), json());
 		});
 	}
 

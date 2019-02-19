@@ -6,6 +6,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 
 import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.sec.SCIMJWTToken;
 
 public class RESTClientPool {
@@ -20,6 +21,8 @@ public class RESTClientPool {
 	
 	private PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
 	private CloseableHttpClient client;
+	
+	private SCIMUser user;
 	private SCIMJWTToken scim_wt_token = new SCIMJWTToken();
 	
 	
@@ -33,6 +36,17 @@ public class RESTClientPool {
 		return this.client;
 	}
 	
+	public String generateAuthorizationToken(SCIMUser user, int time) throws SCIMException {
+		SCIMJWTToken scim_wt_token = new SCIMJWTToken();
+		
+		scim_wt_token.setUserId(user.getId());
+		scim_wt_token.setUserName(user.getUserName());
+		scim_wt_token.setExpireTime(time);
+		
+		
+		return scim_wt_token.issue();
+	}
+	
 	public String generateAuthorizationToken() throws SCIMException {
 		return this.scim_wt_token.issue();
 	}
@@ -41,4 +55,12 @@ public class RESTClientPool {
 		scim_wt_token.setUserName(userName);
 		scim_wt_token.setExpireTime(time);
 	}
+	
+	public void setUser(SCIMUser user) {
+		this.user = user;
+	}
+	public SCIMUser getUser() {
+		return this.user;
+	}
 }
+

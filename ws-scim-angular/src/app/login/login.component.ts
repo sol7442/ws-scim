@@ -39,8 +39,6 @@ export class LoginComponent implements OnInit{
     }
 
     login(event){
-        console.log("config --- ", this.config.get("provider"));
-
         this.authenticationService.login(this.user.id,this.user.passwd)
             .pipe(first())
             .subscribe( data =>{

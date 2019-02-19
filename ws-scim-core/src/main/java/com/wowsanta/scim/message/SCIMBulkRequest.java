@@ -19,6 +19,7 @@ public class SCIMBulkRequest extends SCIMMessage {
 	private int failOnErrors;
 	private List<SCIMBulkOperation> operations = new ArrayList<SCIMBulkOperation>();
 	
+	private String requestId;
 	private String sourecSystemId;
 	private String directSystemId;
 	
@@ -70,6 +71,8 @@ public class SCIMBulkRequest extends SCIMMessage {
 			this.failOnErrors = json_obj.get("failOnErrors").getAsInt();
 		}
 		
+		System.out.println("json_obj : " + json_obj);
+		
 		JsonArray json_operations = json_obj.get("Operations").getAsJsonArray();
 		for (JsonElement json_opperation : json_operations) {
 			SCIMBulkOperation operation = new SCIMBulkOperation();
@@ -80,6 +83,7 @@ public class SCIMBulkRequest extends SCIMMessage {
 		
 		if(json_obj.get(SCIMConstants.WowsantaConstansts.WOWSANAT_BULK_REQUEST_URI) != null) {
 			JsonObject wow_json_obj = json_obj.get(SCIMConstants.WowsantaConstansts.WOWSANAT_BULK_REQUEST_URI).getAsJsonObject();
+			this.requestId      = JsonUtil.toString(wow_json_obj.get("requestId"));
 			this.sourecSystemId = JsonUtil.toString(wow_json_obj.get("sourecSystemId"));
 			this.directSystemId = JsonUtil.toString(wow_json_obj.get("directSystemId"));	
 		}
@@ -101,11 +105,20 @@ public class SCIMBulkRequest extends SCIMMessage {
 		}
 		
 		JsonObject wow_json_obj = new JsonObject();
+		wow_json_obj.addProperty("requestId",this.requestId);
 		wow_json_obj.addProperty("sourecSystemId",this.sourecSystemId);
 		wow_json_obj.addProperty("directSystemId",this.directSystemId);
 		
 		json_obj.add(SCIMConstants.WowsantaConstansts.WOWSANAT_BULK_REQUEST_URI, wow_json_obj);
 		
 		return json_obj;
+	}
+
+	public String getRequestId() {
+		return requestId;
+	}
+
+	public void setRequestId(String requestId) {
+		this.requestId = requestId;
 	}
 }

@@ -23,22 +23,26 @@ public class AuthorizationService {
 					return;
 				}
 				
-				System.out.println("Authorization : " + request.headers("Authorization"));
+				String auth_token = request.headers("Authorization");
+				System.out.println("Authorization >> : " + auth_token);
 				
-//				try {
-//					SCIMJWTToken verify_token = new SCIMJWTToken();
-//					
-//					verify_token.verify(request.headers("Authorization"));
-//					
-//					SCIMSystemRepository systemRepository = SCIMRepositoryManager.getInstance().getSystemRepository();
-//					SCIMUser user = systemRepository.getLoginUser(verify_token.getUserId());
-//	
-//					request.session(true).attribute("user",user);
-//					
-//				} catch (SCIMException e) {
-//					response.status(401);
-//					halt(401);
-//				}
+				try {
+					SCIMJWTToken verify_token = new SCIMJWTToken();
+					SCIMUser login_user = verify_token.verify(auth_token);
+					
+					System.out.println("login-user : " + login_user);
+					if(login_user != null) {
+						// check user ..
+//						SCIMSystemRepository systemRepository = SCIMRepositoryManager.getInstance().getSystemRepository();
+//						SCIMUser user = systemRepository.getLoginUser(verify_token.getUserId());
+						request.session(true).attribute("loginUser",login_user);
+					}
+					
+				} catch (SCIMException e) {
+					System.out.println("e>>" + e.getMessage());
+					response.status(401);
+					halt(401);
+				}
 			}
 		};
 	}

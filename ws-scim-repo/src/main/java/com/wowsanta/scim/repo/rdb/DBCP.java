@@ -127,7 +127,9 @@ public class DBCP extends AbstractJsonObject{
             }catch(Exception e){}
 
             try{
-                if(con != null){con.close();}
+                if(con != null && !con.isClosed()){
+                	con.close();
+                }
             }catch(Exception e){}
             
         }catch(Exception e){}

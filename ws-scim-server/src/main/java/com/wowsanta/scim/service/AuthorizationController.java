@@ -21,14 +21,15 @@ public class AuthorizationController implements Filter {
 		
 		try {
 			SCIMJWTToken verify_token = new SCIMJWTToken();
-			System.out.println("Authorization : " + request.headers("Authorization"));
-			
-			verify_token.verify(request.headers("Authorization"));
-			
-			SCIMSystemRepository systemRepository = SCIMRepositoryManager.getInstance().getSystemRepository();
-			SCIMUser user = systemRepository.getLoginUser(verify_token.getUserId());
+			System.out.println("Authorization  >> : " + request.headers("Authorization"));
 
+			SCIMUser user = verify_token.verify(request.headers("Authorization"));
+			System.out.println("Authorization USER >>: " + user);
+			
 			request.session(true).attribute("user",user);
+			//SCIMSystemRepository systemRepository = SCIMRepositoryManager.getInstance().getSystemRepository();
+			//SCIMUser user = systemRepository.getLoginUser(verify_token.getUserId());
+
 			
 		} catch (SCIMException e) {
 			response.status(401);

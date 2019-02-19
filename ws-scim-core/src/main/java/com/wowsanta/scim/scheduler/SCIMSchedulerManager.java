@@ -35,4 +35,12 @@ public class SCIMSchedulerManager{
 			scimScheduler.shutdown();
 		}
 	}
+	public SCIMScheduler getScheduler(String schedulerId) {
+		for (SCIMScheduler scimScheduler : schedulerList) {
+			if(scimScheduler.getSchedulerId().equals(schedulerId)) {
+				return scimScheduler;
+			}
+		}
+		return null;
+	}
 }

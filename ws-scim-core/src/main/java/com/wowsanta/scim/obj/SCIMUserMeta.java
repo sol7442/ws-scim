@@ -2,6 +2,7 @@ package com.wowsanta.scim.obj;
 
 import com.wowsanta.scim.schema.SCIMDefinitions;
 
+
 public class SCIMUserMeta extends SCIMMeta {
 
 	/**
@@ -13,5 +14,4 @@ public class SCIMUserMeta extends SCIMMeta {
 		setResourceType(SCIMDefinitions.ResoureType.USER.toString());
 	}
 
-	
 }

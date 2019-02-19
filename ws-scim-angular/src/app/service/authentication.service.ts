@@ -15,7 +15,7 @@ export class AuthenticationService {
   
   login(userId:string, password:string){
     let user = new User;
-
+    
     return this.http.post<any>('/login',JSON.stringify({"id":userId,"pw":password}))
       .pipe(map( result =>{
         if(result.code == "0001"){
@@ -25,8 +25,8 @@ export class AuthenticationService {
           user.token = result.data.token;
 
           this.toekn = result.data.token;
-
-          localStorage.setItem('currentUser', JSON.stringify(user));
+          
+          sessionStorage.setItem('currentUser', JSON.stringify(user));
         }
         return user;
       }));

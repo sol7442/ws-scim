@@ -15,6 +15,7 @@ public class SCIMUser extends SCIMResource {
 	private String userName;
 	private boolean active;
 	private String password;
+	private String exernalId;
 	
 	private SCIMUserMeta meta;
 	
@@ -28,6 +29,7 @@ public class SCIMUser extends SCIMResource {
 		this.userName 	= JsonUtil.toString(json_obj.get("userName"));
 		this.active  	= JsonUtil.toBoolean(json_obj.get("active"));
 		this.password   = JsonUtil.toString(json_obj.get("password"));
+		this.exernalId  = JsonUtil.toString(json_obj.get("exernalId"));
 		
 		if(json_obj.get("meta") != null){
 			this.meta       = new SCIMUserMeta();
@@ -43,6 +45,7 @@ public class SCIMUser extends SCIMResource {
 		json_obj.addProperty("userName",this.userName);
 		json_obj.addProperty("active", this.active);
 		json_obj.addProperty("password", this.password);
+		json_obj.addProperty("exernalId", this.exernalId);
 		
 		if(this.meta != null){
 			json_obj.add("meta", this.meta.encode());
@@ -83,5 +86,13 @@ public class SCIMUser extends SCIMResource {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getExernalId() {
+		return exernalId;
+	}
+
+	public void setExernalId(String exernalId) {
+		this.exernalId = exernalId;
 	}
 }

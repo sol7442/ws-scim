@@ -71,11 +71,12 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
         	statement.setString(9, gw_user.getJob());
         	statement.setString(10, gw_user.getRankCode());
         	statement.setString(11, gw_user.getRank());
-        	statement.setBoolean(12, gw_user.isActive());
+        	statement.setString(12, toYN(gw_user.isActive()));
         	statement.setString(13, gw_user.geteMail());
         	
         	statement.setDate(14, toSqlDate(gw_user.getJoinDate()));
         	statement.setDate(15, toSqlDate(gw_user.getRetireDate()));
+        	
         	if(gw_user.getMeta() != null) {
         		statement.setDate(16, toSqlDate(gw_user.getMeta().getCreated()));
             	statement.setDate(17, toSqlDate(gw_user.getMeta().getLastModified()));
@@ -151,6 +152,10 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
 		return gw_user;
 	}
 
+	public List<SCIMUser> getAllActiveUsers() throws SCIMException{
+		return null;
+	}
+	
 	@Override
 	public List<SCIMUser> getUsers(Date from, Date to)throws SCIMException{
 		final String selectSQL = "SELECT UR_Code, GR_Code,EmpNo,DisplayName,ExGroupName"
@@ -195,8 +200,9 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
         		gw_user.setJoinDate(resultSet.getDate("EnterDate"));
         		gw_user.setRetireDate(resultSet.getDate("RetireDate"));
         		
-//        		((DefaultUserMeta)gw_user.getMeta()).setCreated(resultSet.getDate("RegistDate"));
-//        		((DefaultUserMeta)gw_user.getMeta()).setLastModified(resultSet.getDate("ModifyDate"));
+        		gw_user.setMeta(new SCIMUserMeta());
+        		gw_user.getMeta().setCreated(		resultSet.getDate("RegistDate"));
+        		gw_user.getMeta().setLastModified(	resultSet.getDate("ModifyDate"));
         		
         		user_list.add(gw_user);
         	}
@@ -265,6 +271,24 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
 	public void deleteGroup(String groupId) throws SCIMException {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<SCIMUser> getAllUsers() throws SCIMException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void clearSystemUser(String systemId) throws SCIMException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public SCIMUser createSystemUser(String systemId, SCIMUser resource) throws SCIMException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

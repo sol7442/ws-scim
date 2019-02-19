@@ -32,23 +32,21 @@ public class LoginController implements Route {
 			String id = request_json.get("id").getAsString();
 			String pw = request_json.get("pw").getAsString();
 			
-			System.out.println(">>>>>>");
-			System.out.println(id);
-			System.out.println(pw);
-			System.out.println(">>>>>>");
-			
 			SCIMUser user = this.service.login(id,pw);
 			
 			SCIMJWTToken token = new SCIMJWTToken();
 			token.setUserId(user.getId());
 			token.setUserName(user.getUserName());
-			
 			user.setPassword("");
-			String str_token = token.issue("ServiceName","SCIM_KEY_@1234");
+			
+			String str_token = token.issue();
 	
 			Map<String,Object> response_map = new HashMap<String, Object>();
 			response_map.put("token", str_token);
 			response_map.put("user", user);
+			
+//			SCIMJWTToken validate_token = new SCIMJWTToken();
+//			SCIMUser validate_user = validate_token.verify(str_token);
 			
 			result.setCode(SCIMCode.SUCCESS);
 			result.setMessage("sucess");

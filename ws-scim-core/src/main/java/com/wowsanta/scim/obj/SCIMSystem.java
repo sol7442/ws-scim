@@ -13,14 +13,16 @@ public class SCIMSystem extends SCIMJsonObject {
 	private String systemName;
 	private String systemDesc;
 	private String systemUrl;
+	private String systemType;
 	
 	public JsonObject encode(){
 		JsonObject json_object = super.encode();
 	
-		json_object.addProperty("systemId"	, systemId);
-		json_object.addProperty("systemName", systemName);
-		json_object.addProperty("systemDesc", systemDesc);
-		json_object.addProperty("systemUrl"	, systemUrl);
+		json_object.addProperty("systemId"		, systemId);
+		json_object.addProperty("systemName"	, systemName);
+		json_object.addProperty("systemDesc"	, systemDesc);
+		json_object.addProperty("systemUrl"		, systemUrl);
+		json_object.addProperty("systemType"	, systemType);
 		
 		return json_object;
 	}
@@ -48,5 +50,12 @@ public class SCIMSystem extends SCIMJsonObject {
 	}
 	public void setSystemUrl(String systemUrl) {
 		this.systemUrl = systemUrl;
+	}
+
+	public void setSystemType(String systemType) {
+		this.systemType = systemType;
+	}
+	public String getSystemTyp() {
+		return this.systemType;
 	}
 }

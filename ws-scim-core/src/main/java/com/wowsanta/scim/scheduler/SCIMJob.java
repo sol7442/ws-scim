@@ -14,6 +14,7 @@ import org.quartz.impl.StdSchedulerFactory;
 
 import com.wowsanta.scim.json.AbstractJsonObject;
 import com.wowsanta.scim.log.SCIMLogger;
+import com.wowsanta.scim.obj.SCIMUser;
 
 import static org.quartz.TriggerBuilder.newTrigger;
 
@@ -28,17 +29,18 @@ public abstract class SCIMJob extends AbstractJsonObject implements Job{
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		SCIMScheduler scheudler = (SCIMScheduler) context.getJobDetail().getJobDataMap().get("scheduler");
+		SCIMUser worker = (SCIMUser) context.getJobDetail().getJobDataMap().get("worker");
 		
-        beforeExecute(scheudler);
-        doExecute(scheudler);
-        afterExecute(scheudler);
+        beforeExecute(scheudler,worker );
+        doExecute(scheudler ,worker);
+        afterExecute(scheudler ,worker);
         
         //scheduleNextJob(context);
 	}
 
-	public abstract void doExecute(SCIMScheduler scheudler) ;
-	public abstract void beforeExecute(SCIMScheduler context) ;
-	public abstract void afterExecute(SCIMScheduler context) ;
+	public abstract void doExecute(SCIMScheduler scheudler , SCIMUser worker) ;
+	public abstract void beforeExecute(SCIMScheduler context , SCIMUser worker) ;
+	public abstract void afterExecute(SCIMScheduler context, SCIMUser worker) ;
 	
 	@SuppressWarnings("unchecked")
 	public void scheduleNextJob(JobExecutionContext context) {

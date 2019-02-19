@@ -8,5 +8,21 @@
       "target": "http://localhost:5000/",
       "secure": false,
       "logLevel": "debug"
+    },
+    "/hrsystem/*": {
+      "target": "http://localhost:5000/",
+      "secure": false,
+      "logLevel": "debug"
+    },
+
+    "/scheduler/*": {
+      "target": "http://localhost:5000/",
+      "secure": false,
+      "logLevel": "debug"
+    },
+    "/api/*": {
+      "target": "http://localhost:5000/",
+      "secure": false,
+      "logLevel": "debug"
     }
 }

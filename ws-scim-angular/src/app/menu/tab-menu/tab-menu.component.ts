@@ -13,7 +13,10 @@ export class TabMenuComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.items = [            
+    this.items = [   
+            {
+                label: '원장 관리', routerLink:"/main/hrsystem"
+            },         
             {
                 label: '시스템 관리', routerLink:"/main/system"
             },

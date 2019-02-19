@@ -30,6 +30,8 @@ public class User extends SCIMEnterpriseUser{
 	private Date   joinDate;
 	private Date   retireDate;
 	
+	private Date   lastAccessDate;
+	
 	private String eMail;
 	
 	public static final String USER_URI = "urn:ehyundai:params:scim:schemas:extension:enterprise:2.0:User";
@@ -59,6 +61,7 @@ public class User extends SCIMEnterpriseUser{
 			
 			this.joinDate 		= JsonUtil.toDate(json_this.get("joinDate"));
 			this.retireDate		= JsonUtil.toDate(json_this.get("retireDate"));
+			this.lastAccessDate = JsonUtil.toDate(json_this.get("lastAccessDate"));
 			
 			this.eMail			= JsonUtil.toString(json_this.get("eMail"));
 			
@@ -84,8 +87,10 @@ public class User extends SCIMEnterpriseUser{
 		
 		json_this.addProperty("joinDate"	, JsonUtil.toString(this.joinDate));
 		json_this.addProperty("retireDate"	, JsonUtil.toString(this.retireDate));
+		json_this.addProperty("lastAccessDate"	, JsonUtil.toString(this.lastAccessDate));
 		
 		json_this.addProperty("eMail"		, this.eMail);
+		
 		
 		JsonObject user_json = super.encode();
 		user_json.add(USER_URI, json_this);
@@ -188,5 +193,14 @@ public class User extends SCIMEnterpriseUser{
 	public void seteMail(String eMail) {
 		this.eMail = eMail;
 	}
+
+	public Date getLastAccessDate() {
+		return this.lastAccessDate;
+	}
+	public void setLastAccessDate(Date date) {
+		this.lastAccessDate = date;
+	}
+
+
 
 }
