@@ -47,8 +47,8 @@ public class ConsiliationJob_SSO extends SCIMJob {
 
 			SCIMBulkRequest request = new SCIMBulkRequest();
 			request.setRequestId(Random.number(0,10000000));
-			request.setSourecSystemId(scheduler.getSourceSystemId());
-			request.setDirectSystemId(scheduler.getTargetSystemId());
+			request.setSourceSystemId(scheduler.getSourceSystemId());
+			request.setTargetSystemId(scheduler.getTargetSystemId());
 			
 			List<SCIMUser> user_list = res_repo.getAllUsers();;
 			for (SCIMUser scimUser : user_list) {
@@ -65,7 +65,7 @@ public class ConsiliationJob_SSO extends SCIMJob {
 			
 			try {
 				
-				SCIMSystem target_system = sys_rep.getSystem(scheduler.getTargetSystemId());
+				SCIMSystem target_system = sys_rep.getSystemById(scheduler.getTargetSystemId());
 				
 				String bulk_url = target_system.getSystemUrl() + "/api/" + scheduler.getSourceSystemId() + "/scim" + SCIMConstants.VERSION_ENDPINT + SCIMConstants.BULK_ENDPOINT;;
 				

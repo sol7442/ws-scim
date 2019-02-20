@@ -38,6 +38,12 @@ public class Random {
 			return false;
 		}
 	}
+	public static String department() {
+		String[] positions = {"총무","인사","영업1","영업2","개발1","개발2"};
+		int value = (int) (Math.random() * 100);
+		int index = value%positions.length;
+		return positions[index];
+	}
 	public static String position() {
 		String[] positions = {"사장","전무","상무","이사","부장","차장","과장","대리","사원"};
 		
@@ -101,5 +107,13 @@ public class Random {
 	    cal.add(Calendar.YEAR, (year*-1));
 	    Date start   = cal.getTime();
 	    return date(start,now);
+	}
+	public static String group() {
+		String[] groups = {"Group1","Group2","Group3"};
+		
+		int value = (int) (Math.random() * 100);
+		int index  = value % groups.length;
+		
+		return groups[index];
 	}
 }

@@ -1,9 +1,12 @@
 package com.ehyundai.gw;
 
+import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Test;
 
+import com.ehyundai.object.RepositoryUtil;
 import com.ehyundai.object.User;
 import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.exception.SCIMException;
@@ -13,24 +16,40 @@ import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.util.Random;
 
 public class TestGwRepository {
-	private final String config_file_path = "../config/home_dev_gw_scim-service-provider.json";
+	private final String config_file_path = "../config/home_dev_gw_scim_repository.json";
 
-	@Test
-	public void run_repository_manager_config_test() {
-		load_manager(this.config_file_path);
-		createUsers(10);
-	}
-
-	private void load_manager(String config_file) {
+	public void load_manager(String conf_file_path) {
 		try {
-			SCIMSystemManager.getInstance().load(config_file);
-			SCIMSystemManager.getInstance().loadRepositoryManager();
+			File config_file = new File(conf_file_path);
+			SCIMSystemManager.getInstance().loadRepositoryManager(config_file);
 			SCIMRepositoryManager.getInstance().initailze();
-
 		} catch (SCIMException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	@Test
+	public void sso_create_user_10_test() {
+		try {
+			load_manager(config_file_path);
+			SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
+			
+			List<User> user_list = RepositoryUtil.createUsers(10);
+			for(User user : user_list) {
+				System.out.println(user);
+				res_repo.createUser(user);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+//	@Test
+//	public void run_repository_manager_config_test() {
+//		load_manager(this.config_file_path);
+//		createUsers(10);
+//	}
+
 
 	public void createUsers(int size) {
 		SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();

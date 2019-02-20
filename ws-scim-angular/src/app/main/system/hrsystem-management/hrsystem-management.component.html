@@ -65,12 +65,15 @@
                     </div>
                     <div class="p-col-5" >
                         <div class="p-grid">
-                            <div class="p-col-6">실행 주기</div>
+                            <div class="p-col-5">실행 주기</div>
                             <div class="p-col-1 context-label-seperator" >:</div>
-                            <div class="p-col-5">{{scheduler.triggerType}}</div>
-                            <div class="p-col-6">실행 시간(월/주/시/분)</div>
+                            <div class="p-col-6">{{scheduler.triggerType}}</div>
+                            <div class="p-col-5">실행 시간(월/주/시/분)</div>
                             <div class="p-col-1 context-label-seperator" >:</div>
-                            <div class="p-col-5 ">{{scheduler.dayOfMonth}}/{{scheduler.dayOfWeek}}/{{scheduler.hourOfDay}}/{{scheduler.minuteOfHour}}</div>
+                            <div class="p-col-6">{{scheduler.dayOfMonth}}/{{scheduler.dayOfWeek}}/{{scheduler.hourOfDay}}/{{scheduler.minuteOfHour}}</div>
+                            <div class="p-col-5">마지막 실행 시간</div>
+                            <div class="p-col-1 context-label-seperator" >:</div>
+                            <div class="p-col-6">{{scheduler.lastExecuteDate}}</div>
                         </div> 
                     </div>
                     <div class="p-col-2 p-align-center vertical-container" >
@@ -79,7 +82,7 @@
                                 <button class="context-scheduler-button-area" pButton type="button" icon="pi pi-check" label="실행 이력"   (click)="showSchedulerLog($event, scheduler)"></button>
                             </div>
                             <div class="p-col-12">
-                                <button class="context-scheduler-button-area" pButton type="button" icon="pi pi-check" label="즉시 실행"  (click)="runScheduler($event, scheduler)"></button>
+                                <button class="context-scheduler-button-area" pButton type="button" icon="pi pi-check" label="즉시 실행"  (click)="runSystemScheduler($event, scheduler)"></button>
                             </div>
                         </div>
                     </div>
@@ -89,10 +92,28 @@
         <p-footer>
         </p-footer>
       </p-panel>
+
+      <p-panel header="테이블 연결 정보" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
+        <p-table [value]="systemColumns" >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>컬럼 Name</th>
+                    <th>컬럼 ID</th>
+                    <th>연결 컬럼</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-sysCol>
+                <tr>
+                    <td>{{sysCol.displayName}}</td>
+                    <td>{{sysCol.columnName}}</td>
+                    <td>{{sysCol.mappingColumn}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+      </p-panel>
+
     </div>
   </div>
-  
-  
 <p-dialog header="스케줄러 실행 이력" [(visible)]="displayDialog" [responsive]="true" [modal]="true" [style]="{'margin-left':'80px', 'margin-right':'80px'}"  (onAfterHide)="onDialogHide()">
     <div class="ui-g" *ngIf="selectedScheduler">       
         <p-table class="text-center" [value]="schedulerHistorys">

@@ -14,7 +14,12 @@ public interface SCIMResourceRepository {
 	public SCIMUser createUser(SCIMUser user) throws SCIMException;
 	public SCIMUser getUser(String userId) throws SCIMException;
 	public SCIMUser updateUser(SCIMUser updatedUser) throws SCIMException;
-	public List<SCIMUser> getUsers(Date from, Date to)throws SCIMException;
+	
+	//public List<SCIMUser> getAllActiveUsers() throws SCIMException;
+	
+	public List<SCIMUser> getUsersByActive() throws SCIMException;
+	public List<SCIMUser> getUsersByDate(Date from, Date to)throws SCIMException;
+	
 	public List<SCIMUser> getUsers(String where)throws SCIMException;
 	
 	public void deleteUser(String userId) throws SCIMException;
@@ -25,7 +30,7 @@ public interface SCIMResourceRepository {
 	public SCIMGroup getGroup(String groupId) throws SCIMException;
 	public SCIMGroup updateGroup(SCIMGroup group) throws SCIMException;
 	public void deleteGroup(String groupId) throws SCIMException;
-	public List<SCIMUser> getAllActiveUsers() throws SCIMException;
+	
 	public List<SCIMUser> getAllUsers()throws SCIMException;
 	public void clearSystemUser(String systemId) throws SCIMException;
 	public SCIMUser createSystemUser(String systemId, SCIMUser resource) throws SCIMException;

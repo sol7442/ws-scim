@@ -28,7 +28,7 @@ public class GWSystemRepository extends AbstractRDBRepository implements SCIMSys
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public SCIMSystem getSystem(String systemId)throws SCIMException{
+	public SCIMSystem getSystemById(String systemId)throws SCIMException{
 		final String selectSQL = "SELECT systemId,systemName,systemDesc,systemUrl"
 				+ " FROM SCIM_SYSTEM WHERE systemId=?";
 		
@@ -218,5 +218,4 @@ public class GWSystemRepository extends AbstractRDBRepository implements SCIMSys
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

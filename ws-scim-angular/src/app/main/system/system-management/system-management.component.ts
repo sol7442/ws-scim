@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ScimApiService } from './../../../service/scim-api.service';
-import { System , Scheduler , SchedulerHistory, TableMap} from '../../../model/model';
+import { System , Scheduler , SchedulerHistory, SystemColumn} from '../../../model/model';
 
 import { first } from 'rxjs/operators';
 
@@ -19,9 +19,10 @@ export class SystemManagementComponent implements OnInit {
   private schedulers:Scheduler[];
   private selectedScheduler:Scheduler;
   private schedulerHistorys:SchedulerHistory[];
-  private tableMaps:TableMap[];
+  private systemColumns:SystemColumn[] = [];
 
   private displayDialog: boolean = false;
+  private displayDetailDialog:boolean = false;
 
   constructor(
     private scimApiService:ScimApiService,
@@ -48,19 +49,24 @@ export class SystemManagementComponent implements OnInit {
   }
 
   onSelect(event){
-    this.selectedSystem = event.value;
-
-    this.scimApiService.getSystemScheduler(this.selectedSystem.systemId)
+    this.selectedSystem = event.value;   
+    this.scimApiService.getSchedulerBySystemId(this.selectedSystem.systemId)
     .pipe(first())
     .subscribe( data =>{
-      console.log("schedulers : ", data);
       this.schedulers = data;
     },error =>{
         console.log("login-error : ", error);
     });
 
+    this.scimApiService.getSystemComlumsBySystemId(this.selectedSystem.systemId)
+    .pipe(first())
+    .subscribe( data =>{
+      console.log("system-columns", data);
+      this.systemColumns = data;
+    },error =>{
+        console.log("login-error : ", error);
+    });
 
-    //this.schedulers = this.systems;
     this.displayContext();
   }
 
@@ -85,13 +91,17 @@ export class SystemManagementComponent implements OnInit {
     });
     
     this.displayDialog = true;
-
   }
-  runScheduler(event: Event, scheduler: Scheduler) {
+  showDetailLog(event: Event, history:SchedulerHistory){
+    console.log("selected history : ", history);
+    this.displayDetailDialog = true;
+  }
+
+
+  runSystemScheduler(event: Event, scheduler: Scheduler) {
     
     this.selectedScheduler = scheduler;
-    this.scimApiService.runScheduler(
-      this.selectedScheduler.sourceSystemId,
+    this.scimApiService.runSystemScheduler(
       this.selectedScheduler.schedulerId)
     .pipe(first())
     .subscribe( data =>{
@@ -102,6 +112,7 @@ export class SystemManagementComponent implements OnInit {
     });
 
   }
+
 
   onDialogHide(){
     this.displayDialog = false;

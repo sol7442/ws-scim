@@ -102,6 +102,20 @@ public abstract class AbstractRDBRepository extends SCIMRepository {
 			return false;
 		}
 	}
+	public boolean toBoolean(int yn) {
+		if(yn == 1) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	public int toInteger(boolean yn) {
+		if(yn) {
+			return 1;
+		}else {
+			return 0;
+		}
+	}
 	public Date toJavaDate(java.sql.Timestamp date) {
 		if(date != null) {
 			return new Date(date.getTime());

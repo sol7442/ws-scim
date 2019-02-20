@@ -65,12 +65,15 @@
                   </div>
                   <div class="p-col-5" >
                       <div class="p-grid">
-                          <div class="p-col-6">실행 주기</div>
-                          <div class="p-col-1 context-label-seperator" >:</div>
-                          <div class="p-col-5">{{scheduler.triggerType}}</div>
-                          <div class="p-col-6">실행 시간(월/주/시/분)</div>
-                          <div class="p-col-1 context-label-seperator" >:</div>
-                          <div class="p-col-5 ">{{scheduler.dayOfMonth}}/{{scheduler.dayOfWeek}}/{{scheduler.hourOfDay}}/{{scheduler.minuteOfHour}}</div>
+                        <div class="p-col-5">실행 주기</div>
+                        <div class="p-col-1 context-label-seperator" >:</div>
+                        <div class="p-col-6">{{scheduler.triggerType}}</div>
+                        <div class="p-col-5">실행 시간(월/주/시/분)</div>
+                        <div class="p-col-1 context-label-seperator" >:</div>
+                        <div class="p-col-6">{{scheduler.dayOfMonth}}/{{scheduler.dayOfWeek}}/{{scheduler.hourOfDay}}/{{scheduler.minuteOfHour}}</div>
+                        <div class="p-col-5">마지막 실행 시간</div>
+                        <div class="p-col-1 context-label-seperator" >:</div>
+                        <div class="p-col-6">{{scheduler.lastExecuteDate}}</div>
                       </div> 
                   </div>
                   <div class="p-col-2 p-align-center vertical-container" >
@@ -79,7 +82,7 @@
                               <button class="context-scheduler-button-area" pButton type="button" icon="pi pi-check" label="실행 이력"   (click)="showSchedulerLog($event, scheduler)"></button>
                           </div>
                           <div class="p-col-12">
-                              <button class="context-scheduler-button-area" pButton type="button" icon="pi pi-check" label="즉시 실행"  (click)="runScheduler($event, scheduler)"></button>
+                              <button class="context-scheduler-button-area" pButton type="button" icon="pi pi-check" label="즉시 실행"  (click)="runSystemScheduler($event, scheduler)"></button>
                           </div>
                       </div>
                   </div>
@@ -91,25 +94,23 @@
       </p-footer>
     </p-panel>
     
-    <p-panel header="테이블 메핑 정보" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
-        <p-table >
+    <p-panel header="테이블 연결 정보" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
+        <p-table [value]="systemColumns">
             <ng-template pTemplate="header">
                 <tr>
-                    <th>시스템명</th>
-                    <th>통합계정관리 </th>
-                    <th>인사시스템 </th>
+                    <th>컬럼 이름</th>
+                    <th>컬럼 아이디 </th>
+                    <th>연결 컬럼</th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-history>
+            <ng-template pTemplate="body" let-sysCol>
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{sysCol.displayName}}</td>
+                    <td>{{sysCol.columnName}}</td>
+                    <td>{{sysCol.mappingColumn}}</td>
                 </tr>
             </ng-template>
         </p-table>
-
-
     </p-panel>
       
   </div>
@@ -117,7 +118,7 @@
 
 <p-dialog header="스케줄러 실행 이력" [(visible)]="displayDialog" [responsive]="true" [modal]="true" [style]="{'margin-left':'80px', 'margin-right':'80px'}"  (onAfterHide)="onDialogHide()">
     <div class="ui-g" *ngIf="selectedScheduler">       
-        <p-table class="text-center" [value]="schedulerHistorys">
+        <p-table class="table-cell-center" [value]="schedulerHistorys">
             <ng-template pTemplate="header">
                 <tr>
                     <th>실행 시간</th>
@@ -127,20 +128,28 @@
                     <th>계정 삭제 (성공/시도)</th>
                     
                     <th>합계 (성공/시도)</th>
+                    <th>상세 내용</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-history>
                 <tr>
                     <td>{{history.workDate}}</td>
 
-                    <td>{{history.reqPut - history.resPut}}/{{history.reqPut}}</td>
-                    <td>{{history.reqPost + history.reqPatch - history.resPost - history.resPatch }}/{{history.reqPost + history.reqPatch}}</td>
-                    <td>{{history.reqDelete - history.resDelete}}/{{history.reqDelete}}</td>
-
-                    <td> {{history.reqPut + history.reqPost + history.reqPatch + history.reqDelete - history.resPut - history.resPost - history.resPatch - history.resDelete }}/{{history.reqPut + history.reqPost + history.reqPatch + history.reqDelete}}</td>
+                    <td>{{history.resPut}}/{{history.reqPut}}</td>
+                    <td>{{history.resPost + history.resPatch }}/{{history.reqPost + history.reqPatch}}</td>
+                    <td>{{history.resDelete}}/{{history.reqDelete}}</td>
+                    <td> {{history.resPut + history.resPost + history.resPatch + history.resDelete }}/{{history.reqPut + history.reqPost + history.reqPatch + history.reqDelete}}</td>
+                    <td> <p-button label="Click" (onClick)="showDetailLog($event,history)"> </p-button> </td>
                 </tr>
             </ng-template>
         </p-table>
+    </div>
+    <p-paginator [rows]="10" [totalRecords]="100"></p-paginator>
+</p-dialog>
+
+<p-dialog header="상세 내용" [(visible)]="displayDetailDialog" [responsive]="true" [modal]="true" [style]="{'margin-left':'80px', 'margin-right':'80px'}"  (onAfterHide)="onDialogHide()">
+    <div class="ui-g" *ngIf="selectedScheduler">       
+       detail log ..
     </div>
     <p-paginator [rows]="10" [totalRecords]="100"></p-paginator>
 </p-dialog>

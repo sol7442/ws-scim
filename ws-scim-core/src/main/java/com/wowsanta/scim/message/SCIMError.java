@@ -23,9 +23,25 @@ public class SCIMError extends SCIMJsonObject{
 	
 	private List<String> schemas = new ArrayList<String>();
 	
+	public SCIMError(String status,String type,String detail) {
+		this.status = status;
+		this.scimType = type;
+		this.detail = detail;
+	}
+	public SCIMError(String status,String detail) {
+		this.status = status;
+		this.detail = detail;
+	}
+	public SCIMError(SCIMError e, String detail) {
+		this.status   = e.status;
+		this.scimType = e.scimType;
+		this.detail   = e.detail + " : " +detail;
+	}
+	
 	public SCIMError() {
 		addSchema(SCIMConstants.ERROR_SCHEMA_URI);
 	}
+	
 	
 	public void addSchema(String schema) {
 		this.schemas.add(schema);

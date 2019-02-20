@@ -132,7 +132,7 @@ public class IMResourceRepository extends AbstractRDBRepository implements SCIMR
 	}
 	
 	@Override
-	public List<SCIMUser> getAllActiveUsers() throws SCIMException {
+	public List<SCIMUser> getUsersByActive() throws SCIMException {
 		final String selectSQL = "SELECT userId,userName,active,createDate,modifyDate"
 				+ " FROM SCIM_USER WHERE active=?";
 	
@@ -148,20 +148,7 @@ public class IMResourceRepository extends AbstractRDBRepository implements SCIMR
         	
         	resultSet = statement.executeQuery();
         	while(resultSet.next()) {
-        		User im_user = new User();
-        		
-        		im_user.setId(resultSet.getString("userId"));
-        		
-        		im_user.setEmployeeNumber(resultSet.getString("userId"));
-        		
-        		im_user.setUserName(resultSet.getString("userName"));
-        		im_user.setActive(resultSet.getBoolean("active"));
-        		
-        		im_user.setMeta(new SCIMUserMeta());
-        		im_user.getMeta().setCreated(toJavaDate(resultSet.getTimestamp("createDate")));
-        		im_user.getMeta().setLastModified(toJavaDate(resultSet.getTimestamp("modifyDate")));
-        		
-        		user_list.add(im_user);
+        		user_list.add(newUser(resultSet));
         	}
         	
 		} catch (SQLException e) {
@@ -173,8 +160,9 @@ public class IMResourceRepository extends AbstractRDBRepository implements SCIMR
 		return user_list;
 	}
 	
+	
 	@Override
-	public List<SCIMUser> getUsers(Date from, Date to) throws SCIMException {
+	public List<SCIMUser> getUsersByDate(Date from, Date to) throws SCIMException {
 		final String selectSQL = "SELECT userId,userName,active,createDate, modifyDate"
 				+ " FROM SCIM_USER WHERE ModifyDate BETWEEN ? AND ?";
 	
@@ -192,17 +180,7 @@ public class IMResourceRepository extends AbstractRDBRepository implements SCIMR
         	
         	resultSet = statement.executeQuery();
         	while(resultSet.next()) {
-        		User im_user = new User();
-        		
-        		im_user.setId(resultSet.getString("userId"));
-        		im_user.setUserName(resultSet.getString("userName"));
-        		im_user.setActive(resultSet.getBoolean("active"));
-        		
-        		im_user.setMeta(new SCIMUserMeta());        		
-        		im_user.getMeta().setCreated(toJavaDate(resultSet.getTimestamp("createDate")));
-        		im_user.getMeta().setLastModified(toJavaDate(resultSet.getTimestamp("ModifyDate")));
-        		
-        		user_list.add(im_user);
+        		user_list.add(newUser(resultSet));
         	}
         	
 		} catch (SQLException e) {
@@ -212,6 +190,32 @@ public class IMResourceRepository extends AbstractRDBRepository implements SCIMR
 		}
         
 		return user_list;
+	}
+
+	private User newUser(ResultSet resultSet) {
+		User im_user = new User();
+		try {
+    		im_user.setId(resultSet.getString("userId"));
+    		
+    		im_user.setEmployeeNumber(resultSet.getString("userId"));
+    		im_user.setUserName(resultSet.getString("userName"));
+    		im_user.setActive(resultSet.getBoolean("active"));
+    		
+    		im_user.setMeta(new SCIMUserMeta());
+    		im_user.getMeta().setCreated(toJavaDate(resultSet.getTimestamp("createDate")));
+    		im_user.getMeta().setLastModified(toJavaDate(resultSet.getTimestamp("modifyDate")));
+    		
+    		
+    		//add user profile data//
+    		im_user.setCompanyCode("companycode");
+    		im_user.setOrganization("organization");
+    		im_user.setDepartment("department");
+    		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return im_user;
 	}
 
 	@Override

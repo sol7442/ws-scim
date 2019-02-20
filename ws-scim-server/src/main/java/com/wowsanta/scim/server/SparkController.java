@@ -13,8 +13,8 @@ import com.wowsanta.scim.service.AuthorizationController;
 import com.wowsanta.scim.service.LoginController;
 import com.wowsanta.scim.service.auth.AuthorizationService;
 import com.wowsanta.scim.service.auth.LoginService;
-import com.wowsanta.scim.service.scim.v2.BulkController;
-import com.wowsanta.scim.service.scim.v2.bulk.BlukService;
+import com.wowsanta.scim.service.schudler.SchdulerService;
+import com.wowsanta.scim.service.scim.v2.BlukService;
 import com.wowsanta.scim.service.system.SystemApiService;
 
 
@@ -40,10 +40,12 @@ public class SparkController {
 	}
 
 	private void scheduler() {
-		path("/scheduler", () -> {
-			get("/:systemId"   ,SystemApiService.getSystemScheduler(), json());
-			get("/history/:schedulerId"   ,SystemApiService.getSchedulerHistory(), json());
-			post("/run/:schedulerId"   ,SystemApiService.runSystemScheduler(), json());
+		path("/scheduler", () -> {			
+			get("/system/:systemId"   	,SystemApiService.getSchedulerBySystemId(), json());
+			get("/:schedulerId"   		,SystemApiService.getSchedulerById(), json());
+			get("/history/:schedulerId" ,SystemApiService.getSchedulerHistory(), json());
+			post("/run"   				,SystemApiService.runScheduler(), json());
+			post("/run/system" 			,SystemApiService.runSystemScheduler(), json());
 		});
 		
 	}
@@ -54,22 +56,21 @@ public class SparkController {
 			get("/:id",SystemApiService.getSystem(), json());
 		});
 	}
-
-	private void api() {
-		path("/api/:systemId", () -> {
-			scim_v2();
-			path("/scheduler", () -> {
-				post("/run/:schedulerId"   ,SystemApiService.runSystemScheduler(), json());
-			});
-		});
-	}
-
 	private void system() {
 		path("/system", () -> {
+			get("/columns/:systemId"   ,SystemApiService.getSystemColumnBySystemId(), json());
 			get("/"   ,SystemApiService.getConsumerSystems(), json());
 			get("/:id",SystemApiService.getSystem(), json());
 		});
 	}
+	private void api() {
+		path("/api", () -> {
+			//scim_v2();
+			//scheduler();
+		});
+	}
+
+
 
 	private void scim_v2() {		
 		path("/scim/" + SCIMConstants.VERSION, () -> {

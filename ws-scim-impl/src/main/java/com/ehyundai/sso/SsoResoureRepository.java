@@ -40,8 +40,9 @@ public class SsoResoureRepository extends AbstractRDBRepository implements SCIMR
 
 	@Override
 	public SCIMUser createUser(SCIMUser user) throws SCIMException {
-		User gw_user = (User)user;
+		User sso_user = (User)user;
 		
+		System.out.println("sso user create >>> " + sso_user);
 		final String insertSQL = "INSERT INTO WA3_USER (ID,NAME,EMAIL,DIV_ID,ORG_ID,PATH_ID"
 				+ ",DISABLED,LOCKED"
 				+ ",CREATE_TIME,MODIFY_TIME )"
@@ -57,20 +58,20 @@ public class SsoResoureRepository extends AbstractRDBRepository implements SCIMR
 	    	connection = getConnection();
         	statement  = connection.prepareStatement(insertSQL);
         	
-        	statement.setString(1, gw_user.getEmployeeNumber());
-        	statement.setString(2, gw_user.getUserName());
-        	statement.setString(3, gw_user.geteMail());
+        	statement.setString(1, sso_user.getId());
+        	statement.setString(2, sso_user.getUserName());
+        	statement.setString(3, sso_user.geteMail());
         	
-        	statement.setString(4, "div_id");
-        	statement.setString(5, "org_id");
-        	statement.setString(6, "path_id");
+        	statement.setString(4, sso_user.getCompanyCode());
+        	statement.setString(5, sso_user.getOrganization());
+        	statement.setString(6, sso_user.getDepartment());
 
-        	statement.setBoolean(7,gw_user.isActive());
-        	statement.setBoolean(8,gw_user.isActive());
+        	statement.setBoolean(7,sso_user.isActive());
+        	statement.setBoolean(8,sso_user.isActive());
         	
-        	if(gw_user.getMeta() != null) {
-        		statement.setLong(9,gw_user.getMeta().getCreated().getTime());
-        		statement.setLong(10,gw_user.getMeta().getLastModified().getTime());
+        	if(sso_user.getMeta() != null) {
+        		statement.setLong(9,sso_user.getMeta().getCreated().getTime());
+        		statement.setLong(10,sso_user.getMeta().getLastModified().getTime());
         	}else {
         		statement.setLong(9,new Date().getTime());
         		statement.setLong(10,new Date().getTime());
@@ -78,16 +79,19 @@ public class SsoResoureRepository extends AbstractRDBRepository implements SCIMR
         	
         	statement.execute();
 	    }catch(Exception e) {
+System.out.println("sso user create error >>> " + e.getMessage());
+	    	
 	    	if (e instanceof SQLIntegrityConstraintViolationException) {
-				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
+				throw new SCIMException(e.getMessage());
 			}else {
 				throw new SCIMException("CREATE USER FAILED : " + insertSQL , e);
 			}
 	    }finally {
 	    	DBCP.close(connection, statement, resultSet);
 	    }
+System.out.println("sso user create >>> " + sso_user);
 		
-		return gw_user;
+		return sso_user;
 	}
 
 	@Override
@@ -134,10 +138,9 @@ public class SsoResoureRepository extends AbstractRDBRepository implements SCIMR
 	}
 
 	@Override
-	public List<SCIMUser> getAllActiveUsers() throws SCIMException{
+	public List<SCIMUser> getUsersByActive() throws SCIMException{
 		
-		
-		return null;
+		return new ArrayList<SCIMUser>();
 	}
 	
 
@@ -190,7 +193,7 @@ public class SsoResoureRepository extends AbstractRDBRepository implements SCIMR
 	}
 	
 	@Override
-	public List<SCIMUser> getUsers(Date from, Date to)throws SCIMException{
+	public List<SCIMUser> getUsersByDate(Date from, Date to)throws SCIMException{
 		final String selectSQL = "SELECT ID,NAME,EMAIL,DIV_ID,ORG_ID,PATH_ID"
 				+ ",DISABLED,LOCKED"
 				+ ",CREATE_TIME,MODIFY_TIME "

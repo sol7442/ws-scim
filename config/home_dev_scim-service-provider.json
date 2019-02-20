@@ -50,7 +50,9 @@
 		}
 	],
 	"systemInfo": {
-		"url": "https://127.0.0.1/scim",
+		"systemId":"sys-scim-im",
+		"systemName":"통합 계정관리 시스템",
+		"url": "http://127.0.0.1:5000",
 		"ver": "v2.0"
 	},
 	"server": {

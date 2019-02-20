@@ -16,13 +16,18 @@ export class System {
 }
 
 export class Scheduler {
-    schedulerId: string;
+    schedulerId: string;        
     schedulerName:string;
-    schedulerDesc:string;
     schedulerType:string;
-
+    schedulerDesc:string;
+    jobClass:string;
+    dayOfMonth : number;
+	dayOfWeek : number;
+	hourOfDay : number;
+	minuteOfHour : number;
     sourceSystemId:string;
     tragetSystemId:string;
+    lastExecuteDate:string;
 }
 
 export class SchedulerHistory {
@@ -42,8 +47,16 @@ export class SchedulerHistory {
     workDate:string;
 }
 
-export class TableMap {
-    sysColumn:string;
-    imColumn:string;
-    hrColum:string;
+export class SystemColumn {
+    systemId:string;
+    columnName:string;
+    displayName:string;
+    
+    dataType:string;
+    dataSize:number;
+    allowNull:boolean;
+	
+	defaultValue:string;
+    comment:string;
+    mappingColumn:string;
 }

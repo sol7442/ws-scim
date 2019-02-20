@@ -28,7 +28,7 @@ public class SsoSystemRepository extends AbstractRDBRepository implements SCIMSy
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public SCIMSystem getSystem(String systemId)throws SCIMException{
+	public SCIMSystem getSystemById(String systemId)throws SCIMException{
 		final String selectSQL = "SELECT systemId,systemName,systemDesc,systemUrl"
 				+ " FROM SCIM_SYSTEM WHERE systemId=?";
 		
@@ -144,56 +144,7 @@ public class SsoSystemRepository extends AbstractRDBRepository implements SCIMSy
 		return scheduler_list;
 	}
 
-	@Override
-	public void addOperationResult(String workId, SCIMUser user, String source, String direct, SCIMOperation operation,
-			SCIMOperation result) throws SCIMException {
-		final String insertSQL = "INSERT INTO SCIM_AUDIT (workId, adminId,userId,sourceSystem,directSystem,method,result,detail,workDate)"
-				+ " VALUES ("
-				+ "?,?,?,?,?,"
-				+ "?,?,?,?)";
-		
-		Connection connection = null;
-		PreparedStatement statement = null;
-	    ResultSet resultSet = null;        
-	    try {
-	    	connection = getConnection();
-        	statement  = connection.prepareStatement(insertSQL);
-
-        	statement.setString(1, workId);
-        	statement.setString(2, user.getId());
-        	statement.setString(3, operation.getData().getId());
-        	statement.setString(4, source);
-        	statement.setString(5, direct);
-        	statement.setString(6, operation.getMethod());
-        	statement.setString(7, result.getStatus());
-        	if(result.getResponse() != null) {
-        		statement.setString(8, result.getResponse().getDetail());
-        	}else {
-        		statement.setString(8, null);
-        	}
-        	statement.setTimestamp(9, toSqlTimestamp(new Date()));
-        	
-        	statement.execute();
-	    } catch (SQLException e) {
-	    	if (e instanceof SQLIntegrityConstraintViolationException) {
-				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
-			}else {
-				throw new SCIMException("ADD AUDIT DATA FAILED : " + insertSQL , e);
-			}
-		}finally {
-	    	DBCP.close(connection, statement, resultSet);
-	    }
-		
-	}
-
-	@Override
-	public void addSchedulerHistory(String schedulerId, String workId, int req_put_count, int req_post_count,
-			int req_patch_count, int req_delate_count, int res_put_count, int res_post_count, int res_patch_count,
-			int res_delate_count) throws SCIMException {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	@Override
 	public List<SCIMSystem> getSystemAll(String type) throws SCIMException {
 		// TODO Auto-generated method stub
@@ -255,6 +206,17 @@ public class SsoSystemRepository extends AbstractRDBRepository implements SCIMSy
 			DBCP.close(connection, statement, resultSet);
 		}
 		return scheduler;
+	}
+
+	@Override
+	public void addOperationResult(String workId, SCIMUser user, String source, String direct, SCIMOperation operation,
+			SCIMOperation result) throws SCIMException {
+	}
+
+	@Override
+	public void addSchedulerHistory(String schedulerId, String workId, int req_put_count, int req_post_count,
+			int req_patch_count, int req_delate_count, int res_put_count, int res_post_count, int res_patch_count,
+			int res_delate_count) throws SCIMException {
 	}
 
 }

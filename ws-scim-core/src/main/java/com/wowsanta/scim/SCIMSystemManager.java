@@ -37,10 +37,6 @@ public class SCIMSystemManager {
 			SCIMResouceFactory.getInstance().setUserClass(
 					this.serviceProvider.getResources().get("user").getSchema(),
 					this.serviceProvider.getResources().get("user").getClassName());
-			
-			//load_repository(this.serviceProvider.getRepositoryConfig());
-			
-			
 		} catch (Exception e) {
 			throw new SCIMException("LOAD CONFIG FILE ERROR : " + conf_file_path, e);
 		} finally {
@@ -60,10 +56,13 @@ public class SCIMSystemManager {
 		this.serviceProvider = servicveProvider;
 	}
 	
+	public void loadRepositoryManager(File config_file) throws SCIMException {
+		SCIMRepositoryManager.getInstance().load(config_file);
+	}
 	public void loadRepositoryManager() throws SCIMException {
 		String repository_config_file_path = this.serviceProvider.getRepositoryConfig();
-		File repository_config_file = new File(repository_config_file_path);			
-		SCIMRepositoryManager.getInstance().load(repository_config_file);
+		File repository_config_file = new File(repository_config_file_path);
+		loadRepositoryManager(repository_config_file);
 	}
 	
 	public void loadSchdulerManager() {

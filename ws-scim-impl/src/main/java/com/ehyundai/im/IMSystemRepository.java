@@ -22,8 +22,10 @@ import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.repo.rdb.DBCP;
 import com.wowsanta.scim.resource.SCIMGroup;
+import com.wowsanta.scim.resource.SCIMProviderRepository;
 import com.wowsanta.scim.resource.SCIMResouceFactory;
 import com.wowsanta.scim.resource.SCIMResourceRepository;
+import com.wowsanta.scim.resource.SCIMSystemColumn;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
 import com.wowsanta.scim.scheduler.SCIMScheduler;
 import com.wowsanta.scim.scheduler.SCIMSchedulerHistory;
@@ -31,8 +33,88 @@ import com.wowsanta.scim.schema.SCIMConstants;
 import com.wowsanta.scim.schema.SCIMDefinitions;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
-public class IMSystemRepository extends AbstractRDBRepository implements SCIMSystemRepository{
+public class IMSystemRepository extends AbstractRDBRepository implements SCIMProviderRepository{
+	private static final long serialVersionUID = 1L;
+	
+	@Override
+	public List<SCIMSystemColumn> getSystemColumnsBySystemId(String systemId) throws SCIMException {
+		final String selectSQL = "SELECT * FROM SCIM_SYSTEM_COLUMN WHERE systemId=?";
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
 
+	    List<SCIMSystemColumn> column_list = new ArrayList<SCIMSystemColumn>();
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(selectSQL);
+        	statement.setString(1, systemId);
+        	
+        	resultSet = statement.executeQuery();
+        	while(resultSet.next()) {
+        		SCIMSystemColumn column = new SCIMSystemColumn();
+        		column.setSystemId(systemId);
+        		
+        		column.setColumnName(	resultSet.getString("columnName"));
+        		column.setAllowNull(	toBoolean(resultSet.getInt("allowNull")));
+        		column.setComment(		resultSet.getString("comment"));
+        		column.setDataSize(		resultSet.getInt("dataSize"));
+        		column.setDataType(		resultSet.getString("dataType"));
+        		column.setDefaultValue(	resultSet.getString("defaultValue"));
+        		column.setDisplayName(	resultSet.getString("displayName"));
+        		column.setMappingColumn(resultSet.getString("mappingColumn"));
+        		
+        		column_list.add(column);
+        	}
+		} catch (SQLException e) {
+			throw new SCIMException(selectSQL, e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+		return column_list;
+	}
+	
+	@Override
+	public void addSystemColumn(SCIMSystemColumn scimSystemColumn)throws SCIMException{
+		final String insertSQL = "INSERT INTO SCIM_SYSTEM_COLUMN "
+				+ "(systemId, columnName,displayName,"
+				+ "dataType,dataSize,allowNull,"
+				+ "defaultValue,comment,mappingColumn)"
+				+ " VALUES ("
+				+ "?,?,?,"
+				+ "?,?,?,"
+				+ "?,?,?)";
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
+	    try {
+	    	connection = getConnection();
+        	statement  = connection.prepareStatement(insertSQL);
+
+        	statement.setString(1, scimSystemColumn.getSystemId());
+        	statement.setString(2, scimSystemColumn.getColumnName());
+        	statement.setString(3, scimSystemColumn.getDisplayName());
+        	statement.setString(4, scimSystemColumn.getDataType());
+        	statement.setInt(5, scimSystemColumn.getDataSize());
+        	statement.setInt(6, toInteger(scimSystemColumn.isAllowNull()));
+        	statement.setString(7, scimSystemColumn.getDefaultValue());
+        	statement.setString(8, scimSystemColumn.getComment());
+        	statement.setString(9, scimSystemColumn.getMappingColumn());
+        	
+        	statement.execute();
+	    } catch (SQLException e) {
+	    	System.out.println(">>>>>>> L : " +  e.getMessage());
+	    	if (e instanceof SQLIntegrityConstraintViolationException) {
+				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
+			}else {
+				throw new SCIMException("ADD AUDIT DATA FAILED : " + insertSQL , e);
+			}
+		}finally {
+	    	DBCP.close(connection, statement, resultSet);
+	    }
+	}
+	
 	@Override
 	public SCIMScheduler getSchdulerById(String schedulerId) throws SCIMException{
 		final String selectSQL = "SELECT schedulerId, schedulerName, schedulerDesc, schedulerType,"
@@ -379,7 +461,7 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMSys
 	}
 	
 	@Override
-	public SCIMSystem getSystem(String systemId) throws SCIMException {
+	public SCIMSystem getSystemById(String systemId) throws SCIMException {
 		final String selectSQL = "SELECT systemId,systemName,systemDesc,systemUrl"
 				+ " FROM SCIM_SYSTEM WHERE systemId=?";
 		
@@ -410,10 +492,7 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMSys
 		}
 	    
 		return system;
-	}
-
-
-	@Override
+	}	@Override
 	public void updateSchdulerLastExcuteDate(String schdulerId, Date date) throws SCIMException {
 		// TODO Auto-generated method stub
 		
@@ -471,7 +550,4 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMSys
 	    	DBCP.close(connection, statement, resultSet);
 	    }
 	}
-
-
-
 }

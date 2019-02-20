@@ -12,20 +12,26 @@ import {AppRouteModule} from './app-route.module';
 
 
 import {AuthGuard} from './guards/auth-guard';
+
 import {AuthenticationService} from './service/authentication.service';
-import {AuthInterceptor} from './service/auth-interceptor';
 import {ScimApiService} from './service/scim-api.service';
+import {AlertService} from './service/alert.service';
+import {AuthInterceptor} from './service/auth-interceptor';
+import {HttpErrorInerceptor} from './service/http-error-inerceptor';
+
+
 
 
 
 import {LoginModule} from './login/login.module';
+
+import {AlertComponent} from './alert/alert.component';
 
 import {TabMenuComponent} from './menu/tab-menu/tab-menu.component';
 import {TitleComponent} from './title/title.component';
 import {SystemManagementComponent} from './main/system/system-management/system-management.component';
 import {HrsystemManagementComponent} from './main/system/hrsystem-management/hrsystem-management.component';
 import {AccountComponent} from './main/account/account.component';
-
 import {SystemAccountComponent} from './main/account/system-account/system-account.component';
 import {AccountManagementComponent} from './main/account/account-management/account-management.component';
 
@@ -48,7 +54,7 @@ import 'rxjs/Rx';
 
 @NgModule({
    declarations: [
-      AppComponent,
+      AppComponent,AlertComponent,
       TabMenuComponent,TitleComponent,
       SystemManagementComponent,HrsystemManagementComponent,
       AccountComponent,SystemAccountComponent,AccountManagementComponent
@@ -64,15 +70,12 @@ import 'rxjs/Rx';
       LoginModule,
    ],
    providers: [
-      {
-         provide:HTTP_INTERCEPTORS,
-         useClass:AuthInterceptor,
-         multi:true
-      },
+      {provide:HTTP_INTERCEPTORS,  useClass:AuthInterceptor,  multi:true  },
+      {provide:HTTP_INTERCEPTORS,  useClass:HttpErrorInerceptor,  multi:true  },
       ConfigService,
       ConfigModule.init(),
       AuthGuard,
-      AuthenticationService,ScimApiService
+      AlertService,AuthenticationService,ScimApiService
    ],
    bootstrap: [
       AppComponent

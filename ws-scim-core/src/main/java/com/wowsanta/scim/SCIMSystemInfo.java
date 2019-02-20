@@ -26,6 +26,9 @@ public class SCIMSystemInfo extends AbstractJsonObject {
 		return this.url + "/" + ver + SCIMConstants.USER_ENDPOINT;
 	}
 	
+	public String getSystemUrl() {
+		return this.url;
+	}
 	public String getGroupEndpoint() {
 		return this.url + "/" + ver + SCIMConstants.GROUP_ENDPOINT;
 	}

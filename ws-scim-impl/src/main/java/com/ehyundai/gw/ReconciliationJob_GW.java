@@ -41,41 +41,48 @@ public class ReconciliationJob_GW extends SCIMJob {
 		try {
 			SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
 			SCIMSystemRepository   sys_rep  = SCIMRepositoryManager.getInstance().getSystemRepository();
+		
+			List<SCIMUser> user_list = null;
 			
 			Calendar cal = Calendar.getInstance();
 			Date to = cal.getTime();
-			
-			Date last_execute_date = null;//scheduler.getLastExecuteDate();
+			Date last_execute_date = scheduler.getLastExecuteDate();
 			if(last_execute_date != null) {
 				cal.setTime(last_execute_date);
+				Date from = cal.getTime();
+				user_list = res_repo.getUsersByDate(from, to);
 			}else {
-				cal.add(Calendar.DATE, -1000);
+				user_list = res_repo.getUsersByActive();
 			}
 			
-			Date from = cal.getTime();
-
 			SCIMBulkRequest request = new SCIMBulkRequest();
 			request.setRequestId(Random.number(0,10000000));
-			request.setSourecSystemId(scheduler.getSourceSystemId());
-			request.setDirectSystemId(scheduler.getTargetSystemId());
+			request.setSourceSystemId(scheduler.getSourceSystemId());
+			request.setTargetSystemId(scheduler.getTargetSystemId());
+			request.setSchedulerId(scheduler.getSchedulerId());
 			
-			SCIMSystem target_system = sys_rep.getSystem(scheduler.getTargetSystemId());
+			SCIMSystem target_system = sys_rep.getSystemById(scheduler.getTargetSystemId());
+			String bulk_url = target_system.getSystemUrl() + "/scim" + SCIMConstants.VERSION_ENDPINT + SCIMConstants.BULK_ENDPOINT;;			
+			
+			System.out.println("bulk_url : " + bulk_url);
 
-			List<SCIMUser> user_list = res_repo.getUsers(from, to);
 			for (SCIMUser scimUser : user_list) {
 				User user = (User) scimUser;
-				
 				SCIMBulkOperation operation = new SCIMBulkOperation();
 				operation.setData(user);
-				
 				if (user.getActive() == 0) {
 					operation.setMethod(SCIMDefinitions.MethodType.PATCH.toString());
 				} else {
-					if (user.getActive() == 1 && user.getMeta().getCreated().equals(user.getMeta().getLastModified())) {
+					if(last_execute_date == null) {
 						operation.setBulkId(Random.number(0, 1000000));
 						operation.setMethod(SCIMDefinitions.MethodType.PUT.toString());
-					} else {
-						operation.setMethod(SCIMDefinitions.MethodType.POST.toString());
+					}else {
+						if (user.getActive() == 1 && user.getMeta().getCreated().equals(user.getMeta().getLastModified())) {
+							operation.setBulkId(Random.number(0, 1000000));
+							operation.setMethod(SCIMDefinitions.MethodType.PUT.toString());
+						} else {
+							operation.setMethod(SCIMDefinitions.MethodType.POST.toString());
+						}
 					}
 				}
 				request.addOperation(operation);
@@ -83,35 +90,15 @@ public class ReconciliationJob_GW extends SCIMJob {
 			
 			
 			try {
-				
-				String bulk_url = target_system.getSystemUrl() + "/scim" + SCIMConstants.VERSION_ENDPINT + SCIMConstants.BULK_ENDPOINT;;
-				
 				RESTClient client = new RESTClient(worker);
-				SCIMBulkResponse response = client.bulk(bulk_url, request);
-				List<SCIMBulkOperation> opersations = response.getOperations();
 				
-				for (SCIMBulkOperation request_Operation : request.getOperations()) {
-					System.out.println(request_Operation.toString());
-				}
+				client.bulk(bulk_url, request);
 				
-				for (SCIMBulkOperation response_Operation : opersations) {
-					System.out.println(response_Operation.toString());
-					
-//					sys_rep.addOperationResult(
-//							request.getRequestId(),
-//							worker, 
-//							scheduler.getSourceSystemId(), scheduler.getTargetSystemId(),
-//							scimBulkOperation, scimBulkOperation);
-				}
+				sys_rep.updateSchdulerLastExcuteDate(scheduler.getSchedulerId(), to);
 				
-				System.out.println(">>> ["+request.getOperations().size()+"]["+response.getOperations().size()+"]");
-				
-			} catch (SCIMException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
-			
-			sys_rep.updateSchdulerLastExcuteDate(scheduler.getSchedulerId(), to);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

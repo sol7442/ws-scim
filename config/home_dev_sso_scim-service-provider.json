@@ -50,14 +50,14 @@
 		}
 	],
 	"systemInfo": {
-		"systemId":"sys-scim-gw",
-		"systemName":"그룹웨어",
-		"url": "https://127.0.0.1:5001",
+		"systemId":"sys-scim-sso",
+		"systemName":"통합 로그인 시스템",
+		"url": "http://127.0.0.1:5003",
 		"ver": "v2.0"
 	},
 	"server": {
-		"baseURL": "http://127.0.0.1:5001/scim/",
-		"servicePort": 5001,
+		"baseURL": "http://127.0.0.1:5003/scim/",
+		"servicePort": 5003,
 		"maxThreads": 3000,
 		"minThreads": 100,
 		"idleTimeoutMills": 10000,
@@ -76,5 +76,5 @@
 			"className": ""
 		}
 	},
-	"repositoryConfig": "../config/home_dev_gw_scim_repository.json"
+	"repositoryConfig": "../config/home_dev_sso_scim_repository.json"
 }

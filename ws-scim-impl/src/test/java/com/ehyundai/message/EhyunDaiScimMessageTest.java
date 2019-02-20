@@ -34,8 +34,8 @@ public class EhyunDaiScimMessageTest extends EhyunDaiScimObjectTest {
 	
 	public SCIMBulkRequest create_bulk_request(){
 		SCIMBulkRequest request = new SCIMBulkRequest();
-		request.setSourecSystemId("sys-scim-gw");
-		request.setDirectSystemId("sys-scim-im");
+		request.setSourceSystemId("sys-scim-gw");
+		request.setTargetSystemId("sys-scim-im");
 		
 		User user1 = create_user_test (
 				"12344",

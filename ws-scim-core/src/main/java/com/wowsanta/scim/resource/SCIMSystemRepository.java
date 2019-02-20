@@ -16,22 +16,22 @@ public interface SCIMSystemRepository {
 
 	public List<SCIMSystem> getSystemAll()throws SCIMException;
 	public List<SCIMSystem> getSystemAll(String type)throws SCIMException;
-	public SCIMSystem getSystem(String targetSystemId)throws SCIMException;
+	
 		
 	public void updateSchdulerLastExcuteDate(String schdulerId, Date date) throws SCIMException; 
 	public List<SCIMScheduler> getSchdulerAll()throws SCIMException;
-	
-	public void addOperationResult(String workId, SCIMUser user, String source,String direct, SCIMOperation operation, SCIMOperation result)throws SCIMException;
-
-	public void addSchedulerHistory(String schedulerId, String workId, int req_put_count, int req_post_count,
-			int req_patch_count, int req_delate_count, int res_put_count, int res_post_count, int res_patch_count,
-			int res_delate_count) throws SCIMException;
 
 	public List<SCIMScheduler> getSchdulerBySystemId(String systemId)throws SCIMException;
 
 	public List<SCIMSchedulerHistory> getSchedulerHistory(String schedulerId)throws SCIMException;
 
 	public SCIMScheduler getSchdulerById(String schedulerId) throws SCIMException;
+
+	public SCIMSystem getSystemById(String sourceSystemId) throws SCIMException;
+	//public SCIMSystem getSystem(String targetSystemId)throws SCIMException;
 	
-	
+	public void addOperationResult(String workId, SCIMUser user, String source,String direct, SCIMOperation operation, SCIMOperation result)throws SCIMException;
+	public void addSchedulerHistory(String schedulerId, String workId, int req_put_count, int req_post_count,
+			int req_patch_count, int req_delate_count, int res_put_count, int res_post_count, int res_patch_count,
+			int res_delate_count) throws SCIMException;
 }

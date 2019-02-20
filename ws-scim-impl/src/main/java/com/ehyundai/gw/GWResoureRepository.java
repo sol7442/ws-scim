@@ -17,6 +17,7 @@ import com.wowsanta.scim.repo.rdb.DBCP;
 import com.wowsanta.scim.resource.SCIMGroup;
 import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
+import com.wowsanta.scim.util.Random;
 
 public class GWResoureRepository extends AbstractRDBRepository implements SCIMResourceRepository{
 	/**
@@ -58,13 +59,16 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
 		PreparedStatement statement = null;
 	    ResultSet resultSet = null;        
 	    try {
+			
 	    	connection = getConnection();
         	statement  = connection.prepareStatement(insertSQL);
         	statement.setString(1, gw_user.getId());
-        	statement.setString(2, gw_user.getGroupCode());
+        	statement.setString(2, gw_user.getCompanyCode());
+        	
         	statement.setString(3, gw_user.getEmployeeNumber());
         	statement.setString(4, gw_user.getUserName());
-        	statement.setString(5, gw_user.getGroupName());
+        	statement.setString(5, gw_user.getDivision());
+        	
         	statement.setString(6, gw_user.getPositionCode());
         	statement.setString(7, gw_user.getPosition());
         	statement.setString(8, gw_user.getJobCode());
@@ -117,28 +121,7 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
         	statement.setString(1, userId);
         	resultSet = statement.executeQuery();
         	if(resultSet.next()) {
-        		gw_user = new User();
-        		
-        		gw_user.setId(resultSet.getString("UR_Code"));
-        		gw_user.setGroupCode(resultSet.getString("GR_Code"));
-        		gw_user.setEmployeeNumber(resultSet.getString("EmpNo"));
-        		gw_user.setUserName(resultSet.getString("DisplayName"));
-        		gw_user.setGroupName(resultSet.getString("ExGroupName"));
-        		gw_user.setPositionCode(resultSet.getString("JobPositionCode"));
-        		gw_user.setPosition(resultSet.getString("ExJobPositionName"));
-        		gw_user.setJobCode(resultSet.getString("JobTitleCode"));
-        		gw_user.setJob(resultSet.getString("ExJobTitleName"));
-        		gw_user.setRankCode(resultSet.getString("JobLevelCode"));
-        		gw_user.setRank(resultSet.getString("ExJobLevelName"));
-        		gw_user.setActive(toBoolean(resultSet.getString("IsUse")));
-        		gw_user.seteMail(resultSet.getString("Ex_PrimaryMail"));
-        		
-        		gw_user.setJoinDate(toJavaDate(resultSet.getTimestamp("EnterDate")));
-        		gw_user.setRetireDate(toJavaDate(resultSet.getTimestamp("RetireDate")));
-        		
-        		gw_user.setMeta(new SCIMUserMeta());
-        		gw_user.getMeta().setCreated(toJavaDate(resultSet.getTimestamp("RegistDate")));
-        		gw_user.getMeta().setLastModified(toJavaDate(resultSet.getTimestamp("ModifyDate")));
+        		gw_user = newUser(resultSet);
         	}else {
         		throw new SCIMException("USER NOT FOUND : " + userId, RESULT_IS_NULL);
         	}
@@ -151,13 +134,15 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
         
 		return gw_user;
 	}
-
-	public List<SCIMUser> getAllActiveUsers() throws SCIMException{
+	
+	
+	@Override
+	public List<SCIMUser> getUsersByActive() throws SCIMException{
 		return null;
 	}
 	
 	@Override
-	public List<SCIMUser> getUsers(Date from, Date to)throws SCIMException{
+	public List<SCIMUser> getUsersByDate(Date from, Date to)throws SCIMException{
 		final String selectSQL = "SELECT UR_Code, GR_Code,EmpNo,DisplayName,ExGroupName"
 				+ ",JobPositionCode,ExJobPositionName"
 				+ ",JobTitleCode,ExJobTitleName"
@@ -181,30 +166,7 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
         	
         	resultSet = statement.executeQuery();
         	while(resultSet.next()) {
-        		User gw_user = new User();
-        		
-        		gw_user.setId(resultSet.getString("UR_Code"));
-        		gw_user.setGroupCode(resultSet.getString("GR_Code"));
-        		gw_user.setEmployeeNumber(resultSet.getString("EmpNo"));
-        		gw_user.setUserName(resultSet.getString("DisplayName"));
-        		gw_user.setGroupName(resultSet.getString("ExGroupName"));
-        		gw_user.setPositionCode(resultSet.getString("JobPositionCode"));
-        		gw_user.setPosition(resultSet.getString("ExJobPositionName"));
-        		gw_user.setJobCode(resultSet.getString("JobTitleCode"));
-        		gw_user.setJob(resultSet.getString("ExJobTitleName"));
-        		gw_user.setRankCode(resultSet.getString("JobLevelCode"));
-        		gw_user.setRank(resultSet.getString("ExJobLevelName"));
-        		gw_user.setActive(toBoolean(resultSet.getString("IsUse")));
-        		gw_user.seteMail(resultSet.getString("Ex_PrimaryMail"));
-        		
-        		gw_user.setJoinDate(resultSet.getDate("EnterDate"));
-        		gw_user.setRetireDate(resultSet.getDate("RetireDate"));
-        		
-        		gw_user.setMeta(new SCIMUserMeta());
-        		gw_user.getMeta().setCreated(		resultSet.getDate("RegistDate"));
-        		gw_user.getMeta().setLastModified(	resultSet.getDate("ModifyDate"));
-        		
-        		user_list.add(gw_user);
+        		user_list.add(newUser(resultSet));
         	}
         	
 		} catch (SQLException e) {
@@ -290,12 +252,43 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	private User newUser(ResultSet resultSet) {
+		User gw_user = new User();
+		try {
+			
 
-
-
-
-
-
-
+    		gw_user.setId(resultSet.getString("UR_Code"));
+    		
+    		gw_user.setEmployeeNumber(resultSet.getString("UR_Code"));
+    		gw_user.setUserName(resultSet.getString("DisplayName"));
+    		
+    		gw_user.setOrganization(resultSet.getString("GR_Code"));
+    		gw_user.setDivision(resultSet.getString("ExGroupName"));
+    		
+    		gw_user.setDepartment("defaultvalue");
+    		
+    		gw_user.setPositionCode(resultSet.getString("JobPositionCode"));
+    		gw_user.setPosition(resultSet.getString("ExJobPositionName"));
+    		gw_user.setJobCode(resultSet.getString("JobTitleCode"));
+    		gw_user.setJob(resultSet.getString("ExJobTitleName"));
+    		gw_user.setRankCode(resultSet.getString("JobLevelCode"));
+    		gw_user.setRank(resultSet.getString("ExJobLevelName"));
+    		gw_user.setActive(toBoolean(resultSet.getString("IsUse")));
+    		gw_user.seteMail(resultSet.getString("Ex_PrimaryMail"));
+    		
+    		gw_user.setJoinDate(resultSet.getDate("EnterDate"));
+    		gw_user.setRetireDate(resultSet.getDate("RetireDate"));
+    		
+    		gw_user.setMeta(new SCIMUserMeta());
+    		gw_user.getMeta().setCreated(		toJavaDate(resultSet.getDate("RegistDate")));
+    		gw_user.getMeta().setLastModified(	toJavaDate(resultSet.getDate("ModifyDate")));
+    		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return gw_user;
+	}
 
 }

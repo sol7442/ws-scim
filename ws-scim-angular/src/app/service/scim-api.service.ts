@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient,HttpHeaders } from '@angular/common/http';
+import { HttpClient,HttpHeaders,HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
 
@@ -35,16 +35,22 @@ export class ScimApiService {
     }));
   }
 
-  getSystemScheduler(id:string){
-    let api_url = '/scheduler/' + id;
-    return this.http.get<any>(api_url,
-      {
-        headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
-      })
+  getSchedulerBySystemId(systemId:string){
+    let api_url = '/scheduler/system/' + systemId;
+    return this.http.get<any>(api_url)
     .pipe(map( result =>{
       return result;
     }));
   }
+
+  getSystemComlumsBySystemId(systemId:string){
+    let api_url = '/system/columns/' + systemId;
+    return this.http.get<any>(api_url)
+    .pipe(map( result =>{
+      return result;
+    }));
+  }
+  
 
   getSchedulerHistory(id:string){
     let api_url = '/scheduler/history/' + id;
@@ -56,23 +62,32 @@ export class ScimApiService {
       return result;
     }));
   }
-  runScheduler(systemId:string, schedulerId:string){
-    let api_url = '/api/'+ systemId +'/scheduler/run/' + schedulerId;
-    return this.http.post<any>(api_url,
-      {
-        headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
-      })
+
+  runSystemScheduler(schedulerId:string){
+    let api_url = '/scheduler/run/system';
+    
+    let  httpParams = new HttpParams();
+    httpParams.append("schedulerId",schedulerId);    
+    return this.http.post<any>(api_url,{'schedulerId': schedulerId})
     .pipe(map( result =>{
       return result;
     }));
   }
+
+  // runScheduler(systemId:string, schedulerId:string){
+  //   let api_url = '/api/'+ systemId +'/scheduler/run/' + schedulerId;
+  //   return this.http.post<any>(api_url,
+  //     {
+  //       headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
+  //     })
+  //   .pipe(map( result =>{
+  //     return result;
+  //   }));
+  // }
   // HR - System 
   getHrSystems(){
     let api_url = '/hrsystem/';
-    return this.http.get<any>(api_url,
-      {
-        headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
-      })
+    return this.http.get<any>(api_url)
     .pipe(map( result =>{
       return result;
     }));

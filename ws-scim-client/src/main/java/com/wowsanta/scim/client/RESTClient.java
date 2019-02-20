@@ -17,6 +17,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 
+import com.google.gson.JsonObject;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.json.SCIMJsonObject;
 import com.wowsanta.scim.message.SCIMBulkRequest;
@@ -73,12 +74,15 @@ public class RESTClient {
 		}
 	}
 	
-	public HttpResponse post(String url) throws SCIMException {
+	public HttpResponse post(String url,JsonObject object) throws SCIMException {
 		try {
 			HttpPost post = new HttpPost(url);
+			StringEntity postingString = new StringEntity(object.toString(),"UTF-8");
+			
 			post.addHeader("Content-Type", "application/json;UTF-8");
 			post.addHeader("Authorization", RESTClientPool.getInstance().generateAuthorizationToken(user, 1000*60));
-			//post.setEntity(new StringEntity(request.toString(),"UTF-8"));
+			post.setEntity(postingString);
+			
 			return execute(post);
 			
 		} catch (Exception e) {
@@ -112,8 +116,10 @@ public class RESTClient {
 		
 		return str.toString();
 	}
-	public String run(String url) throws SCIMException {
-		HttpResponse http_response = post(url);
+	public String run(String url,JsonObject params) throws SCIMException {
+		
+		HttpResponse http_response = post(url,params);
+		
 		int http_res_code = http_response.getStatusLine().getStatusCode();
 		
 		StringBuilder str = new StringBuilder();
