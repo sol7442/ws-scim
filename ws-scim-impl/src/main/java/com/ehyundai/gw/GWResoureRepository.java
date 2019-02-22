@@ -138,7 +138,38 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
 	
 	@Override
 	public List<SCIMUser> getUsersByActive() throws SCIMException{
-		return null;
+		final String selectSQL = "SELECT UR_Code, GR_Code,EmpNo,DisplayName,ExGroupName"
+				+ ",JobPositionCode,ExJobPositionName"
+				+ ",JobTitleCode,ExJobTitleName"
+				+ ",JobLevelCode,ExJobLevelName"
+				+ ",IsUse"
+				+ ",Ex_PrimaryMail"
+				+ ",EnterDate,RetireDate,RegistDate,ModifyDate "
+				+ "FROM GW_USER WHERE IsUse=?";
+	
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;              
+
+	    List<SCIMUser> user_list = new ArrayList<SCIMUser>();
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(selectSQL);
+        	
+        	statement.setString(1, "Y");
+        	
+        	resultSet = statement.executeQuery();
+        	while(resultSet.next()) {
+        		user_list.add(newUser(resultSet));
+        	}
+        	
+		} catch (SQLException e) {
+			throw new SCIMException(selectSQL, e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+        
+		return user_list;
 	}
 	
 	@Override
@@ -241,18 +272,6 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
 		return null;
 	}
 
-	@Override
-	public void clearSystemUser(String systemId) throws SCIMException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public SCIMUser createSystemUser(String systemId, SCIMUser resource) throws SCIMException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	private User newUser(ResultSet resultSet) {
 		User gw_user = new User();
 		try {

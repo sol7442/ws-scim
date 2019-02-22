@@ -1,0 +1,33 @@
+{
+	"className": "com.wowsanta.scim.resource.SCIMRepositoryManager",
+	"resourceRepository": {
+		"className": "com.ehyundai.gw.GWResoureRepository",
+		"type": "RDB",
+		"dbcp": {
+			"poolName": "gw-resource",
+			"driverName": "oracle.jdbc.driver.OracleDriver",
+			"jdbcUrl": "jdbc:mysql://wession.com:3306/ws_scim_gw?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC",
+			"userName": "root",
+			"password": "wession@12",
+			"valiationQuery": "select 1",
+			"timeBetweenEvictionRunsMillis": 60000,
+			"testWhileIdle": true,
+			"minIdle": 5,
+			"maxTotal": 50
+		}
+	},
+	"systemRepository": {
+		"className": "com.ehyundai.gw.GWSystemRepository",
+		"type": "RDB",
+		"dbcp": {
+			"poolName": "gw-system",
+			"driverName": "org.sqlite.JDBC",
+			"jdbcUrl": "jdbc:sqlite:D:\\workspace\\git\\ws-scim\\config\\scim_gw_sys.db",
+			"valiationQuery": "select 1",
+			"timeBetweenEvictionRunsMillis": 60000,
+			"testWhileIdle": true,
+			"minIdle": 5,
+			"maxTotal": 50
+		}
+	}
+}

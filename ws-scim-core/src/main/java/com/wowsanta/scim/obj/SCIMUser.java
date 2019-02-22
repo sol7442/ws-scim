@@ -1,6 +1,8 @@
 package com.wowsanta.scim.obj;
 
 
+import java.util.Map.Entry;
+
 import com.google.gson.JsonObject;
 import com.wowsanta.scim.schema.SCIMConstants;
 
@@ -95,4 +97,5 @@ public class SCIMUser extends SCIMResource {
 	public void setExernalId(String exernalId) {
 		this.exernalId = exernalId;
 	}
+	
 }

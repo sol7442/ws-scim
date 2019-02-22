@@ -1,24 +1,27 @@
-package com.wowsanta.scim.server;
+package com.wowsanta.scim.service;
 
 import static com.wowsanta.scim.server.JsonUtil.json;
 import static spark.Spark.after;
 import static spark.Spark.before;
 import static spark.Spark.path;
 import static spark.Spark.post;
+import static spark.Spark.put;
+import static spark.Spark.patch;
 import static spark.Spark.get;
 
 import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.schema.SCIMConstants;
-import com.wowsanta.scim.service.AuthorizationController;
-import com.wowsanta.scim.service.LoginController;
+import com.wowsanta.scim.service.account.AccountService;
 import com.wowsanta.scim.service.auth.AuthorizationService;
 import com.wowsanta.scim.service.auth.LoginService;
 import com.wowsanta.scim.service.schudler.SchdulerService;
-import com.wowsanta.scim.service.scim.v2.BlukService;
+import com.wowsanta.scim.service.scim.v2.BlukControl;
+import com.wowsanta.scim.service.scim.v2.UserControl;
+import com.wowsanta.scim.service.scim.v2.service.BlukService;
 import com.wowsanta.scim.service.system.SystemApiService;
 
 
-public class SparkController {
+public class ServerController extends SparkController{
 	
 	private LoginService auth = new LoginService();
 	
@@ -34,18 +37,27 @@ public class SparkController {
 		login();
 		scim_v2();
 		system();
+		account();
 		hrsystem();
 		scheduler();
 		api();
 	}
 
+	private void account() {
+		path("/account", () -> {			
+			get("/system/:systemId"   		,AccountService.getSystemAccount(), json());
+			get("/history/:userId"   		,AccountService.getAccountHistory(), json());
+		});
+	}
+
 	private void scheduler() {
 		path("/scheduler", () -> {			
-			get("/system/:systemId"   	,SystemApiService.getSchedulerBySystemId(), json());
-			get("/:schedulerId"   		,SystemApiService.getSchedulerById(), json());
-			get("/history/:schedulerId" ,SystemApiService.getSchedulerHistory(), json());
-			post("/run"   				,SystemApiService.runScheduler(), json());
-			post("/run/system" 			,SystemApiService.runSystemScheduler(), json());
+			get("/system/:systemId"   		,SystemApiService.getSchedulerBySystemId(), json());
+			get("/:schedulerId"   			,SystemApiService.getSchedulerById(), json());
+			get("/history/system/:systemId" ,SchdulerService.getSystemSchedulerHistory(), json());
+			get("/history/:schedulerId" 	,SystemApiService.getSchedulerHistory(), json());
+			post("/run/remote" 				,SystemApiService.runRemoteScheduler(), json());
+			post("/run/system" 				,SchdulerService.runSystemScheduler(), json());
 		});
 		
 	}
@@ -74,7 +86,13 @@ public class SparkController {
 
 	private void scim_v2() {		
 		path("/scim/" + SCIMConstants.VERSION, () -> {
-			post  ("/Bulk",BlukService.execute(), json());
+			get    ("/Users/:userId",UserControl.getUser(), json());
+			put    ("/Users",UserControl.create(), json());
+			post   ("/Users",UserControl.updateUser(), json());
+			patch  ("/Users",UserControl.patch(), json());
+			post   ("/Bulk",BlukControl.post(), json());
+			get    ("/Bulk",BlukControl.getAll(), json());
+			get    ("/Bulk/:lasteDate",BlukControl.get(), json());
 		});
 	}
 

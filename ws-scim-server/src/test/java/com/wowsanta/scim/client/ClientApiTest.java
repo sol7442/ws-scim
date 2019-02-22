@@ -20,18 +20,18 @@ public class ClientApiTest {
 		RESTClientPool.getInstance().setUserInfo("sys-scim-admin","scim-admin",60*1000);
 		
 		String bulk_url = url + SCIMConstants.VERSION_ENDPINT + SCIMConstants.BULK_ENDPOINT;
-		SCIMBulkRequest request = create_bulk_request();
-		RESTClient client = new RESTClient();
-		
-		try {
-			System.out.println(">>>>");
-			System.out.println(request.toString(true));
-			System.out.println(">>>>");
-			
-			SCIMBulkResponse response = client.bulk(bulk_url, request);
-			System.out.println(response.toString(true));
-		} catch (SCIMException e) {
-			e.printStackTrace();
-		}
+//		SCIMBulkRequest request = create_bulk_request();
+//		RESTClient client = new RESTClient();
+//		
+//		try {
+//			System.out.println(">>>>");
+//			System.out.println(request.toString(true));
+//			System.out.println(">>>>");
+//			
+//			SCIMBulkResponse response = client.bulk(bulk_url, request);
+//			System.out.println(response.toString(true));
+//		} catch (SCIMException e) {
+//			e.printStackTrace();
+//		}
 	}
 }

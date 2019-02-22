@@ -32,7 +32,7 @@ public class RESTClient {
 		this.user = user;
 	}
 
-	public SCIMBulkResponse bulk(String url,SCIMBulkRequest request) throws SCIMException {
+	public SCIMBulkResponse post_bulk(String url,SCIMBulkRequest request) throws SCIMException {
 		SCIMBulkResponse response = new SCIMBulkResponse();
 		
 		HttpResponse http_response = post(url, request);
@@ -111,6 +111,7 @@ public class RESTClient {
 				e.printStackTrace();
 			}
 		}else {
+			System.out.println(http_response);
 			throw new SCIMException("call error : ", http_res_code);
 		}
 		

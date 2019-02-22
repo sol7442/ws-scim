@@ -2,8 +2,8 @@ package com.wowsanta.scim.scheduler;
 
 import org.junit.Test;
 
-import com.ehyundai.gw.ReconciliationJob_GW;
-import com.ehyundai.gw.ReconciliationJob_GW_All;
+import com.ehyundai.gw.ConciliationJob_GW;
+import com.ehyundai.gw.ConciliationJob_GW;
 import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.SCIMUser;
@@ -29,8 +29,8 @@ public class GwReconciliationTest {
 			test_user.setId("sys-scim-tester");
 			test_user.setUserName("SYSTEM-TESTER");
 			
-			ReconciliationJob_GW_All job = new ReconciliationJob_GW_All();
-			job.doExecute(sheduler, test_user);
+//			ReconciliationJob_GW_All job = new ReconciliationJob_GW_All();
+//			job.doExecute(sheduler, test_user);
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -52,8 +52,8 @@ public class GwReconciliationTest {
 			test_user.setId("sys-scim-tester");
 			test_user.setUserName("SYSTEM-TESTER");
 			
-			ReconciliationJob_GW job = new ReconciliationJob_GW();
-			job.doExecute(sheduler, test_user);
+//			ConciliationJob_GW job = new ConciliationJob_GW();
+//			job.doExecute(sheduler, test_user);
 			
 		}catch (Exception e) {
 			e.printStackTrace();

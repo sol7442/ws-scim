@@ -14,7 +14,7 @@ import com.wowsanta.scim.resource.SCIMResourceRepository;
 
 public class SsoResourceRepositoryTest {
 	
-	private final String repository_config_file = "../config/home_dev_sso_scim_repository.json";
+	private final String repository_config_file = "../config/poc_raonsecure_sso_mysql_repository.json";
 	
 	@Test
 	public void sso_create_user_10_test() {

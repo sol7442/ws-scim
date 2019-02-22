@@ -45,11 +45,13 @@ public class SsoResoureRepository extends AbstractRDBRepository implements SCIMR
 		System.out.println("sso user create >>> " + sso_user);
 		final String insertSQL = "INSERT INTO WA3_USER (ID,NAME,EMAIL,DIV_ID,ORG_ID,PATH_ID"
 				+ ",DISABLED,LOCKED"
-				+ ",CREATE_TIME,MODIFY_TIME )"
+				+ ",LAST_LOGON_TIME,CREATE_TIME,MODIFY_TIME )"
 				+ " VALUES ("
 				+ "?,?,?,?,?,?,"
-				+ "?,?,?,?)";
+				+ "?,?,?,?,?)";
 				
+	    System.out.println(">>>>>>" + sso_user.toString(true));    	
+
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -57,24 +59,30 @@ public class SsoResoureRepository extends AbstractRDBRepository implements SCIMR
 	    try {
 	    	connection = getConnection();
         	statement  = connection.prepareStatement(insertSQL);
-        	
+
         	statement.setString(1, sso_user.getId());
         	statement.setString(2, sso_user.getUserName());
         	statement.setString(3, sso_user.geteMail());
         	
-        	statement.setString(4, sso_user.getCompanyCode());
-        	statement.setString(5, sso_user.getOrganization());
+        	statement.setString(4, sso_user.getOrganization());
+        	statement.setString(5, sso_user.getDivision());
         	statement.setString(6, sso_user.getDepartment());
 
         	statement.setBoolean(7,sso_user.isActive());
         	statement.setBoolean(8,sso_user.isActive());
         	
-        	if(sso_user.getMeta() != null) {
-        		statement.setLong(9,sso_user.getMeta().getCreated().getTime());
-        		statement.setLong(10,sso_user.getMeta().getLastModified().getTime());
+        	if(sso_user.getLastAccessDate() != null) {
+        		statement.setLong(9,sso_user.getLastAccessDate().getTime());	
         	}else {
         		statement.setLong(9,new Date().getTime());
+        	}
+        	
+        	if(sso_user.getMeta() != null) {
+        		statement.setLong(10,sso_user.getMeta().getCreated().getTime());
+        		statement.setLong(11,sso_user.getMeta().getLastModified().getTime());
+        	}else {
         		statement.setLong(10,new Date().getTime());
+        		statement.setLong(11,new Date().getTime());
         	}
         	
         	statement.execute();
@@ -118,7 +126,7 @@ System.out.println("sso user create >>> " + sso_user);
         		sso_user.setUserName(resultSet.getString("NAME"));
         		sso_user.seteMail(resultSet.getString("EMAIL"));
         		
-        		sso_user.setGroupCode(resultSet.getString("DIV_ID"));
+        		sso_user.setOrganization(resultSet.getString("DIV_ID"));
         		sso_user.setActive(resultSet.getBoolean("DISABLED"));
         		
         		sso_user.setMeta(new SCIMUserMeta());
@@ -335,24 +343,6 @@ System.out.println("sso user create >>> " + sso_user);
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void clearSystemUser(String systemId) throws SCIMException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public SCIMUser createSystemUser(String systemId, SCIMUser resource) throws SCIMException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-
-
-
-
 
 
 

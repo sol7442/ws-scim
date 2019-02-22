@@ -6,7 +6,6 @@ import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.resource.SCIMCode;
 import com.wowsanta.scim.resource.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
-import com.wowsanta.scim.resource.ServiceAdmin;
 import com.wowsanta.scim.schema.SCIMConstants;
 
 public class LoginService  {

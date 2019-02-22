@@ -1,5 +1,6 @@
-package com.wowsanta.scim.service.scim.v2;
+package com.wowsanta.scim.service.scim.v2.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.wowsanta.scim.exception.SCIMException;
@@ -28,6 +29,8 @@ import spark.Route;
 
 public class BlukService {
 
+	private UserService userService = new UserService();
+	
 	public static Route execute() {
 		return new Route() {
 			@Override
@@ -247,28 +250,28 @@ System.out.println("bulk result >>> " + result);
 		SCIMBulkOperation result = new SCIMBulkOperation(operation);
 		SCIMResource resource = operation.getData();
 
-		SCIMResourceRepository resource_repository = SCIMRepositoryManager.getInstance().getResourceRepository();
-		result.setLocation(SCIMLocationFactory.getInstance().get(resource));
-
-		try {
-			resource_repository.createSystemUser(systemId, (SCIMUser) resource);
-			result.setStatus(SCIMConstants.SatusConstants.SCUESS_CODE);
-
-		} catch (SCIMException e) {
-			if (e.getCode() == SCIMRepository.RESULT_DUPLICATE_ENTRY) {
-				result.setStatus(SCIMConstants.SatusConstants.uniqueness);
-				SCIMError error = new SCIMError();
-				error.setStatus(SCIMConstants.SatusConstants.uniqueness);
-				error.setScimType(SCIMDefinitions.ErrorType.uniqueness.toString());
-				error.setDetail(SCIMConstants.SatusConstants.uniqueness_DETAIL);
-
-				result.setResponse(error);
-			} else {
-				e.printStackTrace();
-			}
-		} finally {
-
-		}
+//		SCIMResourceRepository resource_repository = SCIMRepositoryManager.getInstance().getResourceRepository();
+//		result.setLocation(SCIMLocationFactory.getInstance().get(resource));
+//
+//		try {
+//			resource_repository.createSystemUser(systemId, (SCIMUser) resource);
+//			result.setStatus(SCIMConstants.SatusConstants.SCUESS_CODE);
+//
+//		} catch (SCIMException e) {
+//			if (e.getCode() == SCIMRepository.RESULT_DUPLICATE_ENTRY) {
+//				result.setStatus(SCIMConstants.SatusConstants.uniqueness);
+//				SCIMError error = new SCIMError();
+//				error.setStatus(SCIMConstants.SatusConstants.uniqueness);
+//				error.setScimType(SCIMDefinitions.ErrorType.uniqueness.toString());
+//				error.setDetail(SCIMConstants.SatusConstants.uniqueness_DETAIL);
+//
+//				result.setResponse(error);
+//			} else {
+//				e.printStackTrace();
+//			}
+//		} finally {
+//
+//		}
 
 		return result;
 	}
@@ -295,4 +298,55 @@ System.out.println("bulk result >>> " + result);
 		return result;
 	}
 
+
+	public List<SCIMBulkOperation> excute(List<SCIMBulkOperation> request_operations) throws SCIMException {
+		
+		SCIMResourceRepository resource_repository = SCIMRepositoryManager.getInstance().getResourceRepository();
+		
+		List<SCIMBulkOperation> operation_result_list = new ArrayList<SCIMBulkOperation>();
+		for (SCIMBulkOperation operation : request_operations) {
+			
+System.out.println("bulk-request-op : " + operation);
+			String path 			= operation.getPath();
+			String method 			= operation.getMethod();
+			
+			SCIMResource req_resource 	= operation.getData();
+			SCIMBulkOperation operation_result = new SCIMBulkOperation(operation);
+			
+			try {
+				SCIMResource res_resource = null;
+				if (path.equals(SCIMConstants.USER_ENDPOINT)) {
+					SCIMUser req_user  = (SCIMUser) req_resource;
+					if (SCIMDefinitions.MethodType.PUT.toString().equals(method)) {
+						res_resource = resource_repository.createUser(req_user);
+					} else if (SCIMDefinitions.MethodType.PATCH.toString().equals(method)) {
+						res_resource = resource_repository.updateUser(req_user);
+					} else if (SCIMDefinitions.MethodType.POST.toString().equals(method)) {
+						res_resource = resource_repository.updateUser(req_user);
+					} else if (SCIMDefinitions.MethodType.DELETE.toString().equals(method)) {
+						resource_repository.deleteUser(req_user.getId());
+					} else {
+						throw new SCIMException("",SCIMErrorCode.e500, SCIMErrorCode.SCIMType.invalidValue);
+					}
+				} else {
+	
+				}
+				operation_result.setStatus(SCIMConstants.SatusConstants.SCUESS_CODE);
+				if(res_resource != null) {
+					operation_result.setLocation(SCIMLocationFactory.getInstance().get(res_resource));
+				}
+			} catch (SCIMException e) {
+				e.printStackTrace();
+
+				operation_result.setStatus(e.getType().toString());
+				operation_result.setResponse(e.getError());
+				
+			}finally {
+				System.out.println("bulk result >>> " + operation_result);
+				operation_result_list.add(operation_result);
+			}
+		}
+		
+		return operation_result_list;
+	}
 }

@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.Test;
 import org.quartz.JobExecutionException;
 
-import com.ehyundai.gw.ReconciliationJob_GW;
+import com.ehyundai.gw.ConciliationJob_GW;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.resource.SCIMRepository;
 import com.wowsanta.scim.resource.SCIMRepositoryManager;
@@ -28,7 +28,7 @@ public class ReconciliationTest extends ServiceProviderTest {
 			// TODO Auto-generated catch block
 		}
 		
-		ReconciliationJob_GW recon_gw = new ReconciliationJob_GW();
+		ConciliationJob_GW recon_gw = new ConciliationJob_GW();
 		try {
 			recon_gw.execute(null);
 		} catch (JobExecutionException e) {

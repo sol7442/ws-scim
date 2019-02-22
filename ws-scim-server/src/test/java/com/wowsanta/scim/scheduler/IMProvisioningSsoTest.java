@@ -2,8 +2,8 @@ package com.wowsanta.scim.scheduler;
 
 import org.junit.Test;
 
-import com.ehyundai.gw.ReconciliationJob_GW;
-import com.ehyundai.gw.ReconciliationJob_GW_All;
+import com.ehyundai.gw.ConciliationJob_GW;
+import com.ehyundai.gw.ConciliationJob_GW;
 import com.ehyundai.im.ProvisioningJob_SSO;
 import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.exception.SCIMException;
@@ -32,8 +32,8 @@ public class IMProvisioningSsoTest {
 			test_user.setId("sys-scim-tester");
 			test_user.setUserName("SYSTEM-TESTER");
 			
-			ProvisioningJob_SSO job = new ProvisioningJob_SSO();
-			job.doExecute(sheduler, test_user);
+//			ProvisioningJob_SSO job = new ProvisioningJob_SSO();
+//			job.doExecute(sheduler, test_user);
 			
 		}catch (Exception e) {
 			e.printStackTrace();

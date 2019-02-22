@@ -1,7 +1,10 @@
 package com.wowsanta.scim.server;
 
 
+import com.wowsanta.scim.scheduler.SCIMJob;
 import com.wowsanta.scim.service.SCIMServiceServer;
+import com.wowsanta.scim.service.ServerController;
+import com.wowsanta.scim.service.SparkController;
 
 import spark.Spark;
 
@@ -13,6 +16,8 @@ public class SparkServer implements SCIMServiceServer{
 	private int idleTimeoutMills;
 	private String[] version;
 	private String staticFiles;
+	
+	private String controllerClass;
 	
 	public String getBaseURL() {
 		return baseURL;
@@ -63,6 +68,14 @@ public class SparkServer implements SCIMServiceServer{
 	public void stop() {
 		Spark.stop();
 	}
+	
+	public String getControllerClass() {
+		return controllerClass;
+	}
+	public void setControllerClass(String controllerClass) {
+		this.controllerClass = controllerClass;
+	}
+	
 	@Override
 	public void initialize() {
 		Spark.port(this.servicePort);
@@ -70,8 +83,22 @@ public class SparkServer implements SCIMServiceServer{
 		Spark.staticFiles.registerMimeType("ico", "ico");
 		Spark.staticFiles.externalLocation(this.staticFiles);
 
-		new SparkController().control();
+		new ServerController().control();
 		
+		
+//		try {
+//			SparkController controller =  (SparkController) Class.forName(this.controllerClass).newInstance();
+//			controller.control();
+//		} catch (InstantiationException e) {
+//			e.printStackTrace();
+//		} catch (IllegalAccessException e) {
+//			e.printStackTrace();
+//		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+//		}
+		
+		//new SparkController().control();
 	}
+	
 	
 }

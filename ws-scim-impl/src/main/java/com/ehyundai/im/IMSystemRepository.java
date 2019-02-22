@@ -28,6 +28,7 @@ import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.resource.SCIMSystemColumn;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
 import com.wowsanta.scim.scheduler.SCIMScheduler;
+import com.wowsanta.scim.scheduler.SCIMSchedulerDetailHistory;
 import com.wowsanta.scim.scheduler.SCIMSchedulerHistory;
 import com.wowsanta.scim.schema.SCIMConstants;
 import com.wowsanta.scim.schema.SCIMDefinitions;
@@ -117,10 +118,7 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
 	
 	@Override
 	public SCIMScheduler getSchdulerById(String schedulerId) throws SCIMException{
-		final String selectSQL = "SELECT schedulerId, schedulerName, schedulerDesc, schedulerType,"
-				+ "jobClass, triggerType, dayOfMonth, dayOfWeek, hourOfDay, minuteOfHour,"
-				+ "sourceSystemId, targetSystemId, lastExecuteDate "
-				+ " FROM SCIM_SCHEDULER WHERE schedulerId=? ";
+		final String selectSQL = "SELECT * FROM SCIM_SCHEDULER WHERE schedulerId=?";
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -134,23 +132,7 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
         	
         	resultSet = statement.executeQuery();
         	if(resultSet.next()) {
-        		scheduler = new SCIMScheduler();
-        		
-        		scheduler.setSchedulerId(	resultSet.getString("schedulerId"));
-        		scheduler.setSchedulerName(	resultSet.getString("schedulerName"));
-        		scheduler.setSchedulerDesc(	resultSet.getString("schedulerDesc"));
-        		scheduler.setSchedulerType(	resultSet.getString("schedulerType"));
-        		scheduler.setJobClass(		resultSet.getString("jobClass"));
-        		scheduler.setTriggerType(	resultSet.getString("triggerType"));
-        		scheduler.setDayOfMonth(	resultSet.getInt("dayOfMonth"));
-        		scheduler.setDayOfWeek(		resultSet.getInt("dayOfWeek"));
-        		scheduler.setHourOfDay(		resultSet.getInt("hourOfDay"));
-        		scheduler.setMinuteOfHour(	resultSet.getInt("minuteOfHour"));
-        		
-        		scheduler.setSourceSystemId(resultSet.getString("sourceSystemId"));
-        		scheduler.setTargetSystemId(resultSet.getString("targetSystemId"));
-        		
-        		scheduler.setLastExecuteDate(toJavaDate (resultSet.getTimestamp("lastExecuteDate")));
+        		scheduler = newScheduler(resultSet);
         	}
 		} catch (SQLException e) {
 			throw new SCIMException(selectSQL, e);
@@ -159,6 +141,86 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
 		}
 		return scheduler;
 	};
+	
+	private SCIMScheduler newScheduler(ResultSet resultSet) {
+		SCIMScheduler scheduler = new SCIMScheduler();
+		try {
+		
+			scheduler.setSchedulerId(	resultSet.getString("schedulerId"));
+			scheduler.setSchedulerName(	resultSet.getString("schedulerName"));
+			scheduler.setSchedulerDesc(	resultSet.getString("schedulerDesc"));
+			scheduler.setSchedulerType(	resultSet.getString("schedulerType"));
+			scheduler.setJobClass(		resultSet.getString("jobClass"));
+			scheduler.setTriggerType(	resultSet.getString("triggerType"));
+			scheduler.setDayOfMonth(	resultSet.getInt("dayOfMonth"));
+			scheduler.setDayOfWeek(		resultSet.getInt("dayOfWeek"));
+			scheduler.setHourOfDay(		resultSet.getInt("hourOfDay"));
+			scheduler.setMinuteOfHour(	resultSet.getInt("minuteOfHour"));
+			scheduler.setExcuteSystemId(resultSet.getString("excuteSystemId"));
+			scheduler.setSourceSystemId(resultSet.getString("sourceSystemId"));
+			scheduler.setTargetSystemId(resultSet.getString("targetSystemId"));
+			
+			scheduler.setLastExecuteDate(toJavaDate (resultSet.getTimestamp("lastExecuteDate")));
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+			new SCIMException(e.getMessage(), e);
+		}
+		return scheduler;
+	}
+
+	@Override
+	public List<SCIMSchedulerHistory> getSystemSchedulerHistory(String systemId)throws SCIMException{
+		final String selectSQL = " SELECT DISTINCT H.workId, H.reqPost, H.reqPut, H.reqPatch, H.reqDelete, "
+				+ " H.resPost, H.resPut, H.resPatch, H.resDelete, "
+				+ " H.workDate, S.schedulerDesc , A.adminId "
+				+ " FROM SCIM_SCHEDULER_HISTORY H , SCIM_SCHEDULER S, SCIM_AUDIT A "
+				+ " WHERE H.schedulerId=S.schedulerId AND H.workId = A.workId "
+				+ " AND S.sourceSystemId = ?";
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
+
+	    List<SCIMSchedulerHistory> history_list = new ArrayList<SCIMSchedulerHistory>();
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(selectSQL);
+        	
+        	statement.setString(1, systemId);
+        	
+        	resultSet = statement.executeQuery();
+        	while(resultSet.next()) {
+        		SCIMSchedulerDetailHistory scheduler_history = new SCIMSchedulerDetailHistory();
+        		
+        		//scheduler_history.setSchedulerId(	resultSet.getString("schedulerId"));
+        		
+        		scheduler_history.setWorkId(	resultSet.getString("workId"));
+        		scheduler_history.setReqPut(	resultSet.getInt("reqPut"));
+        		scheduler_history.setReqPost(	resultSet.getInt("reqPost"));
+        		scheduler_history.setReqPatch(	resultSet.getInt("reqPatch"));
+        		scheduler_history.setReqDelete(	resultSet.getInt("reqDelete"));
+        		
+        		scheduler_history.setResPut(	resultSet.getInt("resPut"));
+        		scheduler_history.setResPost(	resultSet.getInt("resPost"));
+        		scheduler_history.setResPatch(	resultSet.getInt("resPatch"));
+        		scheduler_history.setResDelete(	resultSet.getInt("resDelete"));
+        		
+        		scheduler_history.setWorkDate( 	toJavaDate (resultSet.getTimestamp("workDate")));
+        		
+        		scheduler_history.setSchedulerDesc(resultSet.getString("schedulerDesc"));
+        		scheduler_history.setWorkId(resultSet.getString("workId"));
+        		
+        		history_list.add(scheduler_history);
+        	}
+		} catch (SQLException e) {
+			throw new SCIMException(selectSQL, e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+		return history_list;
+		
+	}
 	
 	@Override
 	public List<SCIMSchedulerHistory> getSchedulerHistory(String schedulerId)throws SCIMException{
@@ -207,10 +269,8 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
 	
 	@Override
 	public List<SCIMScheduler> getSchdulerBySystemId(String systemId)throws SCIMException {
-		final String selectSQL = "SELECT schedulerId, schedulerName, schedulerDesc, schedulerType,"
-				+ "jobClass, triggerType, dayOfMonth, dayOfWeek, hourOfDay, minuteOfHour,"
-				+ "sourceSystemId, targetSystemId, lastExecuteDate "
-				+ " FROM SCIM_SCHEDULER WHERE targetSystemId=? or sourceSystemId=?";
+		
+		final String selectSQL = "SELECT * FROM SCIM_SCHEDULER WHERE targetSystemId=? or sourceSystemId=?";
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -226,25 +286,7 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
         	
         	resultSet = statement.executeQuery();
         	while(resultSet.next()) {
-        		SCIMScheduler scheduler = new SCIMScheduler();
-        		
-        		scheduler.setSchedulerId(	resultSet.getString("schedulerId"));
-        		scheduler.setSchedulerName(	resultSet.getString("schedulerName"));
-        		scheduler.setSchedulerDesc(	resultSet.getString("schedulerDesc"));
-        		scheduler.setSchedulerType(	resultSet.getString("schedulerType"));
-        		scheduler.setJobClass(		resultSet.getString("jobClass"));
-        		scheduler.setTriggerType(	resultSet.getString("triggerType"));
-        		scheduler.setDayOfMonth(	resultSet.getInt("dayOfMonth"));
-        		scheduler.setDayOfWeek(		resultSet.getInt("dayOfWeek"));
-        		scheduler.setHourOfDay(		resultSet.getInt("hourOfDay"));
-        		scheduler.setMinuteOfHour(	resultSet.getInt("minuteOfHour"));
-        		
-        		scheduler.setSourceSystemId(resultSet.getString("sourceSystemId"));
-        		scheduler.setTargetSystemId(resultSet.getString("targetSystemId"));
-        		
-        		scheduler.setLastExecuteDate(toJavaDate (resultSet.getTimestamp("lastExecuteDate")));
-        		
-        		
+        		SCIMScheduler scheduler = newScheduler(resultSet);
         		scheduler_list.add(scheduler);
         	}
 		} catch (SQLException e) {
@@ -257,10 +299,7 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
 	
 	@Override
 	public List<SCIMScheduler> getSchdulerAll() throws SCIMException{
-		final String selectSQL = "SELECT schedulerId, schedulerName, schedulerDesc, schedulerType,"
-				+ "jobClass, triggerType, dayOfMonth, dayOfWeek, hourOfDay, minuteOfHour,"
-				+ "sourceSystemId, targetSystemId, lastExecuteDate "
-				+ " FROM SCIM_SCHEDULER";
+		final String selectSQL = "SELECT * FROM SCIM_SCHEDULER";
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -272,25 +311,7 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
         	statement  = connection.prepareStatement(selectSQL);
         	resultSet = statement.executeQuery();
         	while(resultSet.next()) {
-        		SCIMScheduler scheduler = new SCIMScheduler();
-        		
-        		scheduler.setSchedulerId(	resultSet.getString("schedulerId"));
-        		scheduler.setSchedulerName(	resultSet.getString("schedulerName"));
-        		scheduler.setSchedulerDesc(	resultSet.getString("schedulerDesc"));
-        		scheduler.setSchedulerType(	resultSet.getString("schedulerType"));
-        		scheduler.setJobClass(		resultSet.getString("jobClass"));
-        		scheduler.setTriggerType(	resultSet.getString("triggerType"));
-        		scheduler.setDayOfMonth(	resultSet.getInt("dayOfMonth"));
-        		scheduler.setDayOfWeek(		resultSet.getInt("dayOfWeek"));
-        		scheduler.setHourOfDay(		resultSet.getInt("hourOfDay"));
-        		scheduler.setMinuteOfHour(	resultSet.getInt("minuteOfHour"));
-        		
-        		scheduler.setSourceSystemId(resultSet.getString("sourceSystemId"));
-        		scheduler.setTargetSystemId(resultSet.getString("targetSystemId"));
-        		
-        		scheduler.setLastExecuteDate(toJavaDate (resultSet.getTimestamp("lastExecuteDate")));
-        		
-        		
+        		SCIMScheduler scheduler = newScheduler(resultSet);
         		scheduler_list.add(scheduler);
         	}
 		} catch (SQLException e) {

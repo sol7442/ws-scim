@@ -27,16 +27,16 @@ public class RepositoryUtil {
 
 			//user.setCompanyCode("현대백화점");			
 			
-			user.setCompanyCode("현대백화점");			
+			user.setOrganization("현대백화점");			
 			user.setDivision(Random.group());
-			
-			//user.setDepartment(Random.department());
+			user.setDepartment(Random.department());
 			
 			Date join_date   = Random.beforeYears(1);
 			Date retire_date = null;
 			Date create_date = join_date;//Random.beforeYears(1);
 			Date modify_date = null;
 			
+			user.setLastAccessDate(Random.date(join_date, new Date()));
 			user.setMeta(new SCIMUserMeta());
 			if (user.isActive()) {
 				if(Random.yn_boolean(10)) {	// 신입사원 비율

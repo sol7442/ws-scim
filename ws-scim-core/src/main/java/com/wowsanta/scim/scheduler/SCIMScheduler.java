@@ -6,6 +6,7 @@ import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
 import static org.quartz.JobBuilder.newJob;
@@ -13,6 +14,8 @@ import static org.quartz.TriggerBuilder.newTrigger;
 
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.json.AbstractJsonObject;
+import com.wowsanta.scim.obj.SCIMUser;
+import com.wowsanta.scim.obj.SCIMUserMeta;
 
 public class SCIMScheduler extends AbstractJsonObject {
 	
@@ -30,6 +33,7 @@ public class SCIMScheduler extends AbstractJsonObject {
 	private int dayOfWeek;
 	private int hourOfDay;
 	private int minuteOfHour;
+	private String excuteSystemId;
 	private String sourceSystemId;
 	private String targetSystemId;
 	private Date lastExecuteDate;
@@ -145,7 +149,11 @@ public class SCIMScheduler extends AbstractJsonObject {
 			Class job_cls = Class.forName(this.jobClass);
 			JobDetail job_detail = newJob(job_cls).build();
 			
+			SCIMUser scheduler_worker = new SCIMUser();
+			scheduler_worker.setId("sys-scim-scheduler");
+			
 			job_detail.getJobDataMap().put("schedulerInfo", this);
+			job_detail.getJobDataMap().put("worker", scheduler_worker);
 			
 			this.scheduler = StdSchedulerFactory.getDefaultScheduler();
 			this.scheduler.start();
@@ -162,6 +170,31 @@ public class SCIMScheduler extends AbstractJsonObject {
 			this.scheduler.shutdown();
 		} catch (SchedulerException e) {
 			throw new SCIMException("Scheduler Shutdown Failed",e);
+		}
+	}
+	public String getExcuteSystemId() {
+		return excuteSystemId;
+	}
+	public void setExcuteSystemId(String excuteSystemId) {
+		this.excuteSystemId = excuteSystemId;
+	}
+	public void startNow(SCIMUser login_user) throws SCIMException {
+		
+		try {
+			Class job_cls = Class.forName(this.jobClass);
+			JobDetail job_detail = newJob(job_cls).build();
+			
+			job_detail.getJobDataMap().put("schedulerInfo", this);
+			job_detail.getJobDataMap().put("worker", login_user);
+			
+			this.scheduler = StdSchedulerFactory.getDefaultScheduler();
+			this.scheduler.start();
+			
+			Trigger trigger = newTrigger().startNow().build();
+			this.scheduler.scheduleJob(job_detail,trigger);
+			
+		}catch (Exception e) {
+			throw new SCIMException("Scheduler build Failed ",e);
 		}
 	}
 }

@@ -46,17 +46,17 @@ public class SsoRepositoryTest {
 			
 			Date from = cal.getTime();
 			
-			List<SCIMUser> user_list = res_repo.getUsers(from, to);
-			for (SCIMUser scimUser : user_list) {
-				
-				User user_0 = (User)scimUser;
-				user_0.setActive(Random.yn_boolean(50));
-				
-				user_0.setLastAccessDate(Random.date(user_0.getMeta().getCreated(), new Date()));
-				
-				System.out.println("UPDATE : " + user_0.isActive());
-				res_repo.updateUser(user_0);
-			}
+//			List<SCIMUser> user_list = res_repo.getUsers(from, to);
+//			for (SCIMUser scimUser : user_list) {
+//				
+//				User user_0 = (User)scimUser;
+//				user_0.setActive(Random.yn_boolean(50));
+//				
+//				user_0.setLastAccessDate(Random.date(user_0.getMeta().getCreated(), new Date()));
+//				
+//				System.out.println("UPDATE : " + user_0.isActive());
+//				res_repo.updateUser(user_0);
+//			}
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -77,11 +77,11 @@ public class SsoRepositoryTest {
 			
 			Date from = cal.getTime();
 			
-			List<SCIMUser> user_list = res_repo.getUsers(from, to);
-			System.out.println("user_list["+user_list.size()+"]");
-			for (SCIMUser scimUser : user_list) {
-				System.out.println(scimUser.toString());
-			}
+//			List<SCIMUser> user_list = res_repo.getUsers(from, to);
+//			System.out.println("user_list["+user_list.size()+"]");
+//			for (SCIMUser scimUser : user_list) {
+//				System.out.println(scimUser.toString());
+//			}
 			
 		}catch (Exception e) {
 			e.printStackTrace();

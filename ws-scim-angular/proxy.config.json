@@ -24,5 +24,10 @@
       "target": "http://localhost:5000/",
       "secure": false,
       "logLevel": "debug"
+    },
+    "/account/*": {
+      "target": "http://localhost:5000/",
+      "secure": false,
+      "logLevel": "debug"
     }
 }

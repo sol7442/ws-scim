@@ -1,4 +1,4 @@
-package com.ehyundai.im;
+package com.ehyundai.object;
 
 import java.util.List;
 

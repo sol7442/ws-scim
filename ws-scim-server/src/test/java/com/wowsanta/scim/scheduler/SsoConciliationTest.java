@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.ehyundai.gw.ReconciliationJob_GW;
-import com.ehyundai.gw.ReconciliationJob_GW_All;
-import com.ehyundai.sso.ConsiliationJob_SSO;
+import com.ehyundai.gw.ConciliationJob_GW;
+import com.ehyundai.gw.ConciliationJob_GW;
+import com.ehyundai.sso.ConciliationJob_SSO;
 import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.SCIMUser;
@@ -35,8 +35,8 @@ public class SsoConciliationTest {
 			test_user.setUserName("SYSTEM-TESTER");
 			
 			
-			ConsiliationJob_SSO job =  (ConsiliationJob_SSO) Class.forName(scheduler.getJobClass()).newInstance();
-			job.doExecute(scheduler, test_user);
+//			ConciliationJob_SSO job =  (ConciliationJob_SSO) Class.forName(scheduler.getJobClass()).newInstance();
+//			job.doExecute(scheduler, test_user);
 			
 		}catch (Exception e) {
 			e.printStackTrace();

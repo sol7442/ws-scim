@@ -16,6 +16,7 @@ public class SCIMErrorCode {
 	public static final SCIMError e500 = new SCIMError("412","Internal Server Error");
 	public static final SCIMError e501 = new SCIMError("412","Not Implemented");
 	
+	
 	public static enum SCIMType{
 		invalidSyntax,invalidFilter,tooMany,uniqueness,mutability,invalidPath,noTarget,invalidValue,invalidVers,sensitive,
 		serverError,

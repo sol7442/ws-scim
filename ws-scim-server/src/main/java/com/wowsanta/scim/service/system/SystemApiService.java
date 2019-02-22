@@ -8,7 +8,7 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.plaf.synth.SynthSpinnerUI;
 
-import com.ehyundai.sso.ConsiliationJob_SSO;
+import com.ehyundai.sso.ConciliationJob_SSO;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -16,6 +16,7 @@ import com.google.gson.JsonParser;
 import com.wowsanta.scim.SCIMSystemInfo;
 import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.client.RESTClient;
+import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.message.SCIMBulkResponse;
 import com.wowsanta.scim.obj.SCIMSystem;
 import com.wowsanta.scim.obj.SCIMUser;
@@ -26,6 +27,7 @@ import com.wowsanta.scim.scheduler.SCIMJob;
 import com.wowsanta.scim.scheduler.SCIMScheduler;
 import com.wowsanta.scim.schema.SCIMConstants;
 import com.wowsanta.scim.schema.SCIMErrorCode;
+import com.wowsanta.scim.schema.SCIMScuessCode;
 
 import spark.Request;
 import spark.Response;
@@ -112,55 +114,28 @@ public class SystemApiService {
 			
 		};
 	}
-//	public static Route getSystemScheduler2() {
-//		return new Route() {
-//			@Override
-//			public Object handle(Request request, Response response) throws Exception {
-//				String systemId = request.params(":id");
-//				
-//				System.out.println(">>> : " + systemId);
-//				
-//				SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
-//				SCIMSystem target_system = system_repository.getSystem(systemId);
-//				System.out.println(">>> : " + target_system);
-//				if(target_system == null) {
-//					return system_repository.getSchdulerAll();
-//				}else {
-//					
-//					String call_url = target_system.getSystemUrl() + "/scheduler/";
-//					
-//					List<SCIMScheduler> scheduler_list = new ArrayList<SCIMScheduler>();
-//					SCIMUser user = request.session().attribute("loginUser");
-//					try {
-//					
-//						RESTClient client = new RESTClient(user);
-//						String call_reslut = client.call(call_url);
-//						try {
-//							JsonParser parser = new JsonParser();
-//							JsonArray json_array = parser.parse(call_reslut).getAsJsonArray();
-//							for (JsonElement jsonElement : json_array) {
-//								JsonObject object = jsonElement.getAsJsonObject();
-//								SCIMScheduler schuduler = SCIMScheduler.load(object,SCIMScheduler.class);
-//								scheduler_list.add(schuduler);
-//							}
-//						}catch(Exception e1) {
-//							System.err.println(">>>>" + e1.getMessage());
-//						}
-//						return scheduler_list;
-//					}catch(Exception e) {
-//						System.err.println(">>>" +  e.getMessage());
-//						return scheduler_list;
-//					}
-//				}
-//			}
-//		};
-//	}
-
-	public static Route runScheduler() {
+	
+	public static Route runRemoteScheduler() {
 		return new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
-				return SCIMErrorCode.e501;
+			
+//				JsonObject request_json = json_parse(request.body());
+//				String schedulerId = request_json.get("schedulerId").getAsString();
+//
+//				System.out.println("remote-schedulerId : " + schedulerId);
+//				
+//				SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
+//				SCIMScheduler scheduler 	= system_repository.getSchdulerById(schedulerId);
+//				
+//				SCIMUser login_user = request.session().attribute("loginUser");
+//				
+//				System.out.println("remote-schedulerId run >>: " + schedulerId);
+//				SCIMJob job =  (SCIMJob) Class.forName(scheduler.getJobClass()).newInstance();
+//				job.doExecute(scheduler, login_user, false);
+//				System.out.println("remote-schedulerId run <<: " + schedulerId);
+				
+				return SCIMErrorCode.e501;//"OK";
 			}
 		};
 	}
@@ -168,37 +143,73 @@ public class SystemApiService {
 		return new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
-				JsonObject request_json = json_parse(request.body());
-				String schedulerId = request_json.get("schedulerId").getAsString();
-				
-				System.out.println("schedulerId : ==>> " + schedulerId);
-				
-				SCIMSystemInfo local_system_info = SCIMSystemManager.getInstance().getServiceProvider().getSystemInfo();
-				SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
-				SCIMScheduler scheduler 	= system_repository.getSchdulerById(schedulerId);
-				
-				
-				SCIMUser login_user = request.session().attribute("loginUser");
-				
-				System.out.println("is local system  : " + local_system_info.getSystemId().equals(scheduler.getSourceSystemId()) );
-				
-				if( local_system_info.getSystemId().equals(scheduler.getSourceSystemId())) {
-					SCIMJob job =  (SCIMJob) Class.forName(scheduler.getJobClass()).newInstance();
-					job.doExecute(scheduler, login_user);
-					
-				}else {
-					String run_url = local_system_info.getSystemUrl() + "/scheduler/run/" + schedulerId;
-					RESTClient client = new RESTClient(login_user);
-					
-					JsonObject params = new JsonObject();
-					params.addProperty("schedulerId",schedulerId);
-					String call_reslut = client.run(run_url, params);
-					
-					System.out.println(call_reslut);
-				}
-				
-				return "OK";
+				return SCIMErrorCode.e501;//"OK";
 			}
+//				JsonObject request_json = json_parse(request.body());
+//				String schedulerId = request_json.get("schedulerId").getAsString();
+//				
+//				SCIMLogger.proc("system scheduler call : {}",schedulerId);
+//				
+//				SCIMSystemInfo local_system_info = SCIMSystemManager.getInstance().getServiceProvider().getSystemInfo();
+//				SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
+//				SCIMScheduler scheduler 	= system_repository.getSchdulerById(schedulerId);
+//				
+//				SCIMUser login_user = request.session().attribute("loginUser");
+//				
+//				SCIMLogger.proc("system scheduler call : {}",scheduler);
+//				
+////				boolean wait_return = true;
+////				if(wait_return) {
+////					return SCIMScuessCode.OK;
+////				}
+//				
+//				System.out.println("local system id : " + local_system_info.getSystemId());
+//				System.out.println("excute system id : " + scheduler.getExcuteSystemId());
+//				
+//				if( local_system_info.getSystemId().equals(scheduler.getExcuteSystemId())) {
+//			
+//					try {
+//						SCIMLogger.proc("local scheduler call : {}", schedulerId);
+//						
+//						SCIMJob job =  (SCIMJob) Class.forName(scheduler.getJobClass()).newInstance();
+//
+//						SCIMLogger.proc("local scheduler class : start {}", job.getClass().getCanonicalName());						
+//						
+//						job.doExecute(scheduler, login_user, false);
+//						
+//						SCIMLogger.proc("local scheduler class : end {}", job.getClass().getCanonicalName());
+//						return SCIMScuessCode.OK;
+//						
+//					}catch (Exception e) {
+//						return SCIMErrorCode.e501;
+//					}
+//				}else {
+//					try {
+//
+//						
+//						SCIMSystem remote_system = system_repository.getSystemById(scheduler.getSourceSystemId());
+//						String run_url = remote_system.getSystemUrl() + "/scheduler/run/remote";
+//						
+//						SCIMLogger.proc("remote scheduler call : {}",run_url);
+//						
+//						RESTClient client = new RESTClient(login_user);
+//						JsonObject params = new JsonObject();
+//						params.addProperty("schedulerId",schedulerId);
+//						
+//						System.out.println("remote-call -> schedulerId : " + schedulerId);
+//						String call_reslut = client.run(run_url, params);
+//						
+//						System.out.println(call_reslut);
+//						
+//						SCIMLogger.proc("system scheduler result : {}", "OK");
+//						
+//						return SCIMScuessCode.OK;
+//					}catch(Exception e) {
+//		System.out.println(">>>>eexcep" + e.getLocalizedMessage());
+//						return SCIMErrorCode.e404;
+//					}
+//				}
+//			}
 		};
 	}
 
@@ -224,9 +235,4 @@ public class SystemApiService {
 			}
 		};
 	}
-
-
-
-	
-
 }

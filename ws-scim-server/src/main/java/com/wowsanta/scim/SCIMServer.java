@@ -72,7 +72,7 @@ public class SCIMServer  implements Daemon {
 		SCIMRepositoryManager.getInstance().initailze();
 		
 		SCIMSystemManager.getInstance().loadSchdulerManager();
-		//SCIMSchedulerManager.getInstance().initialize();
+		SCIMSchedulerManager.getInstance().initialize();
 	}
 	@Override
 	public void start() throws Exception {

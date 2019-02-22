@@ -46,47 +46,47 @@ public class SchedulerTest {
 	
 	// @Test
 	public void create_scheduler_manager_config_test() {
-		SCIMScheduler scheduler1 = new SCIMScheduler();
-
-		scheduler1.setName("TestScheduler1");
-		scheduler1.setDescription("Scheduler 1 Test");
-
-		SCIMDayTrigger trigger = new SCIMDayTrigger();
-		trigger.setHour(15);
-		trigger.setMinute(10);
-		scheduler1.setTrigger(trigger);
-
-		SampleSchedulerJob job = new SampleSchedulerJob();
-		scheduler1.setJob(job);
-
-		scheduler1.addSubJob(SampleSubJob1.class.getCanonicalName());
-		scheduler1.addSubJob(SampleSubJob2.class.getCanonicalName());
-
-		SCIMScheduler scheduler2 = new SCIMScheduler();
-
-		scheduler2.setName("TestScheduler2");
-		scheduler2.setDescription("Scheduler 2 Test");
-
-		SCIMDayTrigger trigger2 = new SCIMDayTrigger();
-		trigger2.setHour(15);
-		trigger2.setMinute(10);
-		scheduler2.setTrigger(trigger2);
-
-		SampleSchedulerJob job2 = new SampleSchedulerJob();
-		scheduler2.setJob(job2);
-
-		scheduler2.addSubJob(SampleSubJob1.class.getCanonicalName());
-		scheduler2.addSubJob(SampleSubJob2.class.getCanonicalName());
-
-		SCIMSchedulerManager scheduler_mgr = SCIMSchedulerManager.getInstance();
-		scheduler_mgr.addScheduler(scheduler1);
-		scheduler_mgr.addScheduler(scheduler2);
-
-		try {
-			scheduler_mgr.save(config_file);
-		} catch (SCIMException e) {
-			e.printStackTrace();
-		}
+//		SCIMScheduler scheduler1 = new SCIMScheduler();
+//
+//		scheduler1.setName("TestScheduler1");
+//		scheduler1.setDescription("Scheduler 1 Test");
+//
+//		SCIMDayTrigger trigger = new SCIMDayTrigger();
+//		trigger.setHour(15);
+//		trigger.setMinute(10);
+//		scheduler1.setTrigger(trigger);
+//
+//		SampleSchedulerJob job = new SampleSchedulerJob();
+//		scheduler1.setJob(job);
+//
+//		scheduler1.addSubJob(SampleSubJob1.class.getCanonicalName());
+//		scheduler1.addSubJob(SampleSubJob2.class.getCanonicalName());
+//
+//		SCIMScheduler scheduler2 = new SCIMScheduler();
+//
+//		scheduler2.setName("TestScheduler2");
+//		scheduler2.setDescription("Scheduler 2 Test");
+//
+//		SCIMDayTrigger trigger2 = new SCIMDayTrigger();
+//		trigger2.setHour(15);
+//		trigger2.setMinute(10);
+//		scheduler2.setTrigger(trigger2);
+//
+//		SampleSchedulerJob job2 = new SampleSchedulerJob();
+//		scheduler2.setJob(job2);
+//
+//		scheduler2.addSubJob(SampleSubJob1.class.getCanonicalName());
+//		scheduler2.addSubJob(SampleSubJob2.class.getCanonicalName());
+//
+//		SCIMSchedulerManager scheduler_mgr = SCIMSchedulerManager.getInstance();
+//		scheduler_mgr.addScheduler(scheduler1);
+//		scheduler_mgr.addScheduler(scheduler2);
+//
+//		try {
+//			scheduler_mgr.save(config_file);
+//		} catch (SCIMException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	// @Test

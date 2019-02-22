@@ -148,43 +148,7 @@ public class GWSystemRepository extends AbstractRDBRepository implements SCIMSys
 	@Override
 	public void addOperationResult(String workId, SCIMUser user, String source, String direct, SCIMOperation operation,
 			SCIMOperation result) throws SCIMException {
-		final String insertSQL = "INSERT INTO SCIM_AUDIT (workId, adminId,userId,sourceSystem,directSystem,method,result,detail,workDate)"
-				+ " VALUES ("
-				+ "?,?,?,?,?,"
-				+ "?,?,?,?)";
-		
-		Connection connection = null;
-		PreparedStatement statement = null;
-	    ResultSet resultSet = null;        
-	    try {
-	    	connection = getConnection();
-        	statement  = connection.prepareStatement(insertSQL);
-
-        	statement.setString(1, workId);
-        	statement.setString(2, user.getId());
-        	statement.setString(3, operation.getData().getId());
-        	statement.setString(4, source);
-        	statement.setString(5, direct);
-        	statement.setString(6, operation.getMethod());
-        	statement.setString(7, result.getStatus());
-        	if(result.getResponse() != null) {
-        		statement.setString(8, result.getResponse().getDetail());
-        	}else {
-        		statement.setString(8, null);
-        	}
-        	statement.setTimestamp(9, toSqlTimestamp(new Date()));
-        	
-        	statement.execute();
-	    } catch (SQLException e) {
-	    	if (e instanceof SQLIntegrityConstraintViolationException) {
-				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
-			}else {
-				throw new SCIMException("ADD AUDIT DATA FAILED : " + insertSQL , e);
-			}
-		}finally {
-	    	DBCP.close(connection, statement, resultSet);
-	    }
-		
+		//
 	}
 
 	@Override
@@ -215,7 +179,46 @@ public class GWSystemRepository extends AbstractRDBRepository implements SCIMSys
 
 	@Override
 	public SCIMScheduler getSchdulerById(String schedulerId) throws SCIMException {
-		// TODO Auto-generated method stub
-		return null;
+		final String selectSQL = "SELECT schedulerId, schedulerName, schedulerDesc, schedulerType,"
+				+ "jobClass, triggerType, dayOfMonth, dayOfWeek, hourOfDay, minuteOfHour,"
+				+ "sourceSystemId, targetSystemId, lastExecuteDate "
+				+ " FROM SCIM_SCHEDULER WHERE schedulerId=? ";
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
+
+	    SCIMScheduler scheduler =  null;
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(selectSQL);
+        	statement.setString(1, schedulerId);
+        	
+        	resultSet = statement.executeQuery();
+        	if(resultSet.next()) {
+        		scheduler = new SCIMScheduler();
+        		
+        		scheduler.setSchedulerId(	resultSet.getString("schedulerId"));
+        		scheduler.setSchedulerName(	resultSet.getString("schedulerName"));
+        		scheduler.setSchedulerDesc(	resultSet.getString("schedulerDesc"));
+        		scheduler.setSchedulerType(	resultSet.getString("schedulerType"));
+        		scheduler.setJobClass(		resultSet.getString("jobClass"));
+        		scheduler.setTriggerType(	resultSet.getString("triggerType"));
+        		scheduler.setDayOfMonth(	resultSet.getInt("dayOfMonth"));
+        		scheduler.setDayOfWeek(		resultSet.getInt("dayOfWeek"));
+        		scheduler.setHourOfDay(		resultSet.getInt("hourOfDay"));
+        		scheduler.setMinuteOfHour(	resultSet.getInt("minuteOfHour"));
+        		
+        		scheduler.setSourceSystemId(resultSet.getString("sourceSystemId"));
+        		scheduler.setTargetSystemId(resultSet.getString("targetSystemId"));
+        		
+        		scheduler.setLastExecuteDate(toDate(resultSet.getString("lastExecuteDate")));
+        	}
+		} catch (SQLException e) {
+			throw new SCIMException(selectSQL, e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+		return scheduler;
 	}
 }

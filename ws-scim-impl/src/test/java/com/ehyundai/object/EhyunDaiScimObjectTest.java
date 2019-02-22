@@ -1,6 +1,8 @@
 package com.ehyundai.object;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -8,6 +10,15 @@ import com.wowsanta.scim.obj.SCIMUserMeta;
 
 public class EhyunDaiScimObjectTest {
 
+	@Test
+	public void user_profile_test() {
+		Map<String,String> profile = new HashMap<String,String>();
+		
+		profile.put("value",null);
+		System.out.println(profile);
+		System.out.println(profile.get("value"));
+		
+	}
 	//@Test
 	public void user_object_test() {
 		System.out.println("create user object and parse >>>>>>>>>>>>>>>>>>>>>>>>>>");

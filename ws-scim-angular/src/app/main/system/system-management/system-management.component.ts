@@ -29,10 +29,6 @@ export class SystemManagementComponent implements OnInit {
   ) { 
     this.displayDialog = false;
 
-    // this.tableMaps = [
-    //   {sysColumn:'NAME', imColumn:'userName', hrColumn :'displayName'},
-    //   {'sysColumn':'','imColumn':'','hrColumn':''}
-    // ]
   }
 
   ngOnInit() {
@@ -42,6 +38,8 @@ export class SystemManagementComponent implements OnInit {
       this.systems = data;
       this.selectedSystem = this.systems[0];
       console.log("systems : ", this.systems);
+
+      this.onSelect({value:this.selectedSystem});
     },error =>{
         console.log("login-error : ", error);
     });
@@ -105,7 +103,10 @@ export class SystemManagementComponent implements OnInit {
       this.selectedScheduler.schedulerId)
     .pipe(first())
     .subscribe( data =>{
-      console.log("runScheduler : ", data);
+      console.log("result : ", data.status)
+      if(data.status != "200")      {
+        console.log("error : " , data.detail)
+      }
       
     },error =>{
         console.log("login-error : ", error);

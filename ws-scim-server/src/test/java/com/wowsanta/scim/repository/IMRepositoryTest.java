@@ -40,16 +40,16 @@ public class IMRepositoryTest {
 			
 			SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
 			
-			List<SCIMUser> user_list = res_repo.getAllActiveUsers();
-			System.out.println("user_list["+user_list.size()+"]");
-			if(user_list.size() > 0) {
-				SCIMUser user_0 = user_list.get(0);
-				user_0.setActive(!user_0.isActive());
-				
-				System.out.println("UPDATE : " + user_0.isActive());
-				
-				res_repo.updateUser(user_0);
-			}
+//			List<SCIMUser> user_list = res_repo.getAllActiveUsers();
+//			System.out.println("user_list["+user_list.size()+"]");
+//			if(user_list.size() > 0) {
+//				SCIMUser user_0 = user_list.get(0);
+//				user_0.setActive(!user_0.isActive());
+//				
+//				System.out.println("UPDATE : " + user_0.isActive());
+//				
+//				res_repo.updateUser(user_0);
+//			}
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -64,11 +64,11 @@ public class IMRepositoryTest {
 			
 			SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
 			
-			List<SCIMUser> user_list = res_repo.getAllActiveUsers();
-			System.out.println("user_list["+user_list.size()+"]");
-			for (SCIMUser scimUser : user_list) {
-				System.out.println(scimUser.toString());
-			}
+//			List<SCIMUser> user_list = res_repo.getAllActiveUsers();
+//			System.out.println("user_list["+user_list.size()+"]");
+//			for (SCIMUser scimUser : user_list) {
+//				System.out.println(scimUser.toString());
+//			}
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -87,11 +87,11 @@ public class IMRepositoryTest {
 			cal.add(Calendar.DATE, -365*10);	// 10 년간의 데이터 모두
 			Date from = cal.getTime();
 			
-			List<SCIMUser> user_list = res_repo.getUsers(from, to);
-			System.out.println("user_list["+user_list.size()+"]");
-			for (SCIMUser scimUser : user_list) {
-				System.out.println(scimUser.toString());
-			}
+//			List<SCIMUser> user_list = res_repo.getUsers(from, to);
+//			System.out.println("user_list["+user_list.size()+"]");
+//			for (SCIMUser scimUser : user_list) {
+//				System.out.println(scimUser.toString());
+//			}
 			
 		}catch (Exception e) {
 			e.printStackTrace();

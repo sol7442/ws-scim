@@ -29,26 +29,7 @@ export class HrsystemManagementComponent implements OnInit {
     private scimApiService:ScimApiService,
   ) { 
     
-    this.displayDialog = false;
-
-    let sys_col1= new SystemColumn();
-        sys_col1.columnName    = "ID";
-        sys_col1.displayName = "사용자 ID";
-        sys_col1.mappingColumn = "userId"
-        
-    let sys_col2= new SystemColumn();
-        sys_col2.columnName = "Name";
-        sys_col2.displayName = "사용자 이름";
-        sys_col2.mappingColumn = "userName"
-
-    let sys_col3= new SystemColumn();
-        sys_col3.columnName = "EmpNo";
-        sys_col3.displayName = "사용자 사번";
-        sys_col3.mappingColumn = "employeeNumber"
-        
-    this.systemColumns.push(sys_col1);    
-    this.systemColumns.push(sys_col2);    
-    this.systemColumns.push(sys_col3);    
+    this.displayDialog = false;  
   }
 
   ngOnInit() {
@@ -58,12 +39,14 @@ export class HrsystemManagementComponent implements OnInit {
       this.systems = data;
       this.selectedSystem = this.systems[0];
       console.log("systems >>>: ", this.systems);
-    },error =>{
-      //HttpErrorResponse 
       
-      console.log("error tyep : " , typeof(error)) ;
+      this.onSelect({value:this.selectedSystem});
+
+    },error =>{
       console.log("login-error : ", error);
     });
+
+
 
   }
 
@@ -119,8 +102,10 @@ export class HrsystemManagementComponent implements OnInit {
       this.selectedScheduler.schedulerId)
     .pipe(first())
     .subscribe( data =>{
-      console.log("runScheduler : ", data);
-      
+      console.log("result : ", data.status)
+      if(data.status != "200")      {
+        console.log("error : " , data.detail)
+      }
     },error =>{
         console.log("login-error : ", error);
     });

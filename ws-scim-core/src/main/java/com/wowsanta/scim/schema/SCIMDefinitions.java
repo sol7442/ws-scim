@@ -24,7 +24,7 @@ public class SCIMDefinitions {
     	GET,POST,PUT,PATCH,DELETE
     }
     public static enum UserType{
-    	IM_ADMIN,IM_OPERATOR,SYS_ADMIN,SYS_OPERATOR,USER
+    	IM_ADMIN,IM_OPERATOR,SYS_ADMIN,SYS_OPERATOR,USER,DummyUser
     }
 	public static enum ErrorType{
 		uniqueness, invalidSyntax

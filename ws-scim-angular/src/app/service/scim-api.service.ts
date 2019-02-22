@@ -74,17 +74,6 @@ export class ScimApiService {
     }));
   }
 
-  // runScheduler(systemId:string, schedulerId:string){
-  //   let api_url = '/api/'+ systemId +'/scheduler/run/' + schedulerId;
-  //   return this.http.post<any>(api_url,
-  //     {
-  //       headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
-  //     })
-  //   .pipe(map( result =>{
-  //     return result;
-  //   }));
-  // }
-  // HR - System 
   getHrSystems(){
     let api_url = '/hrsystem/';
     return this.http.get<any>(api_url)
@@ -106,6 +95,39 @@ export class ScimApiService {
 
   getHrSystemScheduler(id:string){
     let api_url = '/hrsystem/' + id + "/scheduler";
+    return this.http.get<any>(api_url,
+      {
+        headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
+      })
+    .pipe(map( result =>{
+      return result;
+    }));
+  }
+
+  getSystemAccount(id:string){
+    let api_url = '/account/system/' + id;
+    return this.http.get<any>(api_url,
+      {
+        headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
+      })
+    .pipe(map( result =>{
+      return result;
+    }));
+  }
+
+  getAccountHistory(id:string){
+    let api_url = '/account/history/' + id;
+    return this.http.get<any>(api_url,
+      {
+        headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
+      })
+    .pipe(map( result =>{
+      return result;
+    }));
+  }
+
+  getWorkHistoryBySystemId(id:string){    
+    let api_url = '/scheduler/history/system/' + id;
     return this.http.get<any>(api_url,
       {
         headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')

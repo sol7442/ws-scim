@@ -15,6 +15,12 @@ export class SystemAccountComponent implements OnInit {
   
   private systems:System[];
   private selectedSystem:System = new System();
+  
+  private users:any[] = [];
+  private historis:any = [];
+
+  private selectedUser:any = {};
+
   private schedulers:Scheduler[];
   private selectedScheduler:Scheduler;
   private schedulerHistorys:SchedulerHistory[];
@@ -42,15 +48,19 @@ export class SystemAccountComponent implements OnInit {
 
   onSelect(event){
     this.selectedSystem = event.value;
+    
+    console.log("system account  : ", this.selectedSystem.systemId);
 
-    // this.scimApiService.getSystemScheduler(this.selectedSystem.systemId)
-    // .pipe(first())
-    // .subscribe( data =>{
-    //   console.log("schedulers : ", data);
-    //   this.schedulers = data;
-    // },error =>{
-    //     console.log("login-error : ", error);
-    // });
+    this.scimApiService.getSystemAccount(this.selectedSystem.systemId)
+    .pipe(first())
+    .subscribe( data =>{
+      console.log("account list : ", data);
+      
+      this.users = data;
+
+    },error =>{
+        console.log("login-error : ", error);
+    });
 
     //this.schedulers = this.systems;
     //this.displayContext();
@@ -59,24 +69,35 @@ export class SystemAccountComponent implements OnInit {
   displayContext(){
     console.log("item >> ",this.selectedSystem);
   }
+  
+  onRowSelect(event: Event){
+    console.log("....",event);
+  }
 
-  showSchedulerLog(event: Event, scheduler: Scheduler) {
-    console.log("item",scheduler);
-    this.selectedScheduler = scheduler;
-    
-    this.schedulerHistorys = [];
+  showDetail(event: Event, user:any) {
+    console.log("item",user);
 
-    this.scimApiService.getSchedulerHistory(this.selectedScheduler.schedulerId)
+    this.scimApiService.getAccountHistory(user.id)
     .pipe(first())
     .subscribe( data =>{
-      this.schedulerHistorys = data;
-      console.log("scheduler_history : ", data);
-      
+      console.log("account history : ", data);
+      this.historis = data;
+
     },error =>{
         console.log("login-error : ", error);
     });
+
+    // this.scimApiService.getSchedulerHistory(this.selectedScheduler.schedulerId)
+    // .pipe(first())
+    // .subscribe( data =>{
+    //   this.schedulerHistorys = data;
+    //   console.log("scheduler_history : ", data);
+      
+    // },error =>{
+    //     console.log("login-error : ", error);
+    // });
     
-    this.displayDialog = true;
+    // this.displayDialog = true;
 
   }
   runScheduler(event: Event, scheduler: Scheduler) {

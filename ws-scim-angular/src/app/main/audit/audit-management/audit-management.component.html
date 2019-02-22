@@ -1,0 +1,55 @@
+<div class="context-wrapper">
+    <div class="context-left" id="context-left-box">
+      <p-listbox [style]="{'width':'100%'}" [options]="systems" (onChange)="onSelect($event)"  optionLabel="systemName">
+        <p-header>
+          <p>시스템 목록</p>
+        </p-header>
+      </p-listbox>
+    </div>
+    <div class="context-right">
+      <p-panel>
+          <p-header>
+              <div class="ui-helper-clearfix">
+                  <span class="ui-panel-title context-header-text" style="display:inline-block;margin-top:4px;font-weight:bold">
+                    감사 기록
+                  </span>
+              </div>
+          </p-header>
+          <div class="ui-helper-clearfix">
+              <p-table class="table-cell-center" [value]="workHistory" [paginator]="true" [rows]="20" [responsive]="true"
+                selectionMode="single" >
+                  <ng-template pTemplate="header">
+                      <tr>
+                          
+                          <th>작업 번호</th>
+                          <th>작업 내용</th>
+                          <th>계정 생성 (성공/시도)</th>
+                          <th>계정 변경 (성공/시도)</th>
+                          <th>계정 삭제 (성공/시도)</th>
+                          
+                          <th>합계 (성공/시도)</th>
+                          <th>상세 내용</th>
+                          <th>실행 시간</th>
+                      </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-history>
+                      <tr>
+                        <td>{{history.workId}}</td>
+                        <td>{{history.schedulerDesc}}</td>
+                        <td>{{history.resPut}}/{{history.reqPut}}</td>
+                        <td>{{history.resPost + history.resPatch }}/{{history.reqPost + history.reqPatch}}</td>
+                        <td>{{history.resDelete}}/{{history.reqDelete}}</td>
+                        <td> {{history.resPut + history.resPost + history.resPatch + history.resDelete }}/{{history.reqPut + history.reqPost + history.reqPatch + history.reqDelete}}</td>
+                        <td>{{history.workDate}}</td>
+                        <td> <p-button label="Click" (onClick)="showDetailLog($event,history)"> </p-button> </td>
+                      </tr>
+                  </ng-template>
+              </p-table>
+          </div>
+          <p-footer>
+              
+          </p-footer>
+      </p-panel>
+    </div>
+  </div>
+  

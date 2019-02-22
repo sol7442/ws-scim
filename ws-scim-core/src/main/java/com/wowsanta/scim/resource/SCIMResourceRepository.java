@@ -32,7 +32,5 @@ public interface SCIMResourceRepository {
 	public void deleteGroup(String groupId) throws SCIMException;
 	
 	public List<SCIMUser> getAllUsers()throws SCIMException;
-	public void clearSystemUser(String systemId) throws SCIMException;
-	public SCIMUser createSystemUser(String systemId, SCIMUser resource) throws SCIMException;
 	
 }

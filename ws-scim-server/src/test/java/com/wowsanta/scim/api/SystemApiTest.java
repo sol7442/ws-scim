@@ -26,21 +26,21 @@ public class SystemApiTest {
 	
 	public void get_all() {
 		RESTClientPool.getInstance().setUserInfo("sys-scim-admin","scim-admin",60*1000);
-		RESTClient client = new RESTClient();
-		final String url = "http://localhost:5000/system/";  
-		try {
-			HttpResponse response = client.get(url);
-			if( response.getStatusLine().getStatusCode() >= SCIMConstants.HtppConstants.OK && response.getStatusLine().getStatusCode() <= SCIMConstants.HtppConstants.IM_Used) {
-				try {
-					System.out.println(EntityUtils.toString(response.getEntity()));
-				} catch (ParseException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		} catch (SCIMException e) {
-			e.printStackTrace();
-		}
+//		RESTClient client = new RESTClient();
+//		final String url = "http://localhost:5000/system/";  
+//		try {
+//			HttpResponse response = client.get(url);
+//			if( response.getStatusLine().getStatusCode() >= SCIMConstants.HtppConstants.OK && response.getStatusLine().getStatusCode() <= SCIMConstants.HtppConstants.IM_Used) {
+//				try {
+//					System.out.println(EntityUtils.toString(response.getEntity()));
+//				} catch (ParseException e) {
+//					e.printStackTrace();
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		} catch (SCIMException e) {
+//			e.printStackTrace();
+//		}
 	}
 }
