@@ -30,14 +30,18 @@ public class SCIMSystemManager {
 	}
 
 	public void load(String conf_file_path) throws SCIMException {
+		
+		System.out.println("server config loading........");
+		
 		File config_file = new File(conf_file_path);
 		try {
+			System.out.println("load config.......");
 			this.serviceProvider = (SCIMServiceProvider) SCIMServiceProvider.load(config_file);
-			
 			SCIMResouceFactory.getInstance().setUserClass(
 					this.serviceProvider.getResources().get("user").getSchema(),
 					this.serviceProvider.getResources().get("user").getClassName());
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new SCIMException("LOAD CONFIG FILE ERROR : " + conf_file_path, e);
 		} finally {
 			SCIMLogger.sys("==[SERVICE INFO]=========  \n {}-{} \n{}", 

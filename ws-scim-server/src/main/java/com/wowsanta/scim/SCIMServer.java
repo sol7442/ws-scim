@@ -2,6 +2,8 @@ package com.wowsanta.scim;
 
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -25,9 +27,9 @@ public class SCIMServer  implements Daemon {
 
 	private ExecutorService executorService = Executors.newSingleThreadExecutor();
 	public static void main(String[] args) throws DaemonInitException, Exception {
-		System.setProperty("logback.configurationFile", "../config/logback.xml");
-		//System.setProperty("logback.path", "../logs");
-		System.setProperty("logback.mode", "debug");
+//		System.setProperty("logback.configurationFile", "../config/logback.xml");
+//		//System.setProperty("logback.path", "../logs");
+//		System.setProperty("logback.mode", "debug");
 		server.init(new DaemonContextImpl(args));
 		server.start();
 	}
@@ -51,6 +53,16 @@ public class SCIMServer  implements Daemon {
 
 	@Override
 	public void init(DaemonContext context) throws DaemonInitException, Exception {
+		
+//		System.setProperty("logback.configurationFile", "../config/logback.xml");
+//		//System.setProperty("logback.path", "../logs");
+//		System.setProperty("logback.mode", "debug");
+
+		String log_path = System.getProperty("logback.path");
+		
+		PrintStream out = new PrintStream(new FileOutputStream(log_path + "/output.txt"));
+		System.setOut(out);
+
 		String config_file_path = "";
 		if(context.getArguments().length == 0) {
 			String instance_name = System.getProperty("scim.instance");
@@ -64,15 +76,22 @@ public class SCIMServer  implements Daemon {
 			config_file_path = current_path.getParent() + File.separator + "config" +File.separator + instance_name +"scim-service-provider.json"; 
 		}
 		System.out.println(config_file_path);
-		SCIMSystemManager.getInstance().load(config_file_path);
+		System.out.println("server starting........");
 		
-		SCIMSystemManager.getInstance().getServiceProvider().getServer().initialize();
-		
-		SCIMSystemManager.getInstance().loadRepositoryManager();
-		SCIMRepositoryManager.getInstance().initailze();
-		
-		SCIMSystemManager.getInstance().loadSchdulerManager();
-		SCIMSchedulerManager.getInstance().initialize();
+		try {
+			SCIMSystemManager.getInstance().load(config_file_path);
+			
+			SCIMSystemManager.getInstance().getServiceProvider().getServer().initialize();
+			
+			SCIMSystemManager.getInstance().loadRepositoryManager();
+			SCIMRepositoryManager.getInstance().initailze();
+			
+			SCIMSystemManager.getInstance().loadSchdulerManager();
+			SCIMSchedulerManager.getInstance().initialize();
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace(System.out);
+		}	
 	}
 	@Override
 	public void start() throws Exception {
