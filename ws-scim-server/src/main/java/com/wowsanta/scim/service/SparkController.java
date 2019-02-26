@@ -1,6 +1,5 @@
 package com.wowsanta.scim.service;
 
-import static com.wowsanta.scim.server.JsonUtil.json;
 import static spark.Spark.after;
 import static spark.Spark.before;
 import static spark.Spark.path;

@@ -1,6 +1,5 @@
 package com.wowsanta.scim.service;
 
-import static com.wowsanta.scim.server.JsonUtil.json;
 import static spark.Spark.after;
 import static spark.Spark.before;
 import static spark.Spark.path;
@@ -11,6 +10,7 @@ import static spark.Spark.get;
 
 import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.schema.SCIMConstants;
+import com.wowsanta.scim.server.JsonTransformer;
 import com.wowsanta.scim.service.account.AccountService;
 import com.wowsanta.scim.service.auth.AuthorizationService;
 import com.wowsanta.scim.service.auth.LoginService;
@@ -45,34 +45,34 @@ public class ServerController extends SparkController{
 
 	private void account() {
 		path("/account", () -> {			
-			get("/system/:systemId"   		,AccountService.getSystemAccount(), json());
-			get("/history/:userId"   		,AccountService.getAccountHistory(), json());
+			get("/system/:systemId"   		,AccountService.getSystemAccount(), new JsonTransformer());
+			get("/history/:userId"   		,AccountService.getAccountHistory(), new JsonTransformer());
 		});
 	}
 
 	private void scheduler() {
 		path("/scheduler", () -> {			
-			get("/system/:systemId"   		,SystemApiService.getSchedulerBySystemId(), json());
-			get("/:schedulerId"   			,SystemApiService.getSchedulerById(), json());
-			get("/history/system/:systemId" ,SchdulerService.getSystemSchedulerHistory(), json());
-			get("/history/:schedulerId" 	,SystemApiService.getSchedulerHistory(), json());
-			post("/run/remote" 				,SystemApiService.runRemoteScheduler(), json());
-			post("/run/system" 				,SchdulerService.runSystemScheduler(), json());
+			get("/system/:systemId"   		,SystemApiService.getSchedulerBySystemId(), new JsonTransformer());
+			get("/:schedulerId"   			,SystemApiService.getSchedulerById(), new JsonTransformer());
+			get("/history/system/:systemId" ,SchdulerService.getSystemSchedulerHistory(), new JsonTransformer());
+			get("/history/:schedulerId" 	,SystemApiService.getSchedulerHistory(), new JsonTransformer());
+			post("/run/remote" 				,SystemApiService.runRemoteScheduler(), new JsonTransformer());
+			post("/run/system" 				,SchdulerService.runSystemScheduler(), new JsonTransformer());
 		});
 		
 	}
 
 	private void hrsystem() {
 		path("/hrsystem", () -> {
-			get("/"   ,SystemApiService.getProviderSystems(), json());
-			get("/:id",SystemApiService.getSystem(), json());
+			get("/"   ,SystemApiService.getProviderSystems(), new JsonTransformer());
+			get("/:id",SystemApiService.getSystem(), new JsonTransformer());
 		});
 	}
 	private void system() {
 		path("/system", () -> {
-			get("/columns/:systemId"   ,SystemApiService.getSystemColumnBySystemId(), json());
-			get("/"   ,SystemApiService.getConsumerSystems(), json());
-			get("/:id",SystemApiService.getSystem(), json());
+			get("/columns/:systemId"   ,SystemApiService.getSystemColumnBySystemId(), new JsonTransformer());
+			get("/"   ,SystemApiService.getConsumerSystems(), new JsonTransformer());
+			get("/:id",SystemApiService.getSystem(), new JsonTransformer());
 		});
 	}
 	private void api() {
@@ -86,17 +86,17 @@ public class ServerController extends SparkController{
 
 	private void scim_v2() {		
 		path("/scim/" + SCIMConstants.VERSION, () -> {
-			get    ("/Users/:userId",UserControl.getUser(), json());
-			put    ("/Users",UserControl.create(), json());
-			post   ("/Users",UserControl.updateUser(), json());
-			patch  ("/Users",UserControl.patch(), json());
-			post   ("/Bulk",BlukControl.post(), json());
-			get    ("/Bulk",BlukControl.getAll(), json());
-			get    ("/Bulk/:lasteDate",BlukControl.get(), json());
+			get    ("/Users/:userId",UserControl.getUser(), new JsonTransformer());
+			put    ("/Users",UserControl.create(), new JsonTransformer());
+			post   ("/Users",UserControl.updateUser(), new JsonTransformer());
+			patch  ("/Users",UserControl.patch(), new JsonTransformer());
+			post   ("/Bulk",BlukControl.post(), new JsonTransformer());
+			get    ("/Bulk",BlukControl.getAll(), new JsonTransformer());
+			get    ("/Bulk/:lasteDate",BlukControl.get(), new JsonTransformer());
 		});
 	}
 
 	private void login() {
-		post("/login", new LoginController(new LoginService()), json());
+		post("/login", new LoginController(new LoginService()), new JsonTransformer());
 	}
 }

@@ -1,6 +1,5 @@
 package com.wowsanta.scim.service;
 
-import static com.wowsanta.scim.server.JsonUtil.json;
 import static spark.Spark.after;
 import static spark.Spark.before;
 import static spark.Spark.path;
@@ -11,6 +10,7 @@ import static spark.Spark.get;
 
 import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.schema.SCIMConstants;
+import com.wowsanta.scim.server.JsonTransformer;
 import com.wowsanta.scim.service.agent.AgentService;
 import com.wowsanta.scim.service.auth.AuthorizationService;
 import com.wowsanta.scim.service.auth.LoginService;
@@ -41,22 +41,22 @@ public class AgentController extends SparkController {
 
 	private void scheduler() {
 		path("/scheduler", () -> {
-			put ("/"   				,SystemApiService.getSchedulerById(), json());
-			post("/"   				,SystemApiService.getSchedulerById(), json());
-			get ("/"   				,SystemApiService.getSchedulerById(), json());
-			get ("/:schedulerId"   	,SystemApiService.getSchedulerById(), json());
-			post("/run/remote" 		,AgentService.runRemoteScheduler(), json());
+			put ("/"   				,SystemApiService.getSchedulerById(), new JsonTransformer());
+			post("/"   				,SystemApiService.getSchedulerById(), new JsonTransformer());
+			get ("/"   				,SystemApiService.getSchedulerById(), new JsonTransformer());
+			get ("/:schedulerId"   	,SystemApiService.getSchedulerById(), new JsonTransformer());
+			post("/run/remote" 		,AgentService.runRemoteScheduler(), new JsonTransformer());
 		});
 		
 	}
 
 	private void scim_v2() {		
 		path("/scim/" + SCIMConstants.VERSION, () -> {
-			post   ("/Bulk",BlukControl.post(), json());
+			post   ("/Bulk",BlukControl.post(), new JsonTransformer());
 		});
 	}
 
 	private void login() {
-		post("/login", new LoginController(new LoginService()), json());
+		post("/login", new LoginController(new LoginService()), new JsonTransformer());
 	}
 }

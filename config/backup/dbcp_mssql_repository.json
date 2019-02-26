@@ -1,0 +1,33 @@
+{
+	/*
+	"systemRository": {
+		"repositoryClass": "com.ehyundai.sso.SSORepositoryManager",
+		"dbcp": {
+			"poolName": "system",
+			"driverName": "org.sqlite.JDBC",
+			"jdbcUrl": "jdbc:sqlite:C:\\Work\\git\\ws-scim\\ws-scim-repo\\data\\scim.db",
+			"valiationQuery": "select 1",
+			"timeBetweenEvictionRunsMillis": 60000,
+			"testWhileIdle": true,
+			"minIdle": 5,
+			"maxTotal": 50
+		}
+	},
+	*/
+	"resourceRepository": {
+		"repositoryClass": "com.ehyundai.gw.GWRepository",
+		"repositoryType": "RDB",
+		"dbcp": {
+			"poolName": "gw",
+			"driverName": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
+			"jdbcUrl": "jdbc:sqlserver://192.168.0.198:1433;database=scim_gw",
+			"userName": "wowsanta",
+			"password": "1q2w3e4r5t!@",
+			"valiationQuery": "select 1",
+			"timeBetweenEvictionRunsMillis": 60000,
+			"testWhileIdle": true,
+			"minIdle": 5,
+			"maxTotal": 50
+		}
+	}
+}

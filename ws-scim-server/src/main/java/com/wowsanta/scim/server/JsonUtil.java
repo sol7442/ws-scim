@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.wowsanta.scim.json.SCIMJsonObject;
 
-import spark.ResponseTransformer;
+//import spark.ResponseTransformer;
 
 public class JsonUtil {
 	public static String toJson(Object object) {
@@ -17,15 +17,12 @@ public class JsonUtil {
 		}
 	}
 	
-	public static ResponseTransformer json() {
-		return JsonUtil::toJson;
-	}
+//	public static ResponseTransformer json() {
+//		return JsonUtil::toJson;
+//	}
 
 	public static JsonObject json_parse(String json) {
 		return new JsonParser().parse(json).getAsJsonObject();
 	}
 	
-//	
-//	Gson gson = new GsonBuilder().create();
-//	LoginRequest loing_request = gson.fromJson(request.body(), LoginRequest.class);
 }

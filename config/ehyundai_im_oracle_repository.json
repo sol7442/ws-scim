@@ -1,0 +1,35 @@
+{
+	"className": "com.wowsanta.scim.resource.SCIMRepositoryManager",
+	"resourceRepository": {
+		"className": "com.ehyundai.im.IMResourceRepository",
+		"type": "RDB",
+		"dbcp": {
+			"poolName": "im-resource",
+			"driverName": "oracle.jdbc.driver.OracleDriver",
+			"jdbcUrl": "jdbc:oracle:thin:@192.168.0.200:1521:xe",
+			"userName": "scimdbuser",
+			"password": "Abcd1234",
+			"valiationQuery": "select 1",
+			"timeBetweenEvictionRunsMillis": 60000,
+			"testWhileIdle": true,
+			"minIdle": 5,
+			"maxTotal": 50
+		}
+	},
+	"systemRepository": {
+		"className": "com.ehyundai.im.IMSystemRepository",
+		"type": "RDB",
+		"dbcp": {
+			"poolName": "im-system",
+			"driverName": "oracle.jdbc.driver.OracleDriver",
+			"jdbcUrl": "jdbc:oracle:thin:@192.168.0.200:1521:xe",
+			"userName": "scimdbuser",
+			"password": "Abcd1234",
+			"valiationQuery": "select 1",
+			"timeBetweenEvictionRunsMillis": 60000,
+			"testWhileIdle": true,
+			"minIdle": 5,
+			"maxTotal": 50
+		}
+	}
+}
