@@ -19,6 +19,7 @@ import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.resource.SCIMLocationFactory;
 import com.wowsanta.scim.resource.SCIMProviderRepository;
 import com.wowsanta.scim.resource.SCIMRepositoryManager;
+import com.wowsanta.scim.resource.SCIMResourceGetterRepository;
 import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.resource.SCIMServerResourceRepository;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
@@ -42,7 +43,7 @@ public class ProvisioningJob_SSO extends SCIMJob {
 		SCIMBulkRequest scim_bluk_request = new SCIMBulkRequest();
 		try {
 
-			SCIMServerResourceRepository resource_repository = (SCIMServerResourceRepository) SCIMRepositoryManager
+			SCIMResourceGetterRepository resource_getter = (SCIMResourceGetterRepository) SCIMRepositoryManager
 					.getInstance().getResourceRepository();
 
 			SCIMScheduler scheduler = (SCIMScheduler) context.getJobDetail().getJobDataMap().get("schedulerInfo");
@@ -63,8 +64,14 @@ public class ProvisioningJob_SSO extends SCIMJob {
 
 			// get system user
 			String system_id = scheduler.getSourceSystemId();
-
-			List<SCIMUser> user_list = resource_repository.getUsersByDate(from, to);
+			List<SCIMUser> user_list = resource_getter.getUsersByDate(from, to);
+			
+			boolean proc_break = true;
+			if(proc_break) {
+				SCIMLogger.proc("process break by --- developer ", "");
+				return;
+			}
+			
 			for (SCIMUser system_user : user_list) {
 
 				System.out.println(">>>" + system_user);
@@ -119,6 +126,12 @@ public class ProvisioningJob_SSO extends SCIMJob {
 		String bluk_request_url = target_system.getSystemUrl() + "/scim/v2.0/Bulk";
 		System.out.println("get bulk url " + bluk_request_url);
 
+		boolean proc_break = true;
+		if(proc_break) {
+			SCIMLogger.proc("process break by --- developer ", "");
+			return;
+		}
+		
 		RESTClient client = new RESTClient(worker);
 
 		SCIMBulkResponse scim_bluk_response = client.post_bulk(bluk_request_url, scim_bluk_request);
@@ -146,6 +159,13 @@ public class ProvisioningJob_SSO extends SCIMJob {
 		System.out.println(scim_bluk_response.getOperations().size());
 		System.out.println("auditing......");
 
+		
+		boolean proc_break = true;
+		if(proc_break) {
+			SCIMLogger.proc("process break by --- developer ", "");
+			return;
+		}
+		
 		int req_put_count = 0;
 		int req_post_count = 0;
 		int req_patch_count = 0;

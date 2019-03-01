@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit{
             .pipe(first())
             .subscribe( data =>{
                 console.log("login-result : ", data);
-                this.router.navigate(["/main/system"]);
+                this.router.navigate(["/main/hrsystem"]);
             },error =>{
                 console.log("login-error : ", error);
             })

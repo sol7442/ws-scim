@@ -1,3 +1,12 @@
-<div>
-    <p-tabMenu [model]="menus"></p-tabMenu>
+<div class="context-wrapper">
+    <div class="context-left" id="context-left-box">
+      <p-listbox [style]="{'width':'100%'}" [options]="menus" (onChange)="onSelect($event)"  optionLabel="label">
+        <p-header>
+          <p>환경 설정 메뉴</p>
+        </p-header>
+      </p-listbox>
+    </div>
+    <div class="context-right">
+        <router-outlet></router-outlet>
+    </div>
 </div>

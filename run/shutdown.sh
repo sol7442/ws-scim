@@ -1,5 +1,7 @@
-PID < $(< scim.pid)
+PID=$(< scim.pid)
 
-echo PID
+echo kill scim process : $PID
 
-kill -9 PID
+kill -9 $PID
+
+rm scim.pid

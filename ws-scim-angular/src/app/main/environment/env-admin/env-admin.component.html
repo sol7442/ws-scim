@@ -1,0 +1,27 @@
+<div class="context-top">
+  <p-panel [toggleable]="true" [style]="{'margin-bottom':'20px' }">
+    <p-header class="context-header-text">
+        관리자 목록
+    </p-header>
+    <p-table [value]="admins" >
+        <ng-template pTemplate="header">
+            <tr>
+                <th>관리자 ID</th>
+                <th>관리자 NAME</th>
+                <th>관리자 TYPE</th>
+                <th>마지막 로그인 시간</th>
+                <th>패스워드 유효일</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-admin>
+            <tr>
+                <td>{{admin.adminId}}</td>
+                <td>{{admin.adminName}}</td>
+                <td>{{admin.adminType}}</td>
+                <td>{{admin.loginTime}}</td>
+                <td>{{admin.pwExpireTime}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+  </p-panel>
+</div>

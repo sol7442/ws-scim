@@ -19,6 +19,7 @@ public abstract class AbstractRDBRepository extends SCIMRepository {
 	 */
 	private static final long serialVersionUID = 1L;
 	private DBCP dbcp;
+	protected String tableName;
 	
 	public AbstractRDBRepository() {
 		setType("RDB");

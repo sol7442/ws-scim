@@ -16,10 +16,11 @@ import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.repo.rdb.DBCP;
 import com.wowsanta.scim.resource.SCIMGroup;
-import com.wowsanta.scim.resource.SCIMResourceRepository;
+import com.wowsanta.scim.resource.SCIMResourceGetterRepository;
+import com.wowsanta.scim.resource.SCIMResourceSetterRepository;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
-public class SsoResoureRepository extends AbstractRDBRepository implements SCIMResourceRepository{
+public class SsoResoureRepository extends AbstractRDBRepository implements SCIMResourceGetterRepository, SCIMResourceSetterRepository{
 	/**
 	 * 
 	 */
@@ -37,6 +38,15 @@ public class SsoResoureRepository extends AbstractRDBRepository implements SCIMR
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public List<SCIMUser> getUsersByWhere(String where) throws SCIMException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	
 
 	@Override
 	public SCIMUser createUser(SCIMUser user) throws SCIMException {
@@ -147,8 +157,7 @@ System.out.println("sso user create >>> " + sso_user);
 
 	@Override
 	public List<SCIMUser> getUsersByActive() throws SCIMException{
-		
-		return new ArrayList<SCIMUser>();
+		return getAllUsers();
 	}
 	
 
@@ -247,11 +256,7 @@ System.out.println("sso user create >>> " + sso_user);
         
 		return user_list;
 	}
-	@Override
-	public List<SCIMUser> getUsers(String where) {
-		
-		return null;
-	}
+	
 	
 	@Override
 	public SCIMUser updateUser(SCIMUser user) throws SCIMException {

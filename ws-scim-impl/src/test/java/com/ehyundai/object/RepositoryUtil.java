@@ -25,11 +25,9 @@ public class RepositoryUtil {
 
 			user.seteMail(user.getEmployeeNumber() + "@ehyundai.com");
 
-			//user.setCompanyCode("현대백화점");			
-			
-			user.setOrganization("현대백화점");			
+			user.setCompanyCode("현대백화점");			
 			user.setDivision(Random.group());
-			user.setDepartment(Random.department());
+			user.setDepartment(user.getDivision() + "/" + Random.department());
 			
 			Date join_date   = Random.beforeYears(1);
 			Date retire_date = null;

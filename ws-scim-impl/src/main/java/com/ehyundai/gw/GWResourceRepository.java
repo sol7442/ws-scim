@@ -15,19 +15,20 @@ import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.repo.rdb.DBCP;
 import com.wowsanta.scim.resource.SCIMGroup;
+import com.wowsanta.scim.resource.SCIMResourceGetterRepository;
 import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 import com.wowsanta.scim.util.Random;
 
-public class GWResoureRepository extends AbstractRDBRepository implements SCIMResourceRepository{
+public class GWResourceRepository extends AbstractRDBRepository implements SCIMResourceGetterRepository{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5170670467974453815L;
 
-	public GWResoureRepository() {
+	public GWResourceRepository() {
 		super();
-		setClassName(GWResoureRepository.class.getCanonicalName());
+		setClassName(GWResourceRepository.class.getCanonicalName());
 	}
 	
 	//SELECT UR_CODE, MODIFYDATE FROM BASE_OBJECT_UR WHERE MODIFYDATE > '2019-01-14 23:17:36'
@@ -37,23 +38,34 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
 		// TODO Auto-generated method stub
 		
 	}
+	
 
 	@Override
+	public void setGroupSchema(SCIMResourceTypeSchema groupSchema) throws SCIMException {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
 	public SCIMUser createUser(SCIMUser user) throws SCIMException {
 		User gw_user = (User)user;
 		
-		final String insertSQL = "INSERT INTO GW_USER (UR_Code,GR_Code,EmpNo,DisplayName,ExGroupName"
+		final String insertSQL = "INSERT INTO IM_ACCOUNT"
+				+ " (UR_Code,DisplayName"
+				+ ",DN_Code,ExGroupName,ExGroupPath"
 				+ ",JobPositionCode,ExJobPositionName"
 				+ ",JobTitleCode,ExJobTitleName"
 				+ ",JobLevelCode,ExJobLevelName"
-				+ ",IsUse"
-				+ ",Ex_PrimaryMail"
+				+ ",IsUse"				
 				+ ",EnterDate,RetireDate,RegistDate,ModifyDate)"
 				+ " VALUES ("
-				+ "?,?,?,?,?,"
-				+ "?,?,?,?,?,"
-				+ "?,?,?,?,?,"
-				+ "?,?)";
+				+ "?,?,"
+				+ "?,?,?,"
+				+ "?,?,"
+				+ "?,?,"
+				+ "?,?,"
+				+ "?,"
+				+ "?,?,?,?)";
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -62,12 +74,13 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
 			
 	    	connection = getConnection();
         	statement  = connection.prepareStatement(insertSQL);
-        	statement.setString(1, gw_user.getId());
-        	statement.setString(2, gw_user.getCompanyCode());
         	
-        	statement.setString(3, gw_user.getEmployeeNumber());
-        	statement.setString(4, gw_user.getUserName());
-        	statement.setString(5, gw_user.getDivision());
+        	statement.setString(1, gw_user.getId());
+        	statement.setString(2, gw_user.getUserName());   
+        	
+        	statement.setString(3, gw_user.getCompanyCode());        	
+        	statement.setString(4, gw_user.getDivision());
+        	statement.setString(5, gw_user.getDepartment());
         	
         	statement.setString(6, gw_user.getPositionCode());
         	statement.setString(7, gw_user.getPosition());
@@ -75,18 +88,18 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
         	statement.setString(9, gw_user.getJob());
         	statement.setString(10, gw_user.getRankCode());
         	statement.setString(11, gw_user.getRank());
-        	statement.setString(12, toYN(gw_user.isActive()));
-        	statement.setString(13, gw_user.geteMail());
         	
-        	statement.setDate(14, toSqlDate(gw_user.getJoinDate()));
-        	statement.setDate(15, toSqlDate(gw_user.getRetireDate()));
+        	statement.setString(12, toYN(gw_user.isActive()));
+        	
+        	statement.setDate(13, toSqlDate(gw_user.getJoinDate()));
+        	statement.setDate(14, toSqlDate(gw_user.getRetireDate()));
         	
         	if(gw_user.getMeta() != null) {
-        		statement.setDate(16, toSqlDate(gw_user.getMeta().getCreated()));
-            	statement.setDate(17, toSqlDate(gw_user.getMeta().getLastModified()));
+        		statement.setDate(15, toSqlDate(gw_user.getMeta().getCreated()));
+            	statement.setDate(16, toSqlDate(gw_user.getMeta().getLastModified()));
         	}else {
-        		statement.setDate(16, toSqlDate(new Date()));
-            	statement.setDate(17, toSqlDate(new Date()));
+        		statement.setDate(15, toSqlDate(new Date()));
+            	statement.setDate(16, toSqlDate(new Date()));
         	}
         	
         	statement.execute();
@@ -121,7 +134,7 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
         	statement.setString(1, userId);
         	resultSet = statement.executeQuery();
         	if(resultSet.next()) {
-        		gw_user = newUser(resultSet);
+        		gw_user = newUserFromDB(resultSet);
         	}else {
         		throw new SCIMException("USER NOT FOUND : " + userId, RESULT_IS_NULL);
         	}
@@ -135,17 +148,11 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
 		return gw_user;
 	}
 	
-	
 	@Override
 	public List<SCIMUser> getUsersByActive() throws SCIMException{
-		final String selectSQL = "SELECT UR_Code, GR_Code,EmpNo,DisplayName,ExGroupName"
-				+ ",JobPositionCode,ExJobPositionName"
-				+ ",JobTitleCode,ExJobTitleName"
-				+ ",JobLevelCode,ExJobLevelName"
-				+ ",IsUse"
-				+ ",Ex_PrimaryMail"
-				+ ",EnterDate,RetireDate,RegistDate,ModifyDate "
-				+ "FROM GW_USER WHERE IsUse=?";
+		final String selectSQL = "SELECT * "
+				+ "FROM " + this.tableName
+				+ " WHERE IsUse='Y'";
 	
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -156,11 +163,9 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
         	connection = getConnection();
         	statement  = connection.prepareStatement(selectSQL);
         	
-        	statement.setString(1, "Y");
-        	
         	resultSet = statement.executeQuery();
         	while(resultSet.next()) {
-        		user_list.add(newUser(resultSet));
+        		user_list.add(newUserFromDB(resultSet));
         	}
         	
 		} catch (SQLException e) {
@@ -174,14 +179,9 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
 	
 	@Override
 	public List<SCIMUser> getUsersByDate(Date from, Date to)throws SCIMException{
-		final String selectSQL = "SELECT UR_Code, GR_Code,EmpNo,DisplayName,ExGroupName"
-				+ ",JobPositionCode,ExJobPositionName"
-				+ ",JobTitleCode,ExJobTitleName"
-				+ ",JobLevelCode,ExJobLevelName"
-				+ ",IsUse"
-				+ ",Ex_PrimaryMail"
-				+ ",EnterDate,RetireDate,RegistDate,ModifyDate "
-				+ "FROM GW_USER WHERE ModifyDate BETWEEN ? AND ?";
+		final String selectSQL = "SELECT * "
+				+ "FROM " + this.tableName
+				+ " WHERE ModifyDate BETWEEN ? AND ?";
 	
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -197,7 +197,7 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
         	
         	resultSet = statement.executeQuery();
         	while(resultSet.next()) {
-        		user_list.add(newUser(resultSet));
+        		user_list.add(newUserFromDB(resultSet));
         	}
         	
 		} catch (SQLException e) {
@@ -209,7 +209,7 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
 		return user_list;
 	}
 	@Override
-	public List<SCIMUser> getUsers(String where) {
+	public List<SCIMUser> getUsersByWhere(String where) {
 		final String selectSQL = "SELECT UR_Code, DN_ID, DN_Code, GR_Code, DisplayName, RegistDate, ModifyDate FROM BASE_OBJECT_UR WHERE UR_Code = ?";
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -218,35 +218,6 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
 		return null;
 	}
 	
-	@Override
-	public SCIMUser updateUser(SCIMUser updatedUser) throws SCIMException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void deleteUser(String userId) throws SCIMException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setGroupSchema(SCIMResourceTypeSchema groupSchema) throws SCIMException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void lockUser(String userId) throws SCIMException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public SCIMGroup createGroup(SCIMGroup group) throws SCIMException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public SCIMGroup getGroup(String groupId) throws SCIMException {
@@ -254,17 +225,7 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
 		return null;
 	}
 
-	@Override
-	public SCIMGroup updateGroup(SCIMGroup group) throws SCIMException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public void deleteGroup(String groupId) throws SCIMException {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public List<SCIMUser> getAllUsers() throws SCIMException {
@@ -272,20 +233,16 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
 		return null;
 	}
 
-	private User newUser(ResultSet resultSet) {
+	private User newUserFromDB(ResultSet resultSet) {
 		User gw_user = new User();
 		try {
-			
-
     		gw_user.setId(resultSet.getString("UR_Code"));
     		
-    		gw_user.setEmployeeNumber(resultSet.getString("UR_Code"));
     		gw_user.setUserName(resultSet.getString("DisplayName"));
     		
-    		gw_user.setOrganization(resultSet.getString("GR_Code"));
+    		gw_user.setOrganization(resultSet.getString("DN_Code"));
     		gw_user.setDivision(resultSet.getString("ExGroupName"));
-    		
-    		gw_user.setDepartment("defaultvalue");
+    		gw_user.setDepartment(resultSet.getString("ExGroupPath"));
     		
     		gw_user.setPositionCode(resultSet.getString("JobPositionCode"));
     		gw_user.setPosition(resultSet.getString("ExJobPositionName"));
@@ -294,7 +251,6 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
     		gw_user.setRankCode(resultSet.getString("JobLevelCode"));
     		gw_user.setRank(resultSet.getString("ExJobLevelName"));
     		gw_user.setActive(toBoolean(resultSet.getString("IsUse")));
-    		gw_user.seteMail(resultSet.getString("Ex_PrimaryMail"));
     		
     		gw_user.setJoinDate(resultSet.getDate("EnterDate"));
     		gw_user.setRetireDate(resultSet.getDate("RetireDate"));
@@ -309,5 +265,6 @@ public class GWResoureRepository extends AbstractRDBRepository implements SCIMRe
 		
 		return gw_user;
 	}
+
 
 }

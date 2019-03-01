@@ -58,9 +58,13 @@ public class SCIMServer  implements Daemon {
 //		//System.setProperty("logback.path", "../logs");
 //		System.setProperty("logback.mode", "debug");
 
-		String log_path = System.getProperty("logback.path");
+		//String log_path = System.getProperty("logback.path");
+		File log_directory = new File(System.getProperty("logback.path"));
+		if(!log_directory.exists()) {
+			log_directory.mkdirs();
+		}
 		
-		PrintStream out = new PrintStream(new FileOutputStream(log_path + "/output.txt"));
+		PrintStream out = new PrintStream(new FileOutputStream(log_directory + "/output.txt"));
 		System.setOut(out);
 
 		String config_file_path = "";

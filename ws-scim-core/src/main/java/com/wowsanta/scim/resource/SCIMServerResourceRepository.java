@@ -6,7 +6,7 @@ import java.util.List;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.SCIMUser;
 
-public interface SCIMServerResourceRepository extends SCIMResourceRepository {
+public interface SCIMServerResourceRepository extends SCIMResourceGetterRepository, SCIMResourceSetterRepository {
 	public SCIMUser getSystemUser(String systemId, String userId) throws SCIMException;
 	public SCIMUser createSystemUser(String systemId, SCIMUser resource) throws SCIMException;
 	public SCIMUser updateSystemUser(String systemId, SCIMUser resource) throws SCIMException;

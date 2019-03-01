@@ -35,7 +35,10 @@ import {AccountComponent} from './main/account/account.component';
 import {SystemAccountComponent} from './main/account/system-account/system-account.component';
 import {AccountManagementComponent} from './main/account/account-management/account-management.component';
 import {AuditManagementComponent } from './main/audit/audit-management/audit-management.component';
-
+import {EnvironmentComponent } from './main/environment/environment.component';
+import {EnvAdminComponent } from './main/environment/env-admin/env-admin.component';
+import {EnvAngentComponent } from './main/environment/env-angent/env-angent.component';
+import {EnvSchedulerComponent } from './main/environment/env-scheduler/env-scheduler.component';
 
 import {ToolbarModule} from 'primeng/toolbar';
 import {ButtonModule} from 'primeng/button';
@@ -60,7 +63,8 @@ import 'rxjs/Rx';
       TabMenuComponent,TitleComponent,
       SystemManagementComponent,HrsystemManagementComponent,
       AccountComponent,SystemAccountComponent,AccountManagementComponent,
-      AuditManagementComponent
+      AuditManagementComponent,
+      EnvironmentComponent,EnvAdminComponent,EnvAngentComponent,EnvSchedulerComponent
    ],
    imports: [
       BrowserModule,FormsModule,

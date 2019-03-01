@@ -10,25 +10,86 @@ import org.junit.Test;
 import com.ehyundai.object.User;
 import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.obj.SCIMAdmin;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
+import com.wowsanta.scim.policy.impl.DefaultPasswordPoilcy;
 import com.wowsanta.scim.resource.SCIMProviderRepository;
 import com.wowsanta.scim.resource.SCIMRepositoryManager;
-import com.wowsanta.scim.resource.SCIMResourceRepository;
+import com.wowsanta.scim.resource.SCIMServerResourceRepository;
 import com.wowsanta.scim.resource.SCIMSystemColumn;
-import com.wowsanta.scim.resource.SCIMSystemRepository;
+import com.wowsanta.scim.schema.SCIMDefinitions;
 import com.wowsanta.scim.util.Random;
 
 public class IMProviderRepositoryTest {
 
 	private final String config_file = "../config/home_dev_scim-service-provider.json";
-	private final String repository_config_file = "../config/home_dev_scim_repository.json";
+	private final String repository_config_file = "../config/ehyundai_im_oracle_repository.json";
 	
 	private final int create_user_size = 1;
 	
-	
-	
 	@Test
+	public void admin_test() {
+		
+		load_manager(this.repository_config_file);
+		SCIMProviderRepository system_repository = (SCIMProviderRepository) SCIMRepositoryManager.getInstance().getSystemRepository();
+		
+		
+		
+		try {
+			
+			SCIMAdmin sch_gw_sync_admin = new SCIMAdmin();
+			sch_gw_sync_admin.setAdminId("sch-gw-sync");
+			sch_gw_sync_admin.setAdminName("그룹웨어 동기화 스케줄러");
+			sch_gw_sync_admin.setAdminType(SCIMDefinitions.AdminType.SYS_SCHEDULER.toString());
+			
+			
+			SCIMAdmin sys_root_admdin = new SCIMAdmin();
+			sys_root_admdin.setAdminId("sys-root-admin");
+			sys_root_admdin.setAdminName("SCIM ROOT ADMIN");
+			sys_root_admdin.setPassword("PASSWORD1234!");
+			
+			DefaultPasswordPoilcy policy = new DefaultPasswordPoilcy();
+			sys_root_admdin.setPassword(policy.encrypt(sys_root_admdin.getPassword()));
+			
+			sys_root_admdin.setAdminType(SCIMDefinitions.AdminType.SYS_ADMIN.toString());
+			
+//			system_repository.createAdmin(sch_gw_sync_admin);
+//			system_repository.createAdmin(sys_root_admdin);
+			
+//			system_repository.updateAdmin(admin);
+//			system_repository.deleteAdmin(admin.getAdminId());
+			SCIMAdmin scim_admin = system_repository.getAdmin(sch_gw_sync_admin.getAdminId());
+			if(scim_admin != null) {
+				System.out.println(scim_admin.toString(true));
+			}
+			
+			
+			Calendar cal = Calendar.getInstance();
+			Date to_day = cal.getTime();
+			cal.add(Calendar.DATE, -90*1);	// 1 년간의 데이터 모두
+			Date expire_day = cal.getTime();
+			
+			sys_root_admdin.setLoginTime(to_day);
+			sys_root_admdin.setPwExpireTime(expire_day);
+			system_repository.updateAdmin(sys_root_admdin);
+			
+			List<SCIMAdmin> admin_list = system_repository.getAdminList();
+			System.out.println("admin list size : " + admin_list.size());
+			for (SCIMAdmin scimAdmin : admin_list) {
+				System.out.println(scimAdmin.toString(true));
+				//system_repository.deleteAdmin(sch_gw_sync_admin.getAdminId());
+			}
+			
+		}catch (SCIMException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
+	
+	//@Test
 	public void add_sso_column() {
 		load_manager(this.repository_config_file);
 		SCIMProviderRepository system_repository = (SCIMProviderRepository) SCIMRepositoryManager.getInstance().getSystemRepository();
@@ -186,7 +247,7 @@ public class IMProviderRepositoryTest {
 			
 			load_manager(config_file);
 			
-			SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
+			SCIMServerResourceRepository res_repo = (SCIMServerResourceRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
 			
 			List<SCIMUser> user_list = res_repo.getUsersByActive();
 			System.out.println("user_list["+user_list.size()+"]");
@@ -210,7 +271,7 @@ public class IMProviderRepositoryTest {
 			
 			load_manager(config_file);
 			
-			SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
+			SCIMServerResourceRepository res_repo = (SCIMServerResourceRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
 			
 			List<SCIMUser> user_list = res_repo.getUsersByActive();
 			System.out.println("user_list["+user_list.size()+"]");
@@ -228,7 +289,7 @@ public class IMProviderRepositoryTest {
 			
 			load_manager(config_file);
 			
-			SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
+			SCIMServerResourceRepository res_repo = (SCIMServerResourceRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
 			
 			Calendar cal = Calendar.getInstance();
 			Date to = cal.getTime();
@@ -249,7 +310,7 @@ public class IMProviderRepositoryTest {
 	
 	//
 	public void createUsers(int size) {
-		SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
+		SCIMServerResourceRepository res_repo = (SCIMServerResourceRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
 		
 		for (int i = 0; i < size; i++) {
 			User user = new User();

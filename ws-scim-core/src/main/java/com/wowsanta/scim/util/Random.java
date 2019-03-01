@@ -70,7 +70,7 @@ public class Random {
 	}
 	
 	public static String job() {
-		String[] jobs = {"팀장","파트장","파트원",""};
+		String[] jobs = {"팀장","파트장","파트원","팀원"};
 		
 		int value = (int) (Math.random() * 100);
 		if(value < 5) {

@@ -38,6 +38,155 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
 	private static final long serialVersionUID = 1L;
 	
 	@Override
+	public SCIMAdmin getAdmin(String adminId)throws SCIMException{
+		final String selectSQL = "SELECT * FROM SCIM_ADMIN WHERE ADMINID=?";
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
+
+	    SCIMAdmin admin = null;
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(selectSQL);
+        	statement.setString(1, adminId);
+        	
+        	resultSet = statement.executeQuery();
+        	if(resultSet.next()) {
+        		admin = newAdminFromDB(resultSet);
+        	}
+		} catch (SQLException e) {
+			throw new SCIMException(selectSQL, e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+		
+		return admin;
+	}
+	private SCIMAdmin newAdminFromDB(ResultSet resultSet) throws SQLException {
+		SCIMAdmin admin = new SCIMAdmin();
+		
+		admin.setAdminId(resultSet.getString("ADMINID"));
+		admin.setAdminName(resultSet.getString("ADMINNAME"));
+		admin.setAdminType(resultSet.getString("ADMINTYPE"));
+		admin.setPassword(resultSet.getString("PASSWD"));
+		admin.setLoginTime(toJavaDate(resultSet.getDate("LOGINTIME")));
+		admin.setPwExpireTime(toJavaDate(resultSet.getDate("PWEXPIRETIME")));
+		
+		return admin;
+	}
+	@Override
+	public SCIMAdmin createAdmin(SCIMAdmin admin) throws SCIMException{
+		final String insertSQL = "INSERT INTO SCIM_ADMIN "
+				+ "(ADMINID, ADMINNAME,ADMINTYPE,PASSWD,PWEXPIRETIME)"
+				+ " VALUES (?,?,?,?,?)";
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
+	    try {
+	    	connection = getConnection();
+        	statement  = connection.prepareStatement(insertSQL);
+
+        	statement.setString(1, admin.getAdminId());
+        	statement.setString(2, admin.getAdminName());
+        	statement.setString(3, admin.getAdminType());
+        	statement.setString(4, admin.getPassword());
+        	statement.setDate(5, toSqlDate(admin.getPwExpireTime()));
+        	
+        	statement.execute();
+	    } catch (SQLException e) {
+	    	if (e instanceof SQLIntegrityConstraintViolationException) {
+				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
+			}else {
+				throw new SCIMException("ADD DATA FAILED : " + insertSQL , e);
+			}
+		}finally {
+	    	DBCP.close(connection, statement, resultSet);
+	    }
+		
+		return admin;
+	}
+	@Override
+	public SCIMAdmin updateAdmin(SCIMAdmin admin)throws SCIMException{
+		final String updateSQL = "UPDATE SCIM_ADMIN"
+				+ " SET ADMINNAME=?, ADMINTYPE=?, PASSWD=?, LOGINTIME=?, PWEXPIRETIME=? "
+				+ " WHERE ADMINID=?";
+
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
+	    try {
+	    	connection = getConnection();
+        	statement  = connection.prepareStatement(updateSQL);
+        	
+        	statement.setString(1, admin.getAdminName());
+        	statement.setString(2, admin.getAdminType());
+        	statement.setString(3, admin.getPassword());
+        	
+        	statement.setDate(4,  toSqlDate(admin.getLoginTime()));
+        	statement.setDate(5,  toSqlDate(admin.getPwExpireTime()));
+        	
+        	statement.setString(6, admin.getAdminId());
+        	
+        	statement.executeUpdate();
+        	
+	    } catch (SQLException e) {
+	    	throw new SCIMException("UPDATE FAILED : " + updateSQL , e);
+		}finally {
+	    	DBCP.close(connection, statement, resultSet);
+	    }
+		
+		return null;
+	}
+	@Override
+	public void deleteAdmin(String adminId)throws SCIMException{
+		final String delateSQL = "DELETE FROM SCIM_ADMIN WHERE ADMINID=?";
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
+	    try {
+	    	connection = getConnection();
+        	statement  = connection.prepareStatement(delateSQL);
+        	
+        	statement.setString(1, adminId);
+        	
+        	statement.executeUpdate();
+	    } catch (SQLException e) {
+	    	throw new SCIMException("DELETE FAILED : " + delateSQL , e);
+		}finally {
+	    	DBCP.close(connection, statement, resultSet);
+	    }
+	}
+	@Override
+	public List<SCIMAdmin> getAdminList()throws SCIMException{
+		
+		final String selectSQL = "SELECT * FROM SCIM_ADMIN";
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
+
+	    List<SCIMAdmin> admin_list = new ArrayList<SCIMAdmin>();
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(selectSQL);
+        	resultSet = statement.executeQuery();
+        	while(resultSet.next()) {
+        		SCIMAdmin admin = newAdminFromDB(resultSet);
+        		admin_list.add(admin);
+        	}
+		} catch (SQLException e) {
+			throw new SCIMException(selectSQL, e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+        
+		return admin_list;
+	}
+	
+	@Override
 	public List<SCIMSystemColumn> getSystemColumnsBySystemId(String systemId) throws SCIMException {
 		final String selectSQL = "SELECT * FROM SCIM_SYSTEM_COLUMN WHERE systemId=?";
 		
@@ -55,10 +204,10 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
         	while(resultSet.next()) {
         		SCIMSystemColumn column = new SCIMSystemColumn();
         		column.setSystemId(systemId);
-        		
+        	
         		column.setColumnName(	resultSet.getString("columnName"));
         		column.setAllowNull(	toBoolean(resultSet.getInt("allowNull")));
-        		column.setComment(		resultSet.getString("comment"));
+        		column.setComment(		resultSet.getString("COLUMNCOMMENT"));
         		column.setDataSize(		resultSet.getInt("dataSize"));
         		column.setDataType(		resultSet.getString("dataType"));
         		column.setDefaultValue(	resultSet.getString("defaultValue"));
@@ -80,7 +229,7 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
 		final String insertSQL = "INSERT INTO SCIM_SYSTEM_COLUMN "
 				+ "(systemId, columnName,displayName,"
 				+ "dataType,dataSize,allowNull,"
-				+ "defaultValue,comment,mappingColumn)"
+				+ "defaultValue,COLUMNCOMMENT,mappingColumn)"
 				+ " VALUES ("
 				+ "?,?,?,"
 				+ "?,?,?,"
@@ -513,10 +662,31 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
 		}
 	    
 		return system;
-	}	@Override
+	}	
+	
+	@Override
 	public void updateSchdulerLastExcuteDate(String schdulerId, Date date) throws SCIMException {
-		// TODO Auto-generated method stub
+		final String updateSQL = "UPDATE SCIM_SCHEDULER"
+				+ " SET LASTEXECUTEDATE=? WHERE SCHEDULERID=?";
+
 		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
+	    try {
+	    	connection = getConnection();
+        	statement  = connection.prepareStatement(updateSQL);
+        	
+        	statement.setDate(1,  toSqlDate(date));
+        	statement.setString(2, schdulerId);
+        	
+        	statement.executeUpdate();
+        	
+	    } catch (SQLException e) {
+	    	throw new SCIMException("UPDATE FAILED : " + updateSQL , e);
+		}finally {
+	    	DBCP.close(connection, statement, resultSet);
+	    }
 	}
 
 

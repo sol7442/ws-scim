@@ -8,7 +8,6 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -16,26 +15,16 @@ import java.util.Map;
 
 import com.ehyundai.object.User;
 import com.wowsanta.scim.exception.SCIMException;
-import com.wowsanta.scim.message.SCIMOperation;
-import com.wowsanta.scim.obj.DefaultUserMeta;
-import com.wowsanta.scim.obj.SCIMAdmin;
-import com.wowsanta.scim.obj.SCIMSystem;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.repo.rdb.DBCP;
 import com.wowsanta.scim.resource.SCIMAuditData;
 import com.wowsanta.scim.resource.SCIMGroup;
-import com.wowsanta.scim.resource.SCIMResouceFactory;
-import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.resource.SCIMServerResourceRepository;
-import com.wowsanta.scim.resource.SCIMSystemRepository;
-import com.wowsanta.scim.scheduler.SCIMScheduler;
-import com.wowsanta.scim.schema.SCIMConstants;
 import com.wowsanta.scim.schema.SCIMDefinitions;
 import com.wowsanta.scim.schema.SCIMErrorCode;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
-import com.wowsanta.scim.util.Random;
 
 public class IMResourceRepository extends AbstractRDBRepository implements SCIMServerResourceRepository{
 
@@ -630,7 +619,7 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
 
 
 	@Override
-	public List<SCIMUser> getUsers(String where) throws SCIMException {
+	public List<SCIMUser> getUsersByWhere(String where) throws SCIMException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -688,17 +677,28 @@ System.out.println(">>>> clearSystemUser : " + systemId);
 		        	
 		        	statement.executeUpdate();
 			    } catch (SQLException e) {
-			    	throw new SCIMException("DELETE SYSTEM USER FAILED : " + delateSQL , e);
+			    	throw new SCIMException("DELETE FAILED : " + delateSQL , e);
 				}finally {
 			    	DBCP.close(connection, statement, resultSet);
 			    }
 	}
 	@Override
 	public void clearUserProfile()throws SCIMException{
-		
+		final String delateSQL = "DELETE FROM SCIM_USER_PROFILE ";
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
+	    try {
+	    	connection = getConnection();
+        	statement  = connection.prepareStatement(delateSQL);
+        	
+        	statement.executeUpdate();
+	    } catch (SQLException e) {
+	    	throw new SCIMException("DELETE FAILED : " + delateSQL , e);
+		}finally {
+	    	DBCP.close(connection, statement, resultSet);
+	    }
 	}
-	
-	
 	
 	@Override
 	public void deleteUser(String userId) throws SCIMException {

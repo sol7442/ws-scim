@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 import {MenuItem} from 'primeng/api';
 
 
@@ -9,16 +11,20 @@ import {MenuItem} from 'primeng/api';
 })
 export class EnvironmentComponent implements OnInit {
 
-  constructor() { }
   menus: MenuItem[];
 
+  constructor(private router: Router) { }
+    
   ngOnInit() {
     this.menus = [
-      {label: '서버환경', icon: 'fa fa-fw fa-bar-chart', routerLink:["work"]},
-      {label: 'XX환경', icon: 'fa fa-fw fa-calendar', routerLink:["account"]},
-      {label: '에이전트', icon: 'fa fa-fw fa-book', routerLink:["policy"]},
-      {label: '관리자', icon: 'fa fa-fw fa-support', routerLink:["audit"]},
-  ];
+      {label: '관리자 설정', icon: 'fa fa-fw fa-bar-chart', routerLink:["/main/environment/admin"]},
+     // {label: '에이전트 설정', icon: 'fa fa-fw fa-calendar', routerLink:["/main/environment/agent"]},
+     // {label: '스케줄러 설정', icon: 'fa fa-fw fa-calendar', routerLink:["/main/environment/scheduler"]},
+    ];
+    
   }
 
+  onSelect(event){    
+    this.router.navigate([event.value.routerLink[0]]);
+  }
 }

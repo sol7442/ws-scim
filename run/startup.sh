@@ -22,13 +22,13 @@ APP_ERR=''
 APP_RUN_MODE='DEBUG'
 
 ######################################################
-function find_apphome(){ 
+find_apphome(){ 
 cd ..;
 APP_HOME=${PWD}
 cd bin;
 }
 
-function find_classpath(){ 
+find_classpath(){ 
     for i in `ls ${APP_HOME}/libs/*.jar`
     do
         CLASSPATH=${CLASSPATH}:${i}

@@ -34,16 +34,16 @@ public class SCIMRepositoryManager {
 			JsonReader reader = new JsonReader(new FileReader(config_file));
 			JsonObject json_object = new JsonParser().parse(reader).getAsJsonObject();
 			
-
-			JsonObject sys_rep_json_obj = json_object.get("systemRepository").getAsJsonObject();
-			if(sys_rep_json_obj != null) {
+			if(json_object.get("systemRepository") != null) {
+				JsonObject sys_rep_json_obj = json_object.get("systemRepository").getAsJsonObject();
 				this.systemRepository  = (SCIMRepository) SCIMRepository.load(sys_rep_json_obj);;
 			}
 			
-			JsonObject res_rep_json_obj = json_object.get("resourceRepository").getAsJsonObject();
-			if(res_rep_json_obj != null) {
+			if(json_object.get("resourceRepository") != null) {
+				JsonObject res_rep_json_obj = json_object.get("resourceRepository").getAsJsonObject();
 				this.resourceRepository = (SCIMRepository) SCIMRepository.load(res_rep_json_obj);
 			}
+			
 			
 		} catch (Exception e) {
 			instance = null;
@@ -52,8 +52,12 @@ public class SCIMRepositoryManager {
 	}
 	
 	public void initailze() throws SCIMException {
-		resourceRepository.initialize();
-		systemRepository.initialize();
+		if(resourceRepository != null) {
+			resourceRepository.initialize();
+		}
+		if(systemRepository !=null) {
+			systemRepository.initialize();
+		}
 	}
 	public void setResourceRepository(SCIMResourceRepository repo) {
 		this.resourceRepository = (SCIMRepository) repo;

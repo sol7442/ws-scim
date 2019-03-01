@@ -15,11 +15,12 @@ import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.repo.rdb.DBCP;
 import com.wowsanta.scim.resource.SCIMGroup;
+import com.wowsanta.scim.resource.SCIMResourceGetterRepository;
 import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 import com.wowsanta.scim.util.Random;
 
-public class HRResoureRepository extends AbstractRDBRepository implements SCIMResourceRepository{
+public class HRResoureRepository extends AbstractRDBRepository implements SCIMResourceGetterRepository{
 	/**
 	 * 
 	 */
@@ -38,7 +39,6 @@ public class HRResoureRepository extends AbstractRDBRepository implements SCIMRe
 		
 	}
 
-	@Override
 	public SCIMUser createUser(SCIMUser user) throws SCIMException {
 		User gw_user = (User)user;
 		
@@ -209,7 +209,7 @@ public class HRResoureRepository extends AbstractRDBRepository implements SCIMRe
 		return user_list;
 	}
 	@Override
-	public List<SCIMUser> getUsers(String where) {
+	public List<SCIMUser> getUsersByWhere(String where) {
 		final String selectSQL = "SELECT UR_Code, DN_ID, DN_Code, GR_Code, DisplayName, RegistDate, ModifyDate FROM BASE_OBJECT_UR WHERE UR_Code = ?";
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -218,17 +218,7 @@ public class HRResoureRepository extends AbstractRDBRepository implements SCIMRe
 		return null;
 	}
 	
-	@Override
-	public SCIMUser updateUser(SCIMUser updatedUser) throws SCIMException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public void deleteUser(String userId) throws SCIMException {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void setGroupSchema(SCIMResourceTypeSchema groupSchema) throws SCIMException {
@@ -236,17 +226,7 @@ public class HRResoureRepository extends AbstractRDBRepository implements SCIMRe
 		
 	}
 
-	@Override
-	public void lockUser(String userId) throws SCIMException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public SCIMGroup createGroup(SCIMGroup group) throws SCIMException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	@Override
 	public SCIMGroup getGroup(String groupId) throws SCIMException {
@@ -254,17 +234,7 @@ public class HRResoureRepository extends AbstractRDBRepository implements SCIMRe
 		return null;
 	}
 
-	@Override
-	public SCIMGroup updateGroup(SCIMGroup group) throws SCIMException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void deleteGroup(String groupId) throws SCIMException {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	@Override
 	public List<SCIMUser> getAllUsers() throws SCIMException {

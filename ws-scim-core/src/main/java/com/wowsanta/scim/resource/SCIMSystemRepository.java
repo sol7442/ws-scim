@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.message.SCIMOperation;
+import com.wowsanta.scim.obj.SCIMAdmin;
 import com.wowsanta.scim.obj.SCIMSystem;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.scheduler.SCIMScheduler;
@@ -34,4 +35,5 @@ public interface SCIMSystemRepository {
 	public void addSchedulerHistory(String schedulerId, String workId, int req_put_count, int req_post_count,
 			int req_patch_count, int req_delate_count, int res_put_count, int res_post_count, int res_patch_count,
 			int res_delate_count) throws SCIMException;
+	
 }

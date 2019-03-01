@@ -19,6 +19,7 @@ import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.resource.SCIMLocationFactory;
 import com.wowsanta.scim.resource.SCIMProviderRepository;
 import com.wowsanta.scim.resource.SCIMRepositoryManager;
+import com.wowsanta.scim.resource.SCIMResourceGetterRepository;
 import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.resource.SCIMServerResourceRepository;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
@@ -42,7 +43,7 @@ public class ProvisioningJob_GW extends SCIMJob {
 		SCIMBulkRequest scim_bluk_request = new SCIMBulkRequest();		
 		try {
 		
-			SCIMServerResourceRepository resource_repository = (SCIMServerResourceRepository) SCIMRepositoryManager.getInstance().getResourceRepository();
+			SCIMResourceGetterRepository resource_getter = (SCIMResourceGetterRepository) SCIMRepositoryManager.getInstance().getResourceRepository();
 			
 			SCIMScheduler scheduler = (SCIMScheduler) context.getJobDetail().getJobDataMap().get("schedulerInfo");
 			SCIMUser worker = (SCIMUser) context.getJobDetail().getJobDataMap().get("worker");
@@ -63,7 +64,7 @@ public class ProvisioningJob_GW extends SCIMJob {
 			// get system user
 			String system_id = scheduler.getSourceSystemId();
 
-			List<SCIMUser> user_list = resource_repository.getUsersByDate(from,to);
+			List<SCIMUser> user_list = resource_getter.getUsersByDate(from,to);
 			for (SCIMUser system_user : user_list) {
 				
 				System.out.println(">>>" + system_user);

@@ -23,6 +23,9 @@ public class SCIMDefinitions {
     public static enum MethodType {
     	GET,POST,PUT,PATCH,DELETE
     }
+    public static enum AdminType{
+    	SYS_SCHEDULER,SYS_ADMIN,SYS_OPERATOR
+    }
     public static enum UserType{
     	IM_ADMIN,IM_OPERATOR,SYS_ADMIN,SYS_OPERATOR,USER,DummyUser
     }

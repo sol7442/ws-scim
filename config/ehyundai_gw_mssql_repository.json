@@ -1,0 +1,20 @@
+{
+	"className": "com.wowsanta.scim.resource.SCIMRepositoryManager",
+	"resourceRepository": {
+		"className": "com.ehyundai.gw.GWResourceRepository",
+		"type": "RDB",
+		"tableName":"[dbo].[IM_ACCOUNT]",
+		"dbcp": {
+			"poolName": "gw-resource",
+			"driverName": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
+			"jdbcUrl": "jdbc:sqlserver://192.168.0.198:1433;database=scim_gw",
+			"userName": "wowsanta",
+			"password": "1q2w3e4r5t!@",
+			"valiationQuery": "select 1",
+			"timeBetweenEvictionRunsMillis": 60000,
+			"testWhileIdle": true,
+			"minIdle": 5,
+			"maxTotal": 50
+		}
+	}
+}

@@ -136,4 +136,13 @@ export class ScimApiService {
       return result;
     }));
   }
+
+  getAdminList(){    
+    let api_url = '/env/admins/';
+    return this.http.get<any>(api_url)
+    .pipe(map( result =>{
+      return result;
+    }));
+  }
+
 }

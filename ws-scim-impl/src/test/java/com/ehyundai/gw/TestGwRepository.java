@@ -1,6 +1,7 @@
 package com.ehyundai.gw;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -10,13 +11,15 @@ import com.ehyundai.object.RepositoryUtil;
 import com.ehyundai.object.User;
 import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.resource.SCIMRepositoryManager;
+import com.wowsanta.scim.resource.SCIMResourceGetterRepository;
 import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.util.Random;
 
 public class TestGwRepository {
-	private final String config_file_path = "../config/home_dev_gw_scim_repository.json";
+	private final String config_file_path = "../config/ehyundai_gw_mssql_repository.json";
 
 	public void load_manager(String conf_file_path) {
 		try {
@@ -28,15 +31,15 @@ public class TestGwRepository {
 		}
 	}
 	
-	@Test
-	public void sso_create_user_10_test() {
+	//@Test
+	public void create_user_10_test() {
 		try {
 			load_manager(config_file_path);
-			SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
+			GWResourceRepository res_repo = (GWResourceRepository) SCIMRepositoryManager.getInstance().getResourceRepository();
 			
-			List<User> user_list = RepositoryUtil.createUsers(10);
+			List<User> user_list = RepositoryUtil.createUsers(20);
 			for(User user : user_list) {
-				System.out.println(user);
+				System.out.println(user.toString(true));
 				res_repo.createUser(user);
 			}
 		}catch (Exception e) {
@@ -44,114 +47,46 @@ public class TestGwRepository {
 		}
 	}
 	
-//	@Test
-//	public void run_repository_manager_config_test() {
-//		load_manager(this.config_file_path);
-//		createUsers(10);
-//	}
-
-
-	public void createUsers(int size) {
-		SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
+	
+	@Test
+	public void getAllActiveUser() {
+	
+		load_manager(config_file_path);
+		SCIMResourceGetterRepository res_repo = (SCIMResourceGetterRepository) SCIMRepositoryManager.getInstance().getResourceRepository();
 		
-		for (int i = 0; i < size; i++) {
-			User user = new User();
-			user.setId(Random.number(10000000, 99999999));
-			user.setEmployeeNumber(user.getId());
-			user.setUserName(Random.name());
-			user.setActive(Random.yn_boolean(90));
-			user.setPosition(Random.position());
-			user.setJob(Random.job());
-
-			user.seteMail(user.getEmployeeNumber() + "@ehyundai.com");
-
-			user.setCompanyCode(Random.number(0, 5));
-			user.setGroupCode(Random.number(0, 10));
-
-			Date join_date = Random.beforeYears(10);
-			user.setJoinDate(join_date);
-
-			user.setMeta(new SCIMUserMeta());
-			if (user.isActive()) {
-				if (Random.yn(60).equals("Y")) {
-					user.setRetireDate(Random.date(join_date, new Date()));
-					user.getMeta().setCreated(Random.date(join_date, user.getRetireDate()));
-					user.getMeta().setLastModified(user.getRetireDate());
-				} else {
-					Date create_date = Random.beforeYears(1);
-					user.getMeta().setCreated(create_date);
-					user.getMeta().setLastModified(Random.date(create_date, new Date()));
-				}
-			} else {
-				Date create_date = Random.beforeYears(1);
-				user.getMeta().setCreated(create_date);
-				user.getMeta().setLastModified(Random.date(create_date, new Date()));
+		try {
+			List<SCIMUser> user_list = res_repo.getUsersByActive();
+			for (SCIMUser scimUser : user_list) {
+				System.out.println(scimUser);
 			}
-			//meta.setLocation(user.getId());
-			System.out.println(user.toString(true));
-
-			try {
-				res_repo.createUser(user);
-			} catch (SCIMException e) {
-				e.printStackTrace();
+			System.out.println("all active user : " + user_list.size());
+		} catch (SCIMException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void getUsersByDate() {
+	
+		load_manager(config_file_path);
+		SCIMResourceGetterRepository res_repo = (SCIMResourceGetterRepository) SCIMRepositoryManager.getInstance().getResourceRepository();
+		
+		try {
+			
+			Calendar cal = Calendar.getInstance();
+			Date to = cal.getTime();
+			cal.add(Calendar.DATE, -365*1);	// 1 년간의 데이터 모두
+			Date from = cal.getTime();
+			
+			System.out.println("from : " + from);
+			List<SCIMUser> user_list = res_repo.getUsersByDate(from, to);
+			for (SCIMUser scimUser : user_list) {
+				System.out.println(scimUser);
 			}
+			System.out.println("from : " + from + " : " + user_list.size());
+		} catch (SCIMException e) {
+			e.printStackTrace();
 		}
 	}
 
-//	
-//	//@Test
-//	public void getUser() {
-//		JsonObject system_conf = load_system_conf();
-//		GWResoureRepository gw_repo = load_repository(system_conf, "resourceRepository");
-//		
-//		try {
-//			User gw_user = (User)gw_repo.getUser("65836156");
-//			System.out.println(gw_user.toString(true));
-//		} catch (SCIMException e) {
-//			e.printStackTrace();
-//		}
-//	}
-//	
-//	
-//	//@Test
-//	public void getUsers() {
-//		JsonObject system_conf = load_system_conf();
-//		GWResoureRepository gw_repo = load_repository(system_conf, "resourceRepository");
-//		
-//		Calendar cal = Calendar.getInstance();
-//		Date to = cal.getTime();
-//		cal.add(Calendar.DATE, -7);
-//		Date from = cal.getTime();
-//		
-//		System.out.println("Date ["+from+"]["+to+"]");
-//		
-//		try {
-//			List<SCIMUser> user_list = gw_repo.getUsers(from,to);
-//			System.out.println("===["+user_list.size()+"]========================");
-//			for (SCIMUser scimUser : user_list) {
-//				//User gw_user = (User)scimUser;
-//				System.out.println(scimUser.toString());
-//			}
-//			System.out.println("===["+user_list.size()+"]========================");
-//		} catch (SCIMException e) {
-//			e.printStackTrace();
-//		}
-//		
-//	}
-//	
-//	//@Test
-//	
-//	//@Test
-//	public void get() {
-//		JsonObject system_conf = load_system_conf();
-//		GWResoureRepository gw_repo = load_repository(system_conf, "resourceRepository");
-//		
-//		try {
-//			SCIMUser user = gw_repo.getUser("UR_Code_0000");
-//			System.out.println(user);
-//			
-//		} catch (SCIMException e) {
-//			e.printStackTrace();
-//		}
-//	}
 }

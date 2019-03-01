@@ -7,6 +7,7 @@ import static spark.Spark.post;
 import static spark.Spark.put;
 import static spark.Spark.patch;
 import static spark.Spark.get;
+import static spark.Spark.delete;
 
 import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.schema.SCIMConstants;
@@ -41,6 +42,21 @@ public class ServerController extends SparkController{
 		hrsystem();
 		scheduler();
 		api();
+		env();
+	}
+
+	private void env() {
+		path("/env", () -> {	
+			path("/admins", () -> {
+				get(	"/"   			,EnvironmentService.getAllAdmin()	, new JsonTransformer());
+				put(	"/"   			,EnvironmentService.createAdmin()	, new JsonTransformer());				
+				post(	"/"   			,EnvironmentService.updateAdmin()	, new JsonTransformer());
+				get(	"/:adminId"   	,EnvironmentService.getAdmin()		, new JsonTransformer());
+				delete(	"/:adminId"   	,EnvironmentService.deleteAdmin()	, new JsonTransformer());
+			});
+			
+		});
+		
 	}
 
 	private void account() {

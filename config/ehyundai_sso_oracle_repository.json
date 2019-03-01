@@ -1,0 +1,19 @@
+{
+	"className": "com.wowsanta.scim.resource.SCIMRepositoryManager",
+	"resourceRepository": {
+		"className": "com.ehyundai.sso.SsoResoureRepository",
+		"type": "RDB",
+		"dbcp": {
+			"poolName": "sso-resource",
+			"driverName": "oracle.jdbc.driver.OracleDriver",
+			"jdbcUrl": "jdbc:oracle:thin:@192.168.0.200:1521:xe",
+			"userName": "ssodbuser",
+			"password": "Abcd1234",
+			"valiationQuery": "select 1",
+			"timeBetweenEvictionRunsMillis": 60000,
+			"testWhileIdle": true,
+			"minIdle": 5,
+			"maxTotal": 50
+		}
+	}
+}

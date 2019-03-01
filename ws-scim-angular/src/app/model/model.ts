@@ -60,3 +60,12 @@ export class SystemColumn {
     comment:string;
     mappingColumn:string;
 }
+
+export class Admin {
+    adminId:string;
+    adminName:string;
+    adminType:string;
+    
+    loginTime:string;
+    pwExpireTime:number;
+}

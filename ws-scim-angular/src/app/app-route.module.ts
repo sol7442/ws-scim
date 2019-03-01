@@ -12,6 +12,11 @@ import {SystemAccountComponent} from './main/account/system-account/system-accou
 import {AccountManagementComponent} from './main/account/account-management/account-management.component';
 import {AuditManagementComponent } from './main/audit/audit-management/audit-management.component';
 
+import {EnvironmentComponent } from './main/environment/environment.component';
+import {EnvAdminComponent } from './main/environment/env-admin/env-admin.component';
+import {EnvAngentComponent } from './main/environment/env-angent/env-angent.component';
+import {EnvSchedulerComponent } from './main/environment/env-scheduler/env-scheduler.component';
+
 const appRoutes: Routes = [
     { path: '', component: AppComponent, canActivate: [AuthGuard] },    
     { path: 'login', component: LoginComponent },
@@ -20,8 +25,17 @@ const appRoutes: Routes = [
     { path: 'main/sysaccount',component:SystemAccountComponent},    
     { path: 'main/accountmgr',component:AccountManagementComponent}, 
     { path: 'main/auditmgr',component:AuditManagementComponent}, 
+    { path: 'main/environment',
+        component:EnvironmentComponent,
+        children: [
+            { path: "", redirectTo: "admin", pathMatch: "full" },
+            { path: "admin", component: EnvAdminComponent   },
+            { path: "agent", component: EnvAngentComponent  },
+            { path: "scheduler", component: EnvSchedulerComponent  }
+          ]
+    }, 
 
     { path: '**', redirectTo: '' }
 ];
 
-export const AppRouteModule = RouterModule.forRoot(appRoutes);
+export const AppRouteModule = RouterModule.forRoot(appRoutes,{ enableTracing: true } );

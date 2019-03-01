@@ -39,7 +39,7 @@ export class TabMenuComponent implements OnInit {
                 label: '감사 로그', routerLink:"/main/auditmgr"
             },
             {
-                label: '환경 설정',
+                label: '환경 설정', routerLink:"/main/environment"
             }
         ];
   }

@@ -16,6 +16,7 @@ import com.wowsanta.scim.resource.SCIMProviderRepository;
 import com.wowsanta.scim.resource.SCIMRepository;
 import com.wowsanta.scim.resource.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.SCIMResourceRepository;
+import com.wowsanta.scim.resource.SCIMResourceSetterRepository;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
 import com.wowsanta.scim.scheduler.SCIMScheduler;
 import com.wowsanta.scim.schema.SCIMConstants;
@@ -173,7 +174,7 @@ System.out.println("bulk result >>> " + result);
 
 		SCIMResource resource = operation.getData();
 
-		SCIMResourceRepository resource_repository = SCIMRepositoryManager.getInstance().getResourceRepository();
+		SCIMResourceSetterRepository resource_repository = (SCIMResourceSetterRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
 		try {
 			SCIMUser user = (SCIMUser) resource;
 			resource_repository.updateUser(user);
@@ -209,7 +210,7 @@ System.out.println("bulk result >>> " + result);
 	private static SCIMBulkOperation deleteUser(SCIMBulkOperation operation) {
 		SCIMBulkOperation result = new SCIMBulkOperation(operation);
 		SCIMResource resource = operation.getData();
-		SCIMResourceRepository resource_repository = SCIMRepositoryManager.getInstance().getResourceRepository();
+		SCIMResourceSetterRepository resource_repository = (SCIMResourceSetterRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
 
 		try {
 			SCIMUser user = (SCIMUser) resource;
@@ -280,7 +281,7 @@ System.out.println("bulk result >>> " + result);
 		SCIMBulkOperation result = new SCIMBulkOperation(operation);
 		SCIMResource resource = operation.getData();
 
-		SCIMResourceRepository resource_repository = SCIMRepositoryManager.getInstance().getResourceRepository();
+		SCIMResourceSetterRepository resource_repository = (SCIMResourceSetterRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
 		result.setLocation(SCIMLocationFactory.getInstance().get(resource));
 
 		try {
@@ -301,7 +302,7 @@ System.out.println("bulk result >>> " + result);
 
 	public List<SCIMBulkOperation> excute(List<SCIMBulkOperation> request_operations) throws SCIMException {
 		
-		SCIMResourceRepository resource_repository = SCIMRepositoryManager.getInstance().getResourceRepository();
+		SCIMResourceSetterRepository resource_repository = (SCIMResourceSetterRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
 		
 		List<SCIMBulkOperation> operation_result_list = new ArrayList<SCIMBulkOperation>();
 		for (SCIMBulkOperation operation : request_operations) {

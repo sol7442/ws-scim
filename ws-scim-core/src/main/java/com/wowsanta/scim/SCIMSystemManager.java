@@ -72,10 +72,13 @@ public class SCIMSystemManager {
 	public void loadSchdulerManager() {
 		SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
 		try {
-			List<SCIMScheduler> scheduler_list = system_repository.getSchdulerAll();
-			for (SCIMScheduler scimScheduler : scheduler_list) {
-				SCIMSchedulerManager.getInstance().addScheduler(scimScheduler);
+			if(system_repository != null) {
+				List<SCIMScheduler> scheduler_list = system_repository.getSchdulerAll();
+				for (SCIMScheduler scimScheduler : scheduler_list) {
+					SCIMSchedulerManager.getInstance().addScheduler(scimScheduler);
+				}
 			}
+			
 		} catch (SCIMException e) {
 			e.printStackTrace();
 		}

@@ -15,6 +15,7 @@ import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.resource.SCIMProviderRepository;
 import com.wowsanta.scim.resource.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.SCIMResourceRepository;
+import com.wowsanta.scim.resource.SCIMServerResourceRepository;
 import com.wowsanta.scim.resource.SCIMSystemColumn;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
 import com.wowsanta.scim.util.Random;
@@ -54,7 +55,7 @@ public class IMResourceRepositoryTest {
 			
 			load_manager(config_file);
 			
-			SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
+			SCIMServerResourceRepository res_repo = (SCIMServerResourceRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
 			
 			List<SCIMUser> user_list = res_repo.getUsersByActive();
 			System.out.println("user_list["+user_list.size()+"]");
@@ -78,7 +79,7 @@ public class IMResourceRepositoryTest {
 			
 			load_manager(config_file);
 			
-			SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
+			SCIMServerResourceRepository res_repo = (SCIMServerResourceRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
 			
 			List<SCIMUser> user_list = res_repo.getUsersByActive();
 			System.out.println("user_list["+user_list.size()+"]");
@@ -96,7 +97,7 @@ public class IMResourceRepositoryTest {
 			
 			load_manager(config_file);
 			
-			SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
+			SCIMServerResourceRepository res_repo = (SCIMServerResourceRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
 			
 			Calendar cal = Calendar.getInstance();
 			Date to = cal.getTime();
@@ -117,7 +118,7 @@ public class IMResourceRepositoryTest {
 	
 	//
 	public void createUsers(int size) {
-		SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
+		SCIMServerResourceRepository res_repo = (SCIMServerResourceRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
 		
 		for (int i = 0; i < size; i++) {
 			User user = new User();

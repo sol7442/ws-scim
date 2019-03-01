@@ -20,7 +20,7 @@ public class SsoResourceRepositoryTest {
 	public void sso_create_user_10_test() {
 		try {
 			load_manager(repository_config_file);
-			SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
+			SsoResoureRepository res_repo = (SsoResoureRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
 			
 			List<User> user_list = RepositoryUtil.createUsers(10);
 			for(User user : user_list) {
