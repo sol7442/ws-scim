@@ -2,10 +2,12 @@ package com.wowsanta.scim.resource;
 
 import java.util.List;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.SCIMEnterpriseUser;
 import com.wowsanta.scim.obj.SCIMResource;
+import com.wowsanta.scim.obj.SCIMResource2;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.schema.SCIMConstants;
 
@@ -76,6 +78,17 @@ public class SCIMResouceFactory {
 			resource = newUserResource(json_obj);//
 		}else {
 			
+		}
+		return resource;
+	}
+	public SCIMResource2 parse(JsonElement json_resource) throws SCIMException {
+		SCIMResource2 resource = null;
+		try {
+			resource = (SCIMResource2) Class.forName("com.ehyundai.object.Resource").newInstance();
+			
+			resource.parse(json_resource.toString());
+		} catch (Exception e) {
+			throw new SCIMException("NEW RESOURCE INSTANCE CREATE FAILED : ", e);
 		}
 		return resource;
 	}

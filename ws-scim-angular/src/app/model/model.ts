@@ -65,7 +65,16 @@ export class Admin {
     adminId:string;
     adminName:string;
     adminType:string;
-    
+    password:string;
     loginTime:string;
     pwExpireTime:number;
+}
+
+
+export class ErrorData {
+    type:string;
+    code:string;
+    message:string;
+    detail:string;
+    solution:string;
 }

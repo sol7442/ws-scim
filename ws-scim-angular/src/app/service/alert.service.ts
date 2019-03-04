@@ -22,19 +22,24 @@ export class AlertService {
 
   success(message: string, keepAfterNavigationChange = false) {
 
-    console.log("11111", message);
+    console.log("success", message);
 
     this.keepAfterNavigationChange = keepAfterNavigationChange;
-    this.subject.next({ type: 'success', text: message });
+    this.subject.next({ type: 'success', data: message });
   }
-
-  error(message: string, keepAfterNavigationChange = false) {
-    
-    console.log("00000", message);
-
+  fail(message: any, keepAfterNavigationChange = false) {
+    console.log("fail", message);
     this.keepAfterNavigationChange = keepAfterNavigationChange;
-    this.subject.next({ type: 'error', text: message });
+    this.subject.next({ type: 'fail', data: message });
   }
+
+  error(error: any, keepAfterNavigationChange = false) {
+    console.log("error", error);
+    this.keepAfterNavigationChange = keepAfterNavigationChange;
+    this.subject.next({ type: 'error', data: error });
+  }
+
+  
 
   getMessage(): Observable<any> {
     return this.subject.asObservable();

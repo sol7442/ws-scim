@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit{
         this.admin.ppasswd = "pasword!1234";
 
         this.user = new User;
-        this.user.id = "sys-scim-admin";
+        this.user.id = "sys-admin";
         this.user.passwd = "pasword!1234";
 
         this.authenticationService.logout();
@@ -41,8 +41,11 @@ export class LoginComponent implements OnInit{
     login(event){
         this.authenticationService.login(this.user.id,this.user.passwd)
             .pipe(first())
-            .subscribe( data =>{
-                console.log("login-result : ", data);
+            .subscribe( result =>{
+                console.log("login-user : ", result);
+                
+                // set titlebar user info //
+
                 this.router.navigate(["/main/hrsystem"]);
             },error =>{
                 console.log("login-error : ", error);

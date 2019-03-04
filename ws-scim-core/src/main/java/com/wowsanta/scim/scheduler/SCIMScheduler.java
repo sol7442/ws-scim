@@ -16,6 +16,8 @@ import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.json.AbstractJsonObject;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
+import com.wowsanta.scim.resource.user.LoginUser;
+import com.wowsanta.scim.resource.worker.Worker;
 
 public class SCIMScheduler extends AbstractJsonObject {
 	
@@ -149,11 +151,12 @@ public class SCIMScheduler extends AbstractJsonObject {
 			Class job_cls = Class.forName(this.jobClass);
 			JobDetail job_detail = newJob(job_cls).build();
 			
-			SCIMUser scheduler_worker = new SCIMUser();
-			scheduler_worker.setId("sys-scim-scheduler");
+			Worker worker = new Worker();
+			worker.setWorkerId(this.schedulerId);
+			worker.setWorkerType("SCHEDULER");
 			
 			job_detail.getJobDataMap().put("schedulerInfo", this);
-			job_detail.getJobDataMap().put("worker", scheduler_worker);
+			job_detail.getJobDataMap().put("workerInfo", worker);
 			
 			this.scheduler = StdSchedulerFactory.getDefaultScheduler();
 			this.scheduler.start();
@@ -178,14 +181,20 @@ public class SCIMScheduler extends AbstractJsonObject {
 	public void setExcuteSystemId(String excuteSystemId) {
 		this.excuteSystemId = excuteSystemId;
 	}
-	public void startNow(SCIMUser login_user) throws SCIMException {
+	public void startNow(LoginUser login_user) throws SCIMException {
 		
 		try {
 			Class job_cls = Class.forName(this.jobClass);
 			JobDetail job_detail = newJob(job_cls).build();
 			
+			
+			
+			Worker worker = new Worker();
+			worker.setWorkerId(login_user.getUserId());
+			worker.setWorkerType(login_user.getType().toString());
+			
 			job_detail.getJobDataMap().put("schedulerInfo", this);
-			job_detail.getJobDataMap().put("worker", login_user);
+			job_detail.getJobDataMap().put("workerInfo", worker);
 			
 			this.scheduler = StdSchedulerFactory.getDefaultScheduler();
 			this.scheduler.start();

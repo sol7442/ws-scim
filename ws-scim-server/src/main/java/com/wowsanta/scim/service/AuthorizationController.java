@@ -5,6 +5,7 @@ import com.wowsanta.scim.obj.SCIMAdmin;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.resource.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
+import com.wowsanta.scim.resource.user.LoginUser;
 import com.wowsanta.scim.sec.SCIMJWTToken;
 
 import spark.Filter;
@@ -23,7 +24,7 @@ public class AuthorizationController implements Filter {
 			SCIMJWTToken verify_token = new SCIMJWTToken();
 			System.out.println("Authorization  >> : " + request.headers("Authorization"));
 
-			SCIMUser user = verify_token.verify(request.headers("Authorization"));
+			LoginUser user = verify_token.verify(request.headers("Authorization"));
 			System.out.println("Authorization USER >>: " + user);
 			
 			request.session(true).attribute("user",user);

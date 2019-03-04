@@ -13,6 +13,7 @@ import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.resource.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.SCIMResourceRepository;
+import com.wowsanta.scim.resource.SCIMResourceSetterRepository;
 import com.wowsanta.scim.util.Random;
 
 public class IMRepositoryTest {
@@ -109,7 +110,7 @@ public class IMRepositoryTest {
 	
 	
 	public void createUsers(int size) {
-		SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
+		SCIMResourceSetterRepository res_repo = (SCIMResourceSetterRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
 		
 		for (int i = 0; i < size; i++) {
 			User user = new User();

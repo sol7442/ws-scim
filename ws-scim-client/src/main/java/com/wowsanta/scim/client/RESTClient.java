@@ -23,13 +23,19 @@ import com.wowsanta.scim.json.SCIMJsonObject;
 import com.wowsanta.scim.message.SCIMBulkRequest;
 import com.wowsanta.scim.message.SCIMBulkResponse;
 import com.wowsanta.scim.obj.SCIMUser;
+import com.wowsanta.scim.resource.worker.Worker;
 import com.wowsanta.scim.schema.SCIMConstants;
 
 public class RESTClient {
-	private final SCIMUser user;
+	private SCIMUser user;
+	private Worker worker;
 	
 	public RESTClient(SCIMUser user) {
 		this.user = user;
+	}
+	
+	public RESTClient(Worker worker) {
+		this.worker = worker;
 	}
 
 	public SCIMBulkResponse post_bulk(String url,SCIMBulkRequest request) throws SCIMException {
@@ -63,8 +69,12 @@ public class RESTClient {
 		try {
 			HttpPost post = new HttpPost(url);
 			post.addHeader("Content-Type", "application/json;UTF-8");
-			post.addHeader("Authorization", RESTClientPool.getInstance().generateAuthorizationToken(user, 1000*60));
-
+			if(user != null) {
+				post.addHeader("Authorization", RESTClientPool.getInstance().generateAuthorizationToken(user, 1000*60));
+			}
+			if(worker != null) {
+				post.addHeader("Authorization", RESTClientPool.getInstance().generateAuthorizationToken(worker, 1000*60));
+			}
 
 			post.setEntity(new StringEntity(request.toString(),"UTF-8"));
 			return execute(post);
@@ -112,7 +122,7 @@ public class RESTClient {
 			}
 		}else {
 			System.out.println(http_response);
-			throw new SCIMException("call error : ", http_res_code);
+			throw new SCIMException("call error : ");
 		}
 		
 		return str.toString();
@@ -140,7 +150,7 @@ public class RESTClient {
 				e.printStackTrace();
 			}
 		}else {
-			throw new SCIMException("call error : ", http_res_code);
+			throw new SCIMException("call error : ");
 		}
 		
 		return str.toString();

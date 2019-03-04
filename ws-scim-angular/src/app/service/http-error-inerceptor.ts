@@ -8,6 +8,8 @@ import { AuthenticationService } from './authentication.service';
 
 import { AlertService } from './alert.service';
 
+import { ErrorData } from '../model/model';
+
 @Injectable()
 export class HttpErrorInerceptor implements HttpInterceptor {
 
@@ -17,15 +19,20 @@ export class HttpErrorInerceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(catchError(err => {
-      
-      this.alertService.error(err.message);
+      //ErrorData      
+      let error_data :ErrorData = new ErrorData(); 
+      error_data.type = "HTTP ERROR";
+      error_data.code = err.status;
+      error_data.message = err.message;
+      error_data.detail = JSON.stringify(err,undefined, 2);
 
-      if (err.status === 401) {
-          this.authenticationService.logout();
-          location.reload(true);
-        }
-        const error = err.error.message || err.statusText;
-        return throwError(error);
+      console.log("http 1 error : ", err);
+      
+      this.alertService.error(error_data);
+      
+      const error = err.error.message || err.statusText;
+      return throwError(error);
+
     }));
   }
 }

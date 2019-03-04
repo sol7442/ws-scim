@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.ehyundai.object.User;
+import com.wowsanta.scim.exception.SCIMError;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.message.SCIMBulkOperation;
@@ -71,7 +72,7 @@ public class BlukControl {
 								} else if (SCIMDefinitions.MethodType.DELETE.toString().equals(method)) {
 									resource_repository.deleteUser(req_user.getId());
 								} else {
-									throw new SCIMException("",SCIMErrorCode.e500, SCIMErrorCode.SCIMType.invalidValue);
+									throw new SCIMException(SCIMError.BadRequest);//"",SCIMErrorCode.e500, SCIMErrorCode.SCIMType.invalidValue);
 								}
 							} else {
 				
@@ -83,7 +84,7 @@ public class BlukControl {
 						} catch (Exception e) {
 							e.printStackTrace();
 							operation_result.setStatus("409");
-							operation_result.setResponse(SCIMErrorCode.e409);
+							operation_result.setResponse(SCIMError.InternalServerError);
 							
 						}finally {
 							System.out.println("bulk result >>> " + operation_result);

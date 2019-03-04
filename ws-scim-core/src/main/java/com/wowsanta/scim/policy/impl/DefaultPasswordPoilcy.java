@@ -2,6 +2,8 @@ package com.wowsanta.scim.policy.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Calendar;
+import java.util.Date;
 
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.policy.SCIMPasswordPolicy;
@@ -24,5 +26,12 @@ public class DefaultPasswordPoilcy implements SCIMPasswordPolicy{
 		} catch (UnsupportedEncodingException e) {
 			throw new SCIMException("encrypt failed : ",e);
 		}
+	}
+
+	public Date getPasswordExpireTime(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.DATE, -90*1);			// 1 년간의 데이터 모두
+		return cal.getTime();
 	}
 }

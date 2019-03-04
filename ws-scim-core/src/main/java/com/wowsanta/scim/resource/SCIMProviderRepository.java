@@ -3,10 +3,8 @@ package com.wowsanta.scim.resource;
 import java.util.List;
 
 import com.wowsanta.scim.exception.SCIMException;
-import com.wowsanta.scim.message.SCIMOperation;
 import com.wowsanta.scim.obj.SCIMAdmin;
-import com.wowsanta.scim.obj.SCIMUser;
-import com.wowsanta.scim.scheduler.SCIMSchedulerHistory;
+import com.wowsanta.scim.obj.SCIMSchedulerHistory;
 
 public interface SCIMProviderRepository extends SCIMSystemRepository {
 	
@@ -18,5 +16,5 @@ public interface SCIMProviderRepository extends SCIMSystemRepository {
 	
 	public void addSystemColumn(SCIMSystemColumn scimSystemColumn)throws SCIMException;
 	public List<SCIMSystemColumn> getSystemColumnsBySystemId(String string)throws SCIMException;
-	public List<SCIMSchedulerHistory> getSystemSchedulerHistory(String systemId)throws SCIMException;
+	public List<SCIMSchedulerHistory> getSchedulerHistoryById(String schedulerId)throws SCIMException;
 }

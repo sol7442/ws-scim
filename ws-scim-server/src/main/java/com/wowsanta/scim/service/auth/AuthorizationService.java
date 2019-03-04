@@ -3,9 +3,11 @@ package com.wowsanta.scim.service.auth;
 import static spark.Spark.halt;
 
 import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.resource.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
+import com.wowsanta.scim.resource.user.LoginUser;
 import com.wowsanta.scim.sec.SCIMJWTToken;
 
 import spark.Filter;
@@ -28,18 +30,16 @@ public class AuthorizationService {
 				
 				try {
 					SCIMJWTToken verify_token = new SCIMJWTToken();
-					SCIMUser login_user = verify_token.verify(auth_token);
+					LoginUser login_user = verify_token.verify(auth_token);
 					
 					System.out.println("login-user : " + login_user);
 					if(login_user != null) {
-						// check user ..
-//						SCIMSystemRepository systemRepository = SCIMRepositoryManager.getInstance().getSystemRepository();
-//						SCIMUser user = systemRepository.getLoginUser(verify_token.getUserId());
 						request.session(true).attribute("loginUser",login_user);
 					}
 					
 				} catch (SCIMException e) {
-					System.out.println("e>>" + e.getMessage());
+					SCIMLogger.sys("TOEKN VAILDATE FAILED ", e.getMessage());
+					
 					response.status(401);
 					halt(401);
 				}

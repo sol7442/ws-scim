@@ -2,37 +2,54 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
-import { User } from '../model/model';
+import { AlertService } from './alert.service';
+import { User ,ErrorData} from '../model/model';
 
 @Injectable()
 export class AuthenticationService {
   
   private toekn:string;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private alertService:AlertService ) {
     this.toekn = "";
   }
   
   login(userId:string, password:string){
-    let user = new User;
-    
     return this.http.post<any>('/login',JSON.stringify({"id":userId,"pw":password}))
       .pipe(map( result =>{
-        if(result.code == "0001"){
-          user.id    = userId;
-          user.name  = result.data.user.userName;
-          user.type  = "";
-          user.token = result.data.token;
+        console.log("login result : ", result);
+       
+        let user:User = new User();
 
-          this.toekn = result.data.token;
-          
-          sessionStorage.setItem('currentUser', JSON.stringify(user));
-        }
+        user.id    = userId;
+        user.name  = result.user.userName;
+        user.type  = result.user.type;
+        user.token = result.token;
+
+        this.toekn = user.token;
+        sessionStorage.setItem('currentUser', JSON.stringify(user));
+
         return user;
+
+        // }else{
+        //   let error_data :ErrorData = new ErrorData(); 
+        //   error_data.type = "HTTP ERROR";
+        //   error_data.code = result.code;
+        //   error_data.message = result.message;
+        //   error_data.detail = JSON.stringify(result.data,undefined, 2);
+        
+        //   this.alertService.error(error_data);
+
+        //   return null;
+        // }
+        
+        //return result;
       }));
   }
   logout(){
-    localStorage.removeItem('currentUser');
+    sessionStorage.removeItem('currentUser');
   }
   getToken(){
     return this.toekn;

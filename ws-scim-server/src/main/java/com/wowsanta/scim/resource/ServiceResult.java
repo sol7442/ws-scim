@@ -25,6 +25,9 @@ public class ServiceResult implements SCIMResult{
 	public void setCode(String code) {
 		this.code = code;
 	}
+	public void setCode(int code) {
+		this.code = String.valueOf(code);
+	}
 	public void setMessage(String msg) {
 		this.message = msg;
 	}

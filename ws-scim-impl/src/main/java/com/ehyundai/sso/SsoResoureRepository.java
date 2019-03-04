@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.ehyundai.object.User;
 import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.obj.SCIMResource2;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
@@ -40,7 +41,7 @@ public class SsoResoureRepository extends AbstractRDBRepository implements SCIMR
 	}
 	
 	@Override
-	public List<SCIMUser> getUsersByWhere(String where) throws SCIMException {
+	public List<SCIMResource2> getUsersByWhere(String where) throws SCIMException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -143,7 +144,7 @@ System.out.println("sso user create >>> " + sso_user);
         		sso_user.getMeta().setCreated(new Date(resultSet.getLong("CREATE_TIME")));
         		sso_user.getMeta().setLastModified(new Date(resultSet.getLong("MODIFY_TIME")));
         	}else {
-        		throw new SCIMException("USER NOT FOUND : " + userId, RESULT_IS_NULL);
+        		//throw new SCIMException("USER NOT FOUND : " + userId, RESULT_IS_NULL);
         	}
         	
 		} catch (SQLException e) {

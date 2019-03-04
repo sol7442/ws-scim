@@ -1,6 +1,7 @@
 package com.wowsanta.scim.service.scim.v2;
 
-import com.wowsanta.scim.schema.SCIMErrorCode;
+
+import com.wowsanta.scim.exception.SCIMError;
 
 import spark.Request;
 import spark.Response;
@@ -12,7 +13,7 @@ public class UserControl {
 		return new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
-				return SCIMErrorCode.e501;
+				return SCIMError.NotImplemented;
 			}
 		} ;
 	}
@@ -21,7 +22,7 @@ public class UserControl {
 		return new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
-				return SCIMErrorCode.e501;
+				return SCIMError.NotImplemented;
 			}
 		} ;
 	}
@@ -30,7 +31,7 @@ public class UserControl {
 		return new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
-				return SCIMErrorCode.e501;
+				return SCIMError.NotImplemented;
 			}
 		} ;
 	}
@@ -39,7 +40,7 @@ public class UserControl {
 		return new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
-				return SCIMErrorCode.e501;
+				return SCIMError.NotImplemented;
 			}
 		} ;
 	}

@@ -14,7 +14,7 @@ import com.wowsanta.scim.server.JsonTransformer;
 import com.wowsanta.scim.service.agent.AgentService;
 import com.wowsanta.scim.service.auth.AuthorizationService;
 import com.wowsanta.scim.service.auth.LoginService;
-import com.wowsanta.scim.service.schudler.SchdulerService;
+import com.wowsanta.scim.service.schudler.SchedulerService;
 import com.wowsanta.scim.service.scim.v2.BlukControl;
 import com.wowsanta.scim.service.scim.v2.UserControl;
 import com.wowsanta.scim.service.scim.v2.service.BlukService;
@@ -57,6 +57,6 @@ public class AgentController extends SparkController {
 	}
 
 	private void login() {
-		post("/login", new LoginController(new LoginService()), new JsonTransformer());
+		//post("/login", new LoginController(new LoginService()), new JsonTransformer());
 	}
 }

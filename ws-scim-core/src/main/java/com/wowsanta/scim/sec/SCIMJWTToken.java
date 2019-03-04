@@ -6,6 +6,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.SCIMUser;
+import com.wowsanta.scim.resource.user.LoginUser;
+import com.wowsanta.scim.resource.user.LoginUserType;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -96,12 +98,12 @@ public class SCIMJWTToken {
 		return builder.signWith(SignatureAlgorithm.HS256, key.getBytes()).compact();
 	}
 
-	public SCIMUser  verify(String token) throws SCIMException {
+	public LoginUser  verify(String token) throws SCIMException {
 		return verify(token, this.key);
 	}
-	public SCIMUser verify(String token, String key) throws SCIMException {
+	public LoginUser verify(String token, String key) throws SCIMException {
 		
-		SCIMUser user = null;
+		LoginUser user = null;
 		try {
 			Jws<Claims> claims = Jwts.parser().setSigningKey(key.getBytes()).parseClaimsJws(token);
 			this.userId = (String) claims.getBody().get("userId");
@@ -112,9 +114,15 @@ public class SCIMJWTToken {
 			this.status = 0;
 			this.detail = "OK";
 			
-			user = new SCIMUser();
-			user.setId((String) claims.getBody().get("userId"));
-			user.setUserName((String) claims.getBody().get("userName"));
+			String id   = (String) claims.getBody().get("userId");
+			String name = (String) claims.getBody().get("userName");
+			String type = (String) claims.getBody().get("userType");
+
+			user = new LoginUser();
+			user.setUserId(id);
+			user.setUserName(name);
+			user.setType(LoginUserType.valueOf(type));
+			
 
 		} catch (SignatureException e) {
 			status = 403;

@@ -1,27 +1,141 @@
 <div class="context-top">
-  <p-panel [toggleable]="true" [style]="{'margin-bottom':'20px' }">
-    <p-header class="context-header-text">
-        관리자 목록
-    </p-header>
-    <p-table [value]="admins" >
-        <ng-template pTemplate="header">
-            <tr>
-                <th>관리자 ID</th>
-                <th>관리자 NAME</th>
-                <th>관리자 TYPE</th>
-                <th>마지막 로그인 시간</th>
-                <th>패스워드 유효일</th>
-            </tr>
+    <p-dataView #dv [value]="admins" [paginator]="true" [rows]="10" paginatorPosition="top">
+        <p-header>
+            <div class="ui-g">
+                <div class="ui-g-10">
+                    <div style="position:relative">
+                        <input type="search" pInputText placeholder="Search Admin By ID" (keyup)="dv.filter($event.target.value)">
+                    </div>
+                </div>
+                <div class="ui-g-2" style="text-align:center" pTooltip="관리자 추가" tooltipPosition="top">
+                    <button pButton type="button" icon="fa fa-user-plus" label="관리자 추가" (click)="showFindUserDialog()"></button>
+                </div>
+            </div>
+        </p-header>
+        <ng-template let-admin pTemplate="listItem">
+            <div class="ui-g" style="padding: 0em; border-bottom: 1px solid #d9d9d9">
+                <div class="ui-g-5">                    
+                    <p-card [style]="{height: '100%'}">
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                <p>{{admin.adminId}} : {{admin.adminName}} : {{admin.adminType}}</p>
+                                <hr class="red-line">
+                            </div>
+                            <div class="ui-g-12">
+                                <div class="ui-g">
+                                    <div class="ui-g-5"><p>최종 로그인 시간</p></div>
+                                    <div class="ui-g-1"><p>:</p></div>
+                                    <div class="ui-g-6"><p>{{admin.loginTime}}</p></div>
+                                    <div class="ui-g-5"><p>패스워드 만료 일시</p></div>
+                                    <div class="ui-g-1"><p>:</p></div>
+                                    <div class="ui-g-6"><p>{{admin.pwExpireTime}}</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </p-card>
+                </div>
+                <div class="ui-g-5">
+                    <p-card [style]="{height: '100%'}">
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                <p>패스워드 변경</p>
+                                <hr class="red-line">
+                            </div>
+                            <div class="ui-g-12">
+                                <div class="ui-g">
+                                    <div class="ui-g-12">
+                                        <span class="ui-float-label">
+                                            <input type="password" id="float-input" size="40" pInputText> 
+                                            <label for="float-input">Username</label>
+                                        </span>        
+                                    </div>
+                                    <div class="ui-g-12">
+                                        <span class="ui-float-label">
+                                            <input type="password" id="float-input" size="40" pInputText> 
+                                            <label for="float-input">Username</label>
+                                        </span>        
+                                    </div>
+                                    <div class="ui-g-12">
+                                        <span class="ui-float-label">
+                                            <input type="password" id="float-input"  size="40" pInputText> 
+                                            <label for="float-input">Username</label>
+                                        </span>        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </p-card>
+                </div>
+                <div class="ui-g-2" style="text-align:center">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="button-box" pTooltip="관리자 변경" tooltipPosition="top">
+                                <button pButton type="button" icon="pi pi-user" label="관리자 변경" (click)="selectCar($event, car)"></button>
+                            </div>
+                        </div>
+                        <div class="ui-g-12 button-box" pTooltip="관리자 삭제" tooltipPosition="top" [style]="{height:'100%'}">
+                            <button pButton type="button" icon="fa fa-user-times" label="관리자 삭제" (click)="selectCar($event, car)"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </ng-template>
-        <ng-template pTemplate="body" let-admin>
-            <tr>
-                <td>{{admin.adminId}}</td>
-                <td>{{admin.adminName}}</td>
-                <td>{{admin.adminType}}</td>
-                <td>{{admin.loginTime}}</td>
-                <td>{{admin.pwExpireTime}}</td>
-            </tr>
-        </ng-template>
-    </p-table>
-  </p-panel>
+    </p-dataView>
 </div>
+
+<!-- new addmin -->
+<p-dialog header="관리자 추가" [(visible)]="displayDialog" [resizable]="false" [modal]="true" width="450" [style]="{'margin-top':'-120px','margin-left':'80px', 'margin-right':'80px'}"  (onAfterHide)="onDialogHide()">
+    
+    <div>
+        <div class="user-info-box">
+            <p-card>
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <input [(ngModel)]="newAdmin.adminId"   class="input-text"  type="text" size="35" pInputText placeholder="관리자 아이디"> 
+                        <input [(ngModel)]="newAdmin.adminName" class="input-text"  type="text" size="35" pInputText placeholder="관리자 이름"> 
+                        <hr class="red-line">
+                        <input [(ngModel)]="newAdmin.password"  class="input-text"  type="password" size="35" pInputText placeholder="패스워드">     
+                        <input [(ngModel)]="newPasswordC" class="input-text" type="password" size="35" pInputText placeholder="패스워드 확인">     
+                    </div>
+                </div>
+            </p-card>
+        </div>
+    </div>
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check"  label="Add" (click)="selectClose()"></button>
+        <button type="button" pButton icon="pi pi-close"  label="Close" (click)="cancelClose()"></button>
+    </p-footer>
+</p-dialog>
+
+<!--[add admin from user]-->
+<!-- <p-dialog header="관리자 추가" [(visible)]="displayDialog" [resizable]="false" [modal]="true" width="450" [style]="{'margin-top':'-120px','margin-left':'80px', 'margin-right':'80px'}"  (onAfterHide)="onDialogHide()">
+    
+    <div>
+        <div class="user-search-box"> 
+            <span>
+                <input #searchUserId class="input-text"  size="35" pInputText placeholder="Search Admin By ID"> 
+                <button pButton type="button" icon="fa fa-search" (click)="searchUserById(searchUserId.value)"></button>
+            </span>
+        </div>
+        <div class="user-info-box">
+            <p-card>
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <p>{{newAdmin.adminName}} : {{newAdmin.adminId}}  </p>
+                        <hr class="red-line">
+                    </div>
+                    <div class="ui-g-12">
+                        <input [(ngModel)]="newPassword" class="input-text"  type="password" size="35" pInputText placeholder="패스워드">     
+                    </div>
+                    <div class="ui-g-12">
+                        <input [(ngModel)]="newPasswordC" class="input-text" type="password" size="35" pInputText placeholder="패스워드 확인">     
+                    </div>
+                </div>
+            </p-card>
+        </div>
+    </div>
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check"  label="Add" (click)="selectClose()"></button>
+        <button type="button" pButton icon="pi pi-close"  label="Close" (click)="cancelClose()"></button>
+    </p-footer>
+</p-dialog> -->

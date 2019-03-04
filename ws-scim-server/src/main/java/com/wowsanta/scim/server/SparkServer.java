@@ -3,7 +3,6 @@ package com.wowsanta.scim.server;
 
 import com.wowsanta.scim.scheduler.SCIMJob;
 import com.wowsanta.scim.service.SCIMServiceServer;
-import com.wowsanta.scim.service.ServerController;
 import com.wowsanta.scim.service.SparkController;
 
 import spark.Spark;
@@ -83,7 +82,7 @@ public class SparkServer implements SCIMServiceServer{
 		Spark.staticFiles.registerMimeType("ico", "ico");
 		Spark.staticFiles.externalLocation(this.staticFiles);
 
-		new ServerController().control();
+		new SparkRouterController().control();
 		
 		
 //		try {

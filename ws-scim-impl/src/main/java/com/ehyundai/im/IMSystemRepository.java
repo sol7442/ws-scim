@@ -17,6 +17,8 @@ import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.message.SCIMOperation;
 import com.wowsanta.scim.obj.DefaultUserMeta;
 import com.wowsanta.scim.obj.SCIMAdmin;
+import com.wowsanta.scim.obj.SCIMAudit;
+import com.wowsanta.scim.obj.SCIMSchedulerHistory;
 import com.wowsanta.scim.obj.SCIMSystem;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
@@ -27,9 +29,9 @@ import com.wowsanta.scim.resource.SCIMResouceFactory;
 import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.resource.SCIMSystemColumn;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
+import com.wowsanta.scim.resource.user.LoginUser;
+import com.wowsanta.scim.resource.user.impl.LoginUserRdbImpl;
 import com.wowsanta.scim.scheduler.SCIMScheduler;
-import com.wowsanta.scim.scheduler.SCIMSchedulerDetailHistory;
-import com.wowsanta.scim.scheduler.SCIMSchedulerHistory;
 import com.wowsanta.scim.schema.SCIMConstants;
 import com.wowsanta.scim.schema.SCIMDefinitions;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
@@ -96,11 +98,7 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
         	
         	statement.execute();
 	    } catch (SQLException e) {
-	    	if (e instanceof SQLIntegrityConstraintViolationException) {
-				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
-			}else {
-				throw new SCIMException("ADD DATA FAILED : " + insertSQL , e);
-			}
+	    	throw new SCIMException("ADD DATA FAILED : " + insertSQL , e);
 		}finally {
 	    	DBCP.close(connection, statement, resultSet);
 	    }
@@ -254,12 +252,14 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
         	
         	statement.execute();
 	    } catch (SQLException e) {
-	    	System.out.println(">>>>>>> L : " +  e.getMessage());
-	    	if (e instanceof SQLIntegrityConstraintViolationException) {
-				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
-			}else {
-				throw new SCIMException("ADD AUDIT DATA FAILED : " + insertSQL , e);
-			}
+	    	throw new SCIMException("ADD DATA FAILED : " + insertSQL , e);
+//	    	
+//	    	System.out.println(">>>>>>> L : " +  e.getMessage());
+//	    	if (e instanceof SQLIntegrityConstraintViolationException) {
+//				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
+//			}else {
+//				throw new SCIMException("ADD AUDIT DATA FAILED : " + insertSQL , e);
+//			}
 		}finally {
 	    	DBCP.close(connection, statement, resultSet);
 	    }
@@ -319,64 +319,72 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
 	}
 
 	@Override
-	public List<SCIMSchedulerHistory> getSystemSchedulerHistory(String systemId)throws SCIMException{
-		final String selectSQL = " SELECT DISTINCT H.workId, H.reqPost, H.reqPut, H.reqPatch, H.reqDelete, "
-				+ " H.resPost, H.resPut, H.resPatch, H.resDelete, "
-				+ " H.workDate, S.schedulerDesc , A.adminId "
-				+ " FROM SCIM_SCHEDULER_HISTORY H , SCIM_SCHEDULER S, SCIM_AUDIT A "
-				+ " WHERE H.schedulerId=S.schedulerId AND H.workId = A.workId "
-				+ " AND S.sourceSystemId = ?";
-		
+	public void addAudit(SCIMAudit audit)throws SCIMException{
+		final String insertSQL = "INSERT INTO SCIM_AUDIT "
+			+ "(workId, workerId,workerType, userId, sourceSystemId, targetSystemId, action, method, result, detail, workDate)"
+			+ " VALUES ("
+			+ "?,?,?,?,?,"
+			+ "?,?,?,?,?,?)";
+			
 		Connection connection = null;
 		PreparedStatement statement = null;
-	    ResultSet resultSet = null;        
-
-	    List<SCIMSchedulerHistory> history_list = new ArrayList<SCIMSchedulerHistory>();
-        try {
-        	connection = getConnection();
-        	statement  = connection.prepareStatement(selectSQL);
-        	
-        	statement.setString(1, systemId);
-        	
-        	resultSet = statement.executeQuery();
-        	while(resultSet.next()) {
-        		SCIMSchedulerDetailHistory scheduler_history = new SCIMSchedulerDetailHistory();
-        		
-        		//scheduler_history.setSchedulerId(	resultSet.getString("schedulerId"));
-        		
-        		scheduler_history.setWorkId(	resultSet.getString("workId"));
-        		scheduler_history.setReqPut(	resultSet.getInt("reqPut"));
-        		scheduler_history.setReqPost(	resultSet.getInt("reqPost"));
-        		scheduler_history.setReqPatch(	resultSet.getInt("reqPatch"));
-        		scheduler_history.setReqDelete(	resultSet.getInt("reqDelete"));
-        		
-        		scheduler_history.setResPut(	resultSet.getInt("resPut"));
-        		scheduler_history.setResPost(	resultSet.getInt("resPost"));
-        		scheduler_history.setResPatch(	resultSet.getInt("resPatch"));
-        		scheduler_history.setResDelete(	resultSet.getInt("resDelete"));
-        		
-        		scheduler_history.setWorkDate( 	toJavaDate (resultSet.getTimestamp("workDate")));
-        		
-        		scheduler_history.setSchedulerDesc(resultSet.getString("schedulerDesc"));
-        		scheduler_history.setWorkId(resultSet.getString("workId"));
-        		
-        		history_list.add(scheduler_history);
-        	}
+		ResultSet resultSet = null;        
+		try {
+			connection = getConnection();
+			statement  = connection.prepareStatement(insertSQL);
+		
+			statement.setString(1, audit.getWorkId());
+			statement.setString(2, audit.getWorkerId());
+			statement.setString(3, audit.getWorkerType());
+			statement.setString(4, audit.getUserId());
+			statement.setString(5, audit.getSourceSystemId());
+			statement.setString(6, audit.getTargetSystemId());
+			statement.setString(7, audit.getAction());
+			statement.setString(8, audit.getMethod());
+			statement.setString(9, audit.getResult());
+			statement.setString(10, audit.getDetail());
+			statement.setDate(11, toSqlDate(audit.getWorkDate()));
+			
+			
+			statement.execute();
 		} catch (SQLException e) {
-			throw new SCIMException(selectSQL, e);
+			throw new SCIMException("ADD DATA FAILED : " + insertSQL , e);
 		}finally {
 			DBCP.close(connection, statement, resultSet);
 		}
-		return history_list;
+	}
+	@Override
+	public void addSchedulerHistory(SCIMSchedulerHistory history)throws SCIMException{
+		final String insertSQL = "INSERT INTO SCIM_SCHEDULER_HISTORY "
+				+ "(schedulerId, workId, workerId,successCount, failCount, workDate)"
+				+ " VALUES (?,?,?,?,?,?)";
+				
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;        
+		try {
+			connection = getConnection();
+			statement  = connection.prepareStatement(insertSQL);
 		
+			statement.setString(1, history.getSchedulerId());
+			statement.setString(2, history.getWorkId());
+			statement.setString(3, history.getWorkerId());
+			statement.setInt(4, history.getSuccessCount());
+			statement.setInt(5, history.getFailCount());
+			statement.setDate(6, toSqlDate(history.getWorkDate()));
+			
+			statement.execute();
+		} catch (SQLException e) {
+			throw new SCIMException("ADD DATA FAILED : " + insertSQL , e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
 	}
 	
 	@Override
-	public List<SCIMSchedulerHistory> getSchedulerHistory(String schedulerId)throws SCIMException{
-		final String selectSQL = "SELECT *"				
-				+ " FROM SCIM_SCHEDULER_HISTORY WHERE schedulerId=? order by workDate desc";
+	public List<SCIMSchedulerHistory> getSchedulerHistoryById(String schedulerId)throws SCIMException{
+		final String selectSQL = " SELECT * FROM SCIM_SCHEDULER_HISTORY WHERE schedulerId=?";
 		
-		System.out.println(">>>> " + schedulerId);
 		Connection connection = null;
 		PreparedStatement statement = null;
 	    ResultSet resultSet = null;        
@@ -392,19 +400,12 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
         	while(resultSet.next()) {
         		SCIMSchedulerHistory scheduler_history = new SCIMSchedulerHistory();
         		
-        		scheduler_history.setSchedulerId(	resultSet.getString("schedulerId"));
-        		scheduler_history.setWorkId(	resultSet.getString("workId"));
-        		scheduler_history.setReqPut(	resultSet.getInt("reqPut"));
-        		scheduler_history.setReqPost(	resultSet.getInt("reqPost"));
-        		scheduler_history.setReqPatch(	resultSet.getInt("reqPatch"));
-        		scheduler_history.setReqDelete(	resultSet.getInt("reqDelete"));
-        		
-        		scheduler_history.setResPut(	resultSet.getInt("resPut"));
-        		scheduler_history.setResPost(	resultSet.getInt("resPost"));
-        		scheduler_history.setResPatch(	resultSet.getInt("resPatch"));
-        		scheduler_history.setResDelete(	resultSet.getInt("resDelete"));
-        		
-        		scheduler_history.setWorkDate( 	toJavaDate (resultSet.getTimestamp("workDate")));
+        		scheduler_history.setSchedulerId(schedulerId);
+        		scheduler_history.setWorkId(resultSet.getString("workId"));
+        		scheduler_history.setWorkerId(	resultSet.getString("workerId"));
+        		scheduler_history.setSuccessCount(	resultSet.getInt("successCount"));
+        		scheduler_history.setFailCount(resultSet.getInt("failCount"));
+        		scheduler_history.setWorkDate( 	toJavaDate (resultSet.getDate("workDate")));
         		
         		history_list.add(scheduler_history);
         	}
@@ -414,6 +415,52 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
 			DBCP.close(connection, statement, resultSet);
 		}
 		return history_list;
+	}
+	
+	@Override
+	public List<SCIMSchedulerHistory> getSchedulerHistory(String schedulerId)throws SCIMException{
+		return null;
+//		final String selectSQL = "SELECT *"				
+//				+ " FROM SCIM_SCHEDULER_HISTORY WHERE schedulerId=? order by workDate desc";
+//		
+//		System.out.println(">>>> " + schedulerId);
+//		Connection connection = null;
+//		PreparedStatement statement = null;
+//	    ResultSet resultSet = null;        
+//
+//	    List<SCIMSchedulerHistory> history_list = new ArrayList<SCIMSchedulerHistory>();
+//        try {
+//        	connection = getConnection();
+//        	statement  = connection.prepareStatement(selectSQL);
+//        	
+//        	statement.setString(1, schedulerId);
+//        	
+//        	resultSet = statement.executeQuery();
+//        	while(resultSet.next()) {
+//        		SCIMSchedulerHistory scheduler_history = new SCIMSchedulerHistory();
+//        		
+//        		scheduler_history.setSchedulerId(	resultSet.getString("schedulerId"));
+//        		scheduler_history.setWorkId(	resultSet.getString("workId"));
+//        		scheduler_history.setReqPut(	resultSet.getInt("reqPut"));
+//        		scheduler_history.setReqPost(	resultSet.getInt("reqPost"));
+//        		scheduler_history.setReqPatch(	resultSet.getInt("reqPatch"));
+//        		scheduler_history.setReqDelete(	resultSet.getInt("reqDelete"));
+//        		
+//        		scheduler_history.setResPut(	resultSet.getInt("resPut"));
+//        		scheduler_history.setResPost(	resultSet.getInt("resPost"));
+//        		scheduler_history.setResPatch(	resultSet.getInt("resPatch"));
+//        		scheduler_history.setResDelete(	resultSet.getInt("resDelete"));
+//        		
+//        		scheduler_history.setWorkDate( 	toJavaDate (resultSet.getTimestamp("workDate")));
+//        		
+//        		history_list.add(scheduler_history);
+//        	}
+//		} catch (SQLException e) {
+//			throw new SCIMException(selectSQL, e);
+//		}finally {
+//			DBCP.close(connection, statement, resultSet);
+//		}
+//		return history_list;
 	}
 	
 	@Override
@@ -471,30 +518,50 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
 		return scheduler_list;
 	}
 
-	
 	@Override
-	public SCIMUser getLoginUser(String id) throws SCIMException {
+	public void updateLoginTime(String userId)throws SCIMException{
+		final String updateSQL = "UPDATE SCIM_ADMIN SET LOGINTIME=? WHERE ADMINID=?";
+
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
+	    try {
+	    	connection = getConnection();
+        	statement  = connection.prepareStatement(updateSQL);
+        	
+        	statement.setDate(1,  toSqlDate(new Date()));
+        	statement.setString(2, userId);
+        	
+        	statement.executeUpdate();
+        	
+	    } catch (SQLException e) {
+	    	throw new SCIMException("UPDATE FAILED : " + updateSQL , e);
+		}finally {
+	    	DBCP.close(connection, statement, resultSet);
+	    }
+	};
+	@Override
+	public LoginUser getLoginUser(String id) throws SCIMException {
 		//final String selectSQL = "SELECT A.adminId, B.userName,  A.adminType, A.adminPw FROM SCIM_ADMIN A, SCIM_USER B WHERE A.adminId = B.userId AND A.adminId = ?";
-		final String selectSQL = "SELECT U.userId, U.userName, U.password, SA.systemId FROM SCIM_USER U , SCIM_SYSTEM_ADMIN SA WHERE U.userId = SA.userId AND U.userId = ?";
+		final String selectSQL = "SELECT * FROM SCIM_ADMIN WHERE ADMINID=?";
 				
 		Connection connection = null;
 		PreparedStatement statement = null;
 	    ResultSet resultSet = null;        
 
-	    SCIMUser login_user = null;
+	    LoginUserRdbImpl login_user = null;
         try {
         	connection = getConnection();
         	statement  = connection.prepareStatement(selectSQL);
         	statement.setString(1, id);
         	resultSet = statement.executeQuery();
         	if(resultSet.next()) {
-        		login_user = new SCIMUser();
-        		login_user.setId(resultSet.getString("userId"));
-        		login_user.setUserName(resultSet.getString("userName"));
-        		login_user.setPassword(resultSet.getString("password"));
-        	}else {
-        		throw new SCIMException("USER NOT FOUND : " + id, RESULT_IS_NULL);
+        		login_user = new LoginUserRdbImpl(resultSet);
         	}
+//        	}else {
+//        		throw new SCIMException("USER NOT FOUND : " + id, RESULT_IS_NULL);
+//        	}
 		} catch (SQLException e) {
 			throw new SCIMException(selectSQL, e);
 		}finally {
@@ -506,48 +573,49 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
 
 	
 	
-	
-
-	@Override
-	public void addOperationResult(String workId, SCIMUser user, String source,String direct, SCIMOperation operation, SCIMOperation result) throws SCIMException {
-		final String insertSQL = "INSERT INTO SCIM_AUDIT (workId, adminId,userId,sourceSystem,directSystem,method,result,detail,workDate)"
-				+ " VALUES ("
-				+ "?,?,?,?,?,"
-				+ "?,?,?,?)";
-		
-		Connection connection = null;
-		PreparedStatement statement = null;
-	    ResultSet resultSet = null;        
-	    try {
-	    	connection = getConnection();
-        	statement  = connection.prepareStatement(insertSQL);
-
-        	statement.setString(1, workId);
-        	statement.setString(2, user.getId());
-        	statement.setString(3, operation.getData().getId());
-        	statement.setString(4, source);
-        	statement.setString(5, direct);
-        	statement.setString(6, operation.getMethod());
-        	statement.setString(7, result.getStatus());
-        	if(result.getResponse() != null) {
-        		statement.setString(8, result.getResponse().getDetail());
-        	}else {
-        		statement.setString(8, null);
-        	}
-        	statement.setTimestamp(9, toSqlTimestamp(new Date()));
-        	
-        	statement.execute();
-	    } catch (SQLException e) {
-	    	System.out.println(">>>>>>> L : " +  e.getMessage());
-	    	if (e instanceof SQLIntegrityConstraintViolationException) {
-				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
-			}else {
-				throw new SCIMException("ADD AUDIT DATA FAILED : " + insertSQL , e);
-			}
-		}finally {
-	    	DBCP.close(connection, statement, resultSet);
-	    }
-	}
+//	
+//
+//	@Override
+//	public void addOperationResult(String workId, SCIMUser user, String source,String direct, SCIMOperation operation, SCIMOperation result) throws SCIMException {
+//		final String insertSQL = "INSERT INTO SCIM_AUDIT (workId, adminId,userId,sourceSystem,directSystem,method,result,detail,workDate)"
+//				+ " VALUES ("
+//				+ "?,?,?,?,?,"
+//				+ "?,?,?,?)";
+//		
+//		Connection connection = null;
+//		PreparedStatement statement = null;
+//	    ResultSet resultSet = null;        
+//	    try {
+//	    	connection = getConnection();
+//        	statement  = connection.prepareStatement(insertSQL);
+//
+//        	statement.setString(1, workId);
+//        	statement.setString(2, user.getId());
+//        	statement.setString(3, operation.getData().getId());
+//        	statement.setString(4, source);
+//        	statement.setString(5, direct);
+//        	statement.setString(6, operation.getMethod());
+//        	statement.setString(7, result.getStatus());
+//        	if(result.getResponse() != null) {
+//        		statement.setString(8, result.getResponse().getDetail());
+//        	}else {
+//        		statement.setString(8, null);
+//        	}
+//        	statement.setTimestamp(9, toSqlTimestamp(new Date()));
+//        	
+//        	statement.execute();
+//	    } catch (SQLException e) {
+//	    	throw new SCIMException("ADD AUDIT DATA FAILED : " + insertSQL , e);
+////	    	System.out.println(">>>>>>> L : " +  e.getMessage());
+////	    	if (e instanceof SQLIntegrityConstraintViolationException) {
+////				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
+////			}else {
+////				throw new SCIMException("ADD AUDIT DATA FAILED : " + insertSQL , e);
+////			}
+//		}finally {
+//	    	DBCP.close(connection, statement, resultSet);
+//	    }
+//	}
 
 	//********************************************************
 	// SYSTEM - 
@@ -689,56 +757,57 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
 	    }
 	}
 
-
-	@Override
-	public void addSchedulerHistory(String schedulerId, String workId, int req_put_count, int req_post_count,
-			int req_patch_count, int req_delete_count, int res_put_count, int res_post_count, int res_patch_count,
-			int res_delete_count) throws SCIMException {
-		
-		
-		final String insertSQL = "INSERT INTO SCIM_SCHEDULER_HISTORY ("
-				+ " schedulerId, workId,"
-				+ " reqPut,reqPost,reqPatch,reqDelete,"
-				+ " resPut,resPost,resPatch,resDelete,"
-				+ " workDate)"
-				+ " VALUES ("
-				+ "?,?,"
-				+ "?,?,?,?,"
-				+ "?,?,?,?,"
-				+ "?)";
-		
-		Connection connection = null;
-		PreparedStatement statement = null;
-	    ResultSet resultSet = null;        
-	    try {
-	    	connection = getConnection();
-        	statement  = connection.prepareStatement(insertSQL);
-
-        	statement.setString(1, schedulerId);
-        	statement.setString(2, workId);
-        	
-        	statement.setInt(3,req_put_count);
-        	statement.setInt(4,req_post_count);
-        	statement.setInt(5,req_patch_count);
-        	statement.setInt(6,req_delete_count);
-        	
-        	statement.setInt(7,res_put_count);
-        	statement.setInt(8,res_post_count);
-        	statement.setInt(9,res_patch_count);
-        	statement.setInt(10,res_delete_count);
-        	
-        	statement.setTimestamp(11, toSqlTimestamp(new Date()));
-        	
-        	statement.execute();
-	    } catch (SQLException e) {
-	    	System.out.println(">>>>>>> L : " +  e.getMessage());
-	    	if (e instanceof SQLIntegrityConstraintViolationException) {
-				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
-			}else {
-				throw new SCIMException("ADD SCHEDULER HISTORY DATA FAILED : " + insertSQL , e);
-			}
-		}finally {
-	    	DBCP.close(connection, statement, resultSet);
-	    }
-	}
+//
+//	@Override
+//	public void addSchedulerHistory(String schedulerId, String workId, int req_put_count, int req_post_count,
+//			int req_patch_count, int req_delete_count, int res_put_count, int res_post_count, int res_patch_count,
+//			int res_delete_count) throws SCIMException {
+//		
+//		
+//		final String insertSQL = "INSERT INTO SCIM_SCHEDULER_HISTORY ("
+//				+ " schedulerId, workId,"
+//				+ " reqPut,reqPost,reqPatch,reqDelete,"
+//				+ " resPut,resPost,resPatch,resDelete,"
+//				+ " workDate)"
+//				+ " VALUES ("
+//				+ "?,?,"
+//				+ "?,?,?,?,"
+//				+ "?,?,?,?,"
+//				+ "?)";
+//		
+//		Connection connection = null;
+//		PreparedStatement statement = null;
+//	    ResultSet resultSet = null;        
+//	    try {
+//	    	connection = getConnection();
+//        	statement  = connection.prepareStatement(insertSQL);
+//
+//        	statement.setString(1, schedulerId);
+//        	statement.setString(2, workId);
+//        	
+//        	statement.setInt(3,req_put_count);
+//        	statement.setInt(4,req_post_count);
+//        	statement.setInt(5,req_patch_count);
+//        	statement.setInt(6,req_delete_count);
+//        	
+//        	statement.setInt(7,res_put_count);
+//        	statement.setInt(8,res_post_count);
+//        	statement.setInt(9,res_patch_count);
+//        	statement.setInt(10,res_delete_count);
+//        	
+//        	statement.setTimestamp(11, toSqlTimestamp(new Date()));
+//        	
+//        	statement.execute();
+//	    } catch (SQLException e) {
+//	    	throw new SCIMException("ADD AUDIT DATA FAILED : " + insertSQL , e);
+////	    	System.out.println(">>>>>>> L : " +  e.getMessage());
+////	    	if (e instanceof SQLIntegrityConstraintViolationException) {
+////				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
+////			}else {
+////				throw new SCIMException("ADD SCHEDULER HISTORY DATA FAILED : " + insertSQL , e);
+////			}
+//		}finally {
+//	    	DBCP.close(connection, statement, resultSet);
+//	    }
+//	}
 }

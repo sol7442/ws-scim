@@ -1,6 +1,9 @@
 package com.wowsanta.scim.message;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.wowsanta.scim.exception.SCIMError;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.json.SCIMJsonObject;
 import com.wowsanta.scim.obj.JsonUtil;
@@ -57,6 +60,10 @@ public class SCIMOperation extends SCIMJsonObject{
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	public void setStatus(int status) {
+		this.status = String.valueOf(status);
+	}
+	
 	public SCIMError getResponse() {
 		return response;
 	}
@@ -82,8 +89,8 @@ public class SCIMOperation extends SCIMJsonObject{
 		this.status = JsonUtil.toString(json_obj.get("status"));
 		
 		if(json_obj.get("response") != null) {
-			this.response = new SCIMError();
-			this.response.parse(json_obj.get("response").toString());
+			Gson gson = new GsonBuilder().create();
+			this.response = gson.fromJson(json_obj, SCIMError.class); 
 		}
 		
 		return json_obj;
@@ -102,7 +109,8 @@ public class SCIMOperation extends SCIMJsonObject{
 		json_obj.addProperty("location",	this.location);
 		json_obj.addProperty("status",	this.status);
 		if(this.response != null) {
-			json_obj.add("response",this.response.encode());
+			Gson gson = new GsonBuilder().create();
+			json_obj.add("response",gson.toJsonTree(this.response));
 		}
 		return json_obj ;
 	}

@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.ehyundai.object.Resource;
 import com.ehyundai.object.User;
 import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.obj.SCIMResource2;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
@@ -136,7 +138,7 @@ public class GWResourceRepository extends AbstractRDBRepository implements SCIMR
         	if(resultSet.next()) {
         		gw_user = newUserFromDB(resultSet);
         	}else {
-        		throw new SCIMException("USER NOT FOUND : " + userId, RESULT_IS_NULL);
+        		//throw new SCIMException("USER NOT FOUND : " + userId, RESULT_IS_NULL);
         	}
         	
 		} catch (SQLException e) {
@@ -209,15 +211,65 @@ public class GWResourceRepository extends AbstractRDBRepository implements SCIMR
 		return user_list;
 	}
 	@Override
-	public List<SCIMUser> getUsersByWhere(String where) {
-		final String selectSQL = "SELECT UR_Code, DN_ID, DN_Code, GR_Code, DisplayName, RegistDate, ModifyDate FROM BASE_OBJECT_UR WHERE UR_Code = ?";
+	public List<SCIMResource2> getUsersByWhere(String where) throws SCIMException{
+		final String selectSQL = "SELECT * "
+				+ " FROM " + this.tableName
+				+ " WHERE " + where;
 		Connection connection = null;
 		PreparedStatement statement = null;
 	    ResultSet resultSet = null;  
 		
-		return null;
+	    List<SCIMResource2> user_list = new ArrayList<SCIMResource2>();
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(selectSQL);
+        	
+        	resultSet = statement.executeQuery();
+        	while(resultSet.next()) {
+        		user_list.add(newResourceFromDB(resultSet));
+        	}
+        	
+		} catch (SQLException e) {
+			throw new SCIMException(selectSQL, e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+        
+		return user_list;
 	}
 	
+
+	private SCIMResource2 newResourceFromDB(ResultSet resultSet) {
+		Resource gw_user_resource = new Resource();
+		try {
+			gw_user_resource.setId(resultSet.getString("UR_Code"));
+    		
+			gw_user_resource.setUserName(resultSet.getString("DisplayName"));
+    		
+			gw_user_resource.setOrganization(resultSet.getString("DN_Code"));
+			gw_user_resource.setDivision(resultSet.getString("ExGroupName"));
+			gw_user_resource.setDepartment(resultSet.getString("ExGroupPath"));
+    		
+			gw_user_resource.setPositionCode(resultSet.getString("JobPositionCode"));
+			gw_user_resource.setPosition(resultSet.getString("ExJobPositionName"));
+			gw_user_resource.setJobCode(resultSet.getString("JobTitleCode"));
+			gw_user_resource.setJob(resultSet.getString("ExJobTitleName"));
+			gw_user_resource.setRankCode(resultSet.getString("JobLevelCode"));
+			gw_user_resource.setRank(resultSet.getString("ExJobLevelName"));
+			gw_user_resource.setActive(toBoolean(resultSet.getString("IsUse")));
+    		
+			gw_user_resource.setJoinDate(resultSet.getDate("EnterDate"));
+			gw_user_resource.setRetireDate(resultSet.getDate("RetireDate"));
+    		
+			gw_user_resource.setCreated(	toJavaDate(resultSet.getDate("RegistDate")));
+			gw_user_resource.setLastModified(toJavaDate(resultSet.getDate("ModifyDate")));
+    		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return gw_user_resource;
+	}
 
 	@Override
 	public SCIMGroup getGroup(String groupId) throws SCIMException {

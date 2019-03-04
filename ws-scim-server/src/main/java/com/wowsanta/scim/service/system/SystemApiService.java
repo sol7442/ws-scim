@@ -8,7 +8,6 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.plaf.synth.SynthSpinnerUI;
 
-import com.ehyundai.sso.ConciliationJob_SSO;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -16,6 +15,7 @@ import com.google.gson.JsonParser;
 import com.wowsanta.scim.SCIMSystemInfo;
 import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.client.RESTClient;
+import com.wowsanta.scim.exception.SCIMError;
 import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.message.SCIMBulkResponse;
 import com.wowsanta.scim.obj.SCIMSystem;
@@ -89,27 +89,12 @@ public class SystemApiService {
 		};
 	}
 
-	public static Route getSchedulerBySystemId() {
-		return new Route() {
-			@Override
-			public Object handle(Request request, Response response) throws Exception {
-				String systemId = request.params(":systemId");
-				
-				SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
-				List<SCIMScheduler> scheduler_list = system_repository.getSchdulerBySystemId(systemId);
-				
-				System.out.println("scheduler_list : " + scheduler_list.size());
-				
-				return scheduler_list;
-			}
-			
-		};
-	}
+
 	public static Route getSchedulerById() {
 		return new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
-				return SCIMErrorCode.e501;
+				return SCIMError.NotImplemented;
 			}
 			
 		};
@@ -135,7 +120,7 @@ public class SystemApiService {
 //				job.doExecute(scheduler, login_user, false);
 //				System.out.println("remote-schedulerId run <<: " + schedulerId);
 				
-				return SCIMErrorCode.e501;//"OK";
+				return SCIMError.NotImplemented;//"OK";
 			}
 		};
 	}
@@ -143,7 +128,7 @@ public class SystemApiService {
 		return new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
-				return SCIMErrorCode.e501;//"OK";
+				return SCIMError.NotImplemented;//"OK";
 			}
 //				JsonObject request_json = json_parse(request.body());
 //				String schedulerId = request_json.get("schedulerId").getAsString();

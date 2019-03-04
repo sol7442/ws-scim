@@ -116,24 +116,21 @@
         <p-table class="text-center" [value]="schedulerHistorys">
             <ng-template pTemplate="header">
                 <tr>
-                    <th>실행 시간</th>
-                    
-                    <th>계정 생성 (성공/시도)</th>
-                    <th>계정 변경 (성공/시도)</th>
-                    <th>계정 삭제 (성공/시도)</th>
-                    
-                    <th>합계 (성공/시도)</th>
+                    <th>작업 ID</th>
+                    <th>실행자 ID</th>
+                    <th>성공 </th>
+                    <th>실패 </th>
+                    <th>동작 시간</th>
                     <th>상세 내용</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-history>
                 <tr>
+                    <td>{{history.workId}}</td>
+                    <td>{{history.workerId}}</td>
+                    <td>{{history.successCount}}</td>
+                    <td>{{history.failCount}}</td>
                     <td>{{history.workDate}}</td>
-
-                    <td>{{history.resPut}}/{{history.reqPut}}</td>
-                    <td>{{history.resPost + history.resPatch }}/{{history.reqPost + history.reqPatch}}</td>
-                    <td>{{history.resDelete}}/{{history.reqDelete}}</td>
-                    <td> {{history.resPut + history.resPost + history.resPatch + history.resDelete }}/{{history.reqPut + history.reqPost + history.reqPatch + history.reqDelete}}</td>
                     <td> <p-button label="Click" (onClick)="showDetailLog($event,history)"> </p-button> </td>
                 </tr>
             </ng-template>

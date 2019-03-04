@@ -1,9 +1,44 @@
 <p-dialog header={{message.type}} [(visible)]="display" [modal]="true" [responsive]="true" [style]="{width: '350px', minWidth: '200px'}" [baseZIndex]="10000">
     <span>
-      {{message.text}}
+      {{message}}
     </span>
   <p-footer>
       <button type="button" pButton icon="pi pi-check" (click)="display=false" label="Yes"></button>
       <button type="button" pButton icon="pi pi-close" (click)="display=false" label="No" class="ui-button-secondary"></button>
   </p-footer>
+</p-dialog>
+
+<!--- alert dialog -->
+<p-dialog header={{message.type}} [(visible)]="alret_display" [modal]="true" width="450" [responsive]="true" [style]="{'margin-left':'80px', 'margin-right':'80px'}" [baseZIndex]="10000">
+    <p-card>
+      <p>
+          {{message.data}} 
+      </p>
+      <hr class="red-line">
+      <p>
+        {{message.data.message}}
+      </p>
+    </p-card>
+  <p-footer>
+      <button type="button" pButton icon="pi pi-check" (click)="alret_display=false" label="Close"></button>
+  </p-footer>
+  </p-dialog>
+
+<!--- error dialog -->
+<p-dialog header={{message.type}} [(visible)]="error_display" [modal]="true" width="450" [responsive]="true" [style]="{'margin-left':'80px', 'margin-right':'80px'}" [baseZIndex]="10000">
+  <p-card>
+    <p>
+        {{message.data.type}} : {{message.data.code}}
+    </p>
+    <hr class="red-line">
+    <p>
+      {{message.data.message}}
+    </p>
+  </p-card>
+  <p-panel header="Detail" [toggleable]="true" collapsed="false" >
+    <pre>{{message.data.detail}}</pre>
+  </p-panel>
+<p-footer>
+    <button type="button" pButton icon="pi pi-check" (click)="error_display=false" label="Close"></button>
+</p-footer>
 </p-dialog>

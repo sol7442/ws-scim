@@ -26,6 +26,7 @@
               "src/styles.css",
               "node_modules/primeicons/primeicons.css",
               "src/css/primeng-nova-light-theme.css",
+              "src/css/float-label.min.css",
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/font-awesome/css/font-awesome.css",
               "node_modules/primeflex/primeflex.css"              
@@ -80,6 +81,7 @@
               "src/styles.css",
               "/node_modules/primeicons/primeicons.css",
               "src/css/primeng-nova-light-theme.css",
+              "src/css/float-label.min.css",
               "/node_modules/primeng/resources/primeng.min.css",
               "/node_modules/primeflex/primeflex.css"              
             ],

@@ -49,7 +49,8 @@ import {DataViewModule} from 'primeng/dataview';
 import {DialogModule} from 'primeng/dialog';
 import {TableModule} from 'primeng/table';
 import {PaginatorModule} from 'primeng/paginator';
-
+import {CardModule} from 'primeng/card';
+import {TooltipModule} from 'primeng/tooltip';
 
 
 
@@ -69,9 +70,9 @@ import 'rxjs/Rx';
    imports: [
       BrowserModule,FormsModule,
       BrowserAnimationsModule,ReactiveFormsModule,
-      TabMenuModule,ToolbarModule,
+      TabMenuModule,ToolbarModule,TooltipModule,
       ButtonModule,SplitButtonModule,PanelModule,
-      ListboxModule,DataViewModule,DialogModule,TableModule,PaginatorModule,
+      ListboxModule,DataViewModule,DialogModule,TableModule,PaginatorModule,CardModule,
       AppRouteModule,
       HttpClientModule,
       LoginModule,

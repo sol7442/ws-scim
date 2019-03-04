@@ -44,7 +44,7 @@ public class AbstractJsonObject implements Serializable{
 			Gson gson = new GsonBuilder().create();
 			object = (AbstractJsonObject) gson.fromJson(jsonObject, Class.forName(class_name));
 		} catch (Exception e) {
-			throw new SCIMException("Json File load Exception ["+jsonObject+"]",e);
+			throw new SCIMException("Json File load Exception ["+jsonObject+"]", e);
 		} 
 		
 		return object;

@@ -3,12 +3,12 @@ package com.wowsanta.scim.service.scim.v2.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wowsanta.scim.exception.SCIMError;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.message.SCIMBulkOperation;
 import com.wowsanta.scim.message.SCIMBulkRequest;
 import com.wowsanta.scim.message.SCIMBulkResponse;
-import com.wowsanta.scim.message.SCIMError;
 import com.wowsanta.scim.obj.SCIMResource;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.resource.SCIMLocationFactory;
@@ -107,54 +107,56 @@ System.out.println("bulk result >>> " + result);
 
 					System.out.println("response : " + response_operation);
 					
-					system_repository.addOperationResult(
-							request.getRequestId(),
-							worker,
-							request.getSourceSystemId(),
-							request.getTargetSystemId(),
-							request_operation, response_operation);
-					
-					if(request_operation.getMethod().equals(SCIMDefinitions.MethodType.PUT.toString())){
-						req_put_count++;
-						if(response_operation.getResponse() == null) {
-							res_put_count++;
-						}
-					}else if(request_operation.getMethod().equals(SCIMDefinitions.MethodType.POST.toString())){
-						req_post_count++;
-						if(response_operation.getResponse() == null) {
-							res_post_count++;
-						}
-					}else if(request_operation.getMethod().equals(SCIMDefinitions.MethodType.PATCH.toString())){
-						req_patch_count++;
-						if(response_operation.getResponse() == null) {
-							res_patch_count++;
-						}
-					}else if(request_operation.getMethod().equals(SCIMDefinitions.MethodType.DELETE.toString())){
-						req_delete_count++;
-						if(response_operation.getResponse() == null) {
-							res_delete_count++;
-						}
-					}
+//					system_repository.addOperationResult(
+//							request.getRequestId(),
+//							worker,
+//							request.getSourceSystemId(),
+//							request.getTargetSystemId(),
+//							request_operation, response_operation);
+//					
+//					if(request_operation.getMethod().equals(SCIMDefinitions.MethodType.PUT.toString())){
+//						req_put_count++;
+//						if(response_operation.getResponse() == null) {
+//							res_put_count++;
+//						}
+//					}else if(request_operation.getMethod().equals(SCIMDefinitions.MethodType.POST.toString())){
+//						req_post_count++;
+//						if(response_operation.getResponse() == null) {
+//							res_post_count++;
+//						}
+//					}else if(request_operation.getMethod().equals(SCIMDefinitions.MethodType.PATCH.toString())){
+//						req_patch_count++;
+//						if(response_operation.getResponse() == null) {
+//							res_patch_count++;
+//						}
+//					}else if(request_operation.getMethod().equals(SCIMDefinitions.MethodType.DELETE.toString())){
+//						req_delete_count++;
+//						if(response_operation.getResponse() == null) {
+//							res_delete_count++;
+//						}
+//					}
 				}
 				
-				system_repository.addSchedulerHistory(request.getSchedulerId(),request.getRequestId(),
-						req_put_count,
-						req_post_count,
-						req_patch_count,
-						req_delete_count,
-						res_put_count,
-						res_post_count,
-						res_patch_count,
-						res_delete_count
-						);
+//				system_repository.addSchedulerHistory(request.getSchedulerId(),request.getRequestId(),
+//						req_put_count,
+//						req_post_count,
+//						req_patch_count,
+//						req_delete_count,
+//						res_put_count,
+//						res_post_count,
+//						res_patch_count,
+//						res_delete_count
+//						);
 				
 			}
 
 			private SCIMBulkOperation findResonseOperation(List<SCIMBulkOperation> response_opersations, SCIMBulkOperation request_operation) {
 				if(response_opersations == null) {
 					SCIMBulkOperation errer_operation =  new SCIMBulkOperation();
+					
 					errer_operation.setStatus(SCIMErrorCode.SCIMType.serverError.toString());
-					errer_operation.setResponse(SCIMErrorCode.e408);
+					errer_operation.setResponse(SCIMError.InternalServerError);
+					
 					return errer_operation;
 				}
 
@@ -181,24 +183,27 @@ System.out.println("bulk result >>> " + result);
 			result.setLocation(SCIMLocationFactory.getInstance().get(user));
 			result.setStatus(SCIMConstants.SatusConstants.SCUESS_CODE);
 		} catch (SCIMException e) {
-			SCIMError error = new SCIMError();
-			if (e.getCode() == SCIMRepository.RESULT_DUPLICATE_ENTRY) {
-				result.setStatus(SCIMConstants.SatusConstants.uniqueness);
+			
+//			
+//			
+//			SCIMError error = new SCIMError();
+//			if (e.getCode() == SCIMRepository.RESULT_DUPLICATE_ENTRY) {
+//				result.setStatus(SCIMConstants.SatusConstants.uniqueness);
+//
+//				error.setStatus(SCIMConstants.SatusConstants.uniqueness);
+//				error.setScimType(SCIMDefinitions.ErrorType.uniqueness.toString());
+//				error.setDetail(SCIMConstants.SatusConstants.uniqueness_DETAIL);
+//			} else {
+//				// bulk_resp.addError(bulkId, method, "400", null, "invalidSyntax", "Request is
+//				// unparsable, syntactically incorrect, or violates schema.");
+//				result.setStatus(SCIMConstants.SatusConstants.invalidSyntax);
+//
+//				error.setStatus(SCIMConstants.SatusConstants.invalidSyntax);
+//				error.setScimType(SCIMDefinitions.ErrorType.invalidSyntax.toString());
+//				error.setDetail(SCIMConstants.SatusConstants.invalidSyntax_DETAIL);
+//			}
 
-				error.setStatus(SCIMConstants.SatusConstants.uniqueness);
-				error.setScimType(SCIMDefinitions.ErrorType.uniqueness.toString());
-				error.setDetail(SCIMConstants.SatusConstants.uniqueness_DETAIL);
-			} else {
-				// bulk_resp.addError(bulkId, method, "400", null, "invalidSyntax", "Request is
-				// unparsable, syntactically incorrect, or violates schema.");
-				result.setStatus(SCIMConstants.SatusConstants.invalidSyntax);
-
-				error.setStatus(SCIMConstants.SatusConstants.invalidSyntax);
-				error.setScimType(SCIMDefinitions.ErrorType.invalidSyntax.toString());
-				error.setDetail(SCIMConstants.SatusConstants.invalidSyntax_DETAIL);
-			}
-
-			result.setResponse(error);
+			result.setResponse(SCIMError.BadRequest);
 
 		} finally {
 
@@ -219,26 +224,26 @@ System.out.println("bulk result >>> " + result);
 			result.setStatus(SCIMConstants.SatusConstants.SCUESS_CODE);
 
 		} catch (SCIMException e) {
-			SCIMError error = new SCIMError();
+//			SCIMError error = new SCIMError();
+//
+//			if (e.getCode() == SCIMRepository.RESULT_DUPLICATE_ENTRY) {
+//				result.setStatus(SCIMConstants.SatusConstants.uniqueness);
+//
+//				error.setStatus(SCIMConstants.SatusConstants.uniqueness);
+//				error.setScimType(SCIMDefinitions.ErrorType.uniqueness.toString());
+//				error.setDetail(SCIMConstants.SatusConstants.uniqueness_DETAIL);
+//
+//			} else {
+//				// bulk_resp.addError(bulkId, method, "400", null, "invalidSyntax", "Request is
+//				// unparsable, syntactically incorrect, or violates schema.");
+//				result.setStatus(SCIMConstants.SatusConstants.invalidSyntax);
+//
+//				error.setStatus(SCIMConstants.SatusConstants.invalidSyntax);
+//				error.setScimType(SCIMDefinitions.ErrorType.invalidSyntax.toString());
+//				error.setDetail(SCIMConstants.SatusConstants.invalidSyntax_DETAIL);
+//			}
 
-			if (e.getCode() == SCIMRepository.RESULT_DUPLICATE_ENTRY) {
-				result.setStatus(SCIMConstants.SatusConstants.uniqueness);
-
-				error.setStatus(SCIMConstants.SatusConstants.uniqueness);
-				error.setScimType(SCIMDefinitions.ErrorType.uniqueness.toString());
-				error.setDetail(SCIMConstants.SatusConstants.uniqueness_DETAIL);
-
-			} else {
-				// bulk_resp.addError(bulkId, method, "400", null, "invalidSyntax", "Request is
-				// unparsable, syntactically incorrect, or violates schema.");
-				result.setStatus(SCIMConstants.SatusConstants.invalidSyntax);
-
-				error.setStatus(SCIMConstants.SatusConstants.invalidSyntax);
-				error.setScimType(SCIMDefinitions.ErrorType.invalidSyntax.toString());
-				error.setDetail(SCIMConstants.SatusConstants.invalidSyntax_DETAIL);
-			}
-
-			result.setResponse(error);
+			result.setResponse(SCIMError.BadRequest);
 
 		} finally {
 
@@ -290,7 +295,7 @@ System.out.println("bulk result >>> " + result);
 
 		} catch (SCIMException e) {
 			//SCIMErrorCode.e409
-			result.setResponse(SCIMErrorCode.e409);
+			result.setResponse(SCIMError.BadRequest);
 			e.printStackTrace();
 		} finally {
 
@@ -327,7 +332,7 @@ System.out.println("bulk-request-op : " + operation);
 					} else if (SCIMDefinitions.MethodType.DELETE.toString().equals(method)) {
 						resource_repository.deleteUser(req_user.getId());
 					} else {
-						throw new SCIMException("",SCIMErrorCode.e500, SCIMErrorCode.SCIMType.invalidValue);
+						throw new SCIMException(SCIMError.BadRequest);
 					}
 				} else {
 	
@@ -339,7 +344,7 @@ System.out.println("bulk-request-op : " + operation);
 			} catch (SCIMException e) {
 				e.printStackTrace();
 
-				operation_result.setStatus(e.getType().toString());
+				operation_result.setStatus(e.getError().getStatus());
 				operation_result.setResponse(e.getError());
 				
 			}finally {

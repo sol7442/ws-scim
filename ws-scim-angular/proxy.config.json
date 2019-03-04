@@ -34,5 +34,10 @@
       "target": "http://localhost:5000/",
       "secure": false,
       "logLevel": "debug"
+    },
+    "/scim/*": {
+      "target": "http://localhost:5000/",
+      "secure": false,
+      "logLevel": "debug"
     }
 }

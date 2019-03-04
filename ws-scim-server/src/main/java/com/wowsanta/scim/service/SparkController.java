@@ -12,7 +12,7 @@ import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.schema.SCIMConstants;
 import com.wowsanta.scim.service.auth.AuthorizationService;
 import com.wowsanta.scim.service.auth.LoginService;
-import com.wowsanta.scim.service.schudler.SchdulerService;
+import com.wowsanta.scim.service.schudler.SchedulerService;
 import com.wowsanta.scim.service.scim.v2.BlukControl;
 import com.wowsanta.scim.service.scim.v2.UserControl;
 import com.wowsanta.scim.service.scim.v2.service.BlukService;

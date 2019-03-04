@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient,HttpHeaders,HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
+import { Admin } from '../model/model';
+
 
 @Injectable()
 export class ScimApiService {
@@ -64,7 +66,7 @@ export class ScimApiService {
   }
 
   runSystemScheduler(schedulerId:string){
-    let api_url = '/scheduler/run/system';
+    let api_url = '/scheduler/run';
     
     let  httpParams = new HttpParams();
     httpParams.append("schedulerId",schedulerId);    
@@ -145,4 +147,19 @@ export class ScimApiService {
     }));
   }
 
+  addAdmin(admin:Admin){    
+    let api_url = '/env/admins/';
+    return this.http.put<any>(api_url, JSON.stringify(admin))
+    .pipe(map( result =>{
+      return result;
+    }));
+  }
+
+  searchUserById(userId:string){
+    let api_url = '/scim/v2.0/Users/' + userId;
+    return this.http.get<any>(api_url)
+    .pipe(map( result =>{
+      return result;
+    }));
+  }
 }

@@ -3,6 +3,7 @@ package com.wowsanta.scim.obj;
 import java.util.Date;
 
 import com.wowsanta.scim.json.AbstractJsonObject;
+import com.wowsanta.scim.resource.user.LoginUserType;
 
 public class SCIMAdmin extends AbstractJsonObject {
 
@@ -14,9 +15,17 @@ public class SCIMAdmin extends AbstractJsonObject {
 	private String adminId;
 	private String adminName;
 	private String adminType;
-	private String password;
+	private transient String password;
 	private Date   loginTime;
 	private Date   pwExpireTime;
+	
+	public SCIMAdmin() {}
+	public SCIMAdmin(SCIMUser user) {
+		this.adminId   = user.getId();
+		this.adminName = user.getUserName();
+		this.adminType = LoginUserType.ADMIN.toString();
+	}
+	
 	public String getAdminId() {
 		return adminId;
 	}

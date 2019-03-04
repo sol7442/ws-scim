@@ -15,6 +15,7 @@ import java.util.Map;
 
 import com.ehyundai.object.User;
 import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.obj.SCIMResource2;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
@@ -143,11 +144,7 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
         	statement1.execute();
         	
 	    } catch (SQLException e) {
-	    	if (e instanceof SQLIntegrityConstraintViolationException) {
-				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
-			}else {
-				throw new SCIMException("CREATE USER FAILED : " + insertSQL1 , e);
-			}
+	    	throw new SCIMException("CREATE USER FAILED : " + insertSQL1 , e);
 		}finally {
 	    	DBCP.close(connection, statement1, resultSet);
 	    }
@@ -190,11 +187,12 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
         	}
         	
 	    } catch (SQLException e) {
-	    	if (e instanceof SQLIntegrityConstraintViolationException) {
-				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
-			}else {
-				throw new SCIMException("CREATE USER FAILED : " + insertSQL2 , e);
-			}
+	    	throw new SCIMException("CREATE USER FAILED : " + insertSQL2 , e);
+//	    	if (e instanceof SQLIntegrityConstraintViolationException) {
+//				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
+//			}else {
+//				throw new SCIMException("CREATE USER FAILED : " + insertSQL2 , e);
+//			}
 		}finally {
 	    	DBCP.close(connection, statement, resultSet);
 	    }
@@ -226,11 +224,12 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
         	}
         	
 	    } catch (SQLException e) {
-	    	if (e instanceof SQLIntegrityConstraintViolationException) {
-				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
-			}else {
-				throw new SCIMException("CREATE USER FAILED : " + insertSQL2 , e);
-			}
+	    	throw new SCIMException("CREATE USER FAILED : " + insertSQL2 , e);
+//	    	if (e instanceof SQLIntegrityConstraintViolationException) {
+//				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
+//			}else {
+//				throw new SCIMException("CREATE USER FAILED : " + insertSQL2 , e);
+//			}
 		}finally {
 	    	DBCP.close(connection, statement, resultSet);
 	    }
@@ -297,8 +296,30 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
 
 	@Override
 	public SCIMUser getUser(String userId) throws SCIMException {
-		// TODO Auto-generated method stub
-		return null;
+		final String selectSQL = "SELECT * FROM SCIM_USER WHERE USERID=?";
+	
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;              
+
+	    SCIMUser user = null;
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(selectSQL);
+        	statement.setString(1, userId);
+        	
+        	resultSet = statement.executeQuery();
+        	if(resultSet.next()) {
+        		user = newUser(resultSet);
+        	}
+        	
+		} catch (SQLException e) {
+			throw new SCIMException(selectSQL, e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+        
+		return user;
 	}
 	
 	@Override
@@ -619,7 +640,7 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
 
 
 	@Override
-	public List<SCIMUser> getUsersByWhere(String where) throws SCIMException {
+	public List<SCIMResource2> getUsersByWhere(String where) throws SCIMException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -764,10 +785,10 @@ System.out.println(">>>> clearSystemUser : " + systemId);
 		User system_user = (User)user;
 		
 		User existed_user = (User) getSystemUser(systemId, user.getId());
-		if(existed_user != null) {
-			System.out.println("exist ..>>" + existed_user);
-			throw new SCIMException("", SCIMErrorCode.e409, SCIMErrorCode.SCIMType.uniqueness) ;
-		}
+//		if(existed_user != null) {
+//			System.out.println("exist ..>>" + existed_user);
+//			throw new SCIMException("", SCIMErrorCode.e409, SCIMErrorCode.SCIMType.uniqueness) ;
+//		}
 		
 		System.out.println(">>>> system_user ("+systemId+"): " + user);
 	
@@ -804,11 +825,12 @@ System.out.println(">>>> clearSystemUser : " + systemId);
         	statement1.execute();
         	
 	    } catch (SQLException e) {
-	    	if (e instanceof SQLIntegrityConstraintViolationException) {
-				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
-			}else {
-				throw new SCIMException("CREATE USER FAILED : " + insertSQL1 , e);
-			}
+	    	throw new SCIMException("CREATE USER FAILED : " + insertSQL1 , e);
+//	    	if (e instanceof SQLIntegrityConstraintViolationException) {
+//				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
+//			}else {
+//				throw new SCIMException("CREATE USER FAILED : " + insertSQL1 , e);
+//			}
 		}finally {
 	    	DBCP.close(connection, statement1, resultSet);
 	    }
@@ -819,11 +841,11 @@ System.out.println(">>>> clearSystemUser : " + systemId);
 		User system_user = (User)user;
 	
 		User existed_user = (User) getSystemUser(systemId, user.getId());
-		if(existed_user != null) {
-			System.out.println("exist ..>>" + existed_user);
-			throw new SCIMException("", SCIMErrorCode.e409, SCIMErrorCode.SCIMType.uniqueness) ;
-			//return existed_user;
-		}
+//		if(existed_user != null) {
+//			System.out.println("exist ..>>" + existed_user);
+//			throw new SCIMException("", SCIMErrorCode.e409, SCIMErrorCode.SCIMType.uniqueness) ;
+//			//return existed_user;
+//		}
 		
 		System.out.println(">>>> system_user ("+systemId+"): " + user);
 	
@@ -860,11 +882,12 @@ System.out.println(">>>> clearSystemUser : " + systemId);
         	statement1.execute();
         	
 	    } catch (SQLException e) {
-	    	if (e instanceof SQLIntegrityConstraintViolationException) {
-				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
-			}else {
-				throw new SCIMException("CREATE USER FAILED : " + insertSQL1 , e);
-			}
+	    	throw new SCIMException("CREATE USER FAILED : " + insertSQL1 , e);
+//	    	if (e instanceof SQLIntegrityConstraintViolationException) {
+//				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
+//			}else {
+//				throw new SCIMException("CREATE USER FAILED : " + insertSQL1 , e);
+//			}
 		}finally {
 	    	DBCP.close(connection, statement1, resultSet);
 	    }
