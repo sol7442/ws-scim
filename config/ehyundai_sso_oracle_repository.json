@@ -9,7 +9,7 @@
 			"jdbcUrl": "jdbc:oracle:thin:@192.168.0.200:1521:xe",
 			"userName": "ssodbuser",
 			"password": "Abcd1234",
-			"valiationQuery": "select 1",
+			"valiationQuery": "SELECT * FROM COLS WHERE TABLE_NAME = 'WA3_USER'",
 			"timeBetweenEvictionRunsMillis": 60000,
 			"testWhileIdle": true,
 			"minIdle": 5,

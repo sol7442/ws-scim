@@ -17,7 +17,7 @@
         </p-header>
         <div class="ui-helper-clearfix">
             <p-table class="table-cell-center" [value]="users" [paginator]="true" [rows]="5" [responsive]="true"
-              selectionMode="single" [(selection)]="selectedUser"  (onRowSelect)="onRowSelect($event)" [metaKeySelection]="false" >
+              selectionMode="single" [(selection)]="selectedUser"   [metaKeySelection]="false" >
                 <ng-template pTemplate="header">
                     <tr>
                         <th>사용자 이름</th>
@@ -26,18 +26,18 @@
                         <th>상태 </th>
                         <th>생성일 </th>
                         <th>변경일 </th>
-                        <th>상세보기 </th>
+                        <th>배포일 </th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-user>
-                    <tr>
+                    <tr (click)="onRowSelect(user)" >
                         <td>{{user.userName}}</td>
                         <td>{{user.id}}</td>
                         <td>{{user.employeeNumber}}</td>
                         <td>{{user.active}}</td>
-                        <td>{{user.meta.created}}</td>
-                        <td>{{user.meta.lastModified}}</td>
-                        <td><p-button label="Click" (onClick)="showDetail($event,user)"></p-button></td>
+                        <td>{{user.meta.created | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
+                        <td>{{user.meta.lastModified | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
+                        <td>{{user.provisionDate | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
                     </tr>
                 </ng-template>
             </p-table>
@@ -56,28 +56,32 @@
           </div>
       </p-header>
       <div class="ui-helper-clearfix">
-          <p-table class="table-cell-center" [value]="historis" [paginator]="true" [rows]="5" [responsive]="true">
-              <ng-template pTemplate="header">
-                  <tr>
-                      <th>작업자</th>
-                      <th>작업내용</th>
-                      <th>작업결과</th>
-                      <th>상세내용</th>
-                      <th>작업 일자</th>
-                      
-                  </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-history>
-                  <tr>
-                      <td>{{history.adminId}}</td>                      
-                      <td>{{history.method}}</td>
-                      <td>{{history.result}}</td>
-                      <td>{{history.detail}}</td>
-                      <td>{{history.workDate}}</td>
-                      
-                  </tr>
-              </ng-template>
-          </p-table>
+        <p-table class="text-center" [value]="historis" [paginator]="true" [rows]="10">
+          <ng-template pTemplate="header">
+              <tr>
+                  <th>변경 일시</th>
+                  <th>사용자 ID</th>
+                  <th>수행 내용</th>
+                  <th>원본 시스템</th>
+                  <th>타겟 시스템</th>
+                  <th>작업 결과</th>
+                  <th>작업자/타입</th>
+                  <th>실패 원인</th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-history>
+              <tr>
+                  <td>{{history.workDate | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
+                  <td>{{history.userId}}</td>
+                  <td>{{history.method}}</td>
+                  <td>{{history.sourceSystemId}}</td>
+                  <td>{{history.targetSystemId}}</td>
+                  <td>{{history.result}}</td>
+                  <td>{{history.workerId}}/{{history.workerType}}</td>
+                  <td>{{history.detail}}</td>
+              </tr>
+          </ng-template>
+      </p-table>
       </div>
       <p-footer>
       </p-footer>

@@ -39,5 +39,15 @@
       "target": "http://localhost:5000/",
       "secure": false,
       "logLevel": "debug"
+    },
+    "/agent/*": {
+      "target": "http://localhost:5000/",
+      "secure": false,
+      "logLevel": "debug"
+    },
+    "/audit/*": {
+      "target": "http://localhost:5000/",
+      "secure": false,
+      "logLevel": "debug"
     }
 }

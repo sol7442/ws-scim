@@ -58,9 +58,6 @@
                         <div class="p-col-3">Description</div>
                         <div class="p-col-1 context-label-seperator" >:</div>
                         <div class="p-col-8">{{scheduler.schedulerDesc}}</div>
-                        <div class="p-col-3">Job Class</div>
-                        <div class="p-col-1 context-label-seperator" >:</div>
-                        <div class="p-col-8">{{scheduler.jobClass}}</div>
                       </div>             
                   </div>
                   <div class="p-col-5" >
@@ -78,11 +75,11 @@
                   </div>
                   <div class="p-col-2 p-align-center vertical-container" >
                       <div class="p-grid">
-                          <div class="p-col-12" >
-                              <button class="context-scheduler-button-area" pButton type="button" icon="pi pi-check" label="실행 이력"   (click)="showSchedulerLog($event, scheduler)"></button>
+                          <div *ngIf="scheduler.schedulerType != 'RESOUREC_ANLYSYS'" class="p-col-12" >
+                              <button class="context-scheduler-button-area" pButton type="button" icon="pi pi-check" label="실행 이력"   (click)="showSchedulerLog(scheduler)"></button>
                           </div>
                           <div class="p-col-12">
-                              <button class="context-scheduler-button-area" pButton type="button" icon="pi pi-check" label="즉시 실행"  (click)="runSystemScheduler($event, scheduler)"></button>
+                              <button class="context-scheduler-button-area" pButton type="button" icon="pi pi-check" label="즉시 실행"  (click)="runSystemScheduler(scheduler)"></button>
                           </div>
                       </div>
                   </div>

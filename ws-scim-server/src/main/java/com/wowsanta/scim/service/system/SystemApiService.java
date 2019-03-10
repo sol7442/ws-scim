@@ -220,4 +220,34 @@ public class SystemApiService {
 			}
 		};
 	}
+
+	public static Route getSystemRepository() {
+		return new Route() {
+			
+			@Override
+			public Object handle(Request request, Response response) throws Exception {
+				String systemId = request.params(":systemId");
+				SCIMProviderRepository provider_repository = (SCIMProviderRepository) SCIMRepositoryManager.getInstance().getSystemRepository();
+				
+				SCIMSystem target_system = provider_repository.getSystemById(systemId);
+				
+				String call_url = target_system.getSystemUrl() + "/system/repository";
+				
+				
+				return provider_repository.getSystemColumnsBySystemId(systemId);
+			}
+		};
+	}
+
+	public static Route setSystemRepository() {
+		return new Route() {
+			
+			@Override
+			public Object handle(Request request, Response response) throws Exception {
+				String systemId = request.params(":systemId");
+				SCIMProviderRepository provider_repository = (SCIMProviderRepository) SCIMRepositoryManager.getInstance().getSystemRepository();
+				return provider_repository.getSystemColumnsBySystemId(systemId);
+			}
+		};
+	}
 }

@@ -81,18 +81,6 @@ export class AccountManagementComponent implements OnInit {
   }
   runScheduler(event: Event, scheduler: Scheduler) {
     
-    // this.selectedScheduler = scheduler;
-    // this.scimApiService.runScheduler(
-    //   this.selectedScheduler.sourceSystemId,
-    //   this.selectedScheduler.schedulerId)
-    // .pipe(first())
-    // .subscribe( data =>{
-    //   console.log("runScheduler : ", data);
-      
-    // },error =>{
-    //     console.log("login-error : ", error);
-    // });
-
   }
 
   onDialogHide(){

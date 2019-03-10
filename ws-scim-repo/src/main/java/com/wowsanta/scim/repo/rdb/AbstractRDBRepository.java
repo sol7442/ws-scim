@@ -3,11 +3,14 @@ package com.wowsanta.scim.repo.rdb;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.google.gson.JsonObject;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.resource.SCIMRepository;
@@ -18,12 +21,25 @@ public abstract class AbstractRDBRepository extends SCIMRepository {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private DBCP dbcp;
+	protected DBCP dbcp;
 	protected String tableName;
 	
 	public AbstractRDBRepository() {
 		setType("RDB");
 	}
+	
+	@Override
+	public void fromJson(JsonObject jsonObject)throws SCIMException{
+		System.out.println("jsonObject : " + jsonObject);
+		setClassName(jsonObject.get("className").getAsString());
+		setType(jsonObject.get("type").getAsString());
+				
+		this.dbcp = new DBCP();
+		this.dbcp.parse(jsonObject.get("dbcp").getAsJsonObject());
+		
+		this.tableName = jsonObject.get("tableName").getAsString();
+	}
+	
 	@Override
 	public void initialize() throws SCIMException {
 		try {
@@ -32,6 +48,30 @@ public abstract class AbstractRDBRepository extends SCIMRepository {
 		} catch (Exception e) {
 			throw new SCIMException("DBCP Setup Error ",e);
 		}
+	}
+	
+	@Override
+	public boolean validate() throws SCIMException {
+		
+		final String selectSQL = this.dbcp.getValiationQuery();//
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
+
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(selectSQL);
+        	
+        	resultSet = statement.executeQuery();
+        	
+		} catch (SQLException e) {
+			throw new SCIMException(selectSQL, e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+        SCIMLogger.sys("REPOSITORY VAILDATE : {} ", selectSQL);	
+		return true;
 	}
 	
 	@Override
@@ -68,6 +108,26 @@ public abstract class AbstractRDBRepository extends SCIMRepository {
 		}	
 	}
 	
+	public String toStringDay(Date date) {
+		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
+		if(date == null) {
+			return "";
+		}else {
+			return transFormat.format(date);
+		}
+	}
+	public Date dayToJavaDate(String str) {
+		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
+		if(str == null) {
+			return null;
+		}else {
+			try {
+				return transFormat.parse(str);
+			} catch (ParseException e) {
+				return null;
+			}
+		}
+	}
 	public String toString(Date date) {
 		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		if(date == null) {
@@ -97,6 +157,8 @@ public abstract class AbstractRDBRepository extends SCIMRepository {
 		}
 	}
 	public boolean toBoolean(String yn) {
+		
+		System.out.println("active : " + yn);
 		if(yn.equals("Y")) {
 			return true;
 		}else {

@@ -35,7 +35,7 @@ public class SCIMScheduler extends AbstractJsonObject {
 	private int dayOfWeek;
 	private int hourOfDay;
 	private int minuteOfHour;
-	private String excuteSystemId;
+	private String executeSystemId;
 	private String sourceSystemId;
 	private String targetSystemId;
 	private Date lastExecuteDate;
@@ -175,11 +175,11 @@ public class SCIMScheduler extends AbstractJsonObject {
 			throw new SCIMException("Scheduler Shutdown Failed",e);
 		}
 	}
-	public String getExcuteSystemId() {
-		return excuteSystemId;
+	public String getExecuteSystemId() {
+		return executeSystemId;
 	}
-	public void setExcuteSystemId(String excuteSystemId) {
-		this.excuteSystemId = excuteSystemId;
+	public void setExecuteSystemId(String executeSystemId) {
+		this.executeSystemId = executeSystemId;
 	}
 	public void startNow(LoginUser login_user) throws SCIMException {
 		

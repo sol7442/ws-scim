@@ -27,7 +27,7 @@
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}  %logger{35} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %msg%n</pattern>
         </encoder>
     </appender>
     <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -76,6 +76,14 @@
     <logger name="acccess" level="info"  additivity="false">
     	<appender-ref ref="ACCEESS_FILE"/>
     </logger>
+    
+    <logger name="com.ehyundai" level="${logback.mode}"  additivity="false">
+    	<appender-ref ref="SYSTEM_FILE"/>
+    </logger>
+    <logger name="com.wowsanta" level="${logback.mode}"  additivity="false">
+    	<appender-ref ref="SYSTEM_FILE"/>
+    </logger>
+    
     <root level="${logback.mode}">
         <appender-ref ref="FILE"/>
     </root>

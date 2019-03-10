@@ -30,6 +30,7 @@ public class User extends SCIMEnterpriseUser{
 	private Date   retireDate;
 	
 	private Date   lastAccessDate;
+	private Date   provisionDate;
 	
 	private String eMail;
 	
@@ -64,6 +65,7 @@ public class User extends SCIMEnterpriseUser{
 			
 			this.eMail			= JsonUtil.toString(json_this.get("eMail"));
 			
+			this.provisionDate = JsonUtil.toDate(json_this.get("provisionDate"));
 		}
 		return json_user;
 	}
@@ -90,6 +92,7 @@ public class User extends SCIMEnterpriseUser{
 		
 		json_this.addProperty("eMail"		, this.eMail);
 		
+		json_this.addProperty("provisionDate", JsonUtil.toString(this.provisionDate));
 		
 		JsonObject user_json = super.encode();
 		user_json.add(USER_URI, json_this);
@@ -198,6 +201,16 @@ public class User extends SCIMEnterpriseUser{
 	}
 	public void setLastAccessDate(Date date) {
 		this.lastAccessDate = date;
+	}
+
+
+	public Date getProvisionDate() {
+		return provisionDate;
+	}
+
+
+	public void setProvisionDate(Date provisionDate) {
+		this.provisionDate = provisionDate;
 	}
 
 

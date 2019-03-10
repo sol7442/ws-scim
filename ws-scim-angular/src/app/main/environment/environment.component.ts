@@ -18,7 +18,7 @@ export class EnvironmentComponent implements OnInit {
   ngOnInit() {
     this.menus = [
       {label: '관리자 설정', icon: 'fa fa-fw fa-bar-chart', routerLink:["/main/environment/admin"]},
-     // {label: '에이전트 설정', icon: 'fa fa-fw fa-calendar', routerLink:["/main/environment/agent"]},
+      {label: '원장 에이전트 설정', icon: 'fa fa-fw fa-calendar', routerLink:["/main/environment/hr_agent"]},
      // {label: '스케줄러 설정', icon: 'fa fa-fw fa-calendar', routerLink:["/main/environment/scheduler"]},
     ];
     

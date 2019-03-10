@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.OutputStreamWriter;
 import java.io.Serializable;
+import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 
 import com.google.gson.Gson;
@@ -50,8 +51,28 @@ public class AbstractJsonObject implements Serializable{
 		return object;
 	}
 	
+	public static <T> T  load(String string, Class<T> classOfT)throws SCIMException {
+		Gson gson = new GsonBuilder().create();
+		return gson.fromJson(string, classOfT); 
+	}
+	
 	public static AbstractJsonObject load(String json_str) throws SCIMException {
-		return load(new JsonParser().parse(json_str).getAsJsonObject());
+		
+		JsonObject jsonObject = new JsonParser().parse(json_str).getAsJsonObject();
+		
+		System.out.println("load : " + jsonObject);
+		
+		String class_name = jsonObject.get("className").getAsString();
+		AbstractJsonObject object = null;
+		try {
+			Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+			object = (AbstractJsonObject) gson.fromJson(json_str, Class.forName(class_name));
+		} catch (Exception e) {
+			throw new SCIMException("Json File load Exception ["+jsonObject+"]", e);
+		} 
+		return object;
+//		JsonReader reader = new JsonReader(new StringReader(json_str));
+//		return load(new JsonParser().parse(reader).getAsJsonObject());
 	}
 	
 	public static AbstractJsonObject load(File json_file) throws SCIMException {
@@ -62,10 +83,7 @@ public class AbstractJsonObject implements Serializable{
 			throw new SCIMException("Json File load Exception ["+json_file.getName()+"]",e);
 		}
 	}
-	public static <T> T  load(JsonObject jsonObject, Class<T> classOfT) {
-		Gson gson = new GsonBuilder().create();
-		return gson.fromJson(jsonObject, classOfT); 
-	}
+
 
 	public void save(String file_name) throws SCIMException {
 		try {

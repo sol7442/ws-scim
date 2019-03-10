@@ -1,5 +1,6 @@
 package com.wowsanta.scim.resource;
 
+import com.google.gson.JsonObject;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.json.AbstractJsonObject;
 
@@ -24,5 +25,8 @@ public abstract class SCIMRepository extends AbstractJsonObject {
 	public String getType() {
 		return this.type;
 	}
-	
+
+	public abstract boolean validate()throws SCIMException;
+	public abstract void fromJson(JsonObject jsonObject)throws SCIMException;
+
 }

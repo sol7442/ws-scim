@@ -11,16 +11,15 @@ import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
-import org.apache.http.util.EntityUtils;
 
 import com.ehyundai.object.Resource;
 import com.ehyundai.object.User;
 import com.wowsanta.scim.client.RESTClient;
+import com.wowsanta.scim.exception.SCIMError;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.message.SCIMFindRequest;
 import com.wowsanta.scim.message.SCIMListResponse;
-import com.wowsanta.scim.message.SCIMSearchRequest;
 import com.wowsanta.scim.obj.SCIMAudit;
 import com.wowsanta.scim.obj.SCIMResource2;
 import com.wowsanta.scim.obj.SCIMSchedulerHistory;
@@ -29,7 +28,6 @@ import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.resource.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.SCIMResourceGetterRepository;
-import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.resource.SCIMResourceSetterRepository;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
 import com.wowsanta.scim.resource.worker.Worker;
@@ -40,38 +38,50 @@ import com.wowsanta.scim.schema.SCIMConstants;
 public class ResourceSyncJob_Groupware extends SCIMJob {
 
 	@Override
-	public boolean run(SCIMScheduler scheduler, Worker worker) throws SCIMException {
-		SCIMSystem source_system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(scheduler.getSourceSystemId());
+	public Object run(SCIMScheduler scheduler, Worker worker) throws SCIMException {
+		
+		try {
+
+			SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
+			SCIMSystem source_system = system_repository.getSystemById(scheduler.getSourceSystemId());
+			
+
+			SCIMAudit audit = makeAuditObject(scheduler, worker);
+			SCIMSchedulerHistory history = makeHistoryObject(scheduler, audit);
+
+			
+			String find_request_url = source_system.getSystemUrl() + "/scim/v2.0/Users/find";
+			SCIMFindRequest req_msg = new SCIMFindRequest();
+			String where = getWhereStatement(scheduler);
+			req_msg.setWhere(where);
+			
+			SCIMLogger.proc("Syn FindRequest  : where : {} ", where);
+			SCIMListResponse find_res = findRequestPost(worker, find_request_url, req_msg);
+			SCIMLogger.proc("Syn ListResponse : count : {} ", find_res.getTotalResults());			
+			
+			sync(find_res, audit, history);
+
+			SCIMLogger.proc("Sync Groupware Result : {} ", history);
+
+			system_repository.addSchedulerHistory(history);
+			system_repository.updateSchdulerLastExcuteDate(scheduler.getSchedulerId(),new Date());
+			
+			return history;
+			
+		}catch (SCIMException e) {
+			SCIMLogger.error("Syn Failed : ",e);
+			throw e;
+		}catch (Exception e) {
+			e.printStackTrace();
+			throw new SCIMException(e.getMessage(), SCIMError.InternalServerError, e);
+		}
+	}
+
+	private void sync(SCIMListResponse find_res, SCIMAudit audit, SCIMSchedulerHistory history) throws SCIMException {
 		
 		SCIMResourceGetterRepository resource_getter_repository  = (SCIMResourceGetterRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
 		SCIMResourceSetterRepository resource_settter_repository = (SCIMResourceSetterRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
 		SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
-		String find_request_url = source_system.getSystemUrl() + "/scim/v2.0/Users/find";
-		
-		SCIMFindRequest req_msg = new SCIMFindRequest();
-		
-		Date last_exec_date = scheduler.getLastExecuteDate();
-		if(last_exec_date == null) {
-			req_msg.setWhere("IsUse='Y'");
-		}else {
-			req_msg.setWhere("ModifyDate BETWEEN '"+ toString(last_exec_date)+"' AND '"+ toString(new Date())+"'");
-		}
-		
-		SCIMLogger.proc("Syn FindRequest  : {} ", req_msg);
-		SCIMListResponse find_res = findRequestPost(worker, find_request_url, req_msg);
-		SCIMLogger.proc("Syn ListResponse : ({}) {} ", find_res.getTotalResults(), find_res);
-		
-		SCIMAudit audit = new SCIMAudit(new Date());
-		audit.setWorkerId(worker.getWorkerId());
-		audit.setWorkerType(worker.getWorkerType());
-		audit.setSourceSystemId(scheduler.getSourceSystemId());
-		audit.setTargetSystemId(scheduler.getTargetSystemId());
-		audit.setAction("SCHEDULER");
-		
-		SCIMSchedulerHistory history = new SCIMSchedulerHistory(scheduler.getSchedulerId());
-		history.setWorkId(audit.getWorkId());
-		history.setWorkerId(audit.getWorkerId());
-		history.setWorkDate(audit.getWorkDate());
 		
 		List<SCIMResource2> resource_list = find_res.getResources();
 		for (SCIMResource2 resource : resource_list) {
@@ -97,13 +107,17 @@ public class ResourceSyncJob_Groupware extends SCIMJob {
 			system_repository.addAudit(audit);
 			history.addAudit(audit);
 		}
+	}
 
-		SCIMLogger.proc("Sync Groupware Result : {} ", history);
-		
-		system_repository.addSchedulerHistory(history);
-		system_repository.updateSchdulerLastExcuteDate(scheduler.getSchedulerId(),new Date());
-		
-		return true;
+	private String getWhereStatement(SCIMScheduler scheduler) {
+		String where = "";
+		Date last_exec_date = scheduler.getLastExecuteDate();
+		if(last_exec_date == null) {
+			where = "IsUse='Y'";
+		}else {
+			where = "ModifyDate BETWEEN '"+ toString(last_exec_date)+"' AND '"+ toString(new Date())+"'";
+		}
+		return where;
 	}
 
 	private User newUserFromResource2(SCIMResource2 resource) {

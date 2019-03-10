@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.ehyundai.object.Resource;
 import com.ehyundai.object.User;
 import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.obj.SCIMResource2;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
@@ -19,6 +21,7 @@ import com.wowsanta.scim.repo.rdb.DBCP;
 import com.wowsanta.scim.resource.SCIMGroup;
 import com.wowsanta.scim.resource.SCIMResourceGetterRepository;
 import com.wowsanta.scim.resource.SCIMResourceSetterRepository;
+import com.wowsanta.scim.resource.SCIMSystemColumn;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
 public class SsoResoureRepository extends AbstractRDBRepository implements SCIMResourceGetterRepository, SCIMResourceSetterRepository{
@@ -32,6 +35,40 @@ public class SsoResoureRepository extends AbstractRDBRepository implements SCIMR
 		setClassName(SsoResoureRepository.class.getCanonicalName());
 	}
 	
+	@Override
+	public boolean validate() throws SCIMException {
+		
+		final String selectSQL = this.dbcp.getValiationQuery();
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
+
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(selectSQL);
+        	
+        	resultSet = statement.executeQuery();
+        
+        	while(resultSet.next()) {
+        		SCIMSystemColumn column = new SCIMSystemColumn();
+        		
+        		column.setColumnName(resultSet.getString("COLUMN_NAME"));
+        		column.setDataType(resultSet.getString("DATA_TYPE"));
+        		column.setAllowNull(resultSet.getBoolean("NULLABLE"));
+        		
+        		SCIMLogger.sys("COLUMNS : {} ", column);
+        	}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SCIMException(selectSQL, e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+        SCIMLogger.sys("REPOSITORY VAILDATE : {} ", selectSQL);	
+		return true;
+	}
+	
 	//SELECT UR_CODE, MODIFYDATE FROM BASE_OBJECT_UR WHERE MODIFYDATE > '2019-01-14 23:17:36'
 
 	@Override
@@ -42,28 +79,66 @@ public class SsoResoureRepository extends AbstractRDBRepository implements SCIMR
 	
 	@Override
 	public List<SCIMResource2> getUsersByWhere(String where) throws SCIMException {
-		// TODO Auto-generated method stub
-		return null;
+		final String selectSQL = "SELECT * FROM WA3_USER " + where;
+	
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;              
+
+	    List<SCIMResource2> user_list = new ArrayList<SCIMResource2>();
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(selectSQL);
+        	
+        	resultSet = statement.executeQuery();
+        	while(resultSet.next()) {
+        		SCIMResource2 sso_user = newResourceFromDB(resultSet);
+        		
+        		user_list.add(sso_user);
+        	}
+        	
+		} catch (SQLException e) {
+			throw new SCIMException(selectSQL, e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+        
+		return user_list;
 	}
 
 
 	
+
+	private SCIMResource2 newResourceFromDB(ResultSet resultSet) throws SQLException {
+		Resource resource = new Resource();  
+				
+		resource.setId(resultSet.getString("ID"));
+		resource.setExernalId(resultSet.getString("ID"));
+		resource.setEmployeeNumber(resultSet.getString("ID"));
+		
+		resource.setUserName(resultSet.getString("NAME"));
+		resource.setActive(resultSet.getBoolean("DISABLED"));
+		resource.setLastAccessDate(new Date(resultSet.getLong("LAST_LOGON_TIME")));
+		resource.setCreated(new Date(resultSet.getLong("CREATE_TIME")));
+		resource.setLastModified(new Date(resultSet.getLong("MODIFY_TIME")));
+		
+		return resource;
+	}
 
 	@Override
 	public SCIMUser createUser(SCIMUser user) throws SCIMException {
 		User sso_user = (User)user;
 		
 		System.out.println("sso user create >>> " + sso_user);
-		final String insertSQL = "INSERT INTO WA3_USER (ID,NAME,EMAIL,DIV_ID,ORG_ID,PATH_ID"
-				+ ",DISABLED,LOCKED"
-				+ ",LAST_LOGON_TIME,CREATE_TIME,MODIFY_TIME )"
+		final String insertSQL = "INSERT INTO WA3_USER ("
+				+ "ID,NAME,EMAIL,DIV_ID,ORG_ID,PATH_ID"
+				+ ",DISABLED,LOCKED,PWD_MUST_CHANGE, ACCESS_ALLOW, PWD_RETRY_COUNT "
+				+ ",PWD_RETRY_TIME, LAST_LOGON_TIME, CREATE_TIME, MODIFY_TIME, VALID_FROM,VALID_TO)"
 				+ " VALUES ("
 				+ "?,?,?,?,?,?,"
-				+ "?,?,?,?,?)";
+				+ "?,?,?,?,?,"
+				+ "?,?,?,?,?,?)";
 				
-	    System.out.println(">>>>>>" + sso_user.toString(true));    	
-
-		
 		Connection connection = null;
 		PreparedStatement statement = null;
 	    ResultSet resultSet = null;        
@@ -71,35 +146,11 @@ public class SsoResoureRepository extends AbstractRDBRepository implements SCIMR
 	    	connection = getConnection();
         	statement  = connection.prepareStatement(insertSQL);
 
-        	statement.setString(1, sso_user.getId());
-        	statement.setString(2, sso_user.getUserName());
-        	statement.setString(3, sso_user.geteMail());
-        	
-        	statement.setString(4, sso_user.getOrganization());
-        	statement.setString(5, sso_user.getDivision());
-        	statement.setString(6, sso_user.getDepartment());
-
-        	statement.setBoolean(7,sso_user.isActive());
-        	statement.setBoolean(8,sso_user.isActive());
-        	
-        	if(sso_user.getLastAccessDate() != null) {
-        		statement.setLong(9,sso_user.getLastAccessDate().getTime());	
-        	}else {
-        		statement.setLong(9,new Date().getTime());
-        	}
-        	
-        	if(sso_user.getMeta() != null) {
-        		statement.setLong(10,sso_user.getMeta().getCreated().getTime());
-        		statement.setLong(11,sso_user.getMeta().getLastModified().getTime());
-        	}else {
-        		statement.setLong(10,new Date().getTime());
-        		statement.setLong(11,new Date().getTime());
-        	}
-        	
+        	setCreateUserStatement(sso_user, statement);
+        	        	
         	statement.execute();
 	    }catch(Exception e) {
-System.out.println("sso user create error >>> " + e.getMessage());
-	    	
+	    	e.printStackTrace();
 	    	if (e instanceof SQLIntegrityConstraintViolationException) {
 				throw new SCIMException(e.getMessage());
 			}else {
@@ -108,17 +159,37 @@ System.out.println("sso user create error >>> " + e.getMessage());
 	    }finally {
 	    	DBCP.close(connection, statement, resultSet);
 	    }
-System.out.println("sso user create >>> " + sso_user);
 		
 		return sso_user;
 	}
 
+	private void setCreateUserStatement(User sso_user, PreparedStatement statement) throws SQLException {
+		statement.setString(1, sso_user.getId());
+		statement.setString(2, sso_user.getUserName());
+		statement.setString(3, sso_user.geteMail());
+		
+		statement.setString(4, sso_user.getOrganization());
+		statement.setString(5, sso_user.getDivision());
+		statement.setString(6, "NOT DEFINED");//sso_user.getDepartment()
+
+		statement.setBoolean(7,false);
+		statement.setBoolean(8,false);
+		statement.setBoolean(9,true);
+		statement.setBoolean(10,true);
+		statement.setInt(11,3);
+		        	
+		Date nowDate = new Date();
+		statement.setLong(12, nowDate.getTime());
+		statement.setLong(13,nowDate.getTime());
+		statement.setLong(14,nowDate.getTime());
+		statement.setLong(15,nowDate.getTime());
+		statement.setLong(16,nowDate.getTime());
+		statement.setLong(17,new Date(2147483647).getTime());
+	}
+
 	@Override
 	public SCIMUser getUser(String userId) throws SCIMException {
-		final String selectSQL = "SELECT ID,NAME,EMAIL,DIV_ID,ORG_ID,PATH_ID"
-				+ ",DISABLED,LOCKED"
-				+ ",CREATE_TIME,MODIFY_TIME "
-				+ "FROM WA3_USER ID = ?";
+		final String selectSQL = "SELECT * FROM WA3_USER WHERE ID=?";
 		Connection connection = null;
 		PreparedStatement statement = null;
 	    ResultSet resultSet = null;              
@@ -129,6 +200,7 @@ System.out.println("sso user create >>> " + sso_user);
         	connection = getConnection();
         	statement  = connection.prepareStatement(selectSQL);
         	statement.setString(1, userId);
+        	
         	resultSet = statement.executeQuery();
         	if(resultSet.next()) {
         		sso_user = new User();
@@ -226,7 +298,6 @@ System.out.println("sso user create >>> " + sso_user);
         	connection = getConnection();
         	statement  = connection.prepareStatement(selectSQL);
         	
-        	System.out.println(new Date().getTime() + ":" + from.getTime() + " : " + to.getTime());
         	statement.setLong(1, from.getTime());
         	statement.setLong(2, to.getTime());
         	
@@ -264,7 +335,7 @@ System.out.println("sso user create >>> " + sso_user);
 		
 		final String updateSQL = "UPDATE WA3_USER "
 				+ "SET NAME=?, EMAIL=?,DIV_ID=?, ORG_ID=?,PATH_ID=?,"
-				+ "DISABLED=?,LOCKED=?, LAST_LOGON_TIME=?, MODIFY_TIME=? WHERE ID=?"; 
+				+ "DISABLED=?, MODIFY_TIME=? WHERE ID=?"; 
 				
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -275,20 +346,7 @@ System.out.println("sso user create >>> " + sso_user);
 	    	connection = getConnection();
         	statement  = connection.prepareStatement(updateSQL);
 
-        	statement.setString(1, sso_user.getUserName());
-        	statement.setString(2, sso_user.geteMail());
-        	
-          	statement.setString(3, "div_id_up");
-        	statement.setString(4, "org_id_up");
-        	statement.setString(5, "path_id_up");
-        	
-        	statement.setBoolean(6, sso_user.isActive());
-        	statement.setBoolean(7, sso_user.isActive());
-        	
-        	statement.setLong(8, toLong(sso_user.getLastAccessDate()));
-        	statement.setLong(9, new Date().getTime());
-        	
-        	statement.setString(10, sso_user.getEmployeeNumber());
+        	setUpdateUserStatement(statement, sso_user);
         	
         	statement.executeUpdate();
 	    } catch (SQLException e) {
@@ -298,6 +356,18 @@ System.out.println("sso user create >>> " + sso_user);
 	    }		
 				
 		return null;
+	}
+
+	private void setUpdateUserStatement(PreparedStatement statement, User sso_user) throws SQLException {
+		statement.setString(1, sso_user.getUserName());
+		statement.setString(2, sso_user.geteMail());
+		statement.setString(3, sso_user.getOrganization());
+		statement.setString(4, sso_user.getDivision());
+		statement.setString(5, "NOT DEFINED-");
+		statement.setBoolean(6, sso_user.isActive());
+		statement.setLong(7, new Date().getTime());
+		
+		statement.setString(8, sso_user.getId());
 	}
 
 	private long toLong(Date lastAccessDate) {

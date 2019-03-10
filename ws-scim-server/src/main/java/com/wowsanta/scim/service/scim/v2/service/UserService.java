@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jetty.security.PropertyUserStore.UserListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.wowsanta.scim.exception.SCIMError;
 import com.wowsanta.scim.exception.SCIMException;
@@ -26,6 +28,8 @@ import static com.wowsanta.scim.server.JsonUtil.json_parse;
 
 public class UserService {
 
+	Logger logger = LoggerFactory.getLogger(UserService.class);
+	
 	public Route getUser() {
 		return new Route() {
 			@Override
@@ -50,15 +54,18 @@ public class UserService {
 					SCIMListResponse  result = new SCIMListResponse();
 					SCIMFindRequest find = json_parse(request.body(),SCIMFindRequest.class);
 					
+					logger.debug("find request > {}", find);
+					
 					SCIMResourceGetterRepository resource_repository = (SCIMResourceGetterRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
 					
 					List<SCIMResource2> user_list = resource_repository.getUsersByWhere(find.getWhere());
 					for (SCIMResource2 scimUser : user_list) {
-						System.out.println("user_list - " + scimUser);
 						result.addReource(scimUser);
 					}
-					
 					result.setTotalResults(user_list.size());
+					
+					logger.debug("find response < {}", result.getTotalResults());
+					
 					response.status(200);
 					return result;
 				}catch(SCIMException e) {

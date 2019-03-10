@@ -32,8 +32,8 @@ public class ResourceSyncJob_Groupware_Test {
 			
 			ResourceSyncJob_Groupware job = new ResourceSyncJob_Groupware();
 			
-			boolean result = job.run(scheduler, woker);
-			
+			Object result = job.run(scheduler, woker);
+			System.out.println(result);
 			
 		} catch (SCIMException e) {
 			e.printStackTrace();

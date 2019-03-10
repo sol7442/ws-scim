@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.SCIMAdmin;
+import com.wowsanta.scim.obj.SCIMAudit;
 import com.wowsanta.scim.obj.SCIMSchedulerHistory;
 
 public interface SCIMProviderRepository extends SCIMSystemRepository {
@@ -17,4 +18,6 @@ public interface SCIMProviderRepository extends SCIMSystemRepository {
 	public void addSystemColumn(SCIMSystemColumn scimSystemColumn)throws SCIMException;
 	public List<SCIMSystemColumn> getSystemColumnsBySystemId(String string)throws SCIMException;
 	public List<SCIMSchedulerHistory> getSchedulerHistoryById(String schedulerId)throws SCIMException;
+	public List<SCIMAudit> findAuditByWorkId(String workId)throws SCIMException;
+	public List<SCIMAudit> findAuditByUserId(String userId)throws SCIMException;
 }

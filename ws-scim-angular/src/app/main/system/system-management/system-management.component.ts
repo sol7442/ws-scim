@@ -2,6 +2,9 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ScimApiService } from './../../../service/scim-api.service';
+import { AlertService } from './../../../service/alert.service';
+
+
 import { System , Scheduler , SchedulerHistory, SystemColumn} from '../../../model/model';
 
 import { first } from 'rxjs/operators';
@@ -26,6 +29,7 @@ export class SystemManagementComponent implements OnInit {
 
   constructor(
     private scimApiService:ScimApiService,
+    private alertService:AlertService,
   ) { 
     this.displayDialog = false;
 
@@ -72,7 +76,7 @@ export class SystemManagementComponent implements OnInit {
     console.log("item >> ",this.selectedSystem);
   }
 
-  showSchedulerLog(event: Event, scheduler: Scheduler) {
+  showSchedulerLog(scheduler: Scheduler) {
     console.log("item",scheduler);
     this.selectedScheduler = scheduler;
     
@@ -90,28 +94,30 @@ export class SystemManagementComponent implements OnInit {
     
     this.displayDialog = true;
   }
-  showDetailLog(event: Event, history:SchedulerHistory){
-    console.log("selected history : ", history);
-    this.displayDetailDialog = true;
-  }
 
-
-  runSystemScheduler(event: Event, scheduler: Scheduler) {
-    
+  runSystemScheduler(scheduler: Scheduler) {
     this.selectedScheduler = scheduler;
-    this.scimApiService.runSystemScheduler(
-      this.selectedScheduler.schedulerId)
+    console.log("run scheduler :",scheduler );
+    
+    this.scimApiService.runSystemScheduler(scheduler.schedulerId)
     .pipe(first())
     .subscribe( data =>{
-      console.log("result : ", data.status)
-      if(data.status != "200")      {
-        console.log("error : " , data.detail)
+      console.log("result >>: ", data)
+      if(data == "InternalServerError"){
+        this.alertService.fail("스케줄러 실행 오류");
+      }else{
+        let message = "성공("+data.successCount+")/실패("+data.failCount+")"
+        this.alertService.success(message);
       }
-      
-    },error =>{
-        console.log("login-error : ", error);
-    });
 
+    },error =>{
+        console.log("login-error>>: ", error);
+    });
+  }
+
+  showDetailLog(history:any){
+    console.log("selected history : ", history);
+    this.displayDetailDialog = true;
   }
 
 

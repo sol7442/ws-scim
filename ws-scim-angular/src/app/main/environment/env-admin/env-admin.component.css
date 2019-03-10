@@ -16,7 +16,11 @@
     margin-top: 1em;
 }
 
-.input-text{
-    padding: 0.429em;
-    margin: 5px;
+.input-text{    
+    size: 170;
+}
+
+.labe-text{    
+    text-align:center;
+    vertical-align: middle;
 }

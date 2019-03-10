@@ -1,5 +1,6 @@
 package com.wowsanta.scim.exception;
 
+import com.google.gson.JsonObject;
 
 public enum SCIMError {
 	
@@ -18,7 +19,7 @@ public enum SCIMError {
 	
 	
 	TemprorayRedirect(	307,"Temporary Redirect"),
-	PermanentRedirect(	308,"Temporary Redirect"),
+	PermanentRedirect(	308,"Permanent Redirect"),
 	BadRequest(			400,"Bad Request"),
 	Unauthorized(		401,"Unauthorized"),
 	Forbidden(			403,"Forbidden"),
@@ -46,6 +47,9 @@ public enum SCIMError {
 	private String scimType;
 	private String detail;
 	
+	public void addDetail(String add) {
+		this.detail= this.detail + ":" + add;
+	}
 	private SCIMError(int status, String detail) {
 		this.status = status;
 		this.detail = detail;
@@ -61,4 +65,13 @@ public enum SCIMError {
 	public String getScimType() {return this.scimType;}
 	public String getDetail() {return this.detail;}
 	
+	public String toJson() {
+		JsonObject object = new JsonObject();
+		
+		object.addProperty("status",this.status);
+		object.addProperty("scimType",this.scimType);
+		object.addProperty("detail",this.detail);
+		
+		return object.toString();
+	}
 }

@@ -1,6 +1,5 @@
 package com.wowsanta.scim.server;
 
-import static com.wowsanta.scim.server.JsonUtil.json_parse;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,8 +16,14 @@ public class JsonUtil {
 		if (object instanceof SCIMJsonObject) {
 			SCIMJsonObject jons_object = (SCIMJsonObject) object;
 			return jons_object.toString();
+		}else if (object instanceof SCIMError){
+			SCIMError jons_object = (SCIMError) object;
+			return jons_object.toJson();
+			
 		}else {
-			return new Gson().toJson(object);
+			//disableHtmlEscaping()
+			Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+			return gson.toJson(object);
 		}
 	}
 	

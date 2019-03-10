@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.obj.SCIMResource2;
 import com.wowsanta.scim.obj.SCIMUser;
 
 public interface SCIMServerResourceRepository extends SCIMResourceGetterRepository, SCIMResourceSetterRepository {
@@ -16,7 +17,8 @@ public interface SCIMServerResourceRepository extends SCIMResourceGetterReposito
 	public void clearSystemUserProfile(String systemId) throws SCIMException;
 	public void clearUser()throws SCIMException;
 	public void clearUserProfile()throws SCIMException;
-	public void createSystemDummyUser(String system_id, SCIMUser user)throws SCIMException;
+	public void createSystemDummyUser(String system_id, SCIMResource2 user)throws SCIMException;
+	public void updateSystemDummyUser(String system_id, SCIMResource2 user)throws SCIMException;
 	public List<SCIMUser> getSystemUsersBysystemIdWidthPage(String systemId)throws SCIMException;
 	public List<SCIMAuditData> getAccountHistoryByUsrIdWidthPage(String userId)throws SCIMException;
 	

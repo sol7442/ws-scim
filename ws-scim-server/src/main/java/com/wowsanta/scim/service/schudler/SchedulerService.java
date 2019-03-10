@@ -15,6 +15,7 @@ import com.wowsanta.scim.resource.SCIMProviderRepository;
 import com.wowsanta.scim.resource.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
 import com.wowsanta.scim.resource.user.LoginUser;
+import com.wowsanta.scim.resource.worker.Worker;
 import com.wowsanta.scim.scheduler.SCIMJob;
 import com.wowsanta.scim.scheduler.SCIMScheduler;
 import com.wowsanta.scim.schema.SCIMErrorCode;
@@ -63,27 +64,25 @@ public class SchedulerService {
 				try {
 					SCIMLogger.proc("scheduler call : {} : {}",login_user, scheduler);
 				
-					scheduler.startNow(login_user);
+					Worker worker = new Worker();
+					worker.setWorkerId(login_user.getUserId());
+					worker.setWorkerType(login_user.getType().toString());
 					
-					return SCIMScuessCode.OK;
+					SCIMLogger.proc("scheduler call : {} : {}",worker, scheduler);
+					
+					SCIMJob job = (SCIMJob)Class.forName(scheduler.getJobClass()).newInstance();
+					Object result = job.run(scheduler, worker);
+					
+					SCIMLogger.proc("scheduler call result : {} ",result);
+					
+					return result;
 				}catch (Exception e) {
-					e.printStackTrace();
-					return e;//SCIMErrorCode.e501;
+					SCIMLogger.error("Scheduler Run Failed : ",e);
+					return SCIMError.InternalServerError;
 				}
 			}
 		};
 	}
-
-//	public Route getSystemSchedulerHistory() {
-//		return new Route() {
-//			@Override
-//			public Object handle(Request request, Response response) throws Exception {
-//				String systemId = request.params(":systemId");
-//				SCIMProviderRepository provider_repository = (SCIMProviderRepository) SCIMRepositoryManager.getInstance().getSystemRepository();
-//				return provider_repository.getSchedulerHistoryById(systemId);
-//			}
-//		};
-//	}
 
 	public Route getSchedulerBySystemId() {
 		return new Route() {
@@ -121,6 +120,20 @@ public class SchedulerService {
 				
 				SCIMProviderRepository provider_repository = (SCIMProviderRepository) SCIMRepositoryManager.getInstance().getSystemRepository();
 				return provider_repository.getSchedulerHistoryById(schedulerId);
+			}
+		};
+	}
+
+	public Route getSchedulerDetailHistoryByWorkId() {
+		return new Route() {
+			@Override
+			public Object handle(Request request, Response response) throws Exception {
+				String workId = request.params(":workId");
+				
+				SCIMLogger.proc("getSchedulerDetailHistoryByWorkId : {}", workId);
+				
+				SCIMProviderRepository provider_repository = (SCIMProviderRepository) SCIMRepositoryManager.getInstance().getSystemRepository();
+				return provider_repository.findAuditByWorkId(workId);
 			}
 		};
 	}

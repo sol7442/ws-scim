@@ -3,6 +3,7 @@ package com.wowsanta.scim.resource.user;
 public enum LoginUserType {
 	ADMIN("관리자"),
 	OPERATOR("작업자"),
+	TESTER("테스터"),
 	USER("사용자");
 	
 	private String text;

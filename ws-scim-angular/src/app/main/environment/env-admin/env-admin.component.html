@@ -46,19 +46,13 @@
                                     <div class="ui-g-12">
                                         <span class="ui-float-label">
                                             <input type="password" id="float-input" size="40" pInputText> 
-                                            <label for="float-input">Username</label>
+                                            <label for="float-input">신규 패스워드</label>
                                         </span>        
                                     </div>
                                     <div class="ui-g-12">
                                         <span class="ui-float-label">
                                             <input type="password" id="float-input" size="40" pInputText> 
-                                            <label for="float-input">Username</label>
-                                        </span>        
-                                    </div>
-                                    <div class="ui-g-12">
-                                        <span class="ui-float-label">
-                                            <input type="password" id="float-input"  size="40" pInputText> 
-                                            <label for="float-input">Username</label>
+                                            <label for="float-input">패스워드 확인</label>
                                         </span>        
                                     </div>
                                 </div>
@@ -106,36 +100,3 @@
         <button type="button" pButton icon="pi pi-close"  label="Close" (click)="cancelClose()"></button>
     </p-footer>
 </p-dialog>
-
-<!--[add admin from user]-->
-<!-- <p-dialog header="관리자 추가" [(visible)]="displayDialog" [resizable]="false" [modal]="true" width="450" [style]="{'margin-top':'-120px','margin-left':'80px', 'margin-right':'80px'}"  (onAfterHide)="onDialogHide()">
-    
-    <div>
-        <div class="user-search-box"> 
-            <span>
-                <input #searchUserId class="input-text"  size="35" pInputText placeholder="Search Admin By ID"> 
-                <button pButton type="button" icon="fa fa-search" (click)="searchUserById(searchUserId.value)"></button>
-            </span>
-        </div>
-        <div class="user-info-box">
-            <p-card>
-                <div class="ui-g">
-                    <div class="ui-g-12">
-                        <p>{{newAdmin.adminName}} : {{newAdmin.adminId}}  </p>
-                        <hr class="red-line">
-                    </div>
-                    <div class="ui-g-12">
-                        <input [(ngModel)]="newPassword" class="input-text"  type="password" size="35" pInputText placeholder="패스워드">     
-                    </div>
-                    <div class="ui-g-12">
-                        <input [(ngModel)]="newPasswordC" class="input-text" type="password" size="35" pInputText placeholder="패스워드 확인">     
-                    </div>
-                </div>
-            </p-card>
-        </div>
-    </div>
-    <p-footer>
-        <button type="button" pButton icon="pi pi-check"  label="Add" (click)="selectClose()"></button>
-        <button type="button" pButton icon="pi pi-close"  label="Close" (click)="cancelClose()"></button>
-    </p-footer>
-</p-dialog> -->

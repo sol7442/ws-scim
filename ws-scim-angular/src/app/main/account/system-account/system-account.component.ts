@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DatePipe } from '@angular/common';
 
 import { ScimApiService } from './../../../service/scim-api.service';
 import { System , Scheduler , SchedulerHistory} from '../../../model/model';
@@ -24,7 +25,6 @@ export class SystemAccountComponent implements OnInit {
   private schedulers:Scheduler[];
   private selectedScheduler:Scheduler;
   private schedulerHistorys:SchedulerHistory[];
-
   private displayDialog: boolean = false;
 
   constructor(
@@ -46,6 +46,7 @@ export class SystemAccountComponent implements OnInit {
 
   }
 
+
   onSelect(event){
     this.selectedSystem = event.value;
     
@@ -62,16 +63,22 @@ export class SystemAccountComponent implements OnInit {
         console.log("login-error : ", error);
     });
 
-    //this.schedulers = this.systems;
-    //this.displayContext();
   }
 
   displayContext(){
     console.log("item >> ",this.selectedSystem);
   }
   
-  onRowSelect(event: Event){
-    console.log("....",event);
+  onRowSelect(user:any){
+    console.log("user",user);
+    this.scimApiService.getUserLifecycle(user.id)
+    .pipe(first())
+    .subscribe( data =>{
+      console.log("account list : ", data);
+      this.historis = data;
+    },error =>{
+        console.log("login-error : ", error);
+    });
   }
 
   showDetail(event: Event, user:any) {
@@ -87,32 +94,9 @@ export class SystemAccountComponent implements OnInit {
         console.log("login-error : ", error);
     });
 
-    // this.scimApiService.getSchedulerHistory(this.selectedScheduler.schedulerId)
-    // .pipe(first())
-    // .subscribe( data =>{
-    //   this.schedulerHistorys = data;
-    //   console.log("scheduler_history : ", data);
-      
-    // },error =>{
-    //     console.log("login-error : ", error);
-    // });
-    
-    // this.displayDialog = true;
-
   }
   runScheduler(event: Event, scheduler: Scheduler) {
     
-    // this.selectedScheduler = scheduler;
-    // this.scimApiService.runScheduler(
-    //   this.selectedScheduler.sourceSystemId,
-    //   this.selectedScheduler.schedulerId)
-    // .pipe(first())
-    // .subscribe( data =>{
-    //   console.log("runScheduler : ", data);
-      
-    // },error =>{
-    //     console.log("login-error : ", error);
-    // });
 
   }
 

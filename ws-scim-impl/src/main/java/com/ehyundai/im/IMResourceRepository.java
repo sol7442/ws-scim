@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.ehyundai.object.Resource;
 import com.ehyundai.object.User;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.SCIMResource2;
@@ -324,8 +325,7 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
 	
 	@Override
 	public List<SCIMUser> getUsersByActive() throws SCIMException {
-		final String selectSQL = "SELECT userId,userName,active,createDate,modifyDate"
-				+ " FROM SCIM_USER WHERE active=?";
+		final String selectSQL = "SELECT * FROM SCIM_USER WHERE active=?";
 	
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -346,6 +346,12 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
 			throw new SCIMException(selectSQL, e);
 		}finally {
 			DBCP.close(connection, statement, resultSet);
+		}
+        
+
+        for (SCIMUser scimUser : user_list) {
+        	User system_user = (User)scimUser;
+        	setUserProfileFromDB(system_user);
 		}
         
 		return user_list;
@@ -573,6 +579,8 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
     		im_user.setOrganization("organization");
     		im_user.setDepartment("department");
     		
+    		//im_user.setProvisionDate(toJavaDate(resultSet.getTimestamp("provisionDate")));
+    		
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -648,7 +656,6 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
 	@Override
 	public void clearSystemUser(String systemId) throws SCIMException {
 		final String delateSQL = "DELETE FROM SCIM_SYSTEM_USER WHERE systemId=?";
-System.out.println(">>>> clearSystemUser : " + systemId);
 		Connection connection = null;
 		PreparedStatement statement = null;
 	    ResultSet resultSet = null;        
@@ -779,23 +786,18 @@ System.out.println(">>>> clearSystemUser : " + systemId);
 		return null;
 	}
 
-	
 	@Override
-	public void createSystemDummyUser(String systemId, SCIMUser user)throws SCIMException{
-		User system_user = (User)user;
+	public void updateSystemDummyUser(String systemId, SCIMResource2 user)throws SCIMException{
 		
-		User existed_user = (User) getSystemUser(systemId, user.getId());
-//		if(existed_user != null) {
-//			System.out.println("exist ..>>" + existed_user);
-//			throw new SCIMException("", SCIMErrorCode.e409, SCIMErrorCode.SCIMType.uniqueness) ;
-//		}
-		
-		System.out.println(">>>> system_user ("+systemId+"): " + user);
+	}
+	@Override
+	public void createSystemDummyUser(String systemId, SCIMResource2 user)throws SCIMException{
+		Resource dummyUser = (Resource)user;
 	
 		final String insertSQL1 = "INSERT INTO SCIM_SYSTEM_USER ("
 				+ "systemId, userId, externalId,userName,"
 				+ "password,userType,active,"
-				+ "createDate,modifyDate,lastAccessDate)"
+				+ " createDate,modifyDate,lastAccessDate)"
 				+ " VALUES ("
 				+ "?,?,?,?,"
 				+ "?,?,?,"
@@ -811,26 +813,21 @@ System.out.println(">>>> clearSystemUser : " + systemId);
         	statement1  = connection.prepareStatement(insertSQL1);
         	
         	statement1.setString(1, systemId);
-        	statement1.setString(2, system_user.getId());
-        	statement1.setString(3, system_user.getExernalId());
-        	statement1.setString(4, system_user.getUserName());
+        	statement1.setString(2, dummyUser.getId());
+        	statement1.setString(3, dummyUser.getExernalId());
+        	statement1.setString(4, dummyUser.getUserName());
         	
-        	statement1.setString(5, system_user.getPassword());
+        	statement1.setString(5, dummyUser.getPassword());
         	statement1.setString(6, SCIMDefinitions.UserType.DummyUser.toString());
-        	statement1.setBoolean(7,system_user.isActive());
+        	statement1.setBoolean(7,dummyUser.isActive());
         	
-        	statement1.setTimestamp(8,  toSqlTimestamp(new Date()));
-        	statement1.setTimestamp(9,  toSqlTimestamp(new Date()));
-        	statement1.setTimestamp(10, toSqlTimestamp(system_user.getLastAccessDate()));
+        	statement1.setDate(8,  toSqlDate(dummyUser.getCreated()));
+        	statement1.setDate(9,  toSqlDate(dummyUser.getLastModified()));
+        	statement1.setDate(10,  toSqlDate(dummyUser.getLastAccessDate()));
+        	
         	statement1.execute();
-        	
 	    } catch (SQLException e) {
 	    	throw new SCIMException("CREATE USER FAILED : " + insertSQL1 , e);
-//	    	if (e instanceof SQLIntegrityConstraintViolationException) {
-//				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
-//			}else {
-//				throw new SCIMException("CREATE USER FAILED : " + insertSQL1 , e);
-//			}
 		}finally {
 	    	DBCP.close(connection, statement1, resultSet);
 	    }
@@ -839,20 +836,11 @@ System.out.println(">>>> clearSystemUser : " + systemId);
 	@Override
 	public SCIMUser createSystemUser(String systemId, SCIMUser user) throws SCIMException {
 		User system_user = (User)user;
-	
-		User existed_user = (User) getSystemUser(systemId, user.getId());
-//		if(existed_user != null) {
-//			System.out.println("exist ..>>" + existed_user);
-//			throw new SCIMException("", SCIMErrorCode.e409, SCIMErrorCode.SCIMType.uniqueness) ;
-//			//return existed_user;
-//		}
 		
-		System.out.println(">>>> system_user ("+systemId+"): " + user);
-	
 		final String insertSQL1 = "INSERT INTO SCIM_SYSTEM_USER ("
 				+ "systemId, userId, externalId,userName,"
 				+ "password,userType,active,"
-				+ "createDate,modifyDate,lastAccessDate)"
+				+ "createDate,modifyDate,provisionDate)"
 				+ " VALUES ("
 				+ "?,?,?,?,"
 				+ "?,?,?,"
@@ -878,22 +866,14 @@ System.out.println(">>>> clearSystemUser : " + systemId);
         	
         	statement1.setTimestamp(8,  toSqlTimestamp(new Date()));
         	statement1.setTimestamp(9,  toSqlTimestamp(new Date()));
-        	statement1.setTimestamp(10, toSqlTimestamp(system_user.getLastAccessDate()));
+        	statement1.setTimestamp(10, toSqlTimestamp(new Date()));
         	statement1.execute();
         	
 	    } catch (SQLException e) {
 	    	throw new SCIMException("CREATE USER FAILED : " + insertSQL1 , e);
-//	    	if (e instanceof SQLIntegrityConstraintViolationException) {
-//				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
-//			}else {
-//				throw new SCIMException("CREATE USER FAILED : " + insertSQL1 , e);
-//			}
 		}finally {
 	    	DBCP.close(connection, statement1, resultSet);
 	    }
-
-	    insertSystemProfiles(systemId,system_user);
-	    
 		return system_user;
 	}
 	
@@ -940,7 +920,7 @@ System.out.println(">>>> clearSystemUser : " + systemId);
     		system_user.getMeta().setLastModified(toJavaDate(resultSet.getTimestamp("modifyDate")));
     		
     		system_user.setLastAccessDate(toJavaDate(resultSet.getTimestamp("lastAccessDate")));
-    		
+    		system_user.setProvisionDate(toJavaDate(resultSet.getTimestamp("provisionDate")));
     		
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -950,7 +930,8 @@ System.out.println(">>>> clearSystemUser : " + systemId);
 
 	@Override
 	public SCIMUser updateSystemUser(String systemId, SCIMUser user) throws SCIMException {
-		final String updateSQL = "UPDATE SCIM_SYSTEM_USER SET userName=?, active=?, modifyDate=?, lastAccessDate=? WHERE systemId=? AND userId=?";
+		final String updateSQL = "UPDATE SCIM_SYSTEM_USER SET "
+				+ "userName=?, active=?, modifyDate=?, provisionDate=? WHERE systemId=? AND userId=?";
 
 		User system_user = (User)user;
 		Connection connection = null;
@@ -964,7 +945,7 @@ System.out.println(">>>> clearSystemUser : " + systemId);
         	statement.setInt(2, system_user.getActive());
         	
         	statement.setTimestamp(3,  toSqlTimestamp(new Date()));
-        	statement.setTimestamp(4, toSqlTimestamp(system_user.getLastAccessDate()));
+        	statement.setTimestamp(4,  toSqlTimestamp(new Date()));
 
         	statement.setString(5, systemId);
         	statement.setString(6, system_user.getId());

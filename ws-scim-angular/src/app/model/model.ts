@@ -78,3 +78,8 @@ export class ErrorData {
     detail:string;
     solution:string;
 }
+
+export class RepositoryType{
+    label : string;
+    value : string;
+}

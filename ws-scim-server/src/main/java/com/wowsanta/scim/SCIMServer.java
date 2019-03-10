@@ -14,6 +14,7 @@ import org.apache.commons.daemon.DaemonContext;
 import org.apache.commons.daemon.DaemonController;
 import org.apache.commons.daemon.DaemonInitException;
 
+import com.wowsanta.scim.exception.SCIMError;
 import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.resource.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.SCIMResouceFactory;
@@ -26,12 +27,14 @@ public class SCIMServer  implements Daemon {
 	private static final SCIMServer server = new SCIMServer();
 
 	private ExecutorService executorService = Executors.newSingleThreadExecutor();
+	
 	public static void main(String[] args) throws DaemonInitException, Exception {
-//		System.setProperty("logback.configurationFile", "../config/logback.xml");
-//		//System.setProperty("logback.path", "../logs");
-//		System.setProperty("logback.mode", "debug");
-		server.init(new DaemonContextImpl(args));
-		server.start();
+		try {
+			server.init(new DaemonContextImpl(args));
+			server.start();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void start(String [] args){
@@ -53,11 +56,6 @@ public class SCIMServer  implements Daemon {
 
 	@Override
 	public void init(DaemonContext context) throws DaemonInitException, Exception {
-		
-//		System.setProperty("logback.configurationFile", "../config/logback.xml");
-//		//System.setProperty("logback.path", "../logs");
-//		System.setProperty("logback.mode", "debug");
-
 		//String log_path = System.getProperty("logback.path");
 		File log_directory = new File(System.getProperty("logback.path"));
 		if(!log_directory.exists()) {
@@ -93,8 +91,8 @@ public class SCIMServer  implements Daemon {
 			SCIMSystemManager.getInstance().loadSchdulerManager();
 			SCIMSchedulerManager.getInstance().initialize();
 		}catch (Exception e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace(System.out);
+			SCIMLogger.error("SYSTEM INITIALIZE FAILED : {}", e);
+			throw new DaemonInitException(e.getMessage(),e);
 		}	
 	}
 	@Override

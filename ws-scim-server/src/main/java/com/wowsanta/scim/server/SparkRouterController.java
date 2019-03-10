@@ -14,8 +14,11 @@ import com.wowsanta.scim.schema.SCIMConstants;
 import com.wowsanta.scim.service.EnvironmentService;
 import com.wowsanta.scim.service.SparkController;
 import com.wowsanta.scim.service.account.AccountService;
+import com.wowsanta.scim.service.agent.AgentService;
+import com.wowsanta.scim.service.audit.AuditService;
 import com.wowsanta.scim.service.auth.AuthorizationService;
 import com.wowsanta.scim.service.auth.LoginService;
+import com.wowsanta.scim.service.config.ConfigService;
 import com.wowsanta.scim.service.schudler.SchedulerService;
 import com.wowsanta.scim.service.scim.v2.BlukControl;
 import com.wowsanta.scim.service.scim.v2.UserControl;
@@ -26,12 +29,17 @@ import com.wowsanta.scim.service.system.SystemApiService;
 
 public class SparkRouterController extends SparkController{
 	
+	private AuthorizationService authService = new AuthorizationService();
 	private LoginService loginService = new LoginService();
 	private SchedulerService schedulerService = new SchedulerService();
 	private UserService userService = new UserService();
+	private AgentService agentService = new AgentService();
+	private ConfigService configService = new ConfigService();
+	private BlukService blukService = new BlukService();
+	private AuditService auditService = new AuditService();
 	
 	public void control() {
-		before("/*",AuthorizationService.verify());
+		before("/*",authService.verify());
 		
 		after("/*", (req, res) -> {
 			res.header("Content-Type", "application/scim+json");
@@ -47,6 +55,33 @@ public class SparkRouterController extends SparkController{
 		scheduler();
 		api();
 		env();
+		agent();
+		config();
+		audit();
+	}
+
+	private void audit() {
+		path("/audit", () -> {	
+			get("/user/:userid"   	,auditService.getUserAuditList(), new JsonTransformer());
+		});		
+	}
+
+	private void config() {
+		path("/config", () -> {	
+			get("/service"   	,configService.getSystemInfo(), new JsonTransformer());
+			post("/service"   	,configService.setSystemInfo(), new JsonTransformer());
+			get("/repository"  	,configService.getRepositoryInfo(), new JsonTransformer());
+			post("/repository" 	,configService.setRepositoryInfo(), new JsonTransformer());
+		});
+	}
+
+	private void agent() {
+		path("/agent", () -> {	
+			get("/service/:systemId"   		,agentService.getSystemInfo(), new JsonTransformer());
+			post("/service/:systemId"   	,agentService.setSystemInfo(), new JsonTransformer());
+			get("/repository/:systemId"   	,agentService.getRepositoryInfo(), new JsonTransformer());
+			post("/repository/:systemId"   	,agentService.setRepositoryInfo(), new JsonTransformer());
+		});
 	}
 
 	private void env() {
@@ -58,9 +93,7 @@ public class SparkRouterController extends SparkController{
 				get(	"/:adminId"   	,EnvironmentService.getAdmin()		, new JsonTransformer());
 				delete(	"/:adminId"   	,EnvironmentService.deleteAdmin()	, new JsonTransformer());
 			});
-			
 		});
-		
 	}
 
 	private void account() {
@@ -74,11 +107,10 @@ public class SparkRouterController extends SparkController{
 		path("/scheduler", () -> {
 			get("/:schedulerId"   			,schedulerService.getSchedulerById(), new JsonTransformer());
 			get("/system/:systemId"   		,schedulerService.getSchedulerBySystemId(), new JsonTransformer());
-			get("/history/:schedulerId"   		,schedulerService.getSchedulerHistoryById(), new JsonTransformer());
+			get("/history/:schedulerId"   	,schedulerService.getSchedulerHistoryById(), new JsonTransformer());
+			get("/history/work/:workId"   	,schedulerService.getSchedulerDetailHistoryByWorkId(), new JsonTransformer());
 			post("/run" 					,schedulerService.runSystemScheduler(), new JsonTransformer());
 		});
-		//get("/history/:schedulerId" 	,SystemApiService.getSchedulerHistory(), new JsonTransformer());
-		//get("/history/:systemId" ,schedulerService.getSystemSchedulerHistory(), new JsonTransformer());
 	}
 
 	private void hrsystem() {
@@ -113,9 +145,9 @@ public class SparkRouterController extends SparkController{
 			patch  ("/Users",userService.patch(), new JsonTransformer());
 			
 			
-			post   ("/Bulk",BlukControl.post(), new JsonTransformer());
-			get    ("/Bulk",BlukControl.getAll(), new JsonTransformer());
-			get    ("/Bulk/:lasteDate",BlukControl.get(), new JsonTransformer());
+			post   ("/Bulk",blukService.post(), new JsonTransformer());
+			//get    ("/Bulk",BlukControl.getAll(), new JsonTransformer());
+			//get    ("/Bulk/:lasteDate",BlukControl.get(), new JsonTransformer());
 		});
 	}
 

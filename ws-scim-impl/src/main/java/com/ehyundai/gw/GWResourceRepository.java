@@ -11,6 +11,7 @@ import java.util.List;
 import com.ehyundai.object.Resource;
 import com.ehyundai.object.User;
 import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.obj.SCIMResource2;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
@@ -19,6 +20,7 @@ import com.wowsanta.scim.repo.rdb.DBCP;
 import com.wowsanta.scim.resource.SCIMGroup;
 import com.wowsanta.scim.resource.SCIMResourceGetterRepository;
 import com.wowsanta.scim.resource.SCIMResourceRepository;
+import com.wowsanta.scim.resource.SCIMSystemColumn;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 import com.wowsanta.scim.util.Random;
 
@@ -32,7 +34,42 @@ public class GWResourceRepository extends AbstractRDBRepository implements SCIMR
 		super();
 		setClassName(GWResourceRepository.class.getCanonicalName());
 	}
+
+	@Override
+	public boolean validate() throws SCIMException {
+		
+		final String selectSQL = this.dbcp.getValiationQuery();
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
+
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(selectSQL);
+        	
+        	resultSet = statement.executeQuery();
+        
+        	while(resultSet.next()) {
+        		SCIMSystemColumn column = new SCIMSystemColumn();
+        		
+        		column.setColumnName(resultSet.getString("COLUMN_NAME"));
+        		column.setDataType(resultSet.getString("DATA_TYPE"));
+        		column.setAllowNull(resultSet.getBoolean("IS_NULLABLE"));
+        		
+        		SCIMLogger.sys("COLUMNS : {} ", column);
+        	}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SCIMException(selectSQL, e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+        SCIMLogger.sys("REPOSITORY VAILDATE : {} ", selectSQL);	
+		return true;
+	}
 	
+	//SELECT COLUMN_NAME, IS_NULLABLE, DATA_TYPE  FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'IM_ACCOUNT'
 	//SELECT UR_CODE, MODIFYDATE FROM BASE_OBJECT_UR WHERE MODIFYDATE > '2019-01-14 23:17:36'
 
 	@Override
@@ -54,7 +91,7 @@ public class GWResourceRepository extends AbstractRDBRepository implements SCIMR
 		
 		final String insertSQL = "INSERT INTO IM_ACCOUNT"
 				+ " (UR_Code,DisplayName"
-				+ ",DN_Code,ExGroupName,ExGroupPath"
+				+ ",DN_Code,ExGroupName"
 				+ ",JobPositionCode,ExJobPositionName"
 				+ ",JobTitleCode,ExJobTitleName"
 				+ ",JobLevelCode,ExJobLevelName"
@@ -62,7 +99,7 @@ public class GWResourceRepository extends AbstractRDBRepository implements SCIMR
 				+ ",EnterDate,RetireDate,RegistDate,ModifyDate)"
 				+ " VALUES ("
 				+ "?,?,"
-				+ "?,?,?,"
+				+ "?,?,"
 				+ "?,?,"
 				+ "?,?,"
 				+ "?,?,"
@@ -82,26 +119,25 @@ public class GWResourceRepository extends AbstractRDBRepository implements SCIMR
         	
         	statement.setString(3, gw_user.getCompanyCode());        	
         	statement.setString(4, gw_user.getDivision());
-        	statement.setString(5, gw_user.getDepartment());
         	
-        	statement.setString(6, gw_user.getPositionCode());
-        	statement.setString(7, gw_user.getPosition());
-        	statement.setString(8, gw_user.getJobCode());
-        	statement.setString(9, gw_user.getJob());
-        	statement.setString(10, gw_user.getRankCode());
-        	statement.setString(11, gw_user.getRank());
+        	statement.setString(5, gw_user.getPositionCode());
+        	statement.setString(6, gw_user.getPosition());
+        	statement.setString(7, gw_user.getJobCode());
+        	statement.setString(8, gw_user.getJob());
+        	statement.setString(9, gw_user.getRankCode());
+        	statement.setString(10, gw_user.getRank());
         	
-        	statement.setString(12, toYN(gw_user.isActive()));
+        	statement.setString(11, toYN(gw_user.isActive()));
         	
-        	statement.setDate(13, toSqlDate(gw_user.getJoinDate()));
-        	statement.setDate(14, toSqlDate(gw_user.getRetireDate()));
+        	statement.setString(12, toStringDay(gw_user.getJoinDate()));
+        	statement.setString(13,  toStringDay(gw_user.getRetireDate()));
         	
         	if(gw_user.getMeta() != null) {
-        		statement.setDate(15, toSqlDate(gw_user.getMeta().getCreated()));
-            	statement.setDate(16, toSqlDate(gw_user.getMeta().getLastModified()));
+        		statement.setDate(14, toSqlDate(gw_user.getMeta().getCreated()));
+            	statement.setDate(15, toSqlDate(gw_user.getMeta().getLastModified()));
         	}else {
-        		statement.setDate(15, toSqlDate(new Date()));
-            	statement.setDate(16, toSqlDate(new Date()));
+        		statement.setDate(14, toSqlDate(new Date()));
+            	statement.setDate(14, toSqlDate(new Date()));
         	}
         	
         	statement.execute();
@@ -248,7 +284,7 @@ public class GWResourceRepository extends AbstractRDBRepository implements SCIMR
     		
 			gw_user_resource.setOrganization(resultSet.getString("DN_Code"));
 			gw_user_resource.setDivision(resultSet.getString("ExGroupName"));
-			gw_user_resource.setDepartment(resultSet.getString("ExGroupPath"));
+			//gw_user_resource.setDepartment(resultSet.getString("ExGroupPath"));
     		
 			gw_user_resource.setPositionCode(resultSet.getString("JobPositionCode"));
 			gw_user_resource.setPosition(resultSet.getString("ExJobPositionName"));
@@ -257,9 +293,9 @@ public class GWResourceRepository extends AbstractRDBRepository implements SCIMR
 			gw_user_resource.setRankCode(resultSet.getString("JobLevelCode"));
 			gw_user_resource.setRank(resultSet.getString("ExJobLevelName"));
 			gw_user_resource.setActive(toBoolean(resultSet.getString("IsUse")));
-    		
-			gw_user_resource.setJoinDate(resultSet.getDate("EnterDate"));
-			gw_user_resource.setRetireDate(resultSet.getDate("RetireDate"));
+			
+			gw_user_resource.setJoinDate(dayToJavaDate(resultSet.getString("EnterDate")));
+			gw_user_resource.setRetireDate(dayToJavaDate(resultSet.getString("RetireDate")));
     		
 			gw_user_resource.setCreated(	toJavaDate(resultSet.getDate("RegistDate")));
 			gw_user_resource.setLastModified(toJavaDate(resultSet.getDate("ModifyDate")));
@@ -294,7 +330,7 @@ public class GWResourceRepository extends AbstractRDBRepository implements SCIMR
     		
     		gw_user.setOrganization(resultSet.getString("DN_Code"));
     		gw_user.setDivision(resultSet.getString("ExGroupName"));
-    		gw_user.setDepartment(resultSet.getString("ExGroupPath"));
+    		//gw_user.setDepartment(resultSet.getString("ExGroupPath"));
     		
     		gw_user.setPositionCode(resultSet.getString("JobPositionCode"));
     		gw_user.setPosition(resultSet.getString("ExJobPositionName"));
@@ -304,8 +340,8 @@ public class GWResourceRepository extends AbstractRDBRepository implements SCIMR
     		gw_user.setRank(resultSet.getString("ExJobLevelName"));
     		gw_user.setActive(toBoolean(resultSet.getString("IsUse")));
     		
-    		gw_user.setJoinDate(resultSet.getDate("EnterDate"));
-    		gw_user.setRetireDate(resultSet.getDate("RetireDate"));
+    		gw_user.setJoinDate(dayToJavaDate(resultSet.getString("EnterDate")));
+    		gw_user.setRetireDate(dayToJavaDate(resultSet.getString("RetireDate")));
     		
     		gw_user.setMeta(new SCIMUserMeta());
     		gw_user.getMeta().setCreated(		toJavaDate(resultSet.getDate("RegistDate")));

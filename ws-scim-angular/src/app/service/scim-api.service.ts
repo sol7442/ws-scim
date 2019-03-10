@@ -66,8 +66,7 @@ export class ScimApiService {
   }
 
   runSystemScheduler(schedulerId:string){
-    let api_url = '/scheduler/run';
-    
+    let api_url = '/scheduler/run';    
     let  httpParams = new HttpParams();
     httpParams.append("schedulerId",schedulerId);    
     return this.http.post<any>(api_url,{'schedulerId': schedulerId})
@@ -158,6 +157,50 @@ export class ScimApiService {
   searchUserById(userId:string){
     let api_url = '/scim/v2.0/Users/' + userId;
     return this.http.get<any>(api_url)
+    .pipe(map( result =>{
+      return result;
+    }));
+  }
+
+  getSchedulerWorkHistoryByWorkId(id:string){
+    let api_url = '/scheduler/history/work/' + id;
+    return this.http.get<any>(api_url,
+      {
+        headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
+      })
+    .pipe(map( result =>{
+      return result;
+    }));
+  }
+
+  getAgentRepositoryBySystemId(id:string){
+    let api_url = '/agent/repository/' + id;
+    return this.http.get<any>(api_url,
+      {
+        headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
+      })
+    .pipe(map( result =>{
+      return result;
+    }));
+  }
+
+  setAgentRepositoryBySystemId(id:string, repository:any){
+    let api_url = '/agent/repository/' + id;
+    return this.http.post<any>(api_url,JSON.stringify(repository),
+      {
+        headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
+      })
+    .pipe(map( result =>{
+      return result;
+    }));
+  }
+
+  getUserLifecycle(id:string){
+    let api_url = '/audit/user/' + id;
+    return this.http.get<any>(api_url,
+      {
+        headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
+      })
     .pipe(map( result =>{
       return result;
     }));

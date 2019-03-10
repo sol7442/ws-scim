@@ -2,6 +2,7 @@ package com.wowsanta.scim.resource;
 
 
 
+import com.google.gson.JsonObject;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 

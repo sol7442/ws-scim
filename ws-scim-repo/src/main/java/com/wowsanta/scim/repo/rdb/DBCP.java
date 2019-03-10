@@ -15,6 +15,7 @@ import org.apache.commons.dbcp2.PoolingDriver;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
+import com.google.gson.JsonObject;
 import com.wowsanta.scim.json.AbstractJsonObject;
 import com.wowsanta.scim.log.SCIMLogger;
 
@@ -25,7 +26,28 @@ public class DBCP extends AbstractJsonObject{
 	 */
 	private static final long serialVersionUID = -4682406830216930831L;
 	private String poolName;
+	private String driverName;
+	private String jdbcUrl;
+	private String userName;
+	private String password;
+	private String valiationQuery = "select 1";
+	private long timeBetweenEvictionRunsMillis = 1000L*60*1;
+	private boolean testWhileIdle = true;
+	private int minIdle = 5;
+	private int maxTotal = 50;
 	
+	public void parse(JsonObject asJsonObject) {
+		this.poolName = asJsonObject.get("poolName").getAsString();
+		this.driverName = asJsonObject.get("driverName").getAsString();
+		this.jdbcUrl = asJsonObject.get("jdbcUrl").getAsString();
+		this.userName = asJsonObject.get("userName").getAsString();
+		this.password = asJsonObject.get("password").getAsString();
+		this.valiationQuery = asJsonObject.get("valiationQuery").getAsString();
+		this.timeBetweenEvictionRunsMillis = asJsonObject.get("timeBetweenEvictionRunsMillis").getAsLong();
+		this.testWhileIdle = asJsonObject.get("testWhileIdle").getAsBoolean();
+		this.minIdle = asJsonObject.get("minIdle").getAsInt();
+		this.maxTotal = asJsonObject.get("maxTotal").getAsInt();
+	}
 	public String getPoolName() {
 		return "jdbc:apache:commons:dbcp:" + this.poolName;
 	}
@@ -106,15 +128,10 @@ public class DBCP extends AbstractJsonObject{
 		this.maxTotal = maxTotal;
 	}
 
-	private String driverName;
-	private String jdbcUrl;
-	private String userName;
-	private String password;
-	private String valiationQuery = "select 1";
-	private long timeBetweenEvictionRunsMillis = 1000L*60*1;
-	private boolean testWhileIdle = true;
-	private int minIdle = 5;
-	private int maxTotal = 50;
+
+	
+	
+
 	
 	public static void close(Connection con, PreparedStatement pstmt, ResultSet rs){
         try{
@@ -159,4 +176,6 @@ public class DBCP extends AbstractJsonObject{
 		
 		SCIMLogger.sys("load dbcp => {} : {}",this.poolName, this.jdbcUrl);
 	}
+
+
 }

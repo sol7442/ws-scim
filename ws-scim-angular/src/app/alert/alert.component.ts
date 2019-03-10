@@ -26,8 +26,8 @@ export class AlertComponent implements OnInit {
       }
      
       console.log("message ", message);
-      if(message.type === "success"){
-        //this.error_display = true;
+      if(message.type === "success"){        
+        this.display = true;
       }else if(message.type === "fail"){
         this.alret_display = true;
       }else if(message.type === "error"){

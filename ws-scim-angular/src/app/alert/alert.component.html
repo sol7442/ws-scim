@@ -1,10 +1,12 @@
-<p-dialog header={{message.type}} [(visible)]="display" [modal]="true" [responsive]="true" [style]="{width: '350px', minWidth: '200px'}" [baseZIndex]="10000">
-    <span>
-      {{message}}
-    </span>
+<p-dialog header={{message.type}} [(visible)]="display" [modal]="true" width="450" [responsive]="true" [style]="{width: '350px', minWidth: '200px'}" [baseZIndex]="10000">
+    <p-card>
+        <p>
+            {{message.data}} 
+        </p>
+        <hr class="blue-line">
+    </p-card>
   <p-footer>
       <button type="button" pButton icon="pi pi-check" (click)="display=false" label="Yes"></button>
-      <button type="button" pButton icon="pi pi-close" (click)="display=false" label="No" class="ui-button-secondary"></button>
   </p-footer>
 </p-dialog>
 

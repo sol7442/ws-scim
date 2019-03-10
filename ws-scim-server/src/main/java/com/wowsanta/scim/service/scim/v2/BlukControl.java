@@ -19,11 +19,11 @@ import com.wowsanta.scim.resource.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.SCIMResourceGetterRepository;
 import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.resource.SCIMResourceSetterRepository;
+import com.wowsanta.scim.resource.user.LoginUser;
 import com.wowsanta.scim.schema.SCIMConstants;
 import com.wowsanta.scim.schema.SCIMDefinitions;
 import com.wowsanta.scim.schema.SCIMErrorCode;
 import com.wowsanta.scim.service.scim.v2.service.BlukService;
-import com.wowsanta.scim.service.scim.v2.service.SchedulerServer;
 import com.wowsanta.scim.util.Random;
 
 import spark.Request;
@@ -33,7 +33,6 @@ import spark.Route;
 public class BlukControl {
 
 	private static BlukService bulkService = new BlukService();
-	private static SchedulerServer schedulerService = new SchedulerServer();
 	
 	public static Route post() {
 		return new Route() {
@@ -42,16 +41,16 @@ public class BlukControl {
 				SCIMBulkRequest  scim_bluk_request  = new SCIMBulkRequest();
 				SCIMBulkResponse scim_bluk_response = new SCIMBulkResponse();
 
-				SCIMUser worker = request.session().attribute("loginUser");
+				LoginUser worker = request.session().attribute("loginUser");
 				scim_bluk_request.parse(request.body());
-
+System.out.println("bulk worker : " + worker);
 				try {
-				
-					///List<SCIMBulkOperation> operation_result_list = bulkService.excute(scim_bluk_request.getOperations());
-					//					SCIMResourceGetterRepository res_repo  = (SCIMResourceGetterRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
 
 					SCIMResourceSetterRepository resource_repository = (SCIMResourceSetterRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
 					List<SCIMBulkOperation> operation_result_list = new ArrayList<SCIMBulkOperation>();
+					
+System.out.println("bulk operation_result_list : " + operation_result_list.size());
+
 					for (SCIMBulkOperation operation : scim_bluk_request.getOperations()) {
 						String path 			= operation.getPath();
 						String method 			= operation.getMethod();

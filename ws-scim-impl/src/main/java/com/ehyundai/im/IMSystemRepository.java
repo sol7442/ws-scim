@@ -4,40 +4,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import com.ehyundai.object.User;
 import com.wowsanta.scim.exception.SCIMException;
-import com.wowsanta.scim.message.SCIMOperation;
-import com.wowsanta.scim.obj.DefaultUserMeta;
 import com.wowsanta.scim.obj.SCIMAdmin;
 import com.wowsanta.scim.obj.SCIMAudit;
 import com.wowsanta.scim.obj.SCIMSchedulerHistory;
 import com.wowsanta.scim.obj.SCIMSystem;
-import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.repo.rdb.DBCP;
-import com.wowsanta.scim.resource.SCIMGroup;
 import com.wowsanta.scim.resource.SCIMProviderRepository;
-import com.wowsanta.scim.resource.SCIMResouceFactory;
-import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.resource.SCIMSystemColumn;
-import com.wowsanta.scim.resource.SCIMSystemRepository;
 import com.wowsanta.scim.resource.user.LoginUser;
 import com.wowsanta.scim.resource.user.impl.LoginUserRdbImpl;
 import com.wowsanta.scim.scheduler.SCIMScheduler;
-import com.wowsanta.scim.schema.SCIMConstants;
-import com.wowsanta.scim.schema.SCIMDefinitions;
-import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
 public class IMSystemRepository extends AbstractRDBRepository implements SCIMProviderRepository{
 	private static final long serialVersionUID = 1L;
+	
 	
 	@Override
 	public SCIMAdmin getAdmin(String adminId)throws SCIMException{
@@ -305,7 +291,7 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
 			scheduler.setDayOfWeek(		resultSet.getInt("dayOfWeek"));
 			scheduler.setHourOfDay(		resultSet.getInt("hourOfDay"));
 			scheduler.setMinuteOfHour(	resultSet.getInt("minuteOfHour"));
-			scheduler.setExcuteSystemId(resultSet.getString("excuteSystemId"));
+			scheduler.setExecuteSystemId(resultSet.getString("executeSystemId"));
 			scheduler.setSourceSystemId(resultSet.getString("sourceSystemId"));
 			scheduler.setTargetSystemId(resultSet.getString("targetSystemId"));
 			
@@ -381,9 +367,85 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
 		}
 	}
 	
+	
+	@Override
+	public List<SCIMAudit> findAuditByUserId(String userId)throws SCIMException{
+		final String selectSQL = " SELECT * FROM SCIM_AUDIT WHERE userId=? Order by WorkDate Desc";
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
+
+	    List<SCIMAudit> audit_list = new ArrayList<SCIMAudit>();
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(selectSQL);
+        	
+        	statement.setString(1, userId);
+        	
+        	resultSet = statement.executeQuery();
+        	while(resultSet.next()) {
+        		audit_list.add(newAuditFromDB(resultSet));
+        	}
+        	
+		} catch (SQLException e) {
+			throw new SCIMException(selectSQL, e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+		
+		return audit_list;
+	}
+	private SCIMAudit newAuditFromDB(ResultSet resultSet) throws SQLException {
+		SCIMAudit audit = new SCIMAudit();
+		
+		audit.setWorkId(resultSet.getString("workId"));
+		audit.setWorkerId(resultSet.getString("workerId"));
+		audit.setWorkerType(resultSet.getString("workerType"));
+		audit.setUserId(resultSet.getString("userId"));
+		audit.setSourceSystemId(resultSet.getString("sourceSystemId"));
+		audit.setTargetSystemId(resultSet.getString("targetSystemId"));
+		audit.setMethod(resultSet.getString("method"));
+		audit.setDetail(resultSet.getString("detail"));
+		audit.setWorkDate(toJavaDate (resultSet.getDate("workDate")));
+		audit.setAction(resultSet.getString("action"));
+		audit.setResult(resultSet.getString("result"));
+		
+		return audit;
+	}
+	
+	@Override
+	public List<SCIMAudit> findAuditByWorkId(String workId)throws SCIMException{
+		final String selectSQL = " SELECT * FROM SCIM_AUDIT WHERE workId=? Order by WorkDate Desc";
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
+
+	    List<SCIMAudit> audit_list = new ArrayList<SCIMAudit>();
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(selectSQL);
+        	
+        	statement.setString(1, workId);
+        	
+        	resultSet = statement.executeQuery();
+        	while(resultSet.next()) {
+        		audit_list.add(newAuditFromDB(resultSet));
+        	}
+        	
+		} catch (SQLException e) {
+			throw new SCIMException(selectSQL, e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+		
+		return audit_list;
+	}
+	
 	@Override
 	public List<SCIMSchedulerHistory> getSchedulerHistoryById(String schedulerId)throws SCIMException{
-		final String selectSQL = " SELECT * FROM SCIM_SCHEDULER_HISTORY WHERE schedulerId=?";
+		final String selectSQL = " SELECT * FROM SCIM_SCHEDULER_HISTORY WHERE schedulerId=? Order by workDate Desc";
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -420,47 +482,6 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
 	@Override
 	public List<SCIMSchedulerHistory> getSchedulerHistory(String schedulerId)throws SCIMException{
 		return null;
-//		final String selectSQL = "SELECT *"				
-//				+ " FROM SCIM_SCHEDULER_HISTORY WHERE schedulerId=? order by workDate desc";
-//		
-//		System.out.println(">>>> " + schedulerId);
-//		Connection connection = null;
-//		PreparedStatement statement = null;
-//	    ResultSet resultSet = null;        
-//
-//	    List<SCIMSchedulerHistory> history_list = new ArrayList<SCIMSchedulerHistory>();
-//        try {
-//        	connection = getConnection();
-//        	statement  = connection.prepareStatement(selectSQL);
-//        	
-//        	statement.setString(1, schedulerId);
-//        	
-//        	resultSet = statement.executeQuery();
-//        	while(resultSet.next()) {
-//        		SCIMSchedulerHistory scheduler_history = new SCIMSchedulerHistory();
-//        		
-//        		scheduler_history.setSchedulerId(	resultSet.getString("schedulerId"));
-//        		scheduler_history.setWorkId(	resultSet.getString("workId"));
-//        		scheduler_history.setReqPut(	resultSet.getInt("reqPut"));
-//        		scheduler_history.setReqPost(	resultSet.getInt("reqPost"));
-//        		scheduler_history.setReqPatch(	resultSet.getInt("reqPatch"));
-//        		scheduler_history.setReqDelete(	resultSet.getInt("reqDelete"));
-//        		
-//        		scheduler_history.setResPut(	resultSet.getInt("resPut"));
-//        		scheduler_history.setResPost(	resultSet.getInt("resPost"));
-//        		scheduler_history.setResPatch(	resultSet.getInt("resPatch"));
-//        		scheduler_history.setResDelete(	resultSet.getInt("resDelete"));
-//        		
-//        		scheduler_history.setWorkDate( 	toJavaDate (resultSet.getTimestamp("workDate")));
-//        		
-//        		history_list.add(scheduler_history);
-//        	}
-//		} catch (SQLException e) {
-//			throw new SCIMException(selectSQL, e);
-//		}finally {
-//			DBCP.close(connection, statement, resultSet);
-//		}
-//		return history_list;
 	}
 	
 	@Override

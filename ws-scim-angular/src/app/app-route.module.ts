@@ -14,7 +14,7 @@ import {AuditManagementComponent } from './main/audit/audit-management/audit-man
 
 import {EnvironmentComponent } from './main/environment/environment.component';
 import {EnvAdminComponent } from './main/environment/env-admin/env-admin.component';
-import {EnvAngentComponent } from './main/environment/env-angent/env-angent.component';
+import {EnvHrAgentComponent } from './main/environment/env-hr-agent/env-hr-agent.component';
 import {EnvSchedulerComponent } from './main/environment/env-scheduler/env-scheduler.component';
 
 const appRoutes: Routes = [
@@ -30,7 +30,7 @@ const appRoutes: Routes = [
         children: [
             { path: "", redirectTo: "admin", pathMatch: "full" },
             { path: "admin", component: EnvAdminComponent   },
-            { path: "agent", component: EnvAngentComponent  },
+            { path: "hr_agent", component: EnvHrAgentComponent  },
             { path: "scheduler", component: EnvSchedulerComponent  }
           ]
     }, 
