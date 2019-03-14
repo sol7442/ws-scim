@@ -281,7 +281,9 @@ public class GWResourceRepository extends AbstractRDBRepository implements SCIMR
 			gw_user_resource.setId(resultSet.getString("UR_Code"));
     		
 			gw_user_resource.setUserName(resultSet.getString("DisplayName"));
-    		
+			
+			gw_user_resource.setEmployeeNumber(resultSet.getString("UR_Code"));
+			
 			gw_user_resource.setOrganization(resultSet.getString("DN_Code"));
 			gw_user_resource.setDivision(resultSet.getString("ExGroupName"));
 			//gw_user_resource.setDepartment(resultSet.getString("ExGroupPath"));

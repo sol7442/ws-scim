@@ -4,6 +4,7 @@ dependencies {
 	compile project(':ws-scim-core')
 	
 	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.6'
+	compile group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.6'
 	
 }
 

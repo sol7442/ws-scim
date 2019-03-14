@@ -1,6 +1,7 @@
 package com.wowsanta.scim.client;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -14,7 +15,9 @@ import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.util.EntityUtils;
 
 import com.google.gson.JsonObject;
@@ -338,6 +341,51 @@ public class RESTClient {
 		} catch (Exception e) {
 			throw new SCIMException("HTTP Execute  FAILED : " + base.getURI(), e);
 		}
+	}
+
+	public String post(String url, File[] libray_file) {
+		
+		try {
+		
+			HttpPost post = new HttpPost(url);
+			MultipartEntityBuilder meb = MultipartEntityBuilder.create();
+			for (File file : libray_file) {
+				meb.addBinaryBody(file.getName(), file);
+			}
+			meb.setContentType(ContentType.MULTIPART_FORM_DATA);
+			post.setEntity(meb.build());
+			post.addHeader("Authorization", RESTClientPool.getInstance().generateAuthorizationToken(worker, 1000*60));
+			
+			HttpResponse response = execute(post);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "";
+	}
+
+	public void patch(String patch_url, File[] libray_file) {
+		try {
+			
+			HttpPatch post = new HttpPatch(patch_url);
+			MultipartEntityBuilder meb = MultipartEntityBuilder.create();
+			for (File file : libray_file) {
+				meb.addBinaryBody(file.getName(), file);
+			}
+			meb.setContentType(ContentType.MULTIPART_FORM_DATA);
+			post.setEntity(meb.build());
+			post.addHeader("Authorization", RESTClientPool.getInstance().generateAuthorizationToken(worker, 1000*60));
+			
+			HttpResponse response = execute(post);
+			
+			System.out.println(response.toString());
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 

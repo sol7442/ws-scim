@@ -1,9 +1,12 @@
 package com.wowsanta.scim.service.agent;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -122,5 +125,66 @@ public class AgentService {
 		worker.setWorkerType(login_user.getType().toString());
 		return worker;
 	}
+
+	public Route getLibrary() {
+		return new Route() {
+			@Override
+			public Object handle(Request request, Response response) throws Exception {
+				String systemId = request.params(":systemId");
+				SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
+				String system_url = system.getSystemUrl();
+				String call_url   = system_url + "/config/library";
+				
+				String scim_library = System.getProperty("scim.library");
+				System.out.println("scim_library" +  scim_library);
+				
+				Path library_path = Paths.get(scim_library);
+				File library_dir  = library_path.toFile();
+				for (File libray_file : library_dir.listFiles()) {
+					System.out.println(libray_file.getCanonicalPath());
+				}
+				
+				return library_dir.list();
+			}
+		};
+	}
+	public Route patchLibrary() {
+		return new Route() {
+			@Override
+			public Object handle(Request request, Response response) throws Exception {
+				String systemId = request.params(":systemId");
+				SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
+				String system_url = system.getSystemUrl();
+				String call_url   = system_url + "/config/library";
+				
+				Worker worker = findWorker(request);
+				RESTClient clinent = new RESTClient(worker);
+				
+				String scim_library = System.getProperty("scim.library");
+				System.out.println("scim_library" +  scim_library);
+				
+				Path library_path = Paths.get(scim_library);
+				File library_dir  = library_path.toFile();
+				for (File libray_file : library_dir.listFiles()) {
+					System.out.println(libray_file.getCanonicalPath());
+				}
+				
+				clinent.patch(call_url,library_dir.listFiles());
+				
+				return library_dir.list();
+			}
+		};
+	}
+
+	public Route setLibrary() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Route removeLibrary() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

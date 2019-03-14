@@ -108,18 +108,18 @@ public class ProvisioningJob_SSO extends SCIMJob {
 					audit.setDetail(response_operation.getResponse().getDetail());
 				}
 
-				if(response_operation.getStatus().equals("200") && request_operation.getMethod().equals(SCIMDefinitions.MethodType.PUT.toString())) {
-					resource_repository.createSystemUser(target_system_id, (SCIMUser) request_operation.getData());
+				if(response_operation.getStatus().equals("200")) {
 					
-				}else if(response_operation.getStatus().equals("200") && request_operation.getMethod().equals(SCIMDefinitions.MethodType.POST.toString())) {
-					resource_repository.updateSystemUser(target_system_id, (SCIMUser) request_operation.getData());
+					if(request_operation.getMethod().equals(SCIMDefinitions.MethodType.PUT.toString())){
+						resource_repository.createSystemUser(target_system_id, (SCIMUser) request_operation.getData());
+					}else {
+						resource_repository.updateSystemUser(target_system_id, (SCIMUser) request_operation.getData());
+					}
 				}
-				
 				//SCIMLogger.proc("Provision Response : {} > {} : {} ",audit.getWorkId(),request_operation );
 				SCIMLogger.audit("Provisioning SSO : {}", audit);
 				system_repository.addAudit(audit);
 				history.addAudit(audit);
-				
 				SCIMLogger.proc("Provision Response : {} < {} : {} ",audit.getWorkId(),response_operation );
 			}
 			

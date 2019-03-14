@@ -195,6 +195,27 @@ export class ScimApiService {
     }));
   }
 
+  getAgentLibraryList(id:string){
+    let api_url = '/agent/library/' + id;
+    return this.http.get<any>(api_url,
+      {
+        headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
+      })
+    .pipe(map( result =>{
+      return result;
+    }));
+  }
+  patchLibrary(id:string){
+    let api_url = '/agent/library/' + id;
+    return this.http.patch<any>(api_url,
+      {
+        headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
+      })
+    .pipe(map( result =>{
+      return result;
+    }));
+  }
+
   getUserLifecycle(id:string){
     let api_url = '/audit/user/' + id;
     return this.http.get<any>(api_url,

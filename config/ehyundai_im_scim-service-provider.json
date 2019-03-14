@@ -64,7 +64,7 @@
 		"version": [
 			"v2.0"
 		],
-		"staticFiles": "../ws-scim-front/src"
+		"staticFiles": "../ws-scim-angular/dist/ws-scim-angular"
 	},
 	"resources": {
 		"user": {

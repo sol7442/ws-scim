@@ -68,6 +68,16 @@ export class EnvHrAgentComponent implements OnInit {
     },error =>{
       console.log("login-error : ", error);
     });
+
+    this.scimApiService.getAgentLibraryList(system.systemId)
+    .pipe(first())
+    .subscribe( data =>{
+      console.log("library-list >>>: ", data);
+
+    },error =>{
+      console.log("login-error : ", error);
+    });
+
   }
 
   saveRepository(){
@@ -87,4 +97,14 @@ export class EnvHrAgentComponent implements OnInit {
     });
   }
 
+  patchLibrary(){
+    this.scimApiService.patchLibrary(this.selectedSystem.systemId)
+    .pipe(first())
+    .subscribe( data =>{
+      console.log("patchLibrary >>>: ", data);
+
+    },error =>{
+      console.log("patchLibrary-error : ", error);
+    });
+  }
 }

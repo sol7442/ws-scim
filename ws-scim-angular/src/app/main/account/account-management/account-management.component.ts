@@ -42,18 +42,6 @@ export class AccountManagementComponent implements OnInit {
   onSelect(event){
     this.selectedSystem = event.value;
 
-    // this.scimApiService.getSystemScheduler(this.selectedSystem.systemId)
-    // .pipe(first())
-    // .subscribe( data =>{
-    //   console.log("schedulers : ", data);
-    //   this.schedulers = data;
-    // },error =>{
-    //     console.log("login-error : ", error);
-    // });
-
-
-    //this.schedulers = this.systems;
-    //this.displayContext();
   }
 
   displayContext(){

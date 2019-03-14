@@ -22,7 +22,7 @@ import com.wowsanta.scim.scheduler.SCIMSchedulerManager;
 
 
 
-public class SCIMServer  implements Daemon {
+public class SCIMServer implements Daemon {
 
 	private static final SCIMServer server = new SCIMServer();
 

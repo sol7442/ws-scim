@@ -72,6 +72,11 @@ public class SparkRouterController extends SparkController{
 			post("/service"   	,configService.setSystemInfo(), new JsonTransformer());
 			get("/repository"  	,configService.getRepositoryInfo(), new JsonTransformer());
 			post("/repository" 	,configService.setRepositoryInfo(), new JsonTransformer());
+			get("/library" 			,configService.setRepositoryInfo(), new JsonTransformer());
+			put("/library" 			,configService.setRepositoryInfo(), new JsonTransformer());
+			post("/library" 		,configService.setRepositoryInfo(), new JsonTransformer());			
+			delete("/library" 		,configService.setRepositoryInfo(), new JsonTransformer());
+			patch("/library" 		,configService.patchLibrary(), new JsonTransformer());
 		});
 	}
 
@@ -81,17 +86,22 @@ public class SparkRouterController extends SparkController{
 			post("/service/:systemId"   	,agentService.setSystemInfo(), new JsonTransformer());
 			get("/repository/:systemId"   	,agentService.getRepositoryInfo(), new JsonTransformer());
 			post("/repository/:systemId"   	,agentService.setRepositoryInfo(), new JsonTransformer());
-		});
+			
+			get("/library/:systemId" 		,agentService.getLibrary(), new JsonTransformer());			
+			put("/library/:systemId" 		,agentService.setLibrary(), new JsonTransformer());			
+			delete("/library/:systemId" 	,agentService.removeLibrary(), new JsonTransformer());
+			patch("/library/:systemId" 		,agentService.patchLibrary(), new JsonTransformer());
+		});	
 	}
 
 	private void env() {
 		path("/env", () -> {	
 			path("/admins", () -> {
-				get(	"/"   			,EnvironmentService.getAllAdmin()	, new JsonTransformer());
+				get(	"/"   			,EnvironmentService.getAllAdmin()		, new JsonTransformer());
 				put(	"/"   			,new EnvironmentService().createAdmin()	, new JsonTransformer());				
-				post(	"/"   			,EnvironmentService.updateAdmin()	, new JsonTransformer());
-				get(	"/:adminId"   	,EnvironmentService.getAdmin()		, new JsonTransformer());
-				delete(	"/:adminId"   	,EnvironmentService.deleteAdmin()	, new JsonTransformer());
+				post(	"/"   			,EnvironmentService.updateAdmin()		, new JsonTransformer());
+				get(	"/:adminId"   	,EnvironmentService.getAdmin()			, new JsonTransformer());
+				delete(	"/:adminId"   	,EnvironmentService.deleteAdmin()		, new JsonTransformer());
 			});
 		});
 	}

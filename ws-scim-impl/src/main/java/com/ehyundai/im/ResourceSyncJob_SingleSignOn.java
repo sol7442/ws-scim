@@ -47,10 +47,10 @@ public class ResourceSyncJob_SingleSignOn extends SCIMJob {
 			
 			String find_request_url = source_system.getSystemUrl() + "/scim/v2.0/Users/find";
 			SCIMFindRequest req_msg = new SCIMFindRequest();
-			String where = "";//getWhereStatement(scheduler);
+			String where = getWhereStatement(scheduler);
 			req_msg.setWhere(where);
 			
-			SCIMLogger.proc("Syn FindRequest  : where : {} ", "All");
+			SCIMLogger.proc("Syn FindRequest  : where : {} ", where);
 			SCIMListResponse find_res = findRequestPost(worker, find_request_url, req_msg);
 			SCIMLogger.proc("Syn ListResponse : count : {} ", find_res.getTotalResults());			
 			
@@ -72,6 +72,16 @@ public class ResourceSyncJob_SingleSignOn extends SCIMJob {
 		return null;
 	}
 
+	private String getWhereStatement(SCIMScheduler scheduler) {
+		String where = "";
+		Date last_exec_date = scheduler.getLastExecuteDate();
+		if(last_exec_date == null) {
+			where = "";
+		}else {
+			where = " where MODIFY_TIME BETWEEN "+ last_exec_date.getTime()+" AND "+ new Date().getTime() +"";
+		}
+		return where;
+	}
 	private void sync(String systemId, SCIMListResponse find_res, SCIMAudit audit, SCIMSchedulerHistory history) throws SCIMException {
 		
 		SCIMServerResourceRepository resource_provder_repository = (SCIMServerResourceRepository)SCIMRepositoryManager.getInstance().getResourceRepository();

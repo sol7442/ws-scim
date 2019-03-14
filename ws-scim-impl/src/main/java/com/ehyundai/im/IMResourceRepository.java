@@ -56,7 +56,7 @@ public class IMResourceRepository extends AbstractRDBRepository implements SCIMS
         	
         	resultSet = statement.executeQuery();
         	while(resultSet.next()) {
-        		user_list.add(newUser(resultSet));
+        		user_list.add(newSystemUserFromDB(resultSet));
         	}
         	
 		} catch (SQLException e) {
@@ -150,7 +150,7 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
 	    	DBCP.close(connection, statement1, resultSet);
 	    }
 
-	    insertProfiles(im_user);
+	    createProfiles(im_user);
 	    
 		return im_user;
 	}
@@ -158,13 +158,11 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
 	private void removeProfiles(SCIMUser user) throws SCIMException {
 		
 	}
-	private void updateProfiles(SCIMUser user) throws SCIMException {
-		
-	}
+
 	
 	private void insertSystemProfiles(String systemId, User user) throws SCIMException {
 		User im_user   = (User)user;
-		Map<String,String> user_profile = getProfile(user);
+		Map<String,String> user_profile = getProfileFromUser(user);
 		
 		final String insertSQL2 = "INSERT INTO SCIM_SYSTEM_USER_PROFILE (systemId, userId, pkey, pvalue)"
 				+ " VALUES (?,?,?,?)";
@@ -200,10 +198,10 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
 		
 	}
 	
-	private void insertProfiles(SCIMUser user) throws SCIMException {
+	private void createProfiles(SCIMUser user) throws SCIMException {
 		User im_user   = (User)user;
-		Map<String,String> user_profile = getProfile(user);
-	System.out.println("insert user profiel : " + user.getId());
+		Map<String,String> user_profile = getProfileFromUser(user);
+
 		final String insertSQL2 = "INSERT INTO SCIM_USER_PROFILE (userId, pkey, pvalue)"
 				+ " VALUES (?,?,?)";
 		
@@ -226,21 +224,13 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
         	
 	    } catch (SQLException e) {
 	    	throw new SCIMException("CREATE USER FAILED : " + insertSQL2 , e);
-//	    	if (e instanceof SQLIntegrityConstraintViolationException) {
-//				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
-//			}else {
-//				throw new SCIMException("CREATE USER FAILED : " + insertSQL2 , e);
-//			}
 		}finally {
 	    	DBCP.close(connection, statement, resultSet);
 	    }
 	}
 		
-	private SCIMUser setProfile(SCIMUser user, Map<String, String> profile) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	private Map<String, String> getProfile(SCIMUser user) {
+	
+	private Map<String, String> getProfileFromUser(SCIMUser user) {
 		User im_user = (User)user;
 	
 		Map<String, String> profile = new HashMap<String, String>();
@@ -264,37 +254,6 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
 		return profile;
 	}
 
-//	private void insertProfile(String key, String value, String userId,String version) throws SCIMException {
-//		final String insertSQL2 = "INSERT INTO SCIM_USER_PROFILE (userId, pkey, pvalue, pver)"
-//				+ " VALUES ("
-//				+ "?,?,?,?)";
-//		
-//		Connection connection = null;
-//		PreparedStatement statement1 = null;
-//	    
-//		ResultSet resultSet = null;        
-//	    try {
-//	    	connection = getConnection();
-//        	statement1  = connection.prepareStatement(insertSQL2);
-//        	
-//        	statement1.setString(1, userId);
-//        	statement1.setString(2, key);
-//        	statement1.setString(3, value);
-//        	statement1.setString(4, version);
-//        	statement1.execute();
-//        	
-//	    } catch (SQLException e) {
-//	    	if (e instanceof SQLIntegrityConstraintViolationException) {
-//				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
-//			}else {
-//				throw new SCIMException("CREATE USER FAILED : " + insertSQL2 , e);
-//			}
-//		}finally {
-//	    	DBCP.close(connection, statement1, resultSet);
-//	    }
-//	}
-	
-
 	@Override
 	public SCIMUser getUser(String userId) throws SCIMException {
 		final String selectSQL = "SELECT * FROM SCIM_USER WHERE USERID=?";
@@ -311,7 +270,7 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
         	
         	resultSet = statement.executeQuery();
         	if(resultSet.next()) {
-        		user = newUser(resultSet);
+        		user = newUserFromDB(resultSet);
         	}
         	
 		} catch (SQLException e) {
@@ -339,7 +298,7 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
         	
         	resultSet = statement.executeQuery();
         	while(resultSet.next()) {
-        		user_list.add(newUser(resultSet));
+        		user_list.add(newUserFromDB(resultSet));
         	}
         	
 		} catch (SQLException e) {
@@ -375,7 +334,7 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
         	
         	resultSet = statement.executeQuery();
         	while(resultSet.next()) {
-        		user_list.add(newUser(resultSet));
+        		user_list.add(newUserFromDB(resultSet));
         	}
         	
 		} catch (SQLException e) {
@@ -476,7 +435,7 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
         	
         	resultSet = statement.executeQuery();
         	while(resultSet.next()) {
-        		user_list.add(newUser(resultSet));
+        		user_list.add(newUserFromDB(resultSet));
         	}
         	
 		} catch (SQLException e) {
@@ -560,7 +519,7 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
         return user_profile_mape;
 	}
 	
-	private User newUser(ResultSet resultSet) {
+	private User newUserFromDB(ResultSet resultSet) {
 		User im_user = new User();
 		try {
     		im_user.setId(resultSet.getString("userId"));
@@ -578,8 +537,6 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
     		im_user.setCompanyCode("companycode");
     		im_user.setOrganization("organization");
     		im_user.setDepartment("department");
-    		
-    		//im_user.setProvisionDate(toJavaDate(resultSet.getTimestamp("provisionDate")));
     		
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -615,8 +572,39 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
 		}finally {
 	    	DBCP.close(connection, statement, resultSet);
 	    }
-				
+			
+	    updateProfiles(im_user);
+	    
 		return im_user;
+	}
+	
+	private void updateProfiles(SCIMUser user) throws SCIMException {
+		final String updateSQL = "UPDATE SCIM_USER_PROFILE SET pvalue=? WHERE pkey=? AND userId=?";
+
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
+	    try {
+	    	connection = getConnection();
+        	statement  = connection.prepareStatement(updateSQL);
+        	
+        	Map<String,String> user_profile = getProfileFromUser(user);
+        	System.out.println(user );
+        	for(Map.Entry<String, String> entry : user_profile.entrySet()) {
+        	    statement.setString(1, entry.getValue());
+        	    
+        	    statement.setString(2, entry.getKey());
+        	    statement.setString(3, user.getId());
+        	    
+        	    System.out.println(user.getId() + " >> " + entry.getKey() + " : " +entry.getValue() );
+        	    
+        	    statement.executeUpdate();
+        	}
+	    } catch (SQLException e) {
+	    	throw new SCIMException("UPDATE FAILED : " + updateSQL , e);
+		}finally {
+	    	DBCP.close(connection, statement, resultSet);
+	    }
 	}
 	
 	@Override
@@ -857,7 +845,7 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
         	
         	statement1.setString(1, systemId);
         	statement1.setString(2, system_user.getId());
-        	statement1.setString(3, system_user.getExernalId());
+        	statement1.setString(3, system_user.getEmployeeNumber());
         	statement1.setString(4, system_user.getUserName());
         	
         	statement1.setString(5, system_user.getPassword());
@@ -895,7 +883,7 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
         	
         	resultSet = statement.executeQuery();
         	if(resultSet.next()) {
-        		system_user = getSystemUser(resultSet);
+        		system_user = newSystemUserFromDB(resultSet);
         	}
         	
 		} catch (SQLException e) {
@@ -907,11 +895,11 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
 		return system_user;
 	}
 
-	private SCIMUser getSystemUser(ResultSet resultSet) {
+	private SCIMUser newSystemUserFromDB(ResultSet resultSet) {
 		User system_user = new User();
 		try {
 			system_user.setId(resultSet.getString("userId"));
-			system_user.setExernalId(resultSet.getString("externalId"));
+			system_user.setEmployeeNumber(resultSet.getString("externalId"));
 			system_user.setUserName(resultSet.getString("userName"));
 			system_user.setActive(resultSet.getBoolean("active"));
 			
@@ -931,7 +919,7 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
 	@Override
 	public SCIMUser updateSystemUser(String systemId, SCIMUser user) throws SCIMException {
 		final String updateSQL = "UPDATE SCIM_SYSTEM_USER SET "
-				+ "userName=?, active=?, modifyDate=?, provisionDate=? WHERE systemId=? AND userId=?";
+				+ "userName=?, externalId=?, active=?, modifyDate=?, provisionDate=? WHERE systemId=? AND userId=?";
 
 		User system_user = (User)user;
 		Connection connection = null;
@@ -942,13 +930,15 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
         	statement  = connection.prepareStatement(updateSQL);
         	
         	statement.setString(1, system_user.getUserName());
-        	statement.setInt(2, system_user.getActive());
-        	
-        	statement.setTimestamp(3,  toSqlTimestamp(new Date()));
-        	statement.setTimestamp(4,  toSqlTimestamp(new Date()));
+        	statement.setString(2, system_user.getEmployeeNumber());
 
-        	statement.setString(5, systemId);
-        	statement.setString(6, system_user.getId());
+        	statement.setInt(3, system_user.getActive());
+        	
+        	statement.setTimestamp(4,  toSqlTimestamp(new Date()));
+        	statement.setTimestamp(5,  toSqlTimestamp(new Date()));
+
+        	statement.setString(6, systemId);
+        	statement.setString(7, system_user.getId());
         	
         	statement.executeUpdate();
         	
