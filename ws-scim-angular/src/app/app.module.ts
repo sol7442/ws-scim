@@ -39,7 +39,7 @@ import {EnvironmentComponent } from './main/environment/environment.component';
 import {EnvAdminComponent } from './main/environment/env-admin/env-admin.component';
 import {EnvSchedulerComponent } from './main/environment/env-scheduler/env-scheduler.component';
 import {EnvHrAgentComponent } from './main/environment/env-hr-agent/env-hr-agent.component';
-
+import {EnvLogComponent } from './main/environment/env-log/env-log.component';
 
 import {ToolbarModule} from 'primeng/toolbar';
 import {ButtonModule} from 'primeng/button';
@@ -53,6 +53,9 @@ import {PaginatorModule} from 'primeng/paginator';
 import {CardModule} from 'primeng/card';
 import {TooltipModule} from 'primeng/tooltip';
 import {DropdownModule} from 'primeng/dropdown';
+import {ScrollPanelModule} from 'primeng/scrollpanel';
+import {EditorModule} from 'primeng/editor';
+import {FileUploadModule} from 'primeng/fileupload';
 
 
 
@@ -67,7 +70,7 @@ import 'rxjs/Rx';
       SystemManagementComponent,HrsystemManagementComponent,
       AccountComponent,SystemAccountComponent,AccountManagementComponent,
       AuditManagementComponent,
-      EnvironmentComponent,EnvAdminComponent,EnvHrAgentComponent,EnvSchedulerComponent
+      EnvironmentComponent,EnvAdminComponent,EnvHrAgentComponent,EnvSchedulerComponent,EnvLogComponent
    ],
    imports: [
       BrowserModule,FormsModule,
@@ -75,6 +78,7 @@ import 'rxjs/Rx';
       TabMenuModule,ToolbarModule,TooltipModule,
       ButtonModule,SplitButtonModule,PanelModule,DropdownModule,
       ListboxModule,DataViewModule,DialogModule,TableModule,PaginatorModule,CardModule,
+      ScrollPanelModule,EditorModule,FileUploadModule,
       AppRouteModule,
       HttpClientModule,
       LoginModule,

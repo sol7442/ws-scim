@@ -57,7 +57,7 @@ public class SCIMFindRequest extends SCIMMessage{
 	
 	@Override
 	public String toString() {
-		Gson gson = new GsonBuilder().create();
+		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 		return gson.toJson(this);
 	}
 }

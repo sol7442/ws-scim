@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.wowsanta.scim.exception.SCIMException;
-import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.resource.user.LoginUser;
 import com.wowsanta.scim.sec.SCIMJWTToken;
 
@@ -27,6 +26,40 @@ public class AuthorizationService {
 					return;
 				}
 				
+				if(request.uri().startsWith("/agent/library/")){
+					String auth_token = request.headers("Authorization");
+					logger.debug("library path ... skip... Authorization > {} " ,auth_token);
+					System.out.println("library path ... skip... Authorization >> " + auth_token);
+					return;
+				}
+				
+				if(request.uri().startsWith("/agent/config/")){
+					String auth_token = request.headers("Authorization");
+					if(auth_token == null) {
+						logger.debug("config path ... skip... Authorization > {} " ,auth_token);
+						System.out.println("config path ... skip... Authorization >> " + auth_token);
+						return;
+					}
+				}
+				
+				if(request.uri().startsWith("/library")){
+					String auth_token = request.headers("Authorization");
+					logger.debug("library path ... skip... Authorization > {} " ,auth_token);
+					System.out.println("library path ... skip... Authorization >> " + auth_token);
+					return;
+				}
+				
+				if(request.uri().startsWith("/config")){
+					String auth_token = request.headers("Authorization");
+					if(auth_token == null) {
+						logger.debug("config path ... skip... Authorization > {} " ,auth_token);
+						System.out.println("config path ... skip... Authorization >> " + auth_token);
+						return;
+					}
+				}
+				
+				response.header("Content-Type", "application/scim+json");
+				
 				LoginUser login_user = request.session().attribute("loginUser");
 				if(login_user == null) {
 					String auth_token = request.headers("Authorization");
@@ -41,7 +74,6 @@ public class AuthorizationService {
 						}
 						
 					} catch (SCIMException e) {
-						SCIMLogger.sys("TOEKN VAILDATE FAILED ", e.getMessage());
 						response.status(401);
 						halt(401);
 					}

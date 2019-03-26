@@ -5,6 +5,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ehyundai.object.User;
 import com.wowsanta.scim.exception.SCIMError;
 import com.wowsanta.scim.exception.SCIMException;
@@ -14,10 +17,10 @@ import com.wowsanta.scim.message.SCIMBulkRequest;
 import com.wowsanta.scim.message.SCIMBulkResponse;
 import com.wowsanta.scim.obj.SCIMResource;
 import com.wowsanta.scim.obj.SCIMUser;
+import com.wowsanta.scim.repository.SCIMRepositoryManager;
+import com.wowsanta.scim.repository.SCIMResourceGetterRepository;
+import com.wowsanta.scim.repository.SCIMResourceRepository;
 import com.wowsanta.scim.resource.SCIMLocationFactory;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
-import com.wowsanta.scim.resource.SCIMResourceGetterRepository;
-import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.resource.SCIMResourceSetterRepository;
 import com.wowsanta.scim.resource.user.LoginUser;
 import com.wowsanta.scim.schema.SCIMConstants;
@@ -31,7 +34,8 @@ import spark.Response;
 import spark.Route;
 
 public class BlukControl {
-
+	static Logger logger = LoggerFactory.getLogger(BlukControl.class);
+	
 	private static BlukService bulkService = new BlukService();
 	
 	public static Route post() {
@@ -113,7 +117,7 @@ System.out.println("bulk operation_result_list : " + operation_result_list.size(
 				try {
 					String last_execute_date = request.params(":lasteDate");
 					
-					SCIMLogger.proc("BULK REQUEST - GET : {}", last_execute_date);
+					logger.info("BULK REQUEST - GET : {}", last_execute_date);
 
 					scim_bluk_request.setRequestId(Random.number(0,10000000));
 					SCIMResourceGetterRepository res_repo  = (SCIMResourceGetterRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
@@ -126,14 +130,14 @@ System.out.println("bulk operation_result_list : " + operation_result_list.size(
 					
 					List<SCIMUser> user_list = null;
 					if(last_execute_date.equals("0")) {
-						SCIMLogger.proc("BULK REQUEST - GET USER DATA : {}", "ALL ACTIVE USER");
+						logger.info("BULK REQUEST - GET USER DATA : {}", "ALL ACTIVE USER");
 						user_list = res_repo.getUsersByActive();
 					}else {
-						SCIMLogger.proc("BULK REQUEST - GET USER DATA : {} - {} ",from,to);
+						logger.info("BULK REQUEST - GET USER DATA : {} - {} ",from,to);
 						user_list = res_repo.getUsersByDate(from, to);
 					}
 					 
-					SCIMLogger.proc("BULK REQUEST - GET DATA SIZE : {}", user_list.size());
+					logger.info("BULK REQUEST - GET DATA SIZE : {}", user_list.size());
 					
 					int count_post = 0;
 					int count_put = 0;
@@ -167,7 +171,7 @@ System.out.println("bulk operation_result_list : " + operation_result_list.size(
 						scim_bluk_request.addOperation(operation);
 					}
 					
-					SCIMLogger.proc("BULK REQUEST - GET PUT {}, POST {}, PATCH {} - ALL {} ",count_put,count_post,count_patch,user_list.size());
+					logger.info("BULK REQUEST - GET PUT {}, POST {}, PATCH {} - ALL {} ",count_put,count_post,count_patch,user_list.size());
 
 				}catch (Exception e) {
 					e.printStackTrace();

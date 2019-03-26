@@ -1,37 +1,53 @@
 package com.wowsanta.scim.service.agent;
 
-import java.io.BufferedReader;
+import static spark.Spark.halt;
+
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletException;
+import javax.servlet.http.Part;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.ParseException;
+import org.eclipse.jetty.util.UrlEncoded;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.wowsanta.scim.client.RESTClient;
 import com.wowsanta.scim.exception.SCIMError;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.SCIMSystem;
-import com.wowsanta.scim.obj.SCIMUser;
-import com.wowsanta.scim.resource.SCIMRepository;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
-import com.wowsanta.scim.resource.SCIMResourceGetterRepository;
+import com.wowsanta.scim.repository.SCIMRepository;
+import com.wowsanta.scim.repository.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.user.LoginUser;
 import com.wowsanta.scim.resource.worker.Worker;
-import com.wowsanta.scim.schema.SCIMConstants;
+import com.wowsata.util.net.WowsantaURLEncoder;
 
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import spark.utils.IOUtils;
 
 public class AgentService {
 
+	Logger logger = LoggerFactory.getLogger(AgentService.class);
+	
 	public static Route runRemoteScheduler() {
 		// TODO Auto-generated method stub
 		return null;
@@ -57,7 +73,6 @@ public class AgentService {
 					if(system == null) {
 						SCIMError error = SCIMError.invalidValue;
 						error.addDetail("system ID not found : " + systemId);
-						
 						throw new SCIMException(error);
 					}
 					
@@ -69,10 +84,11 @@ public class AgentService {
 					RESTClient clinent = new RESTClient(worker);
 					String result = clinent.get2(call_url);
 					
-					return SCIMRepository.load(result);
+					logger.debug("REMOTE REPOSITORY : {} ", result);
 					
-				}catch(SCIMException e) {
-					return e.getError();
+					return SCIMRepository.loadFromString(result);
+				}catch(Exception e) {
+					return e;//.getError();
 				}
 			}
 		};
@@ -148,30 +164,112 @@ public class AgentService {
 			}
 		};
 	}
+	
+	public Route patchLibrary_old() {
+		return new Route() {
+			@Override
+			public Object handle(Request request, Response response) throws Exception {
+				try {
+					String systemId = request.params(":systemId");
+					SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
+					
+					File system_path = new File(System.getProperty("user.dir"));
+					
+					File system_root_path = system_path.getParentFile();
+					File libray_temp_path = new File(system_root_path.getCanonicalFile() + File.separator + "temp");
+                    
+					String system_url = system.getSystemUrl();
+					
+					logger.info("patchLibrary : {}", systemId );
+					request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement(libray_temp_path.getCanonicalPath()));
+                    Collection<Part> parts = request.raw().getParts();
+                    
+                    Map<String, byte[]> buffer_map = new HashMap<String, byte[]>();
+	                for (Part part : parts) {
+						logger.info(" - patchLibrary : {}", part.getSubmittedFileName() );
+
+	                	byte[] buffer = IOUtils.toByteArray(part.getInputStream());
+	                	buffer_map.put(part.getSubmittedFileName(), buffer);
+	                }
+	                
+					Worker worker = null;
+					if(worker == null) {
+						worker = new Worker();
+						worker.setWorkerId("sys-operator");
+						worker.setWorkerType("Admin");
+	                	System.out.println("- default worker >>" + worker);
+					}
+					
+					Path old_patch_path = Paths.get("../old_patch");
+					File[] file_list = old_patch_path.toFile().listFiles();
+					for (File file : file_list) {
+						System.out.println("old_patch << -- " + file.getName());
+					}
+					
+					String patch_url   = system_url + "/config/library";
+					logger.info("sendFile url : {} ", patch_url);
+					RESTClient clinent = new RESTClient(worker);
+					clinent.patch(patch_url, file_list);
+					
+					
+					return "success";
+				}catch (Exception e) {
+					logger.error("LIBRARY PATCH FAILED ",e);
+				}
+				
+				return "failed";
+			}
+		};
+	}
 	public Route patchLibrary() {
 		return new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
-				String systemId = request.params(":systemId");
-				SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
-				String system_url = system.getSystemUrl();
-				String call_url   = system_url + "/config/library";
 				
-				Worker worker = findWorker(request);
-				RESTClient clinent = new RESTClient(worker);
-				
-				String scim_library = System.getProperty("scim.library");
-				System.out.println("scim_library" +  scim_library);
-				
-				Path library_path = Paths.get(scim_library);
-				File library_dir  = library_path.toFile();
-				for (File libray_file : library_dir.listFiles()) {
-					System.out.println(libray_file.getCanonicalPath());
+				try {
+					String systemId = request.params(":systemId");
+					SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
+					
+					File system_path = new File(System.getProperty("user.dir"));
+					
+					File system_root_path = system_path.getParentFile();
+					File libray_temp_path = new File(system_root_path.getCanonicalFile() + File.separator + "temp");
+					
+					
+					logger.info("patchLibrary : {}", systemId );
+					request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement(libray_temp_path.getCanonicalPath()));
+                    Collection<Part> parts = request.raw().getParts();
+                    
+                    Map<String, byte[]> buffer_map = new HashMap<String, byte[]>();
+	                for (Part part : parts) {
+						logger.info(" - patchLibrary : {}", part.getSubmittedFileName() );
+
+	                	byte[] buffer = IOUtils.toByteArray(part.getInputStream());
+	                	buffer_map.put(part.getSubmittedFileName(), buffer);
+	                }
+                    
+					String system_url = system.getSystemUrl();
+					
+					Worker worker = null;//findWorker(request);
+					if(worker == null) {
+						worker = new Worker();
+						worker.setWorkerId("sys-operator");
+						worker.setWorkerType("Admin");
+	                	System.out.println("- default worker >>" + worker);
+					}
+					
+					
+					String post_url   = system_url + "/library/";
+					logger.info("sendFile url : {} ", post_url);
+					RESTClient clinent = new RESTClient(worker);
+					clinent.sendFile(post_url,buffer_map);
+					
+					return "success";
+				}catch (Exception e) {
+					logger.error("LIBRARY PATCH FAILED ",e);
 				}
 				
-				clinent.patch(call_url,library_dir.listFiles());
-				
-				return library_dir.list();
+				return "failed";
 			}
 		};
 	}
@@ -186,5 +284,205 @@ public class AgentService {
 		return null;
 	}
 
+	public Route getLogFileList() {
+		return new Route() {
+			@Override
+			public Object handle(Request request, Response response) throws Exception {
+				String systemId = request.params(":systemId");
+				SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
+				String system_url = system.getSystemUrl();
+				String call_url   = system_url + "/log/list";
+				
+				Worker worker = findWorker(request);
+				RESTClient clinent = new RESTClient(worker);
+				
+				logger.info("getLogFileList systemId : {}, call_url : {}",systemId,call_url);
 
+				String resul_str = clinent.call(call_url);
+				
+				Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+				File[] log_files = gson.fromJson(resul_str,File[].class);
+				
+				File[] log_file_array = new File[log_files.length];
+				for(int i=0; i<log_files.length; i++) {
+					log_file_array[i] = new File(log_files[i].getName());
+				}
+
+				return log_file_array;
+			}
+		};
+	}
+
+	public Route getLogFile() {
+		return new Route() {
+			@Override
+			public Object handle(Request request, Response response) throws Exception {
+				
+				try {
+					String systemId = request.params(":systemId");
+					String fileName = request.params(":fileName");
+					
+					logger.info("systemId : {}, fileName : {}",systemId,fileName);
+					
+					SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
+					String system_url = system.getSystemUrl();
+					String call_url   = system_url + "/log/file/" + UrlEncoded.encodeString(fileName);
+					
+					logger.info("call url : {}",call_url);
+					
+					Worker worker = findWorker(request);
+					RESTClient clinent = new RESTClient(worker);
+				
+					HttpResponse http_res = clinent.getFile(call_url);
+					HttpEntity entity = http_res.getEntity();
+				    if (entity != null) {
+				    	
+				        response.header("Content-Disposition", String.format("attachment; filename=", fileName));
+				        response.raw().setContentType("application/octet-stream");
+				        response.raw().setContentLength((int) entity.getContentLength());
+				        
+				        entity.writeTo(response.raw().getOutputStream());
+				    }
+			        
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				return response.raw();
+			}
+		};
+	}
+
+	public Route getConfigFileList() {
+		return new Route() {
+			@Override
+			public Object handle(Request request, Response response) throws Exception {
+				
+				RESTClient client = null;
+				try {
+					String systemId = request.params(":systemId");
+					
+					SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
+					String system_url = system.getSystemUrl();
+					String call_url   = system_url + "/config/list";
+					
+					
+					Worker worker = findWorker(request);
+					client = new RESTClient(worker);
+					
+					logger.info("getConfigFileList systemId : {}, call_url : {}",systemId,call_url);
+					String result = client.call(call_url);
+					
+					logger.info("getConfigFileList result : {} ",result);
+					
+					Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+					File[] log_files = gson.fromJson(result,File[].class);
+					
+					File[] log_file_array = new File[log_files.length];
+					for(int i=0; i<log_files.length; i++) {
+						log_file_array[i] = new File(log_files[i].getName());
+					}
+
+					return log_file_array;
+					
+				}catch (Exception e) {
+					client.close();
+					
+					logger.error("getConfigFileList failed ",e);
+				}
+				return "fail";
+			}
+		};
+	}
+
+	public Route getConfigFile() {
+		return new Route() {
+			@Override
+			public Object handle(Request request, Response response) throws Exception {
+				try {
+					String systemId = request.params(":systemId");
+					String fileName = request.params(":fileName");
+					
+					logger.info("systemId : {}, fileName : {}",systemId,fileName);
+					
+					SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
+					String system_url = system.getSystemUrl();
+					String call_url   = system_url + "/config/file/" + UrlEncoded.encodeString(fileName);
+					
+					logger.info("call url : {}",call_url);
+					
+					Worker worker = findWorker(request);
+					RESTClient clinent = new RESTClient(worker);
+				
+					HttpResponse http_res = clinent.getFile(call_url);
+					HttpEntity entity = http_res.getEntity();
+				    if (entity != null) {
+				    	
+				        response.header("Content-Disposition", String.format("attachment; filename=", fileName));
+				        response.raw().setContentType("application/octet-stream");
+				        response.raw().setContentLength((int) entity.getContentLength());
+				        
+				        entity.writeTo(response.raw().getOutputStream());
+				    }
+			        
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				return response.raw();
+			}
+		};
+	}
+
+	public Route patchConfigFile() {
+		return new Route() {
+			@Override
+			public Object handle(Request request, Response response) throws Exception {
+				try {
+					String systemId = request.params(":systemId");
+					SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
+					
+					File system_path = new File(System.getProperty("user.dir"));
+					
+					File system_root_path = system_path.getParentFile();
+					File libray_temp_path = new File(system_root_path.getCanonicalFile() + File.separator + "temp");
+					
+					
+					logger.info("patchConfigFile : {}", systemId );
+					request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement(libray_temp_path.getCanonicalPath()));
+                    Collection<Part> parts = request.raw().getParts();
+                    
+                    Map<String, byte[]> buffer_map = new HashMap<String, byte[]>();
+	                for (Part part : parts) {
+						logger.info(" - patchConfigFile : {}", part.getSubmittedFileName() );
+
+	                	byte[] buffer = IOUtils.toByteArray(part.getInputStream());
+	                	buffer_map.put(part.getSubmittedFileName(), buffer);
+	                }
+                    
+					String system_url = system.getSystemUrl();
+					
+					Worker worker = null;//findWorker(request);
+					if(worker == null) {
+						worker = new Worker();
+						worker.setWorkerId("sys-operator");
+						worker.setWorkerType("Admin");
+	                	System.out.println("- default worker >>" + worker);
+					}
+					
+					
+					String post_url   = system_url + "/config/";
+					logger.info("sendFile url : {} ", post_url);
+					RESTClient clinent = new RESTClient(worker);
+					clinent.sendFile(post_url,buffer_map);
+					
+					return "success";
+				}catch (Exception e) {
+					logger.error("CONFIG PATCH FAILED ",e);
+				}
+				
+				return "failed";
+			}
+		};
+	}
 }

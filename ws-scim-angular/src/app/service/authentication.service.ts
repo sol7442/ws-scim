@@ -32,20 +32,6 @@ export class AuthenticationService {
         sessionStorage.setItem('currentUser', JSON.stringify(user));
 
         return user;
-
-        // }else{
-        //   let error_data :ErrorData = new ErrorData(); 
-        //   error_data.type = "HTTP ERROR";
-        //   error_data.code = result.code;
-        //   error_data.message = result.message;
-        //   error_data.detail = JSON.stringify(result.data,undefined, 2);
-        
-        //   this.alertService.error(error_data);
-
-        //   return null;
-        // }
-        
-        //return result;
       }));
   }
   logout(){

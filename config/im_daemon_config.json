@@ -1,0 +1,8 @@
+{
+  "distPath": "../release/20190317153053/dist",
+  "libPath": "../release/20190317153053/libs",
+  "configPath": "../release/20190317153053/config",
+  "serviceConfig": "../config/im_service_config.json",
+  "serviceClass": "com.wowsanta.scim.SCIMServer",
+  "jsonClass": "com.wowsanta.daemon.DaemonConfiguration"
+}

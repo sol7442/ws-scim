@@ -1,0 +1,9 @@
+{
+  "jsonClass": "com.wowsanta.scim.server.SparkConfiguration",	  
+  "servicePort": 5001,
+  "maxThreads": 5,
+  "minThreads": 2,
+  "idleTimeoutMills": 1000, 
+  "routerClass": "com.wowsanta.scim.server.ScimAgentRouter",
+  "repositoryConfig":"../config/gw_mssql_repository.json"
+}

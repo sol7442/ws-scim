@@ -1,0 +1,34 @@
+{
+	"resourceRepository": {
+		"jsonClass": "com.ehyundai.im.IMResourceRepository",
+		"type": "RDB",
+		"dbcp": {
+			"poolName": "im-resource",
+			"driverName": "oracle.jdbc.driver.OracleDriver",
+			"jdbcUrl": "jdbc:oracle:thin:@192.168.0.200:1521:xe",
+			"userName": "scimdbuser",
+			"password": "Abcd1234",
+			"valiationQuery": "select count(*) from SCIM_USER",
+			"timeBetweenEvictionRunsMillis": 60000,
+			"testWhileIdle": true,
+			"minIdle": 5,
+			"maxTotal": 10
+		}
+	},
+	"systemRepository": {
+		"jsonClass": "com.ehyundai.im.IMSystemRepository",
+		"type": "RDB",
+		"dbcp": {
+			"poolName": "im-system",
+			"driverName": "oracle.jdbc.driver.OracleDriver",
+			"jdbcUrl": "jdbc:oracle:thin:@192.168.0.200:1521:xe",
+			"userName": "scimdbuser",
+			"password": "Abcd1234",
+			"valiationQuery": "select count(*) from SCIM_SYSTEM",
+			"timeBetweenEvictionRunsMillis": 60000,
+			"testWhileIdle": true,
+			"minIdle": 5,
+			"maxTotal": 10
+		}
+	}
+}

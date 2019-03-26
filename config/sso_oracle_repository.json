@@ -1,0 +1,18 @@
+{
+	"resourceRepository": {
+		"jsonClass": "com.ehyundai.sso.SsoResoureRepository",
+		"type": "RDB",
+		"dbcp": {
+			"poolName": "sso-resource",
+			"driverName": "oracle.jdbc.driver.OracleDriver",
+			"jdbcUrl": "jdbc:oracle:thin:@192.168.0.200:1521:xe",
+			"userName": "ssodbuser",
+			"password": "Abcd1234",
+			"valiationQuery": "SELECT * FROM COLS WHERE TABLE_NAME = 'WA3_USER'",
+			"timeBetweenEvictionRunsMillis": 60000,
+			"testWhileIdle": true,
+			"minIdle": 5,
+			"maxTotal": 10
+		}
+	}
+}

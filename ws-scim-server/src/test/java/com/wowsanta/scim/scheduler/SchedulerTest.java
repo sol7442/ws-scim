@@ -10,7 +10,7 @@ import org.junit.Test;
 import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.repository.RepositoryManagerTest;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
+import com.wowsanta.scim.repository.SCIMRepositoryManager;
 import com.wowsanta.scim.schema.SCIMDefinitions;
 public class SchedulerTest extends RepositoryManagerTest{
 

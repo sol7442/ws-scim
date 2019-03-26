@@ -1,0 +1,19 @@
+<div class="context-body">
+    <div class="p-grid">
+        <div class="p-col-3">
+            <p-dropdown [options]="systems" [style]="{'width':'100%'}"	 [(ngModel)]="selectedSystem" optionLabel="systemName" (onChange)="onSelectSystem($event)"></p-dropdown>
+        </div>                
+        <div class="p-col-9">
+            <p-dropdown [options]="logFiles" [style]="{'width':'100%'}"	 optionLabel="path" (onChange)="onSelectFile($event)" ></p-dropdown>
+        </div>
+        <div class="p-col-12 box-stretched">
+            <div class="grandparent" style="width:calc(100vw - 250px); height: calc(100vh - 200px); overflow: scroll; background: gray">
+                <div class="parent" style="display: inline-block;" >
+                    <pre>{{logFile}}</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+  

@@ -12,6 +12,7 @@ public class USER_SCHEMA_Test {
 	//@Test
 	public void make() {
 		SCIMResourceTypeSchema user_schema = new SCIMResourceTypeSchema();		
+		
 		user_schema.addSchema(SCIMConstants.USER_CORE_SCHEMA_URI);		
 		user_schema.putAttribute(SCIMSchemaDefinitions.ID);		
 		user_schema.putAttribute(SCIMSchemaDefinitions.META);

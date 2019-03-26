@@ -9,9 +9,9 @@ import org.quartz.JobExecutionException;
 
 import com.ehyundai.gw.ConciliationJob_GW;
 import com.wowsanta.scim.exception.SCIMException;
-import com.wowsanta.scim.resource.SCIMRepository;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
-import com.wowsanta.scim.resource.SCIMResourceRepository;
+import com.wowsanta.scim.repository.SCIMRepository;
+import com.wowsanta.scim.repository.SCIMRepositoryManager;
+import com.wowsanta.scim.repository.SCIMResourceRepository;
 
 public class ReconciliationTest extends ServiceProviderTest {
 

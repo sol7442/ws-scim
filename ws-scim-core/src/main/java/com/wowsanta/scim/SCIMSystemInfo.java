@@ -1,9 +1,8 @@
 package com.wowsanta.scim;
 
-import com.wowsanta.scim.json.AbstractJsonObject;
 import com.wowsanta.scim.schema.SCIMConstants;
 
-public class SCIMSystemInfo extends AbstractJsonObject {
+public class SCIMSystemInfo  {
 	
 	/**
 	 * 

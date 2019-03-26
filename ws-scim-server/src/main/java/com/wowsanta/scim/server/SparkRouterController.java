@@ -5,6 +5,10 @@ import static spark.Spark.before;
 import static spark.Spark.path;
 import static spark.Spark.post;
 import static spark.Spark.put;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import static spark.Spark.patch;
 import static spark.Spark.get;
 import static spark.Spark.delete;
@@ -20,8 +24,6 @@ import com.wowsanta.scim.service.auth.AuthorizationService;
 import com.wowsanta.scim.service.auth.LoginService;
 import com.wowsanta.scim.service.config.ConfigService;
 import com.wowsanta.scim.service.schudler.SchedulerService;
-import com.wowsanta.scim.service.scim.v2.BlukControl;
-import com.wowsanta.scim.service.scim.v2.UserControl;
 import com.wowsanta.scim.service.scim.v2.service.BlukService;
 import com.wowsanta.scim.service.scim.v2.service.UserService;
 import com.wowsanta.scim.service.system.SystemApiService;
@@ -29,6 +31,8 @@ import com.wowsanta.scim.service.system.SystemApiService;
 
 public class SparkRouterController extends SparkController{
 	
+	Logger access_logger  = LoggerFactory.getLogger("access");
+	  
 	private AuthorizationService authService = new AuthorizationService();
 	private LoginService loginService = new LoginService();
 	private SchedulerService schedulerService = new SchedulerService();
@@ -43,7 +47,7 @@ public class SparkRouterController extends SparkController{
 		
 		after("/*", (req, res) -> {
 			res.header("Content-Type", "application/scim+json");
-			SCIMLogger.access("{} -> {} {} : {} ",req.ip(), req.requestMethod(), req.uri(),  res.status());
+			access_logger.info("{} -> {} {} : {} ",req.ip(), req.requestMethod(), req.uri(),  res.status());
 			}
 		);
 		
@@ -156,8 +160,6 @@ public class SparkRouterController extends SparkController{
 			
 			
 			post   ("/Bulk",blukService.post(), new JsonTransformer());
-			//get    ("/Bulk",BlukControl.getAll(), new JsonTransformer());
-			//get    ("/Bulk/:lasteDate",BlukControl.get(), new JsonTransformer());
 		});
 	}
 

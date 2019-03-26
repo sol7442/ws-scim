@@ -14,12 +14,12 @@ import com.wowsanta.scim.message.SCIMBulkRequest;
 import com.wowsanta.scim.message.SCIMBulkResponse;
 import com.wowsanta.scim.obj.SCIMResource;
 import com.wowsanta.scim.obj.SCIMUser;
+import com.wowsanta.scim.repository.SCIMRepository;
+import com.wowsanta.scim.repository.SCIMRepositoryManager;
+import com.wowsanta.scim.repository.SCIMResourceGetterRepository;
+import com.wowsanta.scim.repository.SCIMResourceRepository;
 import com.wowsanta.scim.resource.SCIMLocationFactory;
 import com.wowsanta.scim.resource.SCIMProviderRepository;
-import com.wowsanta.scim.resource.SCIMRepository;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
-import com.wowsanta.scim.resource.SCIMResourceGetterRepository;
-import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.resource.SCIMResourceSetterRepository;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
 import com.wowsanta.scim.resource.user.LoginUser;
@@ -57,7 +57,7 @@ public class BlukService {
 				SCIMBulkRequest  scim_bluk_request  = new SCIMBulkRequest();
 				scim_bluk_request.parse(request.body());
 				
-				SCIMLogger.proc("Bluk Request [{}][{}] start > {} ", scim_bluk_request.getRequestId(),scim_bluk_request.getOperations().size(), worker);
+				logger.info("Bluk Request [{}][{}] start > {} ", scim_bluk_request.getRequestId(),scim_bluk_request.getOperations().size(), worker);
 
 				List<SCIMBulkOperation> operation_result_list = new ArrayList<SCIMBulkOperation>();
 				for (SCIMBulkOperation operation : scim_bluk_request.getOperations()) {
@@ -84,11 +84,11 @@ public class BlukService {
 						operation_result.setResponse(error);
 					}
 					
-					SCIMLogger.proc("Bluk Request operation result > {} ", operation_result);
+					logger.info("Bluk Request operation result > {} ", operation_result);
 					operation_result_list.add(operation_result);
 				}
 
-				SCIMLogger.proc("Bluk Request [{}][{}] end > {} ", scim_bluk_request.getRequestId(),scim_bluk_request.getOperations().size(), worker);
+				logger.info("Bluk Request [{}][{}] end > {} ", scim_bluk_request.getRequestId(),scim_bluk_request.getOperations().size(), worker);
 				
 				SCIMBulkResponse scim_bluk_response = new SCIMBulkResponse();
 				scim_bluk_response.setOperations(operation_result_list);

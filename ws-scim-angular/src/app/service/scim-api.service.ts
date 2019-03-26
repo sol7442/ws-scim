@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,HttpHeaders,HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { Observable } from "rxjs/Observable";
 
 import { Admin } from '../model/model';
 
@@ -25,6 +26,16 @@ export class ScimApiService {
     }));
   }
 
+  getAllSystems(){
+    let api_url = '/system/all/';
+    return this.http.get<any>(api_url,
+      {
+        headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
+      })
+    .pipe(map( result =>{
+      return result;
+    }));
+  }
 
   getSystem(id:string){
     let api_url = '/system/' + id;
@@ -225,5 +236,52 @@ export class ScimApiService {
     .pipe(map( result =>{
       return result;
     }));
+  }
+
+  getConfigFileList(id:string){
+    let api_url = '/agent/config/list/' + id;
+    return this.http.get<any>(api_url,
+      {
+        headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
+      })
+    .pipe(map( result =>{
+      return result;
+    })); 
+  }
+  getConfigFile(systemId:string, fileName:string){
+    let api_url = '/agent/config/file/' + systemId + "/name/" + fileName;
+
+    let header = new HttpHeaders();
+    header.set('Content-Type', 'application/json; charset=utf-8');
+    header.set('Accept', 'application/octet-stream');
+
+    return this.http.get(api_url,{responseType: 'text'})
+    .map(data =>{
+      return data;//thefile;
+    });
+  }
+
+  getLogFileList(id:string){
+    let api_url = '/agent/log/list/' + id;
+    return this.http.get<any>(api_url,
+      {
+        headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
+      })
+    .pipe(map( result =>{
+      return result;
+    })); 
+  }
+  getLogFile(systemId:string, fileName:string) {
+    let api_url = '/agent/log/file/' + systemId + "/name/" + fileName;
+
+    let header = new HttpHeaders();
+    header.set('Content-Type', 'application/json; charset=utf-8');
+    header.set('Accept', 'application/octet-stream');
+
+    return this.http.get(api_url,{responseType: 'text'})
+    .map(data =>{
+      return data;//thefile;
+    });
+
   }
 }

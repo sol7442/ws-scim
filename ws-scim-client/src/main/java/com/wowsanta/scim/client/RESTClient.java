@@ -1,10 +1,17 @@
 package com.wowsanta.scim.client;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.URI;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -19,6 +26,8 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonObject;
 import com.wowsanta.scim.exception.SCIMError;
@@ -31,7 +40,11 @@ import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.resource.worker.Worker;
 import com.wowsanta.scim.schema.SCIMConstants;
 
+
 public class RESTClient {
+	
+	Logger logger = LoggerFactory.getLogger(RESTClient.class);
+	
 //	private SCIMUser user;
 	private Worker worker;
 	
@@ -321,24 +334,25 @@ public class RESTClient {
 //		}
 	}
 
-	public void patch(String url, SCIMJsonObject request) throws SCIMException {
-//		HttpPatch pat = new HttpPatch(url);
-//		pat.addHeader("Content-Type", "application/json");
-//		
-//		HttpResponse response = execute(pat);
-//		
-//		HttpEntity result_entity = 
-//		try {
-//			EntityUtils.toString(result_entity);
-//		} catch (ParseException | IOException e) {
-//			e.printStackTrace();
-//		}
-	}
+//	public void patch(String url, SCIMJsonObject request) throws SCIMException {
+////		HttpPatch pat = new HttpPatch(url);
+////		pat.addHeader("Content-Type", "application/json");
+////		
+////		HttpResponse response = execute(pat);
+////		
+////		HttpEntity result_entity = 
+////		try {
+////			EntityUtils.toString(result_entity);
+////		} catch (ParseException | IOException e) {
+////			e.printStackTrace();
+////		}
+//	}
 
 	private HttpResponse execute(HttpRequestBase base) throws SCIMException {
 		try {
 			return RESTClientPool.getInstance().get().execute(base);
 		} catch (Exception e) {
+			close();
 			throw new SCIMException("HTTP Execute  FAILED : " + base.getURI(), e);
 		}
 	}
@@ -365,7 +379,8 @@ public class RESTClient {
 		return "";
 	}
 
-	public void patch(String patch_url, File[] libray_file) {
+	
+	public void patch(String patch_url, File[] libray_file) throws SCIMException{
 		try {
 			
 			HttpPatch post = new HttpPatch(patch_url);
@@ -384,9 +399,56 @@ public class RESTClient {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+	}
+	public void sendFile(String post_url, Map<String, byte[]> buffer_map) throws ClientException{
+		try {
+
+			MultipartEntityBuilder meb = MultipartEntityBuilder.create();
+			Set<String> buffer_keys = buffer_map.keySet();
+			for (String fileName : buffer_keys) {
+				meb.addBinaryBody(fileName, buffer_map.get(fileName));
+			}
+			meb.setContentType(ContentType.MULTIPART_FORM_DATA);
+			
+			HttpPost post = new HttpPost(post_url);
+			post.setEntity(meb.build());
+			post.addHeader("Authorization", RESTClientPool.getInstance().generateAuthorizationToken(worker, 1000*60));
+			
+			HttpResponse response = execute(post);
+			
+			logger.info("send file result : {} ",response.toString());
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			throw new ClientException("send file failed ",e);
+		}
 		
 	}
+	
+
+	public HttpResponse getFile(String url) throws ClientException{
+		try {
+			
+			//URI urlObject = new URI(url);
+			HttpGet get = new HttpGet(url);
+			get.addHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+			get.addHeader("Accept-Charset", "UTF-8");
+			get.addHeader("Authorization", RESTClientPool.getInstance().generateAuthorizationToken(worker, 1000*60));
+			
+			return execute(get);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ClientException("FAILED : " + url, e);
+		}
+	}
+
+	public void close() {
+		RESTClientPool.getInstance().close();
+	}
+
+
+
 
 
 }

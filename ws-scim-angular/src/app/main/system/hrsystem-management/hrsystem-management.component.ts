@@ -1,6 +1,6 @@
-import { SystemColumn } from './../../../model/model';
 import { Component, OnInit } from '@angular/core';
 
+import { SystemColumn } from './../../../model/model';
 import { ScimApiService } from './../../../service/scim-api.service';
 import { AlertService } from './../../../service/alert.service';
 import { System , Scheduler , SchedulerHistory} from '../../../model/model';

@@ -1,52 +1,57 @@
 {
     "/login": {
-      "target": "http://localhost:5000/",
+      "target": "https://localhost:5000/",
       "secure": false,
       "logLevel": "debug"
     },
     "/system/*": {
-      "target": "http://localhost:5000/",
+      "target": "https://localhost:5000/",
       "secure": false,
       "logLevel": "debug"
     },
     "/hrsystem/*": {
-      "target": "http://localhost:5000/",
+      "target": "https://localhost:5000/",
       "secure": false,
       "logLevel": "debug"
     },
 
     "/scheduler/*": {
-      "target": "http://localhost:5000/",
+      "target": "https://localhost:5000/",
       "secure": false,
       "logLevel": "debug"
     },
     "/api/*": {
-      "target": "http://localhost:5000/",
+      "target": "https://localhost:5000/",
       "secure": false,
       "logLevel": "debug"
     },
     "/account/*": {
-      "target": "http://localhost:5000/",
+      "target": "https://localhost:5000/",
       "secure": false,
       "logLevel": "debug"
     },
     "/env/*": {
-      "target": "http://localhost:5000/",
+      "target": "https://localhost:5000/",
       "secure": false,
       "logLevel": "debug"
     },
     "/scim/*": {
-      "target": "http://localhost:5000/",
+      "target": "https://localhost:5000/",
       "secure": false,
       "logLevel": "debug"
     },
     "/agent/*": {
-      "target": "http://localhost:5000/",
+      "target": "https://localhost:5000/",
       "secure": false,
       "logLevel": "debug"
     },
     "/audit/*": {
-      "target": "http://localhost:5000/",
+      "target": "https://localhost:5000/",
+      "secure": false,
+      "logLevel": "debug"
+    },
+    "/logger/*": {
+      "target": "https://localhost:5000/",
       "secure": false,
       "logLevel": "debug"
     }

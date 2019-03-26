@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ehyundai.object.Resource;
 import com.ehyundai.object.User;
 import com.wowsanta.scim.exception.SCIMException;
@@ -18,21 +21,20 @@ import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.repo.rdb.DBCP;
+import com.wowsanta.scim.repository.SCIMResourceGetterRepository;
 import com.wowsanta.scim.resource.SCIMGroup;
-import com.wowsanta.scim.resource.SCIMResourceGetterRepository;
 import com.wowsanta.scim.resource.SCIMResourceSetterRepository;
 import com.wowsanta.scim.resource.SCIMSystemColumn;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
 public class SsoResoureRepository extends AbstractRDBRepository implements SCIMResourceGetterRepository, SCIMResourceSetterRepository{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5170670467974453815L;
+
+	private transient Logger logger = LoggerFactory.getLogger(SsoResoureRepository.class);
+	private transient static final long serialVersionUID = 5170670467974453815L;
 
 	public SsoResoureRepository() {
 		super();
-		setClassName(SsoResoureRepository.class.getCanonicalName());
+		//setClassName(SsoResoureRepository.class.getCanonicalName());
 	}
 	
 	@Override
@@ -57,7 +59,7 @@ public class SsoResoureRepository extends AbstractRDBRepository implements SCIMR
         		column.setDataType(resultSet.getString("DATA_TYPE"));
         		column.setAllowNull(resultSet.getBoolean("NULLABLE"));
         		
-        		SCIMLogger.sys("COLUMNS : {} ", column);
+        		logger.info("COLUMNS : {} ", column.tojson(false));
         	}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -65,7 +67,7 @@ public class SsoResoureRepository extends AbstractRDBRepository implements SCIMR
 		}finally {
 			DBCP.close(connection, statement, resultSet);
 		}
-        SCIMLogger.sys("REPOSITORY VAILDATE : {} ", selectSQL);	
+        logger.info("REPOSITORY VAILDATE : {} ", selectSQL);	
 		return true;
 	}
 	

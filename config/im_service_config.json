@@ -1,0 +1,13 @@
+{
+  "jsonClass": "com.wowsanta.scim.server.SparkConfiguration",	
+  "staticFiles": "../ws-scim-angular/dist/ws-scim-angular",
+  "servicePort": 5000,
+  "maxThreads": 5,
+  "minThreads": 2,
+  "idleTimeoutMills": 1000, 
+  "keyStorePath": "../config/wowsanta.jks",
+  "keyStorePassword": "wowsanta",
+  "routerClass": "com.wowsanta.scim.server.ScimServerRouter",
+  "repositoryConfig":"../config/im_oracle_repository.json",
+  "serviceProviderConfig":"../config/im_scim-service-provider.json"
+}

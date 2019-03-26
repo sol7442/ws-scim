@@ -11,6 +11,8 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.json.AbstractJsonObject;
@@ -24,6 +26,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
 
 public abstract class SCIMJob extends AbstractJsonObject implements Job{
 
+	Logger logger = LoggerFactory.getLogger(SCIMJob.class);
 	/**
 	 * 
 	 */
@@ -45,7 +48,7 @@ public abstract class SCIMJob extends AbstractJsonObject implements Job{
 
 	public void beforeExecute(JobExecutionContext context)  throws SCIMException{
 		SCIMScheduler scheudler = (SCIMScheduler) context.getJobDetail().getJobDataMap().get("schedulerInfo");
-		SCIMLogger.proc("SCHEDULER START   : {} - {}", scheudler.getSchedulerId(), new Date());
+		logger.info("SCHEDULER START   : {} - {}", scheudler.getSchedulerId(), new Date());
 		
 	};
 	public void doExecute(JobExecutionContext context) throws SCIMException{
@@ -56,13 +59,13 @@ public abstract class SCIMJob extends AbstractJsonObject implements Job{
 		Object result = run(scheudler,worker);
 		Date end_time = new Date();
 			
-		SCIMLogger.proc("SCHEDULER RESULT : {} - {}", result, end_time.getTime() - start_time.getTime());
+		logger.info("SCHEDULER RESULT : {} - {}", result, end_time.getTime() - start_time.getTime());
 		
 	};
 	public abstract Object run(SCIMScheduler scheduler, Worker worker)throws SCIMException;
 	public void afterExecute(JobExecutionContext context)  throws SCIMException{
 		SCIMScheduler scheudler = (SCIMScheduler) context.getJobDetail().getJobDataMap().get("schedulerInfo");
-		SCIMLogger.proc("SCHEDULER FINISHED : {} - {}", scheudler.getSchedulerId(), new Date());
+		logger.info("SCHEDULER FINISHED : {} - {}", scheudler.getSchedulerId(), new Date());
 	};
 
 	

@@ -13,7 +13,7 @@ public class SCIMWeekTrigger extends SCIMTrigger{
 	
 	public SCIMWeekTrigger() {
 		super("week");
-		setClassName(SCIMWeekTrigger.class.getCanonicalName());
+		this.jsonClass = SCIMWeekTrigger.class.getCanonicalName();
 	}
 	public int getMinute() {
 		return minute;

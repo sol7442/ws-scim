@@ -5,6 +5,9 @@ import static com.wowsanta.scim.server.JsonUtil.json_parse;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.JsonObject;
 import com.wowsanta.scim.exception.SCIMError;
 import com.wowsanta.scim.exception.SCIMException;
@@ -12,19 +15,22 @@ import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.obj.SCIMAdmin;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.policy.impl.DefaultPasswordPoilcy;
+import com.wowsanta.scim.repository.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.SCIMCode;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
 import com.wowsanta.scim.resource.ServiceResult;
 import com.wowsanta.scim.resource.user.LoginUser;
 import com.wowsanta.scim.schema.SCIMConstants;
 import com.wowsanta.scim.sec.SCIMJWTToken;
+import com.wowsanta.scim.service.audit.AuditService;
 
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
 public class LoginService  {
+	Logger logger = LoggerFactory.getLogger(LoginService.class);
+
 
 	public Route login() {
 		return new Route() {
@@ -59,12 +65,12 @@ public class LoginService  {
 					return e.getError();
 					
 				}catch (Exception e) {
-					SCIMLogger.audit("LOGIN Exception : -- : {} ", e.getMessage());
+					logger.info("LOGIN Exception : -- : {} ", e.getMessage());
 					response.status(SCIMError.InternalServerError.getStatus());
 					return SCIMError.InternalServerError;
 				}
 				finally {
-					SCIMLogger.audit("LOGIN  : {} ", user);
+					logger.info("LOGIN  : {} ", user);
 				}
 			}
 
@@ -75,7 +81,7 @@ public class LoginService  {
 				}
 				catch (Exception e) {
 					SCIMException scim_ex = new SCIMException("Resource Repository Exception", SCIMError.InternalServerError, e);
-					SCIMLogger.error(scim_ex.getMessage(), scim_ex);
+					logger.error(scim_ex.getMessage(), scim_ex);
 				}
 			}
 
@@ -117,7 +123,7 @@ public class LoginService  {
 		String hashed_pw = policy.encrypt(pw);
 		
 		if(user.getPassword() == null) {
-			SCIMLogger.audit("Authentication Pass {} ",user);
+			logger.info("Authentication Pass {} ",user);
 			return;
 		}
 		if(!user.getPassword().equals(hashed_pw)) {
@@ -130,7 +136,7 @@ public class LoginService  {
 //		}catch (Exception e) {
 //			
 //			SCIMException scim_ex = new SCIMException("User Password Encrypt Failed", SCIMError.InternalServerError, e);
-//			SCIMLogger.error(scim_ex.getMessage(), scim_ex);
+//			logger.error(scim_ex.getMessage(), scim_ex);
 //			
 //			throw scim_ex;
 //		}
@@ -153,7 +159,7 @@ public class LoginService  {
 		}
 		catch (Exception e) {
 			SCIMException scim_ex = new SCIMException("Resource Repository Exception", SCIMError.InternalServerError, e);
-			SCIMLogger.error(scim_ex.getMessage(), scim_ex);
+			logger.error(scim_ex.getMessage(), scim_ex);
 			
 			throw scim_ex;
 		}

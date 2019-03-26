@@ -51,7 +51,6 @@ public class SCIMBulkRequest extends SCIMMessage {
 
 
 	
-	@Override
 	public JsonObject parse(String json_str) {
 		JsonObject json_obj = super.parse(json_str);
 		if(json_obj.get("failOnErrors") != null) {

@@ -1,0 +1,19 @@
+{
+  "resourceRepository": {
+    "dbcp": {
+      "poolName": "gw-resource",
+      "driverName": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
+      "jdbcUrl": "jdbc:sqlserver://192.168.0.198:1433;database=scim_gw",
+      "userName": "wowsanta",
+      "password": "1q2w3e4r5t!@",
+      "valiationQuery": "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='IM_ACCOUNT'",
+      "timeBetweenEvictionRunsMillis": 60000,
+      "testWhileIdle": true,
+      "minIdle": 5,
+      "maxTotal": 50
+    },
+    "tableName": "[dbo].[IM_ACCOUNT]",
+    "type": "RDB",
+    "jsonClass": "com.ehyundai.gw.GWResourceRepository"
+  }
+}

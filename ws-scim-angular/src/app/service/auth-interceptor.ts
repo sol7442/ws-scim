@@ -20,14 +20,15 @@ export class AuthInterceptor implements HttpInterceptor {
       }else{
         token = user.token;
       }
-        req = req.clone({
+      
+      req = req.clone({
           setHeaders: {
-            'Content-Type' : 'application/json; charset=UTF-8',
-            'Accept'       : 'application/json',
             'Authorization': token
           },
-        });
-        console.log("add Authorization", token);
-        return next.handle(req);
-      }
+      });
+      console.log("add Authorization", token);
+      console.log("request ", req);
+
+      return next.handle(req);
+  }
 }

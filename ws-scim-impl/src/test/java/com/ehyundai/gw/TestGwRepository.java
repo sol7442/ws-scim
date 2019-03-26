@@ -13,9 +13,9 @@ import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
-import com.wowsanta.scim.resource.SCIMResourceGetterRepository;
-import com.wowsanta.scim.resource.SCIMResourceRepository;
+import com.wowsanta.scim.repository.SCIMRepositoryManager;
+import com.wowsanta.scim.repository.SCIMResourceGetterRepository;
+import com.wowsanta.scim.repository.SCIMResourceRepository;
 import com.wowsanta.scim.util.Random;
 
 public class TestGwRepository {
@@ -24,9 +24,8 @@ public class TestGwRepository {
 	public void load_manager(String conf_file_path) {
 		try {
 			File config_file = new File(conf_file_path);
-			SCIMSystemManager.getInstance().loadRepositoryManager(config_file);
-			SCIMRepositoryManager.getInstance().initailze();
-		} catch (SCIMException e) {
+			SCIMRepositoryManager.loadFromFile(config_file_path).initailze();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

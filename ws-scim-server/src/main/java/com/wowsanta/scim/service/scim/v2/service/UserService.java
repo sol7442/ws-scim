@@ -16,8 +16,8 @@ import com.wowsanta.scim.message.SCIMListResponse;
 import com.wowsanta.scim.message.SCIMSearchRequest;
 import com.wowsanta.scim.obj.SCIMResource2;
 import com.wowsanta.scim.obj.SCIMUser;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
-import com.wowsanta.scim.resource.SCIMResourceGetterRepository;
+import com.wowsanta.scim.repository.SCIMRepositoryManager;
+import com.wowsanta.scim.repository.SCIMResourceGetterRepository;
 import com.wowsanta.scim.resource.user.LoginUser;
 
 import spark.Request;
@@ -29,6 +29,7 @@ import static com.wowsanta.scim.server.JsonUtil.json_parse;
 public class UserService {
 
 	Logger logger = LoggerFactory.getLogger(UserService.class);
+	Logger audit_logger  = LoggerFactory.getLogger("audit");
 	
 	public Route getUser() {
 		return new Route() {
@@ -51,10 +52,17 @@ public class UserService {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
 				try {
+					
+					logger.debug("reqeust body : \n{}",request.body());
+
+					
 					SCIMListResponse  result = new SCIMListResponse();
+					
+					
 					SCIMFindRequest find = json_parse(request.body(),SCIMFindRequest.class);
 					
 					logger.debug("find request > {}", find);
+					logger.debug("find where   > {}", find.getWhere());
 					
 					SCIMResourceGetterRepository resource_repository = (SCIMResourceGetterRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
 					
@@ -75,7 +83,7 @@ public class UserService {
 					
 				}catch (Exception e) {
 					e.printStackTrace();
-					SCIMLogger.audit("FIND PROCESS Exception : -- : {} ", e.getMessage());
+					logger.error("FIND PROCESS Exception : -- : {} ", e.getMessage());
 					response.status(SCIMError.InternalServerError.getStatus());
 					return SCIMError.InternalServerError;
 				}

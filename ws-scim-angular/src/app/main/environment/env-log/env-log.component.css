@@ -1,0 +1,29 @@
+.box-stretched{
+    height: 100%;
+}
+
+.context-body {
+    display: -ms-grid;
+    display: grid;
+    height: 100%;
+    grid-gap: 1px;
+    background-color: #fff;
+    color: #444;
+    -ms-grid-columns: 1fr;
+    grid-template-columns: 1fr;
+    padding: 10px;
+}
+
+.custom  .ui-scrollpanel-wrapper {
+    border-right: 9px solid #f4f4f4; 
+}
+
+.custom  .ui-scrollpanel-bar {
+    background-color: #1976d2; 
+    opacity: 1; 
+    transition: background-color .3s; 
+}
+
+.custom  .ui-scrollpanel-bar:hover {
+    background-color: #135ba1;
+}

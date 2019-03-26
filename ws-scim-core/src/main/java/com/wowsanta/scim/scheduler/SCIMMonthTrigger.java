@@ -13,7 +13,7 @@ public class SCIMMonthTrigger extends SCIMTrigger {
 	
 	public SCIMMonthTrigger() {
 		super("month");
-		setClassName(SCIMMonthTrigger.class.getCanonicalName());
+		this.jsonClass = SCIMMonthTrigger.class.getCanonicalName();
 	}
 
 	public int getMinute() {

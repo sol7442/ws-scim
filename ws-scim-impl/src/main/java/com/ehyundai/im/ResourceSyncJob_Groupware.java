@@ -11,6 +11,8 @@ import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ehyundai.object.Resource;
 import com.ehyundai.object.User;
@@ -26,8 +28,8 @@ import com.wowsanta.scim.obj.SCIMSchedulerHistory;
 import com.wowsanta.scim.obj.SCIMSystem;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
-import com.wowsanta.scim.resource.SCIMResourceGetterRepository;
+import com.wowsanta.scim.repository.SCIMRepositoryManager;
+import com.wowsanta.scim.repository.SCIMResourceGetterRepository;
 import com.wowsanta.scim.resource.SCIMResourceSetterRepository;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
 import com.wowsanta.scim.resource.worker.Worker;
@@ -36,6 +38,9 @@ import com.wowsanta.scim.scheduler.SCIMScheduler;
 import com.wowsanta.scim.schema.SCIMConstants;
 
 public class ResourceSyncJob_Groupware extends SCIMJob {
+	Logger logger = LoggerFactory.getLogger(ResourceSyncJob_Groupware.class);
+	Logger audit_logger  = LoggerFactory.getLogger("audit");
+
 
 	@Override
 	public Object run(SCIMScheduler scheduler, Worker worker) throws SCIMException {
@@ -55,13 +60,17 @@ public class ResourceSyncJob_Groupware extends SCIMJob {
 			String where = getWhereStatement(scheduler);
 			req_msg.setWhere(where);
 			
-			SCIMLogger.proc("Syn FindRequest  : where : {} ", where);
+			logger.info("Syn FindRequest  : where : {} ", where);
+			
+			logger.debug("request body : \n{}", req_msg.toString());
+			
+			
 			SCIMListResponse find_res = findRequestPost(worker, find_request_url, req_msg);
-			SCIMLogger.proc("Syn ListResponse : count : {} ", find_res.getTotalResults());			
+			logger.info("Syn ListResponse : count : {} ", find_res.getTotalResults());			
 			
 			sync(find_res, audit, history);
 
-			SCIMLogger.proc("Sync Groupware Result : {} ", history);
+			logger.info("Sync Groupware Result : {} ", history);
 
 			system_repository.addSchedulerHistory(history);
 			system_repository.updateSchdulerLastExcuteDate(scheduler.getSchedulerId(),new Date());
@@ -69,7 +78,7 @@ public class ResourceSyncJob_Groupware extends SCIMJob {
 			return history;
 			
 		}catch (SCIMException e) {
-			SCIMLogger.error("Syn Failed : ",e);
+			logger.info("Syn Failed : ",e);
 			throw e;
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -103,7 +112,7 @@ public class ResourceSyncJob_Groupware extends SCIMJob {
 				audit.setDetail(e.getMessage());
 				audit.setResult("FAILED");
 			}
-			SCIMLogger.audit("ResourceSyncJob_Groupware : {}", audit);
+			audit_logger.info("ResourceSyncJob_Groupware : {}", audit);
 			system_repository.addAudit(audit);
 			history.addAudit(audit);
 		}

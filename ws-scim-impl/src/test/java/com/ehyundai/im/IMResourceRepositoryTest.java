@@ -12,10 +12,10 @@ import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
+import com.wowsanta.scim.repository.SCIMRepositoryManager;
+import com.wowsanta.scim.repository.SCIMResourceRepository;
+import com.wowsanta.scim.repository.SCIMServerResourceRepository;
 import com.wowsanta.scim.resource.SCIMProviderRepository;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
-import com.wowsanta.scim.resource.SCIMResourceRepository;
-import com.wowsanta.scim.resource.SCIMServerResourceRepository;
 import com.wowsanta.scim.resource.SCIMSystemColumn;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
 import com.wowsanta.scim.util.Random;
@@ -23,16 +23,14 @@ import com.wowsanta.scim.util.Random;
 public class IMResourceRepositoryTest {
 
 	private final String config_file = "../config/home_dev_scim-service-provider.json";
-	private final String repository_config_file = "../config/home_dev_scim_repository.json";
+	private final String repository_config_file = "../config/im_oracle_repository.json";
 	
 	private final int create_user_size = 1;
 		
 	public void load_manager(String conf_file_path) {
 		try {
-			File config_file = new File(conf_file_path);
-			SCIMSystemManager.getInstance().loadRepositoryManager(config_file);
-			SCIMRepositoryManager.getInstance().initailze();
-		} catch (SCIMException e) {
+			SCIMRepositoryManager.loadFromFile(conf_file_path).initailze();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

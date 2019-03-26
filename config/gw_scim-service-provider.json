@@ -1,0 +1,68 @@
+  {
+	"jsonClass": "com.wowsanta.scim.service.SCIMServiceProvider",
+	"schemas": [
+		"urn:ietf:params:scim:schemas:core:2.0:ServiceProviderConfig"
+	],
+	"meta": {
+		"location": "http://127.0.0.1:5001/scim/v2.0/ServiceProviderConfig",
+		"resourceType": "ServiceProviderConfig",
+		"created": "2019-01-23T04:56:22Z",
+		"lastModified": "2019-01-23T04:56:22Z",
+		"version": "W\/\"3694e05e9dff594\""
+	},
+	"documentationUri": "http://127.0.0.1:5001/scim/v2.0/help/scim.html",
+	"patch": {
+		"supported": true
+	},
+	"bulk": {
+		"supported": true,
+		"maxOperations": 1000,
+		"maxPayloadSize": 1048576
+	},
+	"filter": {
+		"supported": true,
+		"maxResults": 200
+	},
+	"changePassword": {
+		"supported": true
+	},
+	"sort": {
+		"supported": false
+	},
+	"etag": {
+		"supported": true
+	},
+	"authenticationSchemes": [
+		{
+			"name": "OAuth Bearer Token",
+			"description": "Authentication scheme using the OAuth Bearer Token Standard",
+			"specUri": "http://www.rfc-editor.org/info/rfc6750",
+			"documentationUri": "http://127.0.0.1:5001/help/oauth.html",
+			"type": "oauthbearertoken",
+			"primary": true
+		},
+		{
+			"name": "HTTP Basic",
+			"description": "Authentication scheme using the HTTP Basic Standard",
+			"specUri": "http://www.rfc-editor.org/info/rfc2617",
+			"documentationUri": "http://127.0.0.1:5001/help/httpBasic.html",
+			"type": "httpbasic"
+		}
+	],
+	"systemInfo": {
+		"systemId":"sys-scim-im",
+		"systemName":"통합 계정관리 시스템",
+		"url": "http://127.0.0.1:5001",
+		"ver": "v2.0"
+	},
+	"resources": {
+		"user": {
+			"schema": "urn:ehyundai:params:scim:schemas:extension:enterprise:2.0:User",
+			"className": "com.ehyundai.object.User"
+		},
+		"group": {
+			"schema": "",
+			"className": ""
+		}
+	}
+}

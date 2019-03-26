@@ -1,8 +1,8 @@
 package com.wowsanta.scim.resource;
 
-import com.wowsanta.scim.json.AbstractJsonObject;
+import com.wowsata.util.json.WowsantaJson;
 
-public class SCIMSystemColumn extends AbstractJsonObject {
+public class SCIMSystemColumn extends WowsantaJson {
 	private String 	systemId;
 	private String 	columnName;
 	private String  displayName;

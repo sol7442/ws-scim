@@ -8,7 +8,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.obj.SCIMAdmin;
 import com.wowsanta.scim.obj.SCIMAudit;
 import com.wowsanta.scim.obj.SCIMSchedulerHistory;
@@ -20,10 +24,40 @@ import com.wowsanta.scim.resource.SCIMSystemColumn;
 import com.wowsanta.scim.resource.user.LoginUser;
 import com.wowsanta.scim.resource.user.impl.LoginUserRdbImpl;
 import com.wowsanta.scim.scheduler.SCIMScheduler;
+import com.wowsata.util.json.JsonException;
+import com.wowsata.util.json.WowsantaJson;
 
 public class IMSystemRepository extends AbstractRDBRepository implements SCIMProviderRepository{
-	private static final long serialVersionUID = 1L;
 	
+	private transient Logger logger = LoggerFactory.getLogger(IMSystemRepository.class);
+	private transient static final long serialVersionUID = 1L;
+	
+	public static IMSystemRepository loadFromFile(String file_name) throws JsonException{ 
+		return (IMSystemRepository)WowsantaJson.loadFromFile(file_name);
+	}
+	
+	public boolean validate() throws SCIMException {
+		final String selectSQL = this.dbcp.getValiationQuery();//
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
+
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(selectSQL);
+        	resultSet = statement.executeQuery();
+        	
+        	while(resultSet.next()) {
+        		logger.info("validate result : {} " ,  resultSet.getInt("count(*)"));
+        	}
+		} catch (SQLException e) {
+			throw new SCIMException(selectSQL, e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+        logger.info("REPOSITORY VAILDATE : {} ", selectSQL);	
+		return true;
+	}
 	
 	@Override
 	public SCIMAdmin getAdmin(String adminId)throws SCIMException{

@@ -9,8 +9,8 @@ import com.ehyundai.im.ProvisioningJob_SSO;
 import com.ehyundai.im.ResourceSyncJob_Groupware;
 import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.repository.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.SCIMProviderRepository;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.worker.Worker;
 import com.wowsanta.scim.scheduler.SCIMScheduler;
 

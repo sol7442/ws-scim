@@ -8,7 +8,7 @@ import com.ehyundai.im.ProvisioningJob_SSO;
 import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.SCIMUser;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
+import com.wowsanta.scim.repository.SCIMRepositoryManager;
 
 public class IMProvisioningSsoTest {
 

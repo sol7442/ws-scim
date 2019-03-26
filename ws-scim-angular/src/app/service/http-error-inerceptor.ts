@@ -20,6 +20,8 @@ export class HttpErrorInerceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(catchError(err => {
       //ErrorData      
+      console.log("catch error : ", err);
+
       let error_data :ErrorData = new ErrorData(); 
       error_data.type = "HTTP ERROR";
       error_data.code = err.status;

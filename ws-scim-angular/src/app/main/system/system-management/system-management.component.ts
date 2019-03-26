@@ -26,6 +26,7 @@ export class SystemManagementComponent implements OnInit {
 
   private displayDialog: boolean = false;
   private displayDetailDialog:boolean = false;
+  private detailAuditLogs:any[] = [];
 
   constructor(
     private scimApiService:ScimApiService,
@@ -117,7 +118,19 @@ export class SystemManagementComponent implements OnInit {
 
   showDetailLog(history:any){
     console.log("selected history : ", history);
-    this.displayDetailDialog = true;
+    
+
+    this.scimApiService.getSchedulerWorkHistoryByWorkId(history.workId)
+    .pipe(first())
+    .subscribe( data =>{
+      console.log("result : ", data)
+      this.displayDetailDialog = true;  
+
+      this.detailAuditLogs = data;
+
+    },error =>{
+        console.log("login-error : ", error);
+    });
   }
 
 

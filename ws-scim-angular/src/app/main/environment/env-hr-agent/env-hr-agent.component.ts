@@ -6,6 +6,7 @@ import { System , RepositoryType} from '../../../model/model';
 
 import { ScimApiService } from './../../../service/scim-api.service';
 import { AlertService } from './../../../service/alert.service';
+import { AuthenticationService } from './../../../service/authentication.service';
 
 @Component({
   selector: 'app-env-hr-agent',
@@ -18,30 +19,23 @@ export class EnvHrAgentComponent implements OnInit {
   private systems:System[];
   private selectedSystem:System = new System();
 
-  private repositorys:RepositoryType[];// = ["Oracle","MsSql","MySql"];
-  private selectcedRepository;//:String;
+  private configFiles:any[];
+  private configFile:any;//string = "testaassssssaa";
+  //private repositorys:RepositoryType[];// = ["Oracle","MsSql","MySql"];
+  //private selectcedRepository;//:String;
 
-  private jdbcUrl:string;
-  private repository:any = null;
+  //private jdbcUrl:string;
+  //private repository:any = null;
+
+  private librayUploadUrl:string;
+  private configUploadUrl:string;
 
   constructor( 
     private scimApiService:ScimApiService,
-    private alertService:AlertService,) { }
+    private alertService:AlertService,
+    private authService: AuthenticationService) { }
 
   ngOnInit() {
-    this.protocols = [
-      {label:"Select Protocol"},
-      {label:"http"},
-      {label:"https"},];
-    
-    this.repositorys = [
-      {label:'Select Repository', value:null},
-      {label:'Oracle', value:'Oracle'},
-      {label:'MsSql', value:'MsSql'},
-      {label:'MySql', value:'MySql'},
-    ] ,
-   
-
     this.scimApiService.getHrSystems()
     .pipe(first())
     .subscribe( data =>{
@@ -52,59 +46,77 @@ export class EnvHrAgentComponent implements OnInit {
     });
   }
 
-  onRowSelect(system:System){
-    console.log("selected system >>>>:");
-    console.log("selected system : ", event);
+  onSelelectSystem(system:System){
     console.log("selectedSystem : ", system);
     this.selectedSystem = system;
    
-    this.scimApiService.getAgentRepositoryBySystemId(system.systemId)
+    this.scimApiService.getConfigFileList(system.systemId)
     .pipe(first())
     .subscribe( data =>{
-      console.log("repository >>>: ", data);
-      this.repository = data;
-      this.jdbcUrl = data.dbcp.jdbcUrl;
+      console.log("config file list >>>: ", data);
+      this.configFiles = data;
 
     },error =>{
       console.log("login-error : ", error);
     });
 
-    this.scimApiService.getAgentLibraryList(system.systemId)
-    .pipe(first())
-    .subscribe( data =>{
-      console.log("library-list >>>: ", data);
-
-    },error =>{
-      console.log("login-error : ", error);
-    });
-
+    this.librayUploadUrl = "/agent/library/" + this.selectedSystem.systemId;
+    this.configUploadUrl = "/agent/config/" + this.selectedSystem.systemId;
+    console.log("this.librayUploadUrl : ", this.librayUploadUrl);
+    console.log("this.configUploadUrl : ", this.configUploadUrl);
   }
 
-  saveRepository(){
-    console.log("save repository : ", this.jdbcUrl);
-    this.repository.dbcp.jdbcUrl = this.jdbcUrl;
-    console.log("save repository : ", this.repository);
+  onSelectConfigFile(event:any){
+    console.log("selected File : ", event);
+    let file = event.value;
+    console.log("selected File : ", file.path);
 
-    this.scimApiService.setAgentRepositoryBySystemId(
-      this.selectedSystem.systemId, this.repository)
-    .pipe(first())
+    this.scimApiService.getConfigFile(this.selectedSystem.systemId, file.path)
     .subscribe( data =>{
-      console.log("repository >>>: ", data);
-     
-
+      this.configFile = data;
     },error =>{
       console.log("login-error : ", error);
     });
   }
 
-  patchLibrary(){
-    this.scimApiService.patchLibrary(this.selectedSystem.systemId)
-    .pipe(first())
-    .subscribe( data =>{
-      console.log("patchLibrary >>>: ", data);
+  onBeforeLibraryUpload(event){
+    console.log("onBeforeLibraryUpload : ", this.librayUploadUrl);
 
-    },error =>{
-      console.log("patchLibrary-error : ", error);
-    });
+    let token =  this.authService.getToken();
+    event.xhr.open('POST', this.librayUploadUrl);
+    event.xhr.setRequestHeader('Authorization', token);
   }
+
+  uploadLibray(event:any){
+    console.log("selected system : ", this.selectedSystem.systemId);
+    console.log("uploadLibray result : ", event);
+    //this.librayUploadUrl = "/agent/library/" + this.selectedSystem.systemId;
+
+  }
+
+  onBeforeConfigUpload(event){
+    console.log("onBeforeConfigUpload : ", this.configUploadUrl);
+    console.log("onBeforeConfigUpload event : ", event);
+
+    console.log("session user >>", sessionStorage.getItem('currentUser'));
+    let user = JSON.parse(sessionStorage.getItem('currentUser'));
+    console.log("session user >>", user);
+    let token ;
+    if(user == null){
+      token =  this.authService.getToken();
+    }else{
+      token = user.token;
+    }
+
+    //let token =  this.authService.getToken();
+    console.log("onBeforeConfigUpload token : ", token);
+    event.xhr.open('POST', this.configUploadUrl);
+    event.xhr.setRequestHeader('Authorization', '' + token);
+  }
+  uploadConfig(event:any){
+    console.log("selected system : ", this.selectedSystem.systemId);
+    console.log("uploadConfig result : ", event);
+    //this.configUploadUrl = "/agent/config/" + this.selectedSystem.systemId;
+  }
+  
 }

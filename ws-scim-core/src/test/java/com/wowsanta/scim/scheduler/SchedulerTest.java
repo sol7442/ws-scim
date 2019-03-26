@@ -9,7 +9,7 @@ import org.quartz.SchedulerException;
 import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.SCIMSystem;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
+import com.wowsanta.scim.repo.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
 
 public class SchedulerTest {

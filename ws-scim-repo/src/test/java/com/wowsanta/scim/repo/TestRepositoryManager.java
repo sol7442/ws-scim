@@ -12,15 +12,22 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.repo.sample.*;
-import com.wowsanta.scim.resource.SCIMResourceRepository;
+import com.wowsanta.scim.repository.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.SCIMResouceFactory;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
+import com.wowsata.util.json.JsonException;
 
 public class TestRepositoryManager {
 
+	final String config_file = "../config/im_oracle_repository.json";
 	
-	@Before
+	@Test
+	public void load_repository_manager_test() {
+		
+	}
+	
+	
+//@Before
 	public void load() {
 		try {
 //			if(SCIMResourceManager.getInstance().isLoad() == false) {

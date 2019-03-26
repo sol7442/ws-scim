@@ -6,6 +6,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.JsonObject;
 import com.wowsanta.scim.exception.SCIMError;
 import com.wowsanta.scim.exception.SCIMException;
@@ -13,10 +16,10 @@ import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.obj.SCIMAdmin;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.policy.impl.DefaultPasswordPoilcy;
+import com.wowsanta.scim.repository.SCIMRepositoryManager;
+import com.wowsanta.scim.repository.SCIMResourceGetterRepository;
+import com.wowsanta.scim.repository.SCIMServerResourceRepository;
 import com.wowsanta.scim.resource.SCIMProviderRepository;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
-import com.wowsanta.scim.resource.SCIMResourceGetterRepository;
-import com.wowsanta.scim.resource.SCIMServerResourceRepository;
 import com.wowsanta.scim.resource.user.LoginUserType;
 
 import spark.Request;
@@ -24,6 +27,7 @@ import spark.Response;
 import spark.Route;
 
 public class EnvironmentService {
+	Logger logger = LoggerFactory.getLogger(EnvironmentService.class);
 
 	public static Route getAllAdmin() {
 		return new Route() {
@@ -73,16 +77,16 @@ public class EnvironmentService {
 					response.status(200);
 					return admin;
 				}catch(SCIMException e) {
-					SCIMLogger.error("Create Admin FAILED : -- : {} ", e);
+					logger.error("Create Admin FAILED : -- : {} ", e);
 					response.status(e.getError().getStatus());
 					
 					return e.getError();
 				}catch (Exception e) {
-					SCIMLogger.error("Create Admin FAILED : -- : {} ", e);
+					logger.error("Create Admin FAILED : -- : {} ", e);
 					response.status(SCIMError.InternalServerError.getStatus());
 					return SCIMError.InternalServerError;
 				}finally {
-					SCIMLogger.audit("Create Admin  : {} ", admin);
+					logger.info("Create Admin  : {} ", admin);
 				}
 			}
 		};

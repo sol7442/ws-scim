@@ -3,9 +3,9 @@ package com.wowsanta.scim.service.account;
 import java.util.List;
 
 import com.wowsanta.scim.obj.SCIMUser;
+import com.wowsanta.scim.repository.SCIMRepositoryManager;
+import com.wowsanta.scim.repository.SCIMServerResourceRepository;
 import com.wowsanta.scim.resource.SCIMAuditData;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
-import com.wowsanta.scim.resource.SCIMServerResourceRepository;
 
 import spark.Request;
 import spark.Response;

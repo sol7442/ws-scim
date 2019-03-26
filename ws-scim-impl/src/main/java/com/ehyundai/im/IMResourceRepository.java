@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -12,6 +11,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ehyundai.object.Resource;
 import com.ehyundai.object.User;
@@ -21,21 +23,45 @@ import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.repo.rdb.DBCP;
+import com.wowsanta.scim.repository.SCIMServerResourceRepository;
 import com.wowsanta.scim.resource.SCIMAuditData;
 import com.wowsanta.scim.resource.SCIMGroup;
-import com.wowsanta.scim.resource.SCIMServerResourceRepository;
 import com.wowsanta.scim.schema.SCIMDefinitions;
-import com.wowsanta.scim.schema.SCIMErrorCode;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
 public class IMResourceRepository extends AbstractRDBRepository implements SCIMServerResourceRepository{
 
+	private transient Logger logger = LoggerFactory.getLogger(IMResourceRepository.class);
+	
 	@Override
 	public void setUserSchema(SCIMResourceTypeSchema userSchema) {
 		// TODO Auto-generated method stub
 		
 	}
 	
+	@Override
+	public boolean validate() throws SCIMException {
+		final String selectSQL = this.dbcp.getValiationQuery();//
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
+
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(selectSQL);
+        	resultSet = statement.executeQuery();
+        	
+        	while(resultSet.next()) {
+        		logger.info("validate result : {} " ,  resultSet.getInt("count(*)"));
+        	}
+		} catch (SQLException e) {
+			throw new SCIMException(selectSQL, e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+        logger.info("REPOSITORY VAILDATE : {} ", selectSQL);	
+		return true;
+	}
 	
 	@Override
 	public List<SCIMUser> getSystemUsersBysystemIdWidthPage(String systemId)throws SCIMException{

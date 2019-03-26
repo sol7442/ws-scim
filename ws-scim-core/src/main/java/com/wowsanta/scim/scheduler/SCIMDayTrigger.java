@@ -11,7 +11,7 @@ public class SCIMDayTrigger extends SCIMTrigger {
 	
 	public SCIMDayTrigger() {
 		super("day");
-		setClassName(SCIMDayTrigger.class.getCanonicalName());
+		this.jsonClass = SCIMDayTrigger.class.getCanonicalName();
 	}
 	public int getMinute() {
 		return minute;

@@ -14,17 +14,19 @@ import com.wowsanta.scim.obj.SCIMAdmin;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.policy.impl.DefaultPasswordPoilcy;
+import com.wowsanta.scim.repository.SCIMRepositoryManager;
+import com.wowsanta.scim.repository.SCIMServerResourceRepository;
 import com.wowsanta.scim.resource.SCIMProviderRepository;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
-import com.wowsanta.scim.resource.SCIMServerResourceRepository;
 import com.wowsanta.scim.resource.SCIMSystemColumn;
+import com.wowsanta.scim.resource.SCIMSystemRepository;
 import com.wowsanta.scim.schema.SCIMDefinitions;
 import com.wowsanta.scim.util.Random;
 
 public class IMProviderRepositoryTest {
 
 	private final String config_file = "../config/home_dev_scim-service-provider.json";
-	private final String repository_config_file = "../config/ehyundai_im_oracle_repository.json";
+	//private final String repository_config_file = "../config/ehyundai_im_oracle_repository.json";
+	private final String repository_config_file = "../config/im_oracle_repository.json";
 	
 	private final int create_user_size = 1;
 	
@@ -33,9 +35,6 @@ public class IMProviderRepositoryTest {
 		
 		load_manager(this.repository_config_file);
 		SCIMProviderRepository system_repository = (SCIMProviderRepository) SCIMRepositoryManager.getInstance().getSystemRepository();
-		
-		
-		
 		try {
 			
 			SCIMAdmin sch_gw_sync_admin = new SCIMAdmin();
@@ -221,10 +220,8 @@ public class IMProviderRepositoryTest {
 	
 	public void load_manager(String conf_file_path) {
 		try {
-			File config_file = new File(conf_file_path);
-			SCIMSystemManager.getInstance().loadRepositoryManager(config_file);
-			SCIMRepositoryManager.getInstance().initailze();
-		} catch (SCIMException e) {
+			SCIMRepositoryManager.loadFromFile(conf_file_path).initailze();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

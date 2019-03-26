@@ -14,6 +14,8 @@ import org.apache.commons.dbcp2.PoolableConnectionFactory;
 import org.apache.commons.dbcp2.PoolingDriver;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonObject;
 import com.wowsanta.scim.json.AbstractJsonObject;
@@ -21,6 +23,8 @@ import com.wowsanta.scim.log.SCIMLogger;
 
 public class DBCP extends AbstractJsonObject{
 
+	private transient Logger logger = LoggerFactory.getLogger(DBCP.class);
+	
 	/**
 	 * 
 	 */
@@ -174,7 +178,7 @@ public class DBCP extends AbstractJsonObject{
 		PoolingDriver driver = (PoolingDriver)DriverManager.getDriver("jdbc:apache:commons:dbcp:");
 		driver.registerPool(this.poolName,cp);
 		
-		SCIMLogger.sys("load dbcp => {} : {}",this.poolName, this.jdbcUrl);
+		logger.info("load dbcp => {} : {}",this.poolName, this.jdbcUrl);
 	}
 
 

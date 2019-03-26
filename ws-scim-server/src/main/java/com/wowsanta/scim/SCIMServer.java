@@ -2,141 +2,120 @@ package com.wowsanta.scim;
 
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-import java.util.Date;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.List;
+import java.util.function.Consumer;
 
-import org.apache.commons.daemon.Daemon;
-import org.apache.commons.daemon.DaemonContext;
-import org.apache.commons.daemon.DaemonController;
-import org.apache.commons.daemon.DaemonInitException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.wowsanta.scim.exception.SCIMError;
-import com.wowsanta.scim.log.SCIMLogger;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
-import com.wowsanta.scim.resource.SCIMResouceFactory;
+import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.repository.SCIMRepositoryManager;
+import com.wowsanta.scim.resource.SCIMSystemRepository;
+import com.wowsanta.scim.scheduler.SCIMScheduler;
 import com.wowsanta.scim.scheduler.SCIMSchedulerManager;
+import com.wowsanta.scim.server.SparkConfiguration;
+
+import spark.Spark;
 
 
 
-public class SCIMServer implements Daemon {
+public class SCIMServer  {
 
-	private static final SCIMServer server = new SCIMServer();
-
-	private ExecutorService executorService = Executors.newSingleThreadExecutor();
+	Logger logger = LoggerFactory.getLogger(SCIMServer.class);
 	
-	public static void main(String[] args) throws DaemonInitException, Exception {
+	private boolean initialize = false;
+	public static void main(String[] args)  {
 		try {
-			server.init(new DaemonContextImpl(args));
-			server.start();
-		}catch (Exception e) {
+			Runtime.getRuntime().addShutdownHook(new ShutdownHookThread());
+			new SCIMServer().init().start();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public static void start(String [] args){
-        try {
-        	server.init(new DaemonContextImpl(args));
-        	server.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
-    public static void stop(String [] args){
-        try {
-        	server.stop();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
-	@Override
-	public void init(DaemonContext context) throws DaemonInitException, Exception {
-		//String log_path = System.getProperty("logback.path");
-		File log_directory = new File(System.getProperty("logback.path"));
-		if(!log_directory.exists()) {
-			log_directory.mkdirs();
-		}
+	public SCIMServer init() throws Exception{
+		logger.info("SCIMServer INITIALIZE....................");
 		
-		PrintStream out = new PrintStream(new FileOutputStream(log_directory + "/output.txt"));
-		System.setOut(out);
-
-		String config_file_path = "";
-		if(context.getArguments().length == 0) {
-			String instance_name = System.getProperty("scim.instance");
-			if(instance_name == null) {
-				instance_name = "";
-			}else {
-				instance_name = instance_name + "_";
-			}
-			
-			File current_path  = new File(System.getProperty("user.dir"));
-			config_file_path = current_path.getParent() + File.separator + "config" +File.separator + instance_name +"scim-service-provider.json"; 
-		}
-		System.out.println(config_file_path);
-		System.out.println("server starting........");
-		
+		initialize = false;
 		try {
-			SCIMSystemManager.getInstance().load(config_file_path);
+			String service_configFile    = System.getProperty("service.config");
+			logger.info("CURRENT PATH      : {}", new File(System.getProperty("user.dir")).getCanonicalFile());
+			logger.info("SERVICE CONFIG    : {}", service_configFile);
 			
-			SCIMSystemManager.getInstance().getServiceProvider().getServer().initialize();
-			
-			SCIMSystemManager.getInstance().loadRepositoryManager();
-			SCIMRepositoryManager.getInstance().initailze();
-			
-			SCIMSystemManager.getInstance().loadSchdulerManager();
-			SCIMSchedulerManager.getInstance().initialize();
-		}catch (Exception e) {
-			SCIMLogger.error("SYSTEM INITIALIZE FAILED : {}", e);
-			throw new DaemonInitException(e.getMessage(),e);
-		}	
-	}
-	@Override
-	public void start() throws Exception {
-		SCIMLogger.sys("SYSTEM START : {} ======== ",new Date());
-		SCIMSystemManager.getInstance().getServiceProvider().getServer().start();
-		this.executorService.execute(new Runnable() {
-			CountDownLatch latch = new CountDownLatch(1);
-			@Override
-			public void run() {
-				try {
-					latch.await();
-				} catch (InterruptedException e) {
-					SCIMLogger.debug("Thread interrupted, probably means we're shutting down now.");
-				}
-			}
-		});
-	}
-	@Override
-	public void stop() throws Exception {
-		SCIMSystemManager.getInstance().getServiceProvider().getServer().stop();
-		this.executorService.shutdown();
-		SCIMLogger.sys("SYSTEM SHUTDOWN : {} ======== ",new Date());
-		System.exit(0);
-	}
-	@Override
-	public void destroy() {
-		SCIMLogger.sys("SYSTEM Destroying daemon....bye..");
-	}
-	
-	private static final class DaemonContextImpl implements DaemonContext{
-		private final String[] args;
-		
-		public DaemonContextImpl(String[] args) {
-			this.args = args;
-		}
-		@Override
-		public DaemonController getController() {
-			return null;
-		}
+			SparkConfiguration service_config = SparkConfiguration.loadFromFile(service_configFile);
+			logger.debug("SparkConfiguration \n{}",service_config.tojson(true));
 
-		@Override
-		public String[] getArguments() {
-			return this.args;
+			
+			logger.info("SERVICE PROVIDER CONFIG    : {}", service_config.getRepositoryConfig());
+			SCIMSystemManager.getInstance().load(service_config.getServiceProviderConfig());
+			
+			logger.info("REPOSITORY CONFIG    : {}", service_config.getRepositoryConfig());
+			SCIMRepositoryManager.loadFromFile(service_config.getRepositoryConfig()).initailze();
+			
+			try {
+				SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();	
+				if(system_repository != null) {
+					List<SCIMScheduler> scheduler_list = system_repository.getSchdulerAll();
+					
+					for (SCIMScheduler scimScheduler : scheduler_list) {
+						logger.info("SCHEDULER INITIALIZE : {} ", scimScheduler.tojson(false));
+						SCIMSchedulerManager.getInstance().addScheduler(scimScheduler);
+					}
+					SCIMSchedulerManager.getInstance().initialize();
+				}
+			} catch (SCIMException e) {
+				logger.error("Scheduler INITIALIZE FAILED ",e);
+				throw e;
+			}
+			
+			
+			Spark.initExceptionHandler(new Consumer<Exception>() {
+				@Override
+				public void accept(Exception t) {
+					logger.error("SPARK SERVER INITIALIZE FAIL ", t);
+				}
+			});
+			
+			Spark.port(service_config.getServicePort());
+			Spark.threadPool(service_config.getMaxThreads(),service_config.getMinThreads(),service_config.getIdleTimeoutMills());
+			if(service_config.getStaticFiles() != null) {
+				Spark.staticFiles.externalLocation(service_config.getStaticFiles());
+			}
+			
+			if(service_config.getKeyStorePath() != null) {
+				Spark.secure(service_config.getKeyStorePath(),service_config.getKeyStorePassword(),null,null);
+			}
+			
+			logger.info("ROUTER CLASS : {} " , service_config.getRouterClass());
+			ServiceRouter router = (ServiceRouter) Class.forName(service_config.getRouterClass()).newInstance();
+			router.regist();
+			
+			initialize = true;
+		} catch (Exception e) {
+			logger.error("SCIMServer INIT FAILED ",e);
 		}
-	}
+		return this;
+    }
+    //@Override
+	public void start() throws ServiceException{
+		logger.info("SCIMServer START PORT : {} =========================================", Spark.port());
+		if(initialize) {
+			Spark.awaitInitialization();
+		}else {
+			throw new ServiceException("SERVICE NOT INITIALIZED");
+		}
+		
+    }
+   // @Override
+	public void stop() throws Exception{
+    	logger.info("SCIMServer STOP");
+		Spark.stop();
+    }
+    //@Override
+	public void destroy() {
+    	logger.info("SCIMServer DESTORY START");
+    	Spark.stop();
+    	Spark.awaitStop();
+    	logger.info("SCIMServer DESTORY FINISH");
+    }
 }

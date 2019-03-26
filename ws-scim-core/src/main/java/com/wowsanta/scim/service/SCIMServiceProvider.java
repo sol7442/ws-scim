@@ -1,21 +1,19 @@
 package com.wowsanta.scim.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.wowsanta.scim.SCIMSystemInfo;
 import com.wowsanta.scim.json.AbstractJsonObject;
+import com.wowsanta.scim.obj.DefaultMeta;
+import com.wowsanta.scim.obj.ServiceProviderConfigMeta;
 import com.wowsanta.scim.resource.SCIMMeta;
-import com.wowsanta.scim.resource.SCIMRepository;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.SCIMResoureDefinition;
+import com.wowsata.util.json.JsonException;
+import com.wowsata.util.json.WowsantaJson;
 
-public abstract class SCIMServiceProvider extends AbstractJsonObject {
-	/**
-	 * 
-	 */
+public class SCIMServiceProvider extends WowsantaJson {
+
 	private static final long serialVersionUID = 1L;
 
 	private SCIMSystemInfo systemInfo;
@@ -23,17 +21,19 @@ public abstract class SCIMServiceProvider extends AbstractJsonObject {
 	private String[] schemas;
 	private String documentationUri;
 	
-	private String repositoryConfig;
-	private String schdulerConfig;
 	
 	private Map<String, SCIMResoureDefinition> resources = new HashMap<String,SCIMResoureDefinition>();
+
+	private ServiceProviderConfigMeta meta;
 	
-	public abstract SCIMMeta getMeta();
-	public abstract void setMeta(SCIMMeta meta);
-	public abstract SCIMServiceServer getServer();
 	
-	public String getDocumentationUri() {
-		return documentationUri;
+	
+	public SCIMServiceProvider() {
+		this.jsonClass = SCIMServiceProvider.class.getCanonicalName();
+	}
+	
+	public static SCIMServiceProvider loadFromFile(String file_name) throws JsonException{ 
+		return (SCIMServiceProvider)WowsantaJson.loadFromFile(file_name);
 	}
 
 	public void setDocumentationUri(String documentationUri) {
@@ -54,22 +54,18 @@ public abstract class SCIMServiceProvider extends AbstractJsonObject {
 	public void setSystemInfo(SCIMSystemInfo systemInfo) {
 		this.systemInfo = systemInfo;
 	}
-	public String getRepositoryConfig() {
-		return repositoryConfig;
-	}
-	public void setRepositoryConfig(String repositoryConfig) {
-		this.repositoryConfig = repositoryConfig;
-	}
 	public Map<String,SCIMResoureDefinition> getResources() {
 		return resources;
 	}
 	public void setResources(Map<String, SCIMResoureDefinition> resources) {
 		this.resources = resources;
 	}
-	public String getSchdulerConfig() {
-		return schdulerConfig;
+
+	public DefaultMeta getMeta() {
+		return meta;
 	}
-	public void setSchdulerConfig(String schdulerConfig) {
-		this.schdulerConfig = schdulerConfig;
+
+	public void setMeta(ServiceProviderConfigMeta meta) {
+		this.meta = meta;
 	}
 }

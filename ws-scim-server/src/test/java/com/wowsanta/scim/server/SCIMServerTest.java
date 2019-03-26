@@ -7,7 +7,7 @@ import org.junit.Test;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
+import com.wowsanta.scim.repository.SCIMRepositoryManager;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 
 public class SCIMServerTest {

@@ -1,9 +1,32 @@
 package com.wowsanta.scim.client;
 
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
 import org.apache.http.client.HttpClient;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.http.ssl.SSLContexts;
+import org.apache.http.ssl.TrustStrategy;
 
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.SCIMUser;
@@ -20,23 +43,52 @@ public class RESTClientPool {
 	}
 	
 	
-	private PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
-	private CloseableHttpClient client;
+//	private PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
+	private CloseableHttpClient client = null;
 	
 	private SCIMUser user;
 	private SCIMJWTToken scim_wt_token = new SCIMJWTToken();
 	
 	
 	public RESTClientPool() {
-		connectionManager.setMaxTotal(100);		
-		connectionManager.setDefaultMaxPerRoute(10);
-		this.client = HttpClients.custom().setConnectionManager(connectionManager).build();
+
 	}
 	
 	public HttpClient get() {
+		if(this.client == null) {
+			build();
+		}
+		
 		return this.client;
 	}
 	
+	private void build() {
+	    try {
+	    	System.out.println("build client ------<<");
+	    	SSLContextBuilder builder = new SSLContextBuilder();
+	    	builder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
+	    	SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(builder.build(),SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+	    	Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory>create()
+	    	        .register("http", new PlainConnectionSocketFactory())
+	    	        .register("https", sslsf)
+	    	        .build();
+	    	
+	    	PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(registry);
+	    	cm.setMaxTotal(2000);
+
+	    	this.client = HttpClients.custom()
+	    	    .setSSLSocketFactory(sslsf)
+	    	    .setConnectionManager(cm)
+	    	    .build();
+	        
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (KeyStoreException e) {
+			e.printStackTrace();
+		} catch (KeyManagementException e) {
+			e.printStackTrace();
+		}
+	}
 	public String generateAuthorizationToken(SCIMUser user, int time) throws SCIMException {
 		SCIMJWTToken scim_wt_token = new SCIMJWTToken();
 		
@@ -73,6 +125,18 @@ public class RESTClientPool {
 	}
 	public SCIMUser getUser() {
 		return this.user;
+	}
+
+	public void close() {
+		System.out.println("client close ..............................");
+//		try {
+//			this.client.close();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}finally {
+//			System.out.println("client close ..............................");
+//			this.client = null;
+//		}
 	}
 }
 

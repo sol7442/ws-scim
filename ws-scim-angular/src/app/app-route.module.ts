@@ -16,6 +16,7 @@ import {EnvironmentComponent } from './main/environment/environment.component';
 import {EnvAdminComponent } from './main/environment/env-admin/env-admin.component';
 import {EnvHrAgentComponent } from './main/environment/env-hr-agent/env-hr-agent.component';
 import {EnvSchedulerComponent } from './main/environment/env-scheduler/env-scheduler.component';
+import {EnvLogComponent } from './main/environment/env-log/env-log.component';
 
 const appRoutes: Routes = [
     { path: '', component: AppComponent, canActivate: [AuthGuard] },    
@@ -31,7 +32,7 @@ const appRoutes: Routes = [
             { path: "", redirectTo: "admin", pathMatch: "full" },
             { path: "admin", component: EnvAdminComponent   },
             { path: "hr_agent", component: EnvHrAgentComponent  },
-            { path: "scheduler", component: EnvSchedulerComponent  }
+            { path: "env_log", component: EnvLogComponent  }
           ]
     }, 
 

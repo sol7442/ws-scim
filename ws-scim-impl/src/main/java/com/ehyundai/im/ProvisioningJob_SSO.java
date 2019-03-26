@@ -18,10 +18,10 @@ import com.wowsanta.scim.obj.SCIMAudit;
 import com.wowsanta.scim.obj.SCIMSchedulerHistory;
 import com.wowsanta.scim.obj.SCIMSystem;
 import com.wowsanta.scim.obj.SCIMUser;
+import com.wowsanta.scim.repository.SCIMRepositoryManager;
+import com.wowsanta.scim.repository.SCIMResourceGetterRepository;
+import com.wowsanta.scim.repository.SCIMServerResourceRepository;
 import com.wowsanta.scim.resource.SCIMLocationFactory;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
-import com.wowsanta.scim.resource.SCIMResourceGetterRepository;
-import com.wowsanta.scim.resource.SCIMServerResourceRepository;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
 import com.wowsanta.scim.resource.worker.Worker;
 import com.wowsanta.scim.scheduler.SCIMJob;
@@ -38,7 +38,8 @@ public class ProvisioningJob_SSO extends SCIMJob {
 	private static final long serialVersionUID = 2799856505493920258L;
 
 	Logger logger = LoggerFactory.getLogger(ProvisioningJob_SSO.class);
-
+	Logger audit_logger  = LoggerFactory.getLogger("audit");
+	
 	@Override
 	public Object run(SCIMScheduler scheduler, Worker worker) throws SCIMException {
 		
@@ -57,7 +58,7 @@ public class ProvisioningJob_SSO extends SCIMJob {
 			SCIMServerResourceRepository resource_repository = (SCIMServerResourceRepository) SCIMRepositoryManager.getInstance().getResourceRepository();
 			List<SCIMUser> user_list  = getProvisionResource(scheduler);
 			
-			SCIMLogger.proc("Provision : {} > {} : {} ",audit.getWorkId(), target_system_id, user_list.size());
+			logger.info("Provision : {} > {} : {} ",audit.getWorkId(), target_system_id, user_list.size());
 			for (SCIMUser scimUser : user_list) {
 				
 				SCIMUser target_system_user = resource_repository.getSystemUser(target_system_id, scimUser.getId());
@@ -80,7 +81,7 @@ public class ProvisioningJob_SSO extends SCIMJob {
 			SCIMSystem target_system = system_repository.getSystemById(target_system_id);
 			String bluk_request_url = target_system.getSystemUrl() + "/scim/v2.0/Bulk";
 			
-			SCIMLogger.proc("Provision Request: {} > {} : {} ",audit.getWorkId(), bluk_request_url, scim_bluk_request.getOperations().size());
+			logger.info("Provision Request: {} > {} : {} ",audit.getWorkId(), bluk_request_url, scim_bluk_request.getOperations().size());
 
 			
 			RESTClient client = new RESTClient(worker);
@@ -88,7 +89,7 @@ public class ProvisioningJob_SSO extends SCIMJob {
 			
 			SCIMBulkResponse scim_bluk_response = new SCIMBulkResponse();
 			scim_bluk_response.parse(response_str);
-			SCIMLogger.proc("Provision Response : {} < {} : {} ",audit.getWorkId(), bluk_request_url, scim_bluk_response.getOperations().size());
+			logger.info("Provision Response : {} < {} : {} ",audit.getWorkId(), bluk_request_url, scim_bluk_response.getOperations().size());
 			
 			for (SCIMBulkOperation request_operation : scim_bluk_request.getOperations()) {
 				SCIMBulkOperation response_operation = findResponseOperation(request_operation,scim_bluk_response.getOperations());
@@ -116,22 +117,22 @@ public class ProvisioningJob_SSO extends SCIMJob {
 						resource_repository.updateSystemUser(target_system_id, (SCIMUser) request_operation.getData());
 					}
 				}
-				//SCIMLogger.proc("Provision Response : {} > {} : {} ",audit.getWorkId(),request_operation );
-				SCIMLogger.audit("Provisioning SSO : {}", audit);
+				//logger.info("Provision Response : {} > {} : {} ",audit.getWorkId(),request_operation );
+				audit_logger.info("Provisioning SSO : {}", audit);
 				system_repository.addAudit(audit);
 				history.addAudit(audit);
-				SCIMLogger.proc("Provision Response : {} < {} : {} ",audit.getWorkId(),response_operation );
+				logger.info("Provision Response : {} < {} : {} ",audit.getWorkId(),response_operation );
 			}
 			
 			system_repository.addSchedulerHistory(history);
 			system_repository.updateSchdulerLastExcuteDate(scheduler.getSchedulerId(),new Date());
 			
-			SCIMLogger.proc("Provisioning SSO Result : {} ", history);
+			logger.info("Provisioning SSO Result : {} ", history);
 
 			return history;
 			
 		}catch (SCIMException e) {
-			SCIMLogger.error("Syn Failed : ",e);
+			logger.error("Syn Failed : ",e);
 			throw e;
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -194,7 +195,7 @@ public class ProvisioningJob_SSO extends SCIMJob {
 //			
 //			boolean proc_break = true;
 //			if(proc_break) {
-//				SCIMLogger.proc("process break by --- developer ", "");
+//				logger.info("process break by --- developer ", "");
 //				return;
 //			}
 //			
@@ -235,7 +236,7 @@ public class ProvisioningJob_SSO extends SCIMJob {
 //
 //	@Override
 //	public void doExecute(JobExecutionContext context) throws SCIMException {
-//		SCIMLogger.proc("ProvisionJob_SSO : {} ", new Date());
+//		logger.info("ProvisionJob_SSO : {} ", new Date());
 //
 //		SCIMServerResourceRepository resource_repository = (SCIMServerResourceRepository) SCIMRepositoryManager
 //				.getInstance().getResourceRepository();
@@ -254,7 +255,7 @@ public class ProvisioningJob_SSO extends SCIMJob {
 //
 //		boolean proc_break = true;
 //		if(proc_break) {
-//			SCIMLogger.proc("process break by --- developer ", "");
+//			logger.info("process break by --- developer ", "");
 //			return;
 //		}
 //		
@@ -263,7 +264,7 @@ public class ProvisioningJob_SSO extends SCIMJob {
 //		SCIMBulkResponse scim_bluk_response = client.post_bulk(bluk_request_url, scim_bluk_request);
 //
 //		context.getJobDetail().getJobDataMap().put("blukResponse", scim_bluk_response);
-//		SCIMLogger.proc("ProvisionJob_SSO : {} ", new Date());
+//		logger.info("ProvisionJob_SSO : {} ", new Date());
 //
 //	}
 //
@@ -288,7 +289,7 @@ public class ProvisioningJob_SSO extends SCIMJob {
 //		
 //		boolean proc_break = true;
 //		if(proc_break) {
-//			SCIMLogger.proc("process break by --- developer ", "");
+//			logger.info("process break by --- developer ", "");
 //			return;
 //		}
 //		

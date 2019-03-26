@@ -1,0 +1,11 @@
+{
+  "jsonClass": "com.wowsanta.scim.server.SparkConfiguration",	
+  "staticFiles": "../ws-scim-angular/dist/ws-scim-angular",
+  "servicePort": 5003,
+  "maxThreads": 5,
+  "minThreads": 2,
+  "idleTimeoutMills": 1000, 
+  "routerClass": "com.wowsanta.scim.server.ScimAgentRouter",
+  "repositoryConfig":"../config/sso_oracle_repository.json",
+  "serviceProviderConfig":"../config/sso_scim-service-provider.json"
+}

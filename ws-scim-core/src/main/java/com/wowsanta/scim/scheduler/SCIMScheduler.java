@@ -18,8 +18,9 @@ import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.resource.user.LoginUser;
 import com.wowsanta.scim.resource.worker.Worker;
+import com.wowsata.util.json.WowsantaJson;
 
-public class SCIMScheduler extends AbstractJsonObject {
+public class SCIMScheduler extends WowsantaJson {
 	
 	/**
 	 * 

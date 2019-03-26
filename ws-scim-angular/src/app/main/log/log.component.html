@@ -1,0 +1,10 @@
+<div class="context-wrapper">
+  <div class="context-left" id="context-left-box">
+    <p-listbox [style]="{'width':'100%'}" [options]="systems" (onChange)="onSelect($event)"  optionLabel="systemName">
+      <p-header>
+        <p>시스템 목록</p>
+      </p-header>
+    </p-listbox>
+  </div>
+  <div class="context-right">
+</div>

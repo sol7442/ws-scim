@@ -3,11 +3,17 @@ package com.wowsanta.scim.scheduler;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.resource.SCIMSystemRepository;
 
 public class SCIMSchedulerManager{
-	private static transient SCIMSchedulerManager instance;
 	
+	transient Logger logger = LoggerFactory.getLogger(SCIMSchedulerManager.class);
+	
+	private static transient SCIMSchedulerManager instance;
 	private List<SCIMScheduler> schedulerList = new ArrayList<SCIMScheduler>(); 
 	
 	public static SCIMSchedulerManager getInstance() {

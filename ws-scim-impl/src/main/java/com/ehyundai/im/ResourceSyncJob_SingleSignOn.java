@@ -11,6 +11,8 @@ import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.wowsanta.scim.client.RESTClient;
 import com.wowsanta.scim.exception.SCIMException;
@@ -22,8 +24,8 @@ import com.wowsanta.scim.obj.SCIMResource2;
 import com.wowsanta.scim.obj.SCIMSchedulerHistory;
 import com.wowsanta.scim.obj.SCIMSystem;
 import com.wowsanta.scim.obj.SCIMUser;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
-import com.wowsanta.scim.resource.SCIMServerResourceRepository;
+import com.wowsanta.scim.repository.SCIMRepositoryManager;
+import com.wowsanta.scim.repository.SCIMServerResourceRepository;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
 import com.wowsanta.scim.resource.worker.Worker;
 import com.wowsanta.scim.scheduler.SCIMJob;
@@ -31,6 +33,8 @@ import com.wowsanta.scim.scheduler.SCIMScheduler;
 import com.wowsanta.scim.schema.SCIMConstants;
 
 public class ResourceSyncJob_SingleSignOn extends SCIMJob {
+	Logger logger = LoggerFactory.getLogger(ResourceSyncJob_SingleSignOn.class);
+	Logger audit_logger  = LoggerFactory.getLogger("audit");
 
 	@Override
 	public Object run(SCIMScheduler scheduler, Worker worker) throws SCIMException {
@@ -50,13 +54,13 @@ public class ResourceSyncJob_SingleSignOn extends SCIMJob {
 			String where = getWhereStatement(scheduler);
 			req_msg.setWhere(where);
 			
-			SCIMLogger.proc("Syn FindRequest  : where : {} ", where);
+			logger.info("Syn FindRequest  : where : {} ", where);
 			SCIMListResponse find_res = findRequestPost(worker, find_request_url, req_msg);
-			SCIMLogger.proc("Syn ListResponse : count : {} ", find_res.getTotalResults());			
+			logger.info("Syn ListResponse : count : {} ", find_res.getTotalResults());			
 			
 			sync(source_system.getSystemId(),find_res, audit, history);
 
-			SCIMLogger.proc("Sync SingleSingOn Result : {} ", history);
+			logger.info("Sync SingleSingOn Result : {} ", history);
 
 			system_repository.addSchedulerHistory(history);
 			system_repository.updateSchdulerLastExcuteDate(scheduler.getSchedulerId(),new Date());
@@ -64,7 +68,7 @@ public class ResourceSyncJob_SingleSignOn extends SCIMJob {
 			return history;
 			
 		}catch (SCIMException e) {
-			SCIMLogger.error("Syn Failed : ",e);
+			logger.error("Syn Failed : ",e);
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -107,7 +111,7 @@ public class ResourceSyncJob_SingleSignOn extends SCIMJob {
 				audit.setDetail(e.getMessage());
 				audit.setResult("FAILED");
 			}
-			SCIMLogger.audit("ResourceSyncJob_SigleSignOn : {}", audit);
+			audit_logger.info("ResourceSyncJob_SigleSignOn : {}", audit);
 			///system_repository.addAudit(audit);
 			history.addAudit(audit);
 		}

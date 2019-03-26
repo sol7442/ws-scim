@@ -10,16 +10,20 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.JsonObject;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.log.SCIMLogger;
-import com.wowsanta.scim.resource.SCIMRepository;
+import com.wowsanta.scim.repository.SCIMRepository;
+import com.wowsata.util.json.JsonException;
+import com.wowsata.util.json.WowsantaJson;
 
 public abstract class AbstractRDBRepository extends SCIMRepository {
 	
-	/**
-	 * 
-	 */
+	private transient Logger logger = LoggerFactory.getLogger(AbstractRDBRepository.class);
+	
 	private static final long serialVersionUID = 1L;
 	protected DBCP dbcp;
 	protected String tableName;
@@ -28,23 +32,28 @@ public abstract class AbstractRDBRepository extends SCIMRepository {
 		setType("RDB");
 	}
 	
-	@Override
-	public void fromJson(JsonObject jsonObject)throws SCIMException{
-		System.out.println("jsonObject : " + jsonObject);
-		setClassName(jsonObject.get("className").getAsString());
-		setType(jsonObject.get("type").getAsString());
-				
-		this.dbcp = new DBCP();
-		this.dbcp.parse(jsonObject.get("dbcp").getAsJsonObject());
-		
-		this.tableName = jsonObject.get("tableName").getAsString();
+	public DBCP getDbcp() {
+		return this.dbcp;
 	}
 	
+//	@Override
+//	public void fromJson(JsonObject jsonObject)throws SCIMException{
+//		System.out.println("jsonObject : " + jsonObject);
+//		setClassName(jsonObject.get("className").getAsString());
+//		setType(jsonObject.get("type").getAsString());
+//				
+//		this.dbcp = new DBCP();
+//		this.dbcp.parse(jsonObject.get("dbcp").getAsJsonObject());
+//		
+//		this.tableName = jsonObject.get("tableName").getAsString();
+//	}
+	
+
 	@Override
 	public void initialize() throws SCIMException {
 		try {
 			this.dbcp.setUp();
-			SCIMLogger.sys("Repository initialize : {}", this.dbcp.getPoolName());
+			logger.info("Repository initialize : {}", this.dbcp.getPoolName());
 		} catch (Exception e) {
 			throw new SCIMException("DBCP Setup Error ",e);
 		}
@@ -52,9 +61,7 @@ public abstract class AbstractRDBRepository extends SCIMRepository {
 	
 	@Override
 	public boolean validate() throws SCIMException {
-		
 		final String selectSQL = this.dbcp.getValiationQuery();//
-		
 		Connection connection = null;
 		PreparedStatement statement = null;
 	    ResultSet resultSet = null;        
@@ -62,7 +69,6 @@ public abstract class AbstractRDBRepository extends SCIMRepository {
         try {
         	connection = getConnection();
         	statement  = connection.prepareStatement(selectSQL);
-        	
         	resultSet = statement.executeQuery();
         	
 		} catch (SQLException e) {
@@ -70,13 +76,13 @@ public abstract class AbstractRDBRepository extends SCIMRepository {
 		}finally {
 			DBCP.close(connection, statement, resultSet);
 		}
-        SCIMLogger.sys("REPOSITORY VAILDATE : {} ", selectSQL);	
+        logger.info("REPOSITORY VAILDATE : {} ", selectSQL);	
 		return true;
 	}
 	
 	@Override
 	public void close() {
-		SCIMLogger.sys("CLOSE DBCP {} ", this.dbcp.getPoolName());
+		logger.info("CLOSE DBCP {} ", this.dbcp.getPoolName());
 	}
 	
 	public void initDBCP(DBCP dbcp) {

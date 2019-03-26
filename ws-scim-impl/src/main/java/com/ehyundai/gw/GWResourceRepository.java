@@ -8,8 +8,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ehyundai.object.Resource;
 import com.ehyundai.object.User;
+import com.google.gson.JsonObject;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.obj.SCIMResource2;
@@ -17,22 +21,20 @@ import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.repo.rdb.DBCP;
+import com.wowsanta.scim.repository.SCIMResourceGetterRepository;
+import com.wowsanta.scim.repository.SCIMResourceRepository;
 import com.wowsanta.scim.resource.SCIMGroup;
-import com.wowsanta.scim.resource.SCIMResourceGetterRepository;
-import com.wowsanta.scim.resource.SCIMResourceRepository;
 import com.wowsanta.scim.resource.SCIMSystemColumn;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;
 import com.wowsanta.scim.util.Random;
 
 public class GWResourceRepository extends AbstractRDBRepository implements SCIMResourceGetterRepository{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5170670467974453815L;
+	private transient Logger logger = LoggerFactory.getLogger(GWResourceRepository.class);
+	private transient static final long serialVersionUID = 5170670467974453815L;
 
 	public GWResourceRepository() {
 		super();
-		setClassName(GWResourceRepository.class.getCanonicalName());
+		//setClassName(GWResourceRepository.class.getCanonicalName());
 	}
 
 	@Override
@@ -57,15 +59,45 @@ public class GWResourceRepository extends AbstractRDBRepository implements SCIMR
         		column.setDataType(resultSet.getString("DATA_TYPE"));
         		column.setAllowNull(resultSet.getBoolean("IS_NULLABLE"));
         		
-        		SCIMLogger.sys("COLUMNS : {} ", column);
+        		logger.info("COLUMNS : {} ", column.tojson(false));
         	}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("validate failed : ", e);
 			throw new SCIMException(selectSQL, e);
 		}finally {
 			DBCP.close(connection, statement, resultSet);
 		}
-        SCIMLogger.sys("REPOSITORY VAILDATE : {} ", selectSQL);	
+        logger.info("REPOSITORY VAILDATE : {} ", selectSQL);	
+        
+        try {
+        	int count = 0;
+	        List<SCIMResource2> user_list_all = getUsersByWhere("IsUse='Y'");
+	        for (SCIMResource2 scimResource2 : user_list_all) {
+	            logger.info("REPOSITORY VAILDATE  2: {} ", scimResource2);
+	            count++;
+	            if(count > 10) {
+	            	break;
+	            }
+			}
+        }catch (Exception e) {
+			logger.error("REPOSITORY VAILDATE 2 failed : ", e);
+		}
+        
+        try {
+        	String where = "ModifyDate BETWEEN '2018-01-01 00:00:00' AND '"+ toString(new Date())+"'";
+	        List<SCIMResource2> user_list_all = getUsersByWhere(where);
+	        int count = 0;
+	        for (SCIMResource2 scimResource2 : user_list_all) {
+	            logger.info("REPOSITORY VAILDATE  3: {} ", scimResource2);
+	            count++;
+	            if(count > 10) {
+	            	break;
+	            }
+			}
+        }catch (Exception e) {
+			logger.error("REPOSITORY VAILDATE 3 failed : ", e);
+		}
+        
 		return true;
 	}
 	
@@ -89,7 +121,7 @@ public class GWResourceRepository extends AbstractRDBRepository implements SCIMR
 	public SCIMUser createUser(SCIMUser user) throws SCIMException {
 		User gw_user = (User)user;
 		
-		final String insertSQL = "INSERT INTO IM_ACCOUNT"
+		final String insertSQL = "INSERT INTO " + this.tableName
 				+ " (UR_Code,DisplayName"
 				+ ",DN_Code,ExGroupName"
 				+ ",JobPositionCode,ExJobPositionName"
@@ -159,7 +191,7 @@ public class GWResourceRepository extends AbstractRDBRepository implements SCIMR
 				+ ",IsUse"
 				+ ",Ex_PrimaryMail"
 				+ ",EnterDate,RetireDate,RegistDate,ModifyDate "
-				+ "FROM GW_USER WHERE UR_Code = ?";
+				+ "FROM "+this.tableName+" WHERE UR_Code = ?";
 		Connection connection = null;
 		PreparedStatement statement = null;
 	    ResultSet resultSet = null;              
@@ -355,6 +387,12 @@ public class GWResourceRepository extends AbstractRDBRepository implements SCIMR
 		
 		return gw_user;
 	}
+
+//	@Override
+//	public void fromJson(JsonObject jsonObject) throws SCIMException {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 
 }

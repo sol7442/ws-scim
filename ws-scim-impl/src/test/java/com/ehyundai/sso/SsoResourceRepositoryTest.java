@@ -9,8 +9,8 @@ import com.ehyundai.object.RepositoryUtil;
 import com.ehyundai.object.User;
 import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.exception.SCIMException;
-import com.wowsanta.scim.resource.SCIMRepositoryManager;
-import com.wowsanta.scim.resource.SCIMResourceRepository;
+import com.wowsanta.scim.repository.SCIMRepositoryManager;
+import com.wowsanta.scim.repository.SCIMResourceRepository;
 
 public class SsoResourceRepositoryTest {
 	
@@ -34,10 +34,8 @@ public class SsoResourceRepositoryTest {
 	
 	public void load_manager(String conf_file_path) {
 		try {
-			File config_file = new File(conf_file_path);
-			SCIMSystemManager.getInstance().loadRepositoryManager(config_file);
-			SCIMRepositoryManager.getInstance().initailze();
-		} catch (SCIMException e) {
+			SCIMRepositoryManager.loadFromFile(conf_file_path).initailze();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
