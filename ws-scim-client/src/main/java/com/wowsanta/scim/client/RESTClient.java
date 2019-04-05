@@ -37,8 +37,10 @@ import com.wowsanta.scim.json.SCIMJsonObject;
 import com.wowsanta.scim.message.SCIMBulkRequest;
 import com.wowsanta.scim.message.SCIMBulkResponse;
 import com.wowsanta.scim.obj.SCIMUser;
+import com.wowsanta.scim.resource.user.LoginUser;
 import com.wowsanta.scim.resource.worker.Worker;
 import com.wowsanta.scim.schema.SCIMConstants;
+import com.wowsanta.scim.sec.SCIMJWTToken;
 
 
 public class RESTClient {
@@ -390,7 +392,15 @@ public class RESTClient {
 			}
 			meb.setContentType(ContentType.MULTIPART_FORM_DATA);
 			post.setEntity(meb.build());
-			post.addHeader("Authorization", RESTClientPool.getInstance().generateAuthorizationToken(worker, 1000*60));
+			
+			String token = RESTClientPool.getInstance().generateAuthorizationToken(worker, 1000*60);
+			
+			SCIMJWTToken scim_wt_token = new SCIMJWTToken();
+			LoginUser login_user = scim_wt_token.verify(token);
+			
+			logger.info("patch token user : {}", login_user);
+			
+			post.addHeader("Authorization", token );
 			
 			HttpResponse response = execute(post);
 			

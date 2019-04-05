@@ -1,19 +1,23 @@
-<div class="context-body">
-    <div class="p-grid">
-        <div class="p-col-3">
+<table>
+    <tr>
+        <td>
             <p-dropdown [options]="systems" [style]="{'width':'100%'}"	 [(ngModel)]="selectedSystem" optionLabel="systemName" (onChange)="onSelectSystem($event)"></p-dropdown>
-        </div>                
-        <div class="p-col-9">
-            <p-dropdown [options]="logFiles" [style]="{'width':'100%'}"	 optionLabel="path" (onChange)="onSelectFile($event)" ></p-dropdown>
-        </div>
-        <div class="p-col-12 box-stretched">
+        </td>
+        <td>
+            <p-dropdown [options]="logFiles" [style]="{'width':'100%'}"	 [(ngModel)]="selectedlogFile" editable="true" optionLabel="path" ></p-dropdown>
+        </td>        
+        <td style="width:10%;text-align: center"><button type="button" pButton label="파일 가져오기" (click)="onSelectLogFile()"></button></td>
+    </tr>
+    <tr>
+        <td colspan="3">
             <div class="grandparent" style="width:calc(100vw - 250px); height: calc(100vh - 200px); overflow: scroll; background: gray">
                 <div class="parent" style="display: inline-block;" >
-                    <pre>{{logFile}}</pre>
+                    <pre>{{logData}}</pre>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+        </td>
+    </tr>
+</table>
+
 
   

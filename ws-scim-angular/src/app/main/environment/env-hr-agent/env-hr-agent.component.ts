@@ -20,7 +20,9 @@ export class EnvHrAgentComponent implements OnInit {
   private selectedSystem:System = new System();
 
   private configFiles:any[];
-  private configFile:any;//string = "testaassssssaa";
+  private configFile:any;
+  private selectedConfig:any;
+  //string = "testaassssssaa";
   //private repositorys:RepositoryType[];// = ["Oracle","MsSql","MySql"];
   //private selectcedRepository;//:String;
 
@@ -41,6 +43,8 @@ export class EnvHrAgentComponent implements OnInit {
     .subscribe( data =>{
       this.systems = data;
       console.log("systems >>>: ", this.systems);
+      //this.selectedSystem = this.systems[0];
+
     },error =>{
       console.log("login-error : ", error);
     });
@@ -50,7 +54,14 @@ export class EnvHrAgentComponent implements OnInit {
     console.log("selectedSystem : ", system);
     this.selectedSystem = system;
    
-    this.scimApiService.getConfigFileList(system.systemId)
+    this.librayUploadUrl = "/agent/library/" + this.selectedSystem.systemId;
+    this.configUploadUrl = "/agent/config/" + this.selectedSystem.systemId;
+    console.log("this.librayUploadUrl : ", this.librayUploadUrl);
+    console.log("this.configUploadUrl : ", this.configUploadUrl);
+  }
+
+  getConfigList(){
+    this.scimApiService.getConfigFileList(this.selectedSystem.systemId)
     .pipe(first())
     .subscribe( data =>{
       console.log("config file list >>>: ", data);
@@ -59,19 +70,17 @@ export class EnvHrAgentComponent implements OnInit {
     },error =>{
       console.log("login-error : ", error);
     });
-
-    this.librayUploadUrl = "/agent/library/" + this.selectedSystem.systemId;
-    this.configUploadUrl = "/agent/config/" + this.selectedSystem.systemId;
-    console.log("this.librayUploadUrl : ", this.librayUploadUrl);
-    console.log("this.configUploadUrl : ", this.configUploadUrl);
   }
-
-  onSelectConfigFile(event:any){
-    console.log("selected File : ", event);
-    let file = event.value;
-    console.log("selected File : ", file.path);
-
-    this.scimApiService.getConfigFile(this.selectedSystem.systemId, file.path)
+  onSelectConfigFile(){
+    let file_name;
+    if(this.selectedConfig.path === undefined){
+      file_name = this.selectedConfig;
+    }else{
+      file_name = this.selectedConfig.path;
+    }
+    console.log("selectedConfig :", file_name);
+    
+    this.scimApiService.getConfigFile(this.selectedSystem.systemId, file_name)
     .subscribe( data =>{
       this.configFile = data;
     },error =>{
@@ -91,7 +100,7 @@ export class EnvHrAgentComponent implements OnInit {
     console.log("selected system : ", this.selectedSystem.systemId);
     console.log("uploadLibray result : ", event);
     //this.librayUploadUrl = "/agent/library/" + this.selectedSystem.systemId;
-
+    //this.selectedSystem.systemName
   }
 
   onBeforeConfigUpload(event){

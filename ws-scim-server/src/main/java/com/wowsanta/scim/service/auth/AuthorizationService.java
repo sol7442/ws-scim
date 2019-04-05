@@ -22,6 +22,9 @@ public class AuthorizationService {
 			
 			@Override
 			public void handle(Request request, Response response) throws Exception {
+				logger.info("contentType : " + request.uri());
+				logger.info("contentType : " + request.contentType());
+				
 				if(request.uri().equals("/login")){
 					return;
 				}

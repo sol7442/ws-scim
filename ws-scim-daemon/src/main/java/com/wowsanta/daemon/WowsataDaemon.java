@@ -21,10 +21,9 @@ public class WowsataDaemon implements Daemon {
 
 	static Logger logger = LoggerFactory.getLogger(WowsataDaemon.class);
 	
+	private static ShutdownDaemonHookThread shutdownHook;
 	private static WowsataDaemon daemon = new WowsataDaemon();
 //	private ExecutorService executorService = Executors.newSingleThreadExecutor();
-
-	 
 	private DaemonWatcher watcher;
 	private DaemonContext context;
 
@@ -36,7 +35,8 @@ public class WowsataDaemon implements Daemon {
 	private boolean destroy = false;
 	
 	public static void main(String[] args) {
-		Runtime.getRuntime().addShutdownHook(new ShutdownDaemonHookThread());
+		shutdownHook = new ShutdownDaemonHookThread();
+		Runtime.getRuntime().addShutdownHook(shutdownHook);
 		WowsataDaemon.start(args);
 	}
 	
@@ -136,13 +136,9 @@ public class WowsataDaemon implements Daemon {
 			    
 			    try {
 					process = builder.start();
-					
-//			        List ls=IOUtils.readLines(process.getErrorStream(),"euc-kr");
-//			        IOUtils.writeLines(ls, IOUtils.LINE_SEPARATOR_WINDOWS, System.out);   
-//					IOUtils.copy(process.getErrorStream(),System.out);
-//					
-//					System.setOut(new PrintStream(process.getOutputStream()));
-//					System.setErr(new PrintStream(process.get.getErrorStream()));
+					if(shutdownHook != null) {
+						shutdownHook.setProcess(process);
+					}
 			        
 					logger.info("process start");
 					int exitCode = process.waitFor();

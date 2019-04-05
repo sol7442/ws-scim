@@ -180,7 +180,7 @@ public class AgentService {
                     
 					String system_url = system.getSystemUrl();
 					
-					logger.info("patchLibrary : {}", systemId );
+					logger.info("old patchLibrary : {}", systemId );
 					request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement(libray_temp_path.getCanonicalPath()));
                     Collection<Part> parts = request.raw().getParts();
                     
@@ -196,14 +196,14 @@ public class AgentService {
 					if(worker == null) {
 						worker = new Worker();
 						worker.setWorkerId("sys-operator");
-						worker.setWorkerType("Admin");
-	                	System.out.println("- default worker >>" + worker);
+						worker.setWorkerType("ADMIN");
+						logger.info("- default worker >> {} ", worker.getWorkerId());
 					}
 					
 					Path old_patch_path = Paths.get("../old_patch");
 					File[] file_list = old_patch_path.toFile().listFiles();
 					for (File file : file_list) {
-						System.out.println("old_patch << -- " + file.getName());
+						logger.info("old_patch << -- {} ", file.getName());
 					}
 					
 					String patch_url   = system_url + "/config/library";
@@ -369,26 +369,27 @@ public class AgentService {
 					
 					Worker worker = findWorker(request);
 					client = new RESTClient(worker);
-					
+						
 					logger.info("getConfigFileList systemId : {}, call_url : {}",systemId,call_url);
 					String result = client.call(call_url);
 					
 					logger.info("getConfigFileList result : {} ",result);
 					
 					Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
-					File[] log_files = gson.fromJson(result,File[].class);
+					File[] config__files = gson.fromJson(result,File[].class);
 					
-					File[] log_file_array = new File[log_files.length];
-					for(int i=0; i<log_files.length; i++) {
-						log_file_array[i] = new File(log_files[i].getName());
+					File[] config_file_array = new File[config__files.length];
+					for(int i=0; i<config__files.length; i++) {
+						String config_file_name = config__files[i].getName();
+						config_file_array[i] = new File(config_file_name);
 					}
 
-					return log_file_array;
+					return config_file_array;
 					
 				}catch (Exception e) {
 					client.close();
 					
-					logger.error("getConfigFileList failed ",e);
+					logger.error("getConfigFileList failed : " + e.getMessage(),e);
 				}
 				return "fail";
 			}
@@ -469,7 +470,6 @@ public class AgentService {
 						worker.setWorkerType("Admin");
 	                	System.out.println("- default worker >>" + worker);
 					}
-					
 					
 					String post_url   = system_url + "/config/";
 					logger.info("sendFile url : {} ", post_url);

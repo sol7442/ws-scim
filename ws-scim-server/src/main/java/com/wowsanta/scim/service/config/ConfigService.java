@@ -165,7 +165,7 @@ public class ConfigService {
 		return new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
-				File config_dir = new File("../config"); 
+				File config_dir = new File("../config");
 				return config_dir.listFiles();				
 			}
 		};

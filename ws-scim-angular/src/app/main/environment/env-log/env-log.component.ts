@@ -15,7 +15,8 @@ export class EnvLogComponent implements OnInit {
   private systems:System[];
   private selectedSystem:System = new System();
   private logFiles:any[];
-  private logFile:any;//string = "testaassssssaa";
+  private logData:any;
+  private selectedlogFile:any;//string = "testaassssssaa";
 
   constructor(
     private scimApiService:ScimApiService,
@@ -53,16 +54,17 @@ export class EnvLogComponent implements OnInit {
     });
   }
 
-  onSelectFile(event:any){
-    console.log("selected File : ", event);
-    let file = event.value;
-    console.log("selected File : ", file.path);
-
-    
-    this.scimApiService.getLogFile(this.selectedSystem.systemId, file.path)
+  onSelectLogFile(){  
+    let file_name;
+    if(this.selectedlogFile.path === undefined){
+      file_name = this.selectedlogFile;
+    }else{
+      file_name = this.selectedlogFile.path;
+    }
+    console.log("selected File : ", file_name);
+    this.scimApiService.getLogFile(this.selectedSystem.systemId, file_name)
     .subscribe( data =>{
-      //console.log("files >>>: ", data);
-      this.logFile = data;
+      this.logData = data;
     },error =>{
       console.log("login-error : ", error);
     });

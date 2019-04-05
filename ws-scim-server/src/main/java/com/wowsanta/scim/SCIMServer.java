@@ -46,17 +46,22 @@ public class SCIMServer  {
 			logger.debug("SparkConfiguration \n{}",service_config.tojson(true));
 
 			
-			logger.info("SERVICE PROVIDER CONFIG    : {}", service_config.getRepositoryConfig());
+			logger.info("SERVICE PROVIDER CONFIG    : {}", service_config.getServiceProviderConfig());
 			SCIMSystemManager.getInstance().load(service_config.getServiceProviderConfig());
 			
-			logger.info("REPOSITORY CONFIG    : {}", service_config.getRepositoryConfig());
-			SCIMRepositoryManager.loadFromFile(service_config.getRepositoryConfig()).initailze();
+			
+			try {
+				logger.info("REPOSITORY CONFIG    : {}", service_config.getRepositoryConfig());
+				SCIMRepositoryManager.loadFromFile(service_config.getRepositoryConfig()).initailze();
+			
+			}catch (Exception e) {
+				logger.error("REPOSITORY INITIALIZE FAILED ",e);
+			}
 			
 			try {
 				SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();	
 				if(system_repository != null) {
 					List<SCIMScheduler> scheduler_list = system_repository.getSchdulerAll();
-					
 					for (SCIMScheduler scimScheduler : scheduler_list) {
 						logger.info("SCHEDULER INITIALIZE : {} ", scimScheduler.tojson(false));
 						SCIMSchedulerManager.getInstance().addScheduler(scimScheduler);
@@ -65,9 +70,7 @@ public class SCIMServer  {
 				}
 			} catch (SCIMException e) {
 				logger.error("Scheduler INITIALIZE FAILED ",e);
-				throw e;
 			}
-			
 			
 			Spark.initExceptionHandler(new Consumer<Exception>() {
 				@Override
@@ -79,11 +82,17 @@ public class SCIMServer  {
 			Spark.port(service_config.getServicePort());
 			Spark.threadPool(service_config.getMaxThreads(),service_config.getMinThreads(),service_config.getIdleTimeoutMills());
 			if(service_config.getStaticFiles() != null) {
+				logger.info("SPARK SERVER STATIC PATH    : {}", service_config.getStaticFiles());
 				Spark.staticFiles.externalLocation(service_config.getStaticFiles());
 			}
 			
-			if(service_config.getKeyStorePath() != null) {
-				Spark.secure(service_config.getKeyStorePath(),service_config.getKeyStorePassword(),null,null);
+			try {
+				if(service_config.getKeyStorePath() != null) {
+					logger.info("SPARK SERVER SSL KEY STORE    : {}", service_config.getKeyStorePath());
+					Spark.secure(service_config.getKeyStorePath(),service_config.getKeyStorePassword(),null,null);
+				}
+			}catch (Exception e) {
+				logger.error("Spark Https Setting Failed : ",e);
 			}
 			
 			logger.info("ROUTER CLASS : {} " , service_config.getRouterClass());

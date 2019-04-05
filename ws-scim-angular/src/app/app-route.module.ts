@@ -21,11 +21,11 @@ import {EnvLogComponent } from './main/environment/env-log/env-log.component';
 const appRoutes: Routes = [
     { path: '', component: AppComponent, canActivate: [AuthGuard] },    
     { path: 'login', component: LoginComponent },
-    { path: 'main/hrsystem',component:HrsystemManagementComponent},
-    { path: 'main/system',component:SystemManagementComponent},
-    { path: 'main/sysaccount',component:SystemAccountComponent},    
-    { path: 'main/accountmgr',component:AccountManagementComponent}, 
-    { path: 'main/auditmgr',component:AuditManagementComponent}, 
+    { path: 'main/hrsystem',component:HrsystemManagementComponent, canActivate: [AuthGuard]},
+    { path: 'main/system',component:SystemManagementComponent, canActivate: [AuthGuard]},
+    { path: 'main/sysaccount',component:SystemAccountComponent, canActivate: [AuthGuard]},    
+    { path: 'main/accountmgr',component:AccountManagementComponent, canActivate: [AuthGuard]}, 
+    { path: 'main/auditmgr',component:AuditManagementComponent, canActivate: [AuthGuard]}, 
     { path: 'main/environment',
         component:EnvironmentComponent,
         children: [
@@ -34,6 +34,7 @@ const appRoutes: Routes = [
             { path: "hr_agent", component: EnvHrAgentComponent  },
             { path: "env_log", component: EnvLogComponent  }
           ]
+         , canActivate: [AuthGuard]  
     }, 
 
     { path: '**', redirectTo: '' }
