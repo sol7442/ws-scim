@@ -36,7 +36,8 @@ public class WowsataDaemon implements Daemon {
 	
 	public static void main(String[] args) {
 		shutdownHook = new ShutdownDaemonHookThread();
-		Runtime.getRuntime().addShutdownHook(shutdownHook);
+		shutdownHook.attachShutDownHook();
+		//Runtime.getRuntime().addShutdownHook(shutdownHook);
 		WowsataDaemon.start(args);
 	}
 	
@@ -95,11 +96,13 @@ public class WowsataDaemon implements Daemon {
 			java_run.append("bin").append(File.separator);
 			java_run.append("java");
 			
+			logger.info("library cp : " + config.getLibraryClassPath());
+			
 			logger.debug("sesrvice run properties..........");
 			command_list = new ArrayList<String>();
 			command_list.add(java_run.toString());
-			command_list.add("-cp");
-			command_list.add(System.getProperty("java.class.path"));
+			command_list.add("-cp");			
+			command_list.add(System.getProperty("java.class.path") + System.getProperty("path.separator") + config.getLibraryClassPath() );
 			
 			command_list.add("-Dlogback.path=" + System.getProperty("logback.path"));
 			command_list.add("-Dlogback.configurationFile=" + System.getProperty("logback.configurationFile"));
@@ -145,6 +148,7 @@ public class WowsataDaemon implements Daemon {
 					logger.info("process end : {}",exitCode);
 					
 				} catch (Exception e) {
+					logger.error("Process Start Error "+e.getMessage(), e);
 					e.printStackTrace();
 				}
 			}

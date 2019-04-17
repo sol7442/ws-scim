@@ -10,6 +10,7 @@ public abstract class ServiceConfiguration extends WowsantaJson {
 	private int idleTimeoutMills = 1000;
 	private String routerClass;
 	
+	private String repositoryClass;
 	private String repositoryConfig;
 	private String serviceProviderConfig;
 	
@@ -55,5 +56,11 @@ public abstract class ServiceConfiguration extends WowsantaJson {
 	}
 	public void setRepositoryConfig(String repositoryConfig) {
 		this.repositoryConfig = repositoryConfig;
+	}
+	public String getRepositoryClass() {
+		return repositoryClass;
+	}
+	public void setRepositoryClass(String repositoryClass) {
+		this.repositoryClass = repositoryClass;
 	}
 }

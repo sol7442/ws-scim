@@ -5,5 +5,6 @@
   "minThreads": 2,
   "idleTimeoutMills": 1000, 
   "routerClass": "com.wowsanta.scim.server.ScimAgentRouter",
+  "repositoryClass":"com.wowsanta.scim.repository.impl.MsSqlRepository",
   "repositoryConfig":"../config/gw_mssql_repository.json"
 }

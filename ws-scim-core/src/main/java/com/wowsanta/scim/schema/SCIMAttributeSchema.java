@@ -159,7 +159,14 @@ public class SCIMAttributeSchema implements Serializable {
 	public void setSubAttributes(ArrayList<SCIMAttributeSchema> subAttributes) {
 		this.subAttributes = subAttributes;
 	}
-
+	public SCIMAttributeSchema findSubAttribute(String name) {
+		for (SCIMAttributeSchema attribute : this.subAttributes) {
+			if(attribute.getName().equals(name)) {
+				return attribute;
+			}
+		}
+		return null;
+	}
 	public ArrayList<String> getCanonicalValues() {
 		return canonicalValues;
 	}

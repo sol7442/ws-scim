@@ -92,56 +92,56 @@ public class ResourceSyncJob_SingleSignOn extends SCIMJob {
 		
 		//SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
 		
-		List<SCIMResource2> resource_list = find_res.getResources();
-		for (SCIMResource2 resource : resource_list) {
-			audit.setUserId(resource.getId());
-			try {
-			
-				SCIMUser old_user = resource_provder_repository.getSystemUser(systemId, resource.getId());
-				if(old_user == null) {
-					audit.setMethod("CREATE");
-					resource_provder_repository.createSystemDummyUser(systemId, resource);
-					audit.setResult("SUCCESS");
-				}else {
-					audit.setMethod("UPDATE");
-					resource_provder_repository.updateSystemDummyUser(systemId, resource);
-					audit.setResult("SUCCESS");
-				}
-			}catch (Exception e) {
-				audit.setDetail(e.getMessage());
-				audit.setResult("FAILED");
-			}
-			audit_logger.info("ResourceSyncJob_SigleSignOn : {}", audit);
-			///system_repository.addAudit(audit);
-			history.addAudit(audit);
-		}
+//		List<SCIMResource2> resource_list = find_res.getResources();
+//		for (SCIMResource2 resource : resource_list) {
+//			audit.setUserId(resource.getId());
+//			try {
+//			
+//				SCIMUser old_user = resource_provder_repository.getSystemUser(systemId, resource.getId());
+//				if(old_user == null) {
+//					audit.setMethod("CREATE");
+//					resource_provder_repository.createSystemDummyUser(systemId, resource);
+//					audit.setResult("SUCCESS");
+//				}else {
+//					audit.setMethod("UPDATE");
+//					resource_provder_repository.updateSystemDummyUser(systemId, resource);
+//					audit.setResult("SUCCESS");
+//				}
+//			}catch (Exception e) {
+//				audit.setDetail(e.getMessage());
+//				audit.setResult("FAILED");
+//			}
+//			audit_logger.info("ResourceSyncJob_SigleSignOn : {}", audit);
+//			///system_repository.addAudit(audit);
+//			history.addAudit(audit);
+//		}
 	}
 
 	private SCIMListResponse findRequestPost(Worker worker, String find_request_url, SCIMFindRequest req_msg) throws SCIMException {
 		SCIMListResponse response = new SCIMListResponse();
 		
-		RESTClient client = new RESTClient(worker);
-		HttpResponse http_response = client.post(find_request_url, req_msg);
-		int http_res_code = http_response.getStatusLine().getStatusCode();
-		if( http_res_code >= SCIMConstants.HtppConstants.OK && http_res_code <= SCIMConstants.HtppConstants.IM_Used) {
-			try {
-				
-				StringBuilder str = new StringBuilder();
-				HttpEntity entity = http_response.getEntity();
-				InputStream content = entity.getContent();
-				BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-				String line;
-				while ((line = reader.readLine()) != null) {
-					str.append(line);
-				}
-				
-				response.parse(str.toString());
-			} catch (ParseException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+//		RESTClient client = new RESTClient(worker);
+//		HttpResponse http_response = client.post(find_request_url, req_msg);
+//		int http_res_code = http_response.getStatusLine().getStatusCode();
+//		if( http_res_code >= SCIMConstants.HtppConstants.OK && http_res_code <= SCIMConstants.HtppConstants.IM_Used) {
+//			try {
+//				
+//				StringBuilder str = new StringBuilder();
+//				HttpEntity entity = http_response.getEntity();
+//				InputStream content = entity.getContent();
+//				BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+//				String line;
+//				while ((line = reader.readLine()) != null) {
+//					str.append(line);
+//				}
+//				
+//				response.parse(str.toString());
+//			} catch (ParseException e) {
+//				e.printStackTrace();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}
 		
 		return response;
 	}

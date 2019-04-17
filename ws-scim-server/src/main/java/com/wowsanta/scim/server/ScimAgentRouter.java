@@ -22,6 +22,7 @@ import com.wowsanta.scim.service.auth.AuthorizationService;
 import com.wowsanta.scim.service.config.ConfigService;
 import com.wowsanta.scim.service.library.LibraryService;
 import com.wowsanta.scim.service.logger.LoggerService;
+import com.wowsanta.scim.service.repository.RepositoryService;
 import com.wowsanta.scim.service.scim.v2.service.BlukService;
 import com.wowsanta.scim.service.scim.v2.service.UserService;
 
@@ -39,7 +40,7 @@ public class ScimAgentRouter implements ServiceRouter  {
 	private ConfigService configService = new ConfigService();
 	private LoggerService loggerService = new LoggerService();
 	private LibraryService libraryService = new LibraryService();
-	
+	private RepositoryService repositoryService = new RepositoryService();
 	@Override
 	public void regist() throws ServiceException {
 		logger.info("ScimAgentRouter regist START ----------------------");
@@ -51,10 +52,18 @@ public class ScimAgentRouter implements ServiceRouter  {
 		config();
 		log();
 		library();
+		repository();
 		logger.info("ScimAgentRouter regist START ----------------------");
 
 	}
 	
+	private void repository() {
+		path("/repository", () -> {
+			get("/table/list"					,repositoryService.getTableList(), new JsonTransformer());
+			get("/table/column/list/:tableName"	,repositoryService.getTableColumnList(), new JsonTransformer());
+		});//()repository/table/list		
+	}
+
 	private void library() {
 		path("/library", () -> {
 			get("/list"		,libraryService.getLibraryList(), new JsonTransformer());

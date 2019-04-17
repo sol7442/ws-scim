@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.util.Set;
 
 import org.junit.Test;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 public class USER_SCHEMA_Test {
 
 	private final String config_file_name = "../config/schema/scim_user_schema.json";
@@ -44,20 +47,34 @@ public class USER_SCHEMA_Test {
 			e.printStackTrace();
 		}
 	}
-	//@Test
+	
+	@Test
 	public void load() {
 		try {
 			SCIMResourceTypeSchema user_schema = SCIMResourceTypeSchema.load(this.config_file_name);
 			//System.out.println(user_schema.toJson());
-			Set<String> key_set =  user_schema.getAttributes().keySet();
-			for (String key : key_set) {
-				System.out.println("key : " + key);
-			}
+//			Set<String> key_set =  user_schema.getAttributes().keySet();
+//			for (String key : key_set) {
+//				System.out.println("key : " + key);
+//			}
 			
 //			SCIMAttributeSchema attribute_schema = user_schema.getAttribute("addresses");
 //			System.out.println(attribute_schema.getUri() + " : " + attribute_schema.toJson());
 			
 			System.out.println(user_schema.toJson());
+			
+			SCIMAttributeSchema id_schema =  user_schema.getAttribute("id");
+			
+			GsonBuilder builder = new GsonBuilder().disableHtmlEscaping();
+			builder.setPrettyPrinting();			
+			Gson gson = builder.create();
+			System.out.println(gson.toJson(id_schema));
+			
+			
+			SCIMAttributeSchema meta_schema =  user_schema.getAttribute("meta");
+			System.out.println(gson.toJson(meta_schema));
+			
+			
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

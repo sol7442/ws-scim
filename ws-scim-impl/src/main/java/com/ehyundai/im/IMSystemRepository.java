@@ -6,17 +6,25 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ehyundai.object.Resource;
+import com.ehyundai.object.SysUser;
+import com.ehyundai.object.User;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.obj.SCIMAdmin;
 import com.wowsanta.scim.obj.SCIMAudit;
+import com.wowsanta.scim.obj.SCIMResource2;
 import com.wowsanta.scim.obj.SCIMSchedulerHistory;
 import com.wowsanta.scim.obj.SCIMSystem;
+import com.wowsanta.scim.obj.SCIMUser;
+import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.repo.rdb.DBCP;
 import com.wowsanta.scim.resource.SCIMProviderRepository;
@@ -34,6 +42,405 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMPro
 	
 	public static IMSystemRepository loadFromFile(String file_name) throws JsonException{ 
 		return (IMSystemRepository)WowsantaJson.loadFromFile(file_name);
+	}
+	
+	
+	public int getInactiveAccountCount()throws SCIMException{
+		StringBuffer sql_buffer = new StringBuffer();
+		sql_buffer.append("SELECT count(*) as USER_COUNT FROM SCIM_USER WHERE ACTIVE=1 " );
+		
+		
+		int user_count = 0;		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;              
+
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(sql_buffer.toString());
+
+        	resultSet = statement.executeQuery();
+        	if(resultSet.next()) {
+        		user_count = resultSet.getInt("USER_COUNT");
+        	}
+        	
+		} catch (SQLException e) {
+			throw new SCIMException(sql_buffer.toString(), e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+        
+		return user_count;
+	}
+	
+	public int getInactiveSystemAccountCount(String systemId)throws SCIMException{
+		StringBuffer sql_buffer = new StringBuffer();
+		sql_buffer.append("SELECT count(*) as USER_COUNT FROM SCIM_SYSTEM_USER WHERE ACTIVE=1 AND SYSTEMID=? " );
+		
+		
+		int user_count = 0;		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;              
+
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(sql_buffer.toString());
+        	statement.setString(1,systemId);
+        	resultSet = statement.executeQuery();
+        	if(resultSet.next()) {
+        		user_count = resultSet.getInt("USER_COUNT");
+        	}
+        	
+		} catch (SQLException e) {
+			throw new SCIMException(sql_buffer.toString(), e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+        
+		return user_count;
+	}
+
+	public int getIsolatatedAccountCount()throws SCIMException{
+		StringBuffer sql_buffer = new StringBuffer();
+		sql_buffer.append("SELECT count(*) as USER_COUNT FROM SCIM_USER A LEFT JOIN SCIM_SYSTEM_USER B ON A.USERID = B.USERID WHERE B.USERID IS NULL");
+		
+		int user_count = 0;		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;              
+
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(sql_buffer.toString());
+
+        	resultSet = statement.executeQuery();
+        	if(resultSet.next()) {
+        		user_count = resultSet.getInt("USER_COUNT");
+        	}
+        	
+		} catch (SQLException e) {
+			throw new SCIMException(sql_buffer.toString(), e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+        
+		return user_count;
+	}
+	
+	public int getGhostSysAccountCount(String systemId)throws SCIMException{
+		StringBuffer sql_buffer = new StringBuffer();
+		sql_buffer.append("SELECT count(*) as USER_COUNT FROM SCIM_USER A RIGHT JOIN SCIM_SYSTEM_USER B ON A.USERID = B.USERID WHERE A.USERID IS NULL AND B.SYSTEMID=?");
+		//
+		int user_count = 0;		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;              
+
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(sql_buffer.toString());
+        	statement.setString(1,systemId);
+        	
+        	resultSet = statement.executeQuery();
+        	if(resultSet.next()) {
+        		user_count = resultSet.getInt("USER_COUNT");
+        	}
+        	
+		} catch (SQLException e) {
+			throw new SCIMException(sql_buffer.toString(), e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+        
+		return user_count;
+	}
+
+	
+	public int getTotoalSystemAccountCount(String systemId) throws SCIMException{
+		StringBuffer sql_buffer = new StringBuffer();
+		sql_buffer.append("SELECT count(*) as USER_COUNT FROM SCIM_SYSTEM_USER WHERE SYSTEMID=?");
+		
+		int user_count = 0;		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;              
+
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(sql_buffer.toString());
+        	statement.setString(1,systemId);
+        	
+        	resultSet = statement.executeQuery();
+        	if(resultSet.next()) {
+        		user_count = resultSet.getInt("USER_COUNT");
+        	}
+        	
+		} catch (SQLException e) {
+			throw new SCIMException(sql_buffer.toString(), e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+        
+		return user_count;
+	}
+	public int getTotoalAccountCount()throws SCIMException{
+		StringBuffer sql_buffer = new StringBuffer();
+		sql_buffer.append("SELECT count(*) as USER_COUNT FROM SCIM_USER");
+		
+		int user_count = 0;		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;              
+
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(sql_buffer.toString());
+
+        	resultSet = statement.executeQuery();
+        	if(resultSet.next()) {
+        		user_count = resultSet.getInt("USER_COUNT");
+        	}
+        	
+		} catch (SQLException e) {
+			throw new SCIMException(sql_buffer.toString(), e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+        
+		return user_count;
+	}
+	
+	//public int getInactiveSystemAccountCount()throws SCIMException;
+	public List<SCIMResource2> getUserSystemList(String userId) throws SCIMException{
+		final String selectSQL = "SELECT * FROM SCIM_SYSTEM_USER WHERE USERID=?";
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;              
+
+	    List<SCIMResource2> user_list = new ArrayList<SCIMResource2>();
+	    
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(selectSQL);
+        	
+        	statement.setString(1, userId);
+
+        	resultSet = statement.executeQuery();
+        	while(resultSet.next()) {
+        		
+        		SysUser user = (SysUser) newSysUserFromDB(resultSet);
+        		user_list.add(user);
+        	}
+        	
+		} catch (SQLException e) {
+			throw new SCIMException(selectSQL, e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+        
+        
+        return user_list;
+	}
+
+	private SysUser newSysUserFromDB(ResultSet resultSet) {
+
+		SysUser sys_user = new SysUser();
+		try {
+			sys_user.setSystemId(resultSet.getString("SYSTEMID"));
+			sys_user.setId(resultSet.getString("userId"));
+    		
+			sys_user.setEmployeeNumber(resultSet.getString("userId"));
+			sys_user.setUserName(resultSet.getString("userName"));
+			sys_user.setActive(resultSet.getBoolean("active"));
+    		
+			sys_user.setCreated(toJavaDate(resultSet.getTimestamp("createDate")));
+			sys_user.setLastModified(toJavaDate(resultSet.getTimestamp("modifyDate")));
+			sys_user.setProvisionDate(toJavaDate(resultSet.getTimestamp("provisionDate")));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return sys_user;
+	}
+
+	public List<SCIMResource2> getSystemUsersByWhere(String systemId, String where, String order, int start_index, int end_index) throws SCIMException{
+String table_name = "SCIM_SYSTEM_USER";
+		
+		StringBuffer query_buffer = new StringBuffer();
+		query_buffer.append("SELECT * FROM ( SELECT ROWNUM AS RNUM, Z.* FROM ( SELECT * FROM ");
+		query_buffer.append(table_name);
+		
+		query_buffer.append(" WHERE ").append("SYSTEMID=?");
+		
+		if(where != null && where.length() > 1) {
+			query_buffer.append(" AND ").append(where);
+		}
+		
+		if(order != null && order.length() > 1) {
+			query_buffer.append(" ORDER BY ").append(order);
+		}
+		query_buffer.append(" ) Z WHERE ROWNUM <= ? ) WHERE RNUM >= ?");
+		
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;              
+
+	    List<SCIMResource2> user_list = new ArrayList<SCIMResource2>();
+	    
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(query_buffer.toString());
+        	
+        	statement.setString(1, systemId);
+        	statement.setInt(2, end_index);
+        	statement.setInt(3, start_index);
+
+        	resultSet = statement.executeQuery();
+        	while(resultSet.next()) {
+        		user_list.add(newResourceFromDB(resultSet));
+        	}
+        	
+		} catch (SQLException e) {
+			throw new SCIMException(query_buffer.toString(), e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+        
+        for (SCIMResource2 scimUser : user_list) {
+        	setUserProfileFromDB(scimUser);
+		}
+        
+        return user_list;
+	}
+	public List<SCIMResource2> getUsersByWhere(String where, String order, int start_index, int end_index)throws SCIMException{
+
+		String table_name = "SCIM_USER";
+		
+		StringBuffer query_buffer = new StringBuffer();
+		query_buffer.append("SELECT * FROM ( SELECT ROWNUM AS RNUM, Z.* FROM ( SELECT * FROM ");
+		query_buffer.append(table_name);
+		if(where != null && where.length() > 1) {
+			query_buffer.append(" WHERE ").append(where);
+		}
+		if(order != null && order.length() > 1) {
+			query_buffer.append(" ORDER BY ").append(order);
+		}
+		query_buffer.append(" ) Z WHERE ROWNUM <= ? ) WHERE RNUM >= ?");
+		
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;              
+
+	    List<SCIMResource2> user_list = new ArrayList<SCIMResource2>();
+	    
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(query_buffer.toString());
+        	
+        	statement.setInt(1, end_index);
+        	statement.setInt(2, start_index);
+
+        	resultSet = statement.executeQuery();
+        	while(resultSet.next()) {
+        		user_list.add(newResourceFromDB(resultSet));
+        	}
+        	
+		} catch (SQLException e) {
+			throw new SCIMException(query_buffer.toString(), e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+        
+        for (SCIMResource2 scimUser : user_list) {
+        	setUserProfileFromDB(scimUser);
+		}
+        
+        return user_list;
+	}
+	
+	private Map<String, String> setUserProfileFromDB(SCIMResource2 user) throws SCIMException{
+		Resource im_user = (Resource) user;
+		final String selectSQL = "SELECT * FROM SCIM_USER_PROFILE WHERE userId=?";
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;              
+
+	    Map<String, String> user_profile_mape = new HashMap<String, String>();
+	    
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(selectSQL);
+        	
+        	statement.setString(1, im_user.getId());
+        	resultSet = statement.executeQuery();
+        	
+        	while(resultSet.next()) {
+        		String key = resultSet.getString("pkey");
+        		if(key.equals("companyCode")) {
+        			im_user.setCompanyCode(resultSet.getString("pvalue"));
+        		}else if(key.equals("rankCode")) {
+        			im_user.setRankCode(resultSet.getString("pvalue"));
+        		}else if(key.equals("positionCode")) {
+        			im_user.setPositionCode(resultSet.getString("pvalue"));
+        		}else if(key.equals("jobCode")) {
+        			im_user.setJobCode(resultSet.getString("pvalue"));
+        		}else if(key.equals("retireDate")) {
+        			im_user.setRetireDate(toDate(resultSet.getString("pvalue")));
+        		}else if(key.equals("employeeNumber")) {
+        			im_user.setEmployeeNumber(resultSet.getString("pvalue"));
+        		}else if(key.equals("division")) {
+        			im_user.setDivision(resultSet.getString("pvalue"));
+        		}else if(key.equals("groupName")) {
+        			im_user.setGroupName(resultSet.getString("pvalue"));
+        		}else if(key.equals("joinDate")) {
+        			im_user.setJoinDate(toDate(resultSet.getString("pvalue")));
+        		}else if(key.equals("organization")) {
+        			im_user.setOrganization(resultSet.getString("pvalue"));
+        		}else if(key.equals("rank")) {
+        			im_user.setRank(resultSet.getString("pvalue"));
+        		}else if(key.equals("position")) {
+        			im_user.setPosition(resultSet.getString("pvalue"));
+        		}else if(key.equals("job")) {
+        			im_user.setJob(resultSet.getString("pvalue"));
+        		}else if(key.equals("department")) {
+        			im_user.setDepartment(resultSet.getString("pvalue"));
+        		}else if(key.equals("groupCode")) {
+        			im_user.setGroupCode(resultSet.getString("pvalue"));
+        		}else {
+        			System.out.println("key ??" + key + ">> " + resultSet.getString("pvalue"));
+        		}
+        	}
+        	
+		} catch (SQLException e) {
+			throw new SCIMException(selectSQL, e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+
+        return user_profile_mape;
+	}
+	private SCIMResource2 newResourceFromDB(ResultSet resultSet) {
+		Resource im_user = new Resource();
+		try {
+			
+    		im_user.setId(resultSet.getString("userId"));
+    		
+    		im_user.setEmployeeNumber(resultSet.getString("userId"));
+    		im_user.setUserName(resultSet.getString("userName"));
+    		im_user.setActive(resultSet.getBoolean("active"));
+    		
+    		im_user.setCreated(toJavaDate(resultSet.getTimestamp("createDate")));
+    		im_user.setLastModified(toJavaDate(resultSet.getTimestamp("modifyDate")));
+    		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return im_user;
 	}
 	
 	public boolean validate() throws SCIMException {

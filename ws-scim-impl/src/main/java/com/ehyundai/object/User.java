@@ -5,7 +5,6 @@ import java.util.Date;
 import com.google.gson.JsonObject;
 import com.wowsanta.scim.obj.JsonUtil;
 import com.wowsanta.scim.obj.SCIMEnterpriseUser;
-import com.wowsanta.scim.schema.SCIMConstants;
 
 public class User extends SCIMEnterpriseUser{
 	/**

@@ -14,6 +14,9 @@ import { AlertService } from './../../../service/alert.service';
 export class EnvAdminComponent implements OnInit {
 
   private admins:Admin[];
+  private selectedAdmin:Admin;
+
+
   private displayDialog:Boolean = false;
   private newAdmin:Admin = new Admin();
 
@@ -34,6 +37,22 @@ export class EnvAdminComponent implements OnInit {
       console.log("login-error : ", error);
     });
   }
+
+  onSelelectAdmin(admin:Admin){
+    console.log("selected Admin ",admin);
+    this.selectedAdmin = admin;
+  } 
+
+  onAdd(){
+    this.displayDialog = true;
+  }
+  onRemove(){
+
+  }
+  onEdit(){
+
+  }
+
 
   newPasswordCheck(){
     if(this.newAdmin.password == null){

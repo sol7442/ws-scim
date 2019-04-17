@@ -5,6 +5,8 @@ import { Observable } from "rxjs/Observable";
 
 import { Admin } from '../model/model';
 
+import { SCIMFindRequest } from '../model/scim.model';
+
 
 @Injectable()
 export class ScimApiService {
@@ -13,15 +15,84 @@ export class ScimApiService {
   /**************************************************
    * 
    **************************************************/  
+  
+
+  getAccountState(){
+    let api_url = '/account/im/state';
+    return this.http.get<any>(api_url)
+    .pipe(map( result =>{
+      return result;
+    }));  
+  }
+
+  getSysAccountState(systemId:string){
+    let api_url = '/account/sys/state/' + systemId;
+    return this.http.get<any>(api_url)
+    .pipe(map( result =>{
+      return result;
+    }));  
+  }
+
+  getAccountStatus(){
+    let api_url = '/account/im/status';
+    return this.http.get<any>(api_url)
+    .pipe(map( result =>{
+      return result;
+    }));  
+  }
+
+  getSysAccountStatus(systemId:string){
+    let api_url = '/account/sys/status/'+ systemId;
+    return this.http.get<any>(api_url)
+    .pipe(map( result =>{
+      return result;
+    }));  
+  }
+
+  findAccounts(where:string, order:string, startIndex:number, count:number){
+    let find_request:SCIMFindRequest = new SCIMFindRequest();
+    find_request.where = where;
+    find_request.order = order;
+    find_request.startIndex = startIndex;
+    find_request.count = count;
+
+    let api_url = '/account/im/find';
+    return this.http.post<any>(api_url,find_request)
+    .pipe(map( result =>{
+      return result;
+    }));  
+  }
+
+  findSystemAccount(systemId:string, where:string, order:string, startIndex:number, count:number){
+    let find_request:SCIMFindRequest = new SCIMFindRequest();
+    find_request.where = where;
+    find_request.order = order;
+    find_request.startIndex = startIndex;
+    find_request.count = count;
+
+    let api_url = '/account/sys/find/' + systemId;
+    return this.http.post<any>(api_url,find_request)
+    .pipe(map( result =>{
+      return result;
+    }));  
+  }
+  getSysAccountByUserId(userId:string){
+    let api_url = '/account/im/usersys/' + userId;
+    return this.http.get<any>(api_url)
+    .pipe(map( result =>{
+      return result;
+    }));  
+  }
+
 
   // Managered - System 
   getSystems(){
     let api_url = '/system/';
-    return this.http.get<any>(api_url,
-      {
-        headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
-      })
+    return this.http.get<any>(api_url)
     .pipe(map( result =>{
+
+      
+
       return result;
     }));
   }
@@ -237,7 +308,26 @@ export class ScimApiService {
       return result;
     }));
   }
-
+  getTableList(id:string) {
+    let api_url = '/agent/repository/table/list/' + id;
+    return this.http.get<any>(api_url,
+      {
+        headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
+      })
+    .pipe(map( result =>{
+      return result;
+    })); 
+  }
+  getTableColumnList(systemId:string, tableId:string){
+    let api_url = '/agent/repository/table/column/list/' + systemId + "/" + tableId;
+    return this.http.get<any>(api_url,
+      {
+        headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
+      })
+    .pipe(map( result =>{
+      return result;
+    })); 
+  }
   getConfigFileList(id:string){
     let api_url = '/agent/config/list/' + id;
     return this.http.get<any>(api_url,

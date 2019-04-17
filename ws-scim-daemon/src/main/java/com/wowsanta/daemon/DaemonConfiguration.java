@@ -1,6 +1,11 @@
 package com.wowsanta.daemon;
 
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.wowsata.util.json.JsonException;
 import com.wowsata.util.json.WowsantaJson;
 
@@ -13,12 +18,43 @@ public class DaemonConfiguration extends WowsantaJson{
 	private String configPath    = "../config";
 	private String serviceConfig = "../config/serviceConfiguration";
 	private String serviceClass  = "com.wowsata.service.impl.SparkServiceImpl";
-	
+	private List<String> librayList = new ArrayList<>();
+
 	public static DaemonConfiguration getInstance() {
 		if(instance == null) {
 			instance = new DaemonConfiguration();
 		}
 		return instance;
+	}
+	
+	public String getLibraryClassPath() {
+		StringBuffer buffer = new StringBuffer();
+		
+		//System.getProperty("user.dir");
+		//this.getDistPath();
+		File dist_path = new File(this.distPath);
+		File[] library_list = dist_path.listFiles();
+		
+		System.out.println(".....................");
+		for (File file : library_list) {
+			if(librayList.contains(file.getName())) {
+				try {
+					buffer.append(file.getCanonicalPath()).append(System.getProperty("path.separator"));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			};
+		}
+		System.out.println(".....................");
+		return buffer.toString();
+	}
+	
+	public List<String> getLibrayList() {
+		return librayList;
+	}
+
+	public void setLibrayList(List<String> librayList) {
+		this.librayList = librayList;
 	}
 	private DaemonConfiguration() {
 		this.jsonClass =  DaemonConfiguration.class.getCanonicalName();

@@ -41,6 +41,7 @@ public class SparkRouterController extends SparkController{
 	private ConfigService configService = new ConfigService();
 	private BlukService blukService = new BlukService();
 	private AuditService auditService = new AuditService();
+	private AccountService accountService = new AccountService();
 	
 	public void control() {
 		before("/*",authService.verify());
@@ -112,8 +113,8 @@ public class SparkRouterController extends SparkController{
 
 	private void account() {
 		path("/account", () -> {			
-			get("/system/:systemId"   		,AccountService.getSystemAccount(), new JsonTransformer());
-			get("/history/:userId"   		,AccountService.getAccountHistory(), new JsonTransformer());
+			get("/system/:systemId"   		,accountService.getSystemAccount(), new JsonTransformer());
+			get("/history/:userId"   		,accountService.getAccountHistory(), new JsonTransformer());
 		});
 	}
 

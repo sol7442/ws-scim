@@ -9,7 +9,7 @@ import org.quartz.JobExecutionException;
 
 import com.ehyundai.gw.ConciliationJob_GW;
 import com.wowsanta.scim.exception.SCIMException;
-import com.wowsanta.scim.repository.SCIMRepository;
+import com.wowsanta.scim.repository.AbstractSCIMRepository;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
 import com.wowsanta.scim.repository.SCIMResourceRepository;
 
@@ -23,7 +23,7 @@ public class ReconciliationTest extends ServiceProviderTest {
 		
 		try {
 			SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
-			((SCIMRepository)res_repo).initialize();
+			((AbstractSCIMRepository)res_repo).initialize();
 		} catch (SCIMException e1) {
 			// TODO Auto-generated catch block
 		}

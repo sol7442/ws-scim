@@ -21,6 +21,9 @@ import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.repo.rdb.DBCP;
+import com.wowsanta.scim.repository.RepositoryException;
+import com.wowsanta.scim.repository.ResourceColumn;
+import com.wowsanta.scim.repository.ResourceTable;
 import com.wowsanta.scim.repository.SCIMResourceGetterRepository;
 import com.wowsanta.scim.resource.SCIMGroup;
 import com.wowsanta.scim.resource.SCIMResourceSetterRepository;
@@ -35,6 +38,13 @@ public class SsoResoureRepository extends AbstractRDBRepository implements SCIMR
 	public SsoResoureRepository() {
 		super();
 		//setClassName(SsoResoureRepository.class.getCanonicalName());
+	}
+	
+	public List<ResourceTable> getTables() throws RepositoryException{
+		return null;
+	}
+	public List<ResourceColumn> getTableColums(String tableName) throws RepositoryException{
+		return null;
 	}
 	
 	@Override
@@ -73,11 +83,6 @@ public class SsoResoureRepository extends AbstractRDBRepository implements SCIMR
 	
 	//SELECT UR_CODE, MODIFYDATE FROM BASE_OBJECT_UR WHERE MODIFYDATE > '2019-01-14 23:17:36'
 
-	@Override
-	public void setUserSchema(SCIMResourceTypeSchema userSchema) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	@Override
 	public List<SCIMResource2> getUsersByWhere(String where) throws SCIMException {
@@ -382,12 +387,6 @@ public class SsoResoureRepository extends AbstractRDBRepository implements SCIMR
 
 	@Override
 	public void deleteUser(String userId) throws SCIMException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setGroupSchema(SCIMResourceTypeSchema groupSchema) throws SCIMException {
 		// TODO Auto-generated method stub
 		
 	}

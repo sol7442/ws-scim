@@ -33,7 +33,10 @@ import com.wowsanta.scim.client.RESTClient;
 import com.wowsanta.scim.exception.SCIMError;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.SCIMSystem;
-import com.wowsanta.scim.repository.SCIMRepository;
+import com.wowsanta.scim.protocol.ClientReponse;
+import com.wowsanta.scim.protocol.FrontResponse;
+import com.wowsanta.scim.protocol.ResponseState;
+import com.wowsanta.scim.repository.AbstractSCIMRepository;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.user.LoginUser;
 import com.wowsanta.scim.resource.worker.Worker;
@@ -86,7 +89,7 @@ public class AgentService {
 					
 					logger.debug("REMOTE REPOSITORY : {} ", result);
 					
-					return SCIMRepository.loadFromString(result);
+					return AbstractSCIMRepository.loadFromString(result);
 				}catch(Exception e) {
 					return e;//.getError();
 				}
@@ -482,6 +485,79 @@ public class AgentService {
 				}
 				
 				return "failed";
+			}
+		};
+	}
+
+	public Route getTableList() {
+		return new Route() {
+			@Override
+			public Object handle(Request request, Response response) throws Exception {
+				
+				FrontResponse front_response = new FrontResponse();
+
+				
+				RESTClient client = null;
+				try {
+					String systemId = request.params(":systemId");
+					SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
+					String system_url = system.getSystemUrl();
+					String call_url   = system_url + "/repository/table/list";
+					
+					
+					Worker worker = findWorker(request);
+					client = new RESTClient(worker);
+						
+					ClientReponse client_response = client.get3(call_url);
+					front_response.setData(client_response);
+					front_response.setState(ResponseState.Success);;
+					
+				}catch (Exception e) {
+					front_response.setState(ResponseState.Fail);;
+					front_response.setMessage(e.getMessage());
+					logger.error("getConfigFileList failed : " + e.getMessage(),e);
+				}finally {
+					client.close();
+				}
+				
+				return front_response;
+			}
+		};
+	}
+
+	public Route getColumnList() {
+		return new Route() {
+			@Override
+			public Object handle(Request request, Response response) throws Exception {
+				
+				FrontResponse front_response = new FrontResponse();
+
+				
+				RESTClient client = null;
+				try {
+					String systemId = request.params(":systemId");
+					String tableName = request.params(":tableName");
+					
+					SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
+					String system_url = system.getSystemUrl();
+					String call_url   = system_url + "/repository/table/column/list" + "/" + tableName;
+					
+					Worker worker = findWorker(request);
+					client = new RESTClient(worker);
+						
+					ClientReponse client_response = client.get3(call_url);
+					front_response.setData(client_response);
+					front_response.setState(ResponseState.Success);;
+					
+				}catch (Exception e) {
+					front_response.setState(ResponseState.Fail);;
+					front_response.setMessage(e.getMessage());
+					logger.error("getConfigFileList failed : " + e.getMessage(),e);
+				}finally {
+					client.close();
+				}
+				
+				return front_response;
 			}
 		};
 	}

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 import { ScimApiService } from './../../../service/scim-api.service';
 import { System , Scheduler , SchedulerHistory} from '../../../model/model';
@@ -13,96 +14,135 @@ import { first } from 'rxjs/operators';
 })
 export class SystemAccountComponent implements OnInit {
 
+  private sub:any;
+  private systemId:string;
   
-  private systems:System[];
-  private selectedSystem:System = new System();
+  private accounts:any[];
+  private totalCount:number;
   
-  private users:any[] = [];
-  private historis:any = [];
+  private accountStatus;
+  private accountState;
 
-  private selectedUser:any = {};
+  private activeCount:number = 1;
+  private inActiveCount:number = 1;
 
-  private schedulers:Scheduler[];
-  private selectedScheduler:Scheduler;
-  private schedulerHistorys:SchedulerHistory[];
-  private displayDialog: boolean = false;
+  private integrateCount:number = 1;
+  private ghostCount:number = 1;
 
   constructor(
     private scimApiService:ScimApiService,
+    private route: ActivatedRoute
   ) { 
-    this.displayDialog = false;
+    //this.displayDialog = false;
   }
+
+ 
 
   ngOnInit() {
-    this.scimApiService.getSystems()
-    .pipe(first())
-    .subscribe( data =>{
-      this.systems = data;
-      this.selectedSystem = this.systems[0];
-      console.log("systems : ", this.systems);
-    },error =>{
-        console.log("login-error : ", error);
-    });
-
-  }
-
-
-  onSelect(event){
-    this.selectedSystem = event.value;
-    
-    console.log("system account  : ", this.selectedSystem.systemId);
-
-    this.scimApiService.getSystemAccount(this.selectedSystem.systemId)
-    .pipe(first())
-    .subscribe( data =>{
-      console.log("account list : ", data);
+    this.sub = this.route.params.subscribe(params => {
+      this.systemId = params['id'];
+      console.log("systemId : ", this.systemId);
       
-      this.users = data;
-
-    },error =>{
-        console.log("login-error : ", error);
-    });
-
-  }
-
-  displayContext(){
-    console.log("item >> ",this.selectedSystem);
-  }
-  
-  onRowSelect(user:any){
-    console.log("user",user);
-    this.scimApiService.getUserLifecycle(user.id)
-    .pipe(first())
-    .subscribe( data =>{
-      console.log("account list : ", data);
-      this.historis = data;
-    },error =>{
-        console.log("login-error : ", error);
-    });
-  }
-
-  showDetail(event: Event, user:any) {
-    console.log("item",user);
-
-    this.scimApiService.getAccountHistory(user.id)
-    .pipe(first())
-    .subscribe( data =>{
-      console.log("account history : ", data);
-      this.historis = data;
-
-    },error =>{
-        console.log("login-error : ", error);
-    });
-
-  }
-  runScheduler(event: Event, scheduler: Scheduler) {
+      this.scimApiService.getSysAccountState(this.systemId)
+        .pipe(first())
+        .subscribe( result =>{
+          console.log("getSysAccountState : ", result);
+          
+          this.totalCount    = result.data.total;
+          this.activeCount   = result.data.active;
+          this.inActiveCount = result.data.inactive;
     
+          this.accountState = {
+            labels: ['활성', '비활성'],
+            datasets: [
+              {
+                  data: [this.activeCount, this.inActiveCount],
+                  backgroundColor: [
+                    "#36A2EB",
+                    "#FF6384",              
+                    "#FFCE56"
+                  ],
+                  hoverBackgroundColor: [
+                    "#36A2EB",
+                    "#FF6384",              
+                    "#FFCE56"
+                ]
+              }
+            ]
+          };
+      },error =>{
+          console.log("login-error : ", error);
+      });
+      
+      this.scimApiService.getSysAccountStatus(this.systemId)
+        .pipe(first())
+        .subscribe( result =>{
+        
+          console.log("getSysAccountStatus : ", result);
+      
+          this.totalCount      = result.data.total;
+          this.integrateCount  = result.data.integrate;
+          this.ghostCount      = result.data.ghost;
+            
+          this.accountStatus = {
+            labels: ['통합', '고스트'],
+            datasets: [
+              {
+                  data: [this.integrateCount, this.ghostCount],
+                  backgroundColor: [
+                    "#36A2EB",
+                    "#FF6384",              
+                    "#FFCE56"
+                  ],
+                  hoverBackgroundColor: [
+                    "#36A2EB",
+                    "#FF6384",              
+                    "#FFCE56"
+                ]
+              }
+            ]};
 
+            console.log("getSysAccountState - ghostCount: ", this.ghostCount);
+
+      },error =>{
+          console.log("login-error : ", error);
+      });
+      
+    this.scimApiService.findSystemAccount(this.systemId,"","",0,5)
+      .pipe(first())
+      .subscribe( result =>{
+        console.log("findSystemAccount : ", result);
+        this.accounts   = result.data.Resources;
+        this.totalCount = result.data.totalResults;
+      },error =>{
+          console.log("login-error : ", error);
+      });
+    });
   }
 
-  onDialogHide(){
-    this.displayDialog = false;
+
+  ngOnDestroy() {
+    console.log("onDestroy : ", this.systemId);
+    this.sub.unsubscribe();
   }
 
+  onPaginate(event:any){
+    console.log("onPaginate",event)
+
+    this.scimApiService.findSystemAccount(this.systemId,"","",event.page,event.rows)
+    .pipe(first())
+    .subscribe( result =>{
+      console.log("findSystemAccount : ", result);
+      this.accounts   = result.data.Resources;
+      this.totalCount = result.data.totalResults;
+    },error =>{
+        console.log("login-error : ", error);
+    });
+  }
+
+  onSelelectAccount(account){
+    console.log("selected account",account)
+
+  }
 
 }

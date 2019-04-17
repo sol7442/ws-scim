@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
@@ -26,6 +27,7 @@ import com.google.gson.stream.JsonWriter;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.json.AbstractJsonObject;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
+import com.wowsanta.scim.repository.impl.DefaultRepository;
 import com.wowsanta.scim.resource.SCIMSystemRepository;
 import com.wowsata.util.json.JsonException;
 import com.wowsata.util.json.WowsantaJson;
@@ -37,8 +39,9 @@ public class SCIMRepositoryManager {
 	
 	private static transient SCIMRepositoryManager instance;
 	
-	private SCIMRepository resourceRepository;
-	private SCIMRepository systemRepository;
+	private AbstractSCIMRepository resourceRepository;
+	private AbstractSCIMRepository systemRepository;
+	private SCIMRepository repository;
 	
 	private transient File configFile;
 	
@@ -49,7 +52,7 @@ public class SCIMRepositoryManager {
 		return instance;
 	}
 	
-	public static SCIMRepositoryManager loadFromFile(String file_name) throws RepositoryException{
+	public static SCIMRepositoryManager loadFromFile(String className, String file_name) throws RepositoryException{
 		if(instance == null) {
 			instance = new SCIMRepositoryManager();
 		}
@@ -62,13 +65,19 @@ public class SCIMRepositoryManager {
 
 			if(json_object.get("systemRepository") != null) {
 				JsonObject sys_rep_json_obj = json_object.get("systemRepository").getAsJsonObject();
-				instance.setSystemRepository((SCIMSystemRepository) SCIMRepository.loadFromString(sys_rep_json_obj.toString()));
+				instance.setSystemRepository((SCIMSystemRepository) AbstractSCIMRepository.loadFromString(sys_rep_json_obj.toString()));
 			}
 			
 			if(json_object.get("resourceRepository") != null) {
 				JsonObject res_rep_json_obj = json_object.get("resourceRepository").getAsJsonObject();
-				instance.setResourceRepository((SCIMResourceRepository) SCIMRepository.loadFromString(res_rep_json_obj.toString()));
+				instance.setResourceRepository((SCIMResourceRepository) AbstractSCIMRepository.loadFromString(res_rep_json_obj.toString()));
 			}
+			
+			if(className != null) {
+				String repository_path = json_object.get("repository").getAsString();
+				loadFromClass(className, repository_path);
+			}
+				
 			
 		} catch (FileNotFoundException e) {
 			logger.error("REPOSITORY LOAD FAILED : {}", file_name);
@@ -124,10 +133,10 @@ public class SCIMRepositoryManager {
 		return instance;
 	}
 	public void setResourceRepository(SCIMResourceRepository repo) {
-		this.resourceRepository = (SCIMRepository) repo;
+		this.resourceRepository = (AbstractSCIMRepository) repo;
 	}
 	public void setSystemRepository(SCIMSystemRepository repo) {
-		this.systemRepository = (SCIMRepository) repo;
+		this.systemRepository = (AbstractSCIMRepository) repo;
 	}
 	public SCIMResourceRepository getResourceRepository() {
 		return (SCIMResourceRepository) this.resourceRepository;
@@ -145,9 +154,40 @@ public class SCIMRepositoryManager {
 			this.systemRepository.close();
 		}
 		
+		if(this.repository != null) {
+			this.repository.close();
+		}
+		
 	}
 
+	public static void loadFromClass(String className, String configFile) throws RepositoryException {
+		if(instance == null) {
+			instance = new SCIMRepositoryManager();
+		}
+		
+		try {
+			logger.info("Repository load from class : {}",className);
+			Method load_method = Class.forName(className).getMethod("load", String.class);
+			SCIMRepository repository  = (SCIMRepository) load_method.invoke(null, configFile);
+			
+			instance.setRepository(repository);
+		} catch (Exception e) {
+			logger.error("Repository load failed : {}",className,e);
+			throw new RepositoryException("Repository load failed", e);
+		}
+	}
 
-
-
+	private void setRepository(SCIMRepository repository) {
+		try {
+			repository.initialize();
+			this.repository = repository;
+		} catch (RepositoryException e) {
+			logger.error("Repository initialize failed : {}", e);
+			e.printStackTrace();
+		}
+	}
+	public SCIMRepository getRepository() {
+		return this.repository;
+	}
+	
 }

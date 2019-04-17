@@ -21,6 +21,9 @@ import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.repo.rdb.DBCP;
+import com.wowsanta.scim.repository.RepositoryException;
+import com.wowsanta.scim.repository.ResourceColumn;
+import com.wowsanta.scim.repository.ResourceTable;
 import com.wowsanta.scim.repository.SCIMResourceGetterRepository;
 import com.wowsanta.scim.repository.SCIMResourceRepository;
 import com.wowsanta.scim.resource.SCIMGroup;
@@ -103,20 +106,23 @@ public class GWResourceRepository extends AbstractRDBRepository implements SCIMR
 	
 	//SELECT COLUMN_NAME, IS_NULLABLE, DATA_TYPE  FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'IM_ACCOUNT'
 	//SELECT UR_CODE, MODIFYDATE FROM BASE_OBJECT_UR WHERE MODIFYDATE > '2019-01-14 23:17:36'
+//
+//	@Override
+//	public void setUserSchema(SCIMResourceTypeSchema userSchema) {
+//		// TODO Auto-generated method stub
+//	}
+//
+//	@Override
+//	public void setGroupSchema(SCIMResourceTypeSchema groupSchema) throws SCIMException {
+//		// TODO Auto-generated method stub
+//	}
 
-	@Override
-	public void setUserSchema(SCIMResourceTypeSchema userSchema) {
-		// TODO Auto-generated method stub
-		
+	public List<ResourceTable> getTables() throws RepositoryException{
+		return null;
 	}
-	
-
-	@Override
-	public void setGroupSchema(SCIMResourceTypeSchema groupSchema) throws SCIMException {
-		// TODO Auto-generated method stub
-		
+	public List<ResourceColumn> getTableColums(String tableName) throws RepositoryException{
+		return null;
 	}
-	
 
 	public SCIMUser createUser(SCIMUser user) throws SCIMException {
 		User gw_user = (User)user;
@@ -318,7 +324,7 @@ public class GWResourceRepository extends AbstractRDBRepository implements SCIMR
 			
 			gw_user_resource.setOrganization(resultSet.getString("DN_Code"));
 			gw_user_resource.setDivision(resultSet.getString("ExGroupName"));
-			//gw_user_resource.setDepartment(resultSet.getString("ExGroupPath"));
+			gw_user_resource.setDepartment(resultSet.getString("OU_PATH"));
     		
 			gw_user_resource.setPositionCode(resultSet.getString("JobPositionCode"));
 			gw_user_resource.setPosition(resultSet.getString("ExJobPositionName"));

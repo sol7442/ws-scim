@@ -1,51 +1,8 @@
-.system-context{
-    width: 100%;
-    height: 100%;
-    display: inline-block;
-    
-    background-color: blue;
+.context-menu{
+    box-shadow: 1px 1px 10px 0px;
 }
 
-.system-list{
-    float: left;
-    width: 250px;
-    padding: 15px;
-    
-    background-color: yellow;
+.context-body{
+    padding: 10px;   
 }
 
-.account-list{
-    width: 80%;
-    height: 100%;
-    display: inline-block;    
-    background-color: blue;
-}
-
-.system-account-list{
-    width: 100%;
-    height: 100%;
-    display: inline-block;
-    
-    background-color: blue;
-}
-.user-account-list{
-    width: 100%;
-    height: 100%;
-    display: inline-block;
-    
-    background-color: blue;
-}
-
-
-.column {
-    float: left;
-    
-    padding: 15px;
- }
-  
-  /* Clear floats after the columns */
-  .row:after {
-    content: "";
-    display: table;
-    clear: both;
-  }

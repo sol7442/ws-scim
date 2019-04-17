@@ -13,6 +13,7 @@ public class SCIMFindRequest extends SCIMMessage{
 
 	private List<String> attributes = new ArrayList<String>();
 	private String where ;
+	private String order;
 	private int startIndex;
 	private int count;
 	
@@ -59,5 +60,13 @@ public class SCIMFindRequest extends SCIMMessage{
 	public String toString() {
 		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 		return gson.toJson(this);
+	}
+
+	public String getOrder() {
+		return order;
+	}
+
+	public void setOrder(String order) {
+		this.order = order;
 	}
 }

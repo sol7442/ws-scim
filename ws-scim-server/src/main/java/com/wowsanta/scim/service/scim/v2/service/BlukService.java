@@ -14,7 +14,7 @@ import com.wowsanta.scim.message.SCIMBulkRequest;
 import com.wowsanta.scim.message.SCIMBulkResponse;
 import com.wowsanta.scim.obj.SCIMResource;
 import com.wowsanta.scim.obj.SCIMUser;
-import com.wowsanta.scim.repository.SCIMRepository;
+import com.wowsanta.scim.repository.AbstractSCIMRepository;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
 import com.wowsanta.scim.repository.SCIMResourceGetterRepository;
 import com.wowsanta.scim.repository.SCIMResourceRepository;

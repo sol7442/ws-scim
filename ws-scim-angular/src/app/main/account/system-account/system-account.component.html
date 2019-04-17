@@ -1,90 +1,119 @@
-<div class="context-wrapper">
-  <div class="context-left" id="context-left-box">
-    <p-listbox [style]="{'width':'100%'}" [options]="systems" (onChange)="onSelect($event)"  optionLabel="systemName">
-      <p-header>
-        <p>시스템 목록</p>
-      </p-header>
-    </p-listbox>
-  </div>
-  <div class="context-right">
+<p-panel class="context-body" >
+        <p-header>
+            <div class="ui-helper-clearfix">
+                <span class="ui-panel-title context-header-text" style="display:inline-block;margin-top:4px;font-weight:bold">
+                  시스템 계정 현황[{{systemId}}]
+                </span>
+            </div>
+        </p-header>
+        <p-card >
+            <table>
+                <tr>
+                    <td >
+                        <p-card >
+                            <label> 총 계정 : </label> {{totalCount}}
+                            <hr class="red-line">
+                            <label> 계정 상태 </label> : <label> 통합 : </label> {{integrateCount}} , <label> 고스트 : </label> {{ghostCount}}                        
+                            <hr class="red-line">
+                            <label> 계정 종류 </label> : <label> 활성 : </label> {{activeCount}} , <label> 비활성 : </label> {{inActiveCount}}
+                        </p-card>
+                    </td>
+                    <td class="chart-box" >
+                        <p-chart type="pie" [data]="accountState"></p-chart>
+                    </td >
+                    <td class="chart-box">
+                        <p-chart type="pie" [data]="accountStatus"></p-chart>
+                    </td>
+                </tr>
+            </table>
+        </p-card>
+    </p-panel>
     <p-panel>
         <p-header>
             <div class="ui-helper-clearfix">
                 <span class="ui-panel-title context-header-text" style="display:inline-block;margin-top:4px;font-weight:bold">
-                  시스템 계정 현황
+                    계정 리스트
                 </span>
             </div>
         </p-header>
-        <div class="ui-helper-clearfix">
-            <p-table class="table-cell-center" [value]="users" [paginator]="true" [rows]="5" [responsive]="true"
-              selectionMode="single" [(selection)]="selectedUser"   [metaKeySelection]="false" >
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>사용자 이름</th>
-                        <th>사용자 아이디</th>
-                        <th>사용자 사번</th>
-                        <th>상태 </th>
-                        <th>생성일 </th>
-                        <th>변경일 </th>
-                        <th>배포일 </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-user>
-                    <tr (click)="onRowSelect(user)" >
-                        <td>{{user.userName}}</td>
-                        <td>{{user.id}}</td>
-                        <td>{{user.employeeNumber}}</td>
-                        <td>{{user.active}}</td>
-                        <td>{{user.meta.created | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
-                        <td>{{user.meta.lastModified | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
-                        <td>{{user.provisionDate | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </div>
-        <p-footer>
-            
-        </p-footer>
+    
+        <p-table class="table-cell-center" [value]="accounts"  [responsive]="true"  selectionMode="single" >
+        <ng-template pTemplate="header">
+            <tr>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                                <p-dropdown [options]="cities1" [(ngModel)]="selectedCity1"></p-dropdown>       
+                            </td>
+                            <td>
+                                <input type="text" pInputText [(ngModel)]="property"/>
+    
+                            </td>
+                            <td>
+                                <p-button label="Click" ></p-button>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>    
+            <tr>
+                <th>사용자 사번</th>
+                <th>사용자 이름</th>
+                <th>상태 </th>
+                <th>생성일 </th>
+                <th>변경일 </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-account>
+            <tr (click)="onSelelectAccount(account)">
+                <td style="text-align: center">{{account.employeeNumber}}</td>
+                <td style="text-align: center">{{account.userName}}</td>
+                <td style="text-align: center">{{account.active}}</td>
+                <td style="text-align: center">{{account.created | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
+                <td style="text-align: center">{{account.lastModified | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+            <tr>
+                <td colspan="5">
+                    <p-paginator [rows]="5" [totalRecords]="totalCount" (onPageChange)="onPaginate($event)" ></p-paginator>
+                </td>
+            </tr>
+        </ng-template>
+        </p-table>
     </p-panel>
-
     <p-panel>
-      <p-header>
-          <div class="ui-helper-clearfix">
-              <span class="ui-panel-title context-header-text" style="display:inline-block;margin-top:4px;font-weight:bold">
-                계정 변경 이력
-              </span>
-          </div>
-      </p-header>
-      <div class="ui-helper-clearfix">
-        <p-table class="text-center" [value]="historis" [paginator]="true" [rows]="10">
-          <ng-template pTemplate="header">
-              <tr>
-                  <th>변경 일시</th>
-                  <th>사용자 ID</th>
-                  <th>수행 내용</th>
-                  <th>원본 시스템</th>
-                  <th>타겟 시스템</th>
-                  <th>작업 결과</th>
-                  <th>작업자/타입</th>
-                  <th>실패 원인</th>
-              </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-history>
-              <tr>
-                  <td>{{history.workDate | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
-                  <td>{{history.userId}}</td>
-                  <td>{{history.method}}</td>
-                  <td>{{history.sourceSystemId}}</td>
-                  <td>{{history.targetSystemId}}</td>
-                  <td>{{history.result}}</td>
-                  <td>{{history.workerId}}/{{history.workerType}}</td>
-                  <td>{{history.detail}}</td>
-              </tr>
-          </ng-template>
-      </p-table>
-      </div>
-      <p-footer>
-      </p-footer>
+        <p-header>
+            <div class="ui-helper-clearfix">
+                <span class="ui-panel-title context-header-text" style="display:inline-block;margin-top:4px;font-weight:bold">
+                    계정 배포 현황
+                </span>
+            </div>
+        </p-header>
+    
+        <p-table class="table-cell-center" [value]="sysAccounts" [paginator]="true" [rows]="5" [responsive]="true"  selectionMode="single">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>시스템</th>
+                <th>아이디</th>
+                <th>이름</th>
+                <th>상태</th>
+                <th>생성일</th>
+                <th>변경일</th>
+                <th>배포일일</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-sys_account>
+            <tr>
+                <td style="text-align: center">{{sys_account.systemId}}</td>
+                <td style="text-align: center">{{sys_account.id}}</td>
+                <td style="text-align: center">{{sys_account.userName}}</td>
+                <td style="text-align: center">{{sys_account.active}}</td>
+                <td style="text-align: center">{{sys_account.created | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
+                <td style="text-align: center">{{sys_account.lastModified | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
+                <td style="text-align: center">{{sys_account.provisionDate | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
+            </tr>
+        </ng-template>
+        </p-table>
     </p-panel>
-  </div>
-</div>

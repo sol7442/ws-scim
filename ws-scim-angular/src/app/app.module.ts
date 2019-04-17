@@ -33,12 +33,13 @@ import {SystemManagementComponent} from './main/system/system-management/system-
 import {HrsystemManagementComponent} from './main/system/hrsystem-management/hrsystem-management.component';
 import {AccountComponent} from './main/account/account.component';
 import {SystemAccountComponent} from './main/account/system-account/system-account.component';
-import {AccountManagementComponent} from './main/account/account-management/account-management.component';
+import {ImAccountComponent} from './main/account/im-account/im-account.component';
 import {AuditManagementComponent } from './main/audit/audit-management/audit-management.component';
 import {EnvironmentComponent } from './main/environment/environment.component';
 import {EnvAdminComponent } from './main/environment/env-admin/env-admin.component';
 import {EnvSchedulerComponent } from './main/environment/env-scheduler/env-scheduler.component';
 import {EnvHrAgentComponent } from './main/environment/env-hr-agent/env-hr-agent.component';
+import {EnvSysAgentComponent } from './main/environment/env-sys-agent/env-sys-agent.component';
 import {EnvLogComponent } from './main/environment/env-log/env-log.component';
 
 import {ToolbarModule} from 'primeng/toolbar';
@@ -56,6 +57,7 @@ import {DropdownModule} from 'primeng/dropdown';
 import {ScrollPanelModule} from 'primeng/scrollpanel';
 import {EditorModule} from 'primeng/editor';
 import {FileUploadModule} from 'primeng/fileupload';
+import {ChartModule} from 'primeng/chart';
 
 
 
@@ -68,9 +70,9 @@ import 'rxjs/Rx';
       AppComponent,AlertComponent,
       TabMenuComponent,TitleComponent,
       SystemManagementComponent,HrsystemManagementComponent,
-      AccountComponent,SystemAccountComponent,AccountManagementComponent,
+      AccountComponent,SystemAccountComponent,ImAccountComponent,
       AuditManagementComponent,
-      EnvironmentComponent,EnvAdminComponent,EnvHrAgentComponent,EnvSchedulerComponent,EnvLogComponent
+      EnvironmentComponent,EnvAdminComponent,EnvHrAgentComponent,EnvSysAgentComponent,EnvSchedulerComponent,EnvLogComponent
    ],
    imports: [
       BrowserModule,FormsModule,
@@ -78,7 +80,7 @@ import 'rxjs/Rx';
       TabMenuModule,ToolbarModule,TooltipModule,
       ButtonModule,SplitButtonModule,PanelModule,DropdownModule,
       ListboxModule,DataViewModule,DialogModule,TableModule,PaginatorModule,CardModule,
-      ScrollPanelModule,EditorModule,FileUploadModule,
+      ScrollPanelModule,EditorModule,FileUploadModule,ChartModule,
       AppRouteModule,
       HttpClientModule,
       LoginModule,

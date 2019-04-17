@@ -4,5 +4,10 @@
   "configPath": "../release/20190317153053/config",
   "serviceConfig": "../config/im_service_config.json",
   "serviceClass": "com.wowsanta.scim.SCIMServer",
-  "jsonClass": "com.wowsanta.daemon.DaemonConfiguration"
+  "jsonClass": "com.wowsanta.daemon.DaemonConfiguration",
+  "librayList":[
+  	"../config/",
+  	"../config/",
+  	"../config/",
+  ]  
 }

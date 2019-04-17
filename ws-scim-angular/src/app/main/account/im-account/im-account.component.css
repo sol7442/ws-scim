@@ -1,0 +1,15 @@
+.context-menu{
+    display: table-cell;
+    box-shadow: 1px 1px 10px 0px;    
+    width: 100%;
+    padding: 10px;
+    height:100%;  
+    padding: 10px 30px;
+}
+.context-body{
+    height:"calc(100vh - 200px)"
+}
+
+.chart-box{
+    text-align: center;
+}

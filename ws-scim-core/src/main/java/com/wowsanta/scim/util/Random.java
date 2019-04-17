@@ -9,6 +9,9 @@ public class Random {
 		int value = ThreadLocalRandom.current().nextInt(min,max);
 		return String.valueOf(value);
 	}
+//	public static int number(int min, int max) {
+//		return ThreadLocalRandom.current().nextInt(min,max);
+//	}
 	public static String name() {
 		String[] f_name = {"김","이","박","최","정","강","조","윤","장"};
 		String[] m_name = {"용","현","철","성","지","미","연","형","구"};

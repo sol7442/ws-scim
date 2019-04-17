@@ -1,0 +1,86 @@
+<p-panel >
+    <p-header>
+        <div >
+            <span class="ui-panel-title context-header-text" style="display:inline-block;margin-top:4px;font-weight:bold">
+              시스템 리스트
+            </span>
+        </div>
+    </p-header>
+    <div >
+        <p-table class="table-cell-center" [value]="systems" [paginator]="true" [rows]="5" [responsive]="true"
+          selectionMode="single" [(selection)]="selectedSystem" dataKey="systemId">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>시스템 아이디</th>
+                    <th>시스템 이름</th>
+                    <th>시스템 URL</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-system>
+                <tr (click)="onSelelectSystem(system)">
+                    <td>{{system.systemId}}</td>
+                    <td>{{system.systemName}}</td>
+                    <td pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input type="text" [(ngModel)]="system.systemUrl" required>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{system.systemUrl}}
+                            </ng-template>
+                        </p-cellEditor>
+                        
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <p-footer>
+        <table>
+            <tr>
+                <td><button type="button" pButton label="추가" (click)="onAdd()"></button></td>
+                <td><button type="button" pButton label="삭제" (click)="onRemove()"></button></td>
+                <td><button type="button" pButton label="변경" (click)="onEdit()"></button></td>
+            </tr>
+        </table>
+    </p-footer>
+</p-panel>
+
+<p-panel header="환경설정"  [toggleable]="true" [collapsed]="true">
+    <table>
+        <tr><td>+ {{this.selectedSystem.systemName}}</td></tr>
+        <tr>
+            <td style="width:10%;text-align: center"><button type="button" pButton label="리스트 가져오기" (click)="getConfigList()"></button></td>            
+            <td style="width:70%"><p-dropdown [options]="configFiles" [(ngModel)]="selectedConfig" editable="true" [style]="{'width':'100%'}" optionLabel="path"></p-dropdown></td>
+            <td style="width:10%;text-align: center"><button type="button" pButton label="파일 가져오기" (click)="onSelectConfigFile()"></button></td>            
+            <td style="width:10%;text-align: center"><p-fileUpload mode="basic" chooseLabel="패치" (onUpload)="uploadConfig($event)" (onBeforeUpload)="onBeforeConfigUpload($event)"  url="{{configUploadUrl}}" multiple="multiple"  maxFileSize="10000000"></p-fileUpload></td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                    <div class="grandparent" style="width:calc(100vw - 280px); height: calc(100vh - 650px); overflow: scroll; background: gray">
+                        <div class="parent" style="display: inline-block;" >
+                            <pre>{{configFile}}</pre>
+                        </div>
+                    </div>
+            </td>
+        </tr>
+    </table>
+    
+    <p-footer>
+        <p-fileUpload (onUpload)="uploadLibray($event)" (onBeforeUpload)="onBeforeLibraryUpload($event)" url="{{librayUploadUrl}}" multiple="multiple"  maxFileSize="10000000"></p-fileUpload>
+    </p-footer>
+</p-panel>
+<p-dialog [(visible)]="displayDialog" [resizable]="false" [modal]="true" width="450" [style]="{'margin-top':'-120px','margin-left':'80px', 'margin-right':'80px'}"  (onAfterHide)="onDialogHide()">
+    <p-card>
+        <input [(ngModel)]="selectedSystem.systemId"   class="input-text"  type="text" size="35" pInputText placeholder="시스템 아이디"> 
+        <input [(ngModel)]="selectedSystem.systemName" class="input-text"  type="text" size="35" pInputText placeholder="시스템 이름"> 
+        <input [(ngModel)]="selectedSystem.systemDesc" class="input-text"  type="text" size="35" pInputText placeholder="시스템 설명">    
+        <hr class="red-line">
+        <input [(ngModel)]="selectedSystem.systemType"  class="input-text"  type="text" size="35" pInputText placeholder="시스템 타입">     
+        <input [(ngModel)]="selectedSystem.systemUrl"   class="input-text"  type="text" size="35" pInputText placeholder="시스템 URL"> 
+    </p-card>
+    <p-footer>
+        <button type="button" pButton  label="Add" (click)="selectClose()"></button>
+        <button type="button" pButton  label="Close" (click)="cancelClose()"></button>
+    </p-footer>
+</p-dialog>

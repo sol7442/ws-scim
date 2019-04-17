@@ -1,10 +1,13 @@
-<div class="system-context">
-    <div class="p-grid">
-        <div class="p-col-fixed" style="width:100px">
-          
-        </div>
-        <div class="p-col">
-
-        </div>
+<div class="context-wrapper">
+    <div class="context-menu">
+      <button type="button" pButton label="통합 계정" style="width: 100%" (click)="onSelectImSystem()"></button>  
+      <p-listbox [style]="{'width':'100%'}" [options]="systems"  [(ngModel)]="selectedSystem" (onChange)="onSelectSystem($event)"  optionLabel="systemName">
+        <p-header>
+          <p>시스템 계정</p>
+        </p-header>
+      </p-listbox>
+    </div>
+    <div class="context-body">
+        <router-outlet ></router-outlet>
     </div>
 </div>

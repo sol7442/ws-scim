@@ -21,9 +21,6 @@ import com.google.gson.stream.JsonReader;
 public class SCIMResourceTypeSchema implements Serializable{
 	private static final long serialVersionUID = 1292919740668517279L;
 	
-//	private List<String> schemasList;
-//    private ArrayList<SCIMAttributeSchema> attributeList = new ArrayList<SCIMAttributeSchema>();
-    
 	private List<String> schemas = new ArrayList<String>();
 	private Map<String,SCIMAttributeSchema> attributes = new HashMap<String,SCIMAttributeSchema>(); 
 
@@ -52,25 +49,10 @@ public class SCIMResourceTypeSchema implements Serializable{
 	public void putAttribute(SCIMAttributeSchema attribute) {
 		this.attributes.put(attribute.getName(),attribute);
 	}
-	public SCIMAttributeSchema getAttribute(String uri) {
-		return this.attributes.get(uri);
+	public SCIMAttributeSchema getAttribute(String name) {
+		return this.attributes.get(name);
 	}
 	
-//	public List<String> getSchemasList() {
-//		return schemasList;
-//	}
-//	public void setSchemasList(List<String> schemasList) {
-//		this.schemasList = schemasList;
-//	}
-//	public ArrayList<SCIMAttributeSchema> getAttributeList() {
-//		return attributeList;
-//	}
-//	public void setAttributeList(ArrayList<SCIMAttributeSchema> attributeList) {
-//		this.attributeList = attributeList;
-//	}
-//	public void addAttribute(SCIMAttributeSchema attribute) {
-//		this.attributeList.add(attribute);
-//	}
 	
 	public void save(String file_name) throws IOException {
 		OutputStreamWriter writer = new OutputStreamWriter(
@@ -93,8 +75,5 @@ public class SCIMResourceTypeSchema implements Serializable{
 		JsonReader reader = new JsonReader(new FileReader(file_name));
 		return gson.fromJson(reader,SCIMResourceTypeSchema.class);
 	}
-
-
-
 
 }

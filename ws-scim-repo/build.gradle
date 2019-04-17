@@ -6,7 +6,11 @@ dependencies {
 	compile project(':ws-scim-core')
 
 	compile group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.5.0'
-	compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.12'
+		
 	compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.25.2'	
+	compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.6'
+	//compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.12'
+	compile group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '7.0.0.jre8'
+	compile files('../libs/ojdbc6.jar')
 }
 

@@ -24,7 +24,7 @@ import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.exception.SCIMError;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.log.SCIMLogger;
-import com.wowsanta.scim.repository.SCIMRepository;
+import com.wowsanta.scim.repository.AbstractSCIMRepository;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
 import com.wowsanta.scim.repository.SCIMResourceRepository;
 
@@ -56,7 +56,7 @@ public class ConfigService {
 		return new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
-				SCIMRepository repository = (SCIMRepository) SCIMRepositoryManager.getInstance().getResourceRepository();
+				AbstractSCIMRepository repository = (AbstractSCIMRepository) SCIMRepositoryManager.getInstance().getResourceRepository();
 				
 				logger.info("resource repository {} ", repository.tojson(false));
 				

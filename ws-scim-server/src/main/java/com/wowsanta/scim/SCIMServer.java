@@ -50,27 +50,8 @@ public class SCIMServer  {
 			SCIMSystemManager.getInstance().load(service_config.getServiceProviderConfig());
 			
 			
-			try {
-				logger.info("REPOSITORY CONFIG    : {}", service_config.getRepositoryConfig());
-				SCIMRepositoryManager.loadFromFile(service_config.getRepositoryConfig()).initailze();
-			
-			}catch (Exception e) {
-				logger.error("REPOSITORY INITIALIZE FAILED ",e);
-			}
-			
-			try {
-				SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();	
-				if(system_repository != null) {
-					List<SCIMScheduler> scheduler_list = system_repository.getSchdulerAll();
-					for (SCIMScheduler scimScheduler : scheduler_list) {
-						logger.info("SCHEDULER INITIALIZE : {} ", scimScheduler.tojson(false));
-						SCIMSchedulerManager.getInstance().addScheduler(scimScheduler);
-					}
-					SCIMSchedulerManager.getInstance().initialize();
-				}
-			} catch (SCIMException e) {
-				logger.error("Scheduler INITIALIZE FAILED ",e);
-			}
+			loadRepository(service_config);
+			loadSsheduler();
 			
 			Spark.initExceptionHandler(new Consumer<Exception>() {
 				@Override
@@ -105,6 +86,33 @@ public class SCIMServer  {
 		}
 		return this;
     }
+
+	private void loadSsheduler() {
+		try {
+			SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();	
+			if(system_repository != null) {
+				List<SCIMScheduler> scheduler_list = system_repository.getSchdulerAll();
+				for (SCIMScheduler scimScheduler : scheduler_list) {
+					logger.info("SCHEDULER INITIALIZE : {} ", scimScheduler.tojson(false));
+					SCIMSchedulerManager.getInstance().addScheduler(scimScheduler);
+				}
+				SCIMSchedulerManager.getInstance().initialize();
+			}
+		} catch (SCIMException e) {
+			logger.error("Scheduler INITIALIZE FAILED ",e);
+		}
+	}
+
+	private void loadRepository(SparkConfiguration service_config) {
+		logger.info("REPOSITORY CONFIG    : {}", service_config.getRepositoryConfig());
+		try {
+			
+			SCIMRepositoryManager.loadFromFile(service_config.getRepositoryClass(),service_config.getRepositoryConfig()).initailze();
+			
+		}catch (Exception e) {
+			logger.error("REPOSITORY INITIALIZE FAILED ",e);
+		}
+	}
     //@Override
 	public void start() throws ServiceException{
 		logger.info("SCIMServer START PORT : {} =========================================", Spark.port());

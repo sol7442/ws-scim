@@ -21,23 +21,8 @@ export class TabMenuComponent implements OnInit {
                 label: '시스템 관리', routerLink:"/main/system"
             },
             {
-                label: '계정 현황' , routerLink:"/main/sysaccount"
+                label: '계정 현황' , routerLink:"/main/account"
             },
-            // {
-            //     label: '계정 관리',  routerLink:"/main/accountmgr"
-            // },
-            // {
-            //     label: '계정 분석',
-            // },
-            // {
-            //     label: '계정 신청',
-            // },
-            // {
-            //     label: '계정 승인',
-            // },            
-            // {
-            //     label: '감사 로그', routerLink:"/main/auditmgr"
-            // },
             {
                 label: '환경 설정', routerLink:"/main/environment"
             }

@@ -16,11 +16,11 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.JsonObject;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.log.SCIMLogger;
-import com.wowsanta.scim.repository.SCIMRepository;
+import com.wowsanta.scim.repository.AbstractSCIMRepository;
 import com.wowsata.util.json.JsonException;
 import com.wowsata.util.json.WowsantaJson;
 
-public abstract class AbstractRDBRepository extends SCIMRepository {
+public abstract class AbstractRDBRepository extends AbstractSCIMRepository {
 	
 	private transient Logger logger = LoggerFactory.getLogger(AbstractRDBRepository.class);
 	
@@ -94,7 +94,9 @@ public abstract class AbstractRDBRepository extends SCIMRepository {
 		try {
 			connection = DriverManager.getConnection(this.dbcp.getPoolName());
 		} catch (SQLException e) {
-			throw new SCIMException("DBCP CONNECTION FAILED : " + this.dbcp.getPoolName(), e);
+			logger.info("{}, - RETRY ", e.getMessage() );
+			initialize();			
+			//throw new SCIMException("DBCP CONNECTION FAILED : " + this.dbcp.getPoolName(), e);
 		}
 		return connection;
 	}

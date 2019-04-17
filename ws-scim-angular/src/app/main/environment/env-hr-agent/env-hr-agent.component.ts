@@ -22,6 +22,15 @@ export class EnvHrAgentComponent implements OnInit {
   private configFiles:any[];
   private configFile:any;
   private selectedConfig:any;
+
+  private repositoryTables:any[];
+  private selectedTable:any;
+  private repositoryColumns:any[];
+
+  private schemaData:string;
+
+  private displayDialog:boolean = false;
+
   //string = "testaassssssaa";
   //private repositorys:RepositoryType[];// = ["Oracle","MsSql","MySql"];
   //private selectcedRepository;//:String;
@@ -126,6 +135,45 @@ export class EnvHrAgentComponent implements OnInit {
     console.log("selected system : ", this.selectedSystem.systemId);
     console.log("uploadConfig result : ", event);
     //this.configUploadUrl = "/agent/config/" + this.selectedSystem.systemId;
+  }
+
+  getTableList(){
+    this.scimApiService.getTableList(this.selectedSystem.systemId)
+    .pipe(first())
+    .subscribe( data =>{
+      console.log("table list >>>: ", data);
+      this.repositoryTables = data.data.data;
+      this.schemaData = JSON.stringify(data.data.data,null, 2);
+      console.log("schema data >>>: ", this.schemaData );
+
+    },error =>{
+      console.log("login-error : ", error);
+    });
+  }
+  
+  getTableColumnList(){
+    
+    console.log("selected table>>>: ", this.selectedTable);
+    this.scimApiService.getTableColumnList(this.selectedSystem.systemId,this.selectedTable.id )
+    .pipe(first())
+    .subscribe( data =>{
+      console.log("table list >>>: ", data);
+      //
+      //console.log("schema data >>>: ", this.schemaData );
+
+    },error =>{
+      console.log("login-error : ", error);
+    });
+  }
+
+  onAdd(){
+    this.displayDialog =true;
+  }
+  onRemove(){
+
+  }
+  onEdit(){
+
   }
   
 }

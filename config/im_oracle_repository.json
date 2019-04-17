@@ -30,5 +30,6 @@
 			"minIdle": 5,
 			"maxTotal": 10
 		}
-	}
+	},
+	"repository": "../config/default_mssql_repository.json"
 }

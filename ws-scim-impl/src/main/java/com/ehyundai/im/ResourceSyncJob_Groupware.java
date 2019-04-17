@@ -16,6 +16,8 @@ import org.slf4j.LoggerFactory;
 
 import com.ehyundai.object.Resource;
 import com.ehyundai.object.User;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.wowsanta.scim.client.RESTClient;
 import com.wowsanta.scim.exception.SCIMError;
 import com.wowsanta.scim.exception.SCIMException;
@@ -28,6 +30,10 @@ import com.wowsanta.scim.obj.SCIMSchedulerHistory;
 import com.wowsanta.scim.obj.SCIMSystem;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
+import com.wowsanta.scim.object.SCIM_Resource;
+import com.wowsanta.scim.object.SCIM_User;
+import com.wowsanta.scim.protocol.ClientReponse;
+import com.wowsanta.scim.protocol.ResponseState;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
 import com.wowsanta.scim.repository.SCIMResourceGetterRepository;
 import com.wowsanta.scim.resource.SCIMResourceSetterRepository;
@@ -59,6 +65,8 @@ public class ResourceSyncJob_Groupware extends SCIMJob {
 			SCIMFindRequest req_msg = new SCIMFindRequest();
 			String where = getWhereStatement(scheduler);
 			req_msg.setWhere(where);
+			req_msg.setCount(100);
+			req_msg.setStartIndex(0);
 			
 			logger.info("Syn FindRequest  : where : {} ", where);
 			
@@ -73,7 +81,7 @@ public class ResourceSyncJob_Groupware extends SCIMJob {
 			logger.info("Sync Groupware Result : {} ", history);
 
 			system_repository.addSchedulerHistory(history);
-			system_repository.updateSchdulerLastExcuteDate(scheduler.getSchedulerId(),new Date());
+			//system_repository.updateSchdulerLastExcuteDate(scheduler.getSchedulerId(),new Date());
 			
 			return history;
 			
@@ -92,30 +100,38 @@ public class ResourceSyncJob_Groupware extends SCIMJob {
 		SCIMResourceSetterRepository resource_settter_repository = (SCIMResourceSetterRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
 		SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
 		
-		List<SCIMResource2> resource_list = find_res.getResources();
-		for (SCIMResource2 resource : resource_list) {
-			audit.setUserId(resource.getId());
-			try {
+		List<SCIM_Resource> resource_list = find_res.getResources();
+		logger.info("syn resource count {}", resource_list.size());
+		for (SCIM_Resource resource : resource_list) {
+			logger.info("syn resource {}", resource);
 			
-				User user = newUserFromResource2(resource);
-				SCIMUser old_user = resource_getter_repository.getUser(resource.getId());
-				if(old_user == null) {
-					audit.setMethod("CREATE");
-					resource_settter_repository.createUser(user);
-					audit.setResult("SUCCESS");
-				}else {
-					audit.setMethod("UPDATE");
-					resource_settter_repository.updateUser(user);
-					audit.setResult("SUCCESS");
-				}
-			}catch (Exception e) {
-				audit.setDetail(e.getMessage());
-				audit.setResult("FAILED");
-			}
-			audit_logger.info("ResourceSyncJob_Groupware : {}", audit);
-			system_repository.addAudit(audit);
-			history.addAudit(audit);
+			System.out.println("syn...>>>" + resource);
 		}
+		
+		
+//		for (SCIMResource2 resource : resource_list) {
+//			audit.setUserId(resource.getId());
+//			try {
+//			
+//				User user = newUserFromResource2(resource);
+//				SCIMUser old_user = resource_getter_repository.getUser(resource.getId());
+//				if(old_user == null) {
+//					audit.setMethod("CREATE");
+//					resource_settter_repository.createUser(user);
+//					audit.setResult("SUCCESS");
+//				}else {
+//					audit.setMethod("UPDATE");
+//					resource_settter_repository.updateUser(user);
+//					audit.setResult("SUCCESS");
+//				}
+//			}catch (Exception e) {
+//				audit.setDetail(e.getMessage());
+//				audit.setResult("FAILED");
+//			}
+//			audit_logger.info("ResourceSyncJob_Groupware : {}", audit);
+//			system_repository.addAudit(audit);
+//			history.addAudit(audit);
+//		}
 	}
 
 	private String getWhereStatement(SCIMScheduler scheduler) {
@@ -163,7 +179,7 @@ public class ResourceSyncJob_Groupware extends SCIMJob {
 	}
 
 	private SCIMListResponse findRequestPost(Worker worker, String find_request_url, SCIMFindRequest req_msg) throws SCIMException {
-		SCIMListResponse response = new SCIMListResponse();
+		SCIMListResponse response = null;//new SCIMListResponse();
 		
 		RESTClient client = new RESTClient(worker);
 		HttpResponse http_response = client.post(find_request_url, req_msg);
@@ -180,7 +196,14 @@ public class ResourceSyncJob_Groupware extends SCIMJob {
 					str.append(line);
 				}
 				
-				response.parse(str.toString());
+				try {
+					Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+					response = gson.fromJson(str.toString(), SCIMListResponse.class);
+					
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
+				//response.parse(str.toString());
 			} catch (ParseException e) {
 				e.printStackTrace();
 			} catch (IOException e) {

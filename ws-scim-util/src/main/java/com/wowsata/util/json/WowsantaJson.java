@@ -60,4 +60,14 @@ public class WowsantaJson {
 			throw new JsonException(file_name, e);
 		} 
 	}
+
+	public static <T> T parse(String json, Class<T> classOfT) throws JsonException{
+		try {
+			logger.debug("parse json : {} ", json);
+			Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+			return gson.fromJson(json, classOfT); 
+		}catch (Exception e) {
+			throw new JsonException("Json Data Parse Error",  e);
+		}
+	}
 }

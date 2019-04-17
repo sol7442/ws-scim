@@ -1,14 +1,11 @@
 package com.wowsanta.scim.client;
 
-import java.io.BufferedInputStream;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.URI;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -37,6 +34,8 @@ import com.wowsanta.scim.json.SCIMJsonObject;
 import com.wowsanta.scim.message.SCIMBulkRequest;
 import com.wowsanta.scim.message.SCIMBulkResponse;
 import com.wowsanta.scim.obj.SCIMUser;
+import com.wowsanta.scim.protocol.ClientReponse;
+import com.wowsanta.scim.protocol.ClientRequest;
 import com.wowsanta.scim.resource.user.LoginUser;
 import com.wowsanta.scim.resource.worker.Worker;
 import com.wowsanta.scim.schema.SCIMConstants;
@@ -455,6 +454,19 @@ public class RESTClient {
 
 	public void close() {
 		RESTClientPool.getInstance().close();
+	}
+
+	public ClientReponse get3(String call_url) throws ClientException{
+		ClientReponse response = null;
+		try {
+			logger.info("call info : ", call_url);
+			String result_string = get2(call_url);
+			response = ClientReponse.parse(result_string);
+		} catch (SCIMException e) {
+			e.printStackTrace();
+			throw new ClientException(e.getMessage(),e);
+		}
+		return response;
 	}
 
 

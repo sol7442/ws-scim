@@ -23,6 +23,9 @@ import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.repo.rdb.DBCP;
+import com.wowsanta.scim.repository.RepositoryException;
+import com.wowsanta.scim.repository.ResourceColumn;
+import com.wowsanta.scim.repository.ResourceTable;
 import com.wowsanta.scim.repository.SCIMServerResourceRepository;
 import com.wowsanta.scim.resource.SCIMAuditData;
 import com.wowsanta.scim.resource.SCIMGroup;
@@ -33,11 +36,13 @@ public class IMResourceRepository extends AbstractRDBRepository implements SCIMS
 
 	private transient Logger logger = LoggerFactory.getLogger(IMResourceRepository.class);
 	
-	@Override
-	public void setUserSchema(SCIMResourceTypeSchema userSchema) {
-		// TODO Auto-generated method stub
-		
+	public List<ResourceTable> getTables() throws RepositoryException{
+		return null;
 	}
+	public List<ResourceColumn> getTableColums(String tableName) throws RepositoryException{
+		return null;
+	}
+	
 	
 	@Override
 	public boolean validate() throws SCIMException {
@@ -663,9 +668,9 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
 
 	@Override
 	public List<SCIMResource2> getUsersByWhere(String where) throws SCIMException {
-		// TODO Auto-generated method stub
 		return null;
 	}
+	
 
 	@Override
 	public void clearSystemUser(String systemId) throws SCIMException {
@@ -764,11 +769,6 @@ final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE userId=? ";
 	    }
 	}
 
-	@Override
-	public void setGroupSchema(SCIMResourceTypeSchema groupSchema) throws SCIMException {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public SCIMGroup createGroup(SCIMGroup group) throws SCIMException {
