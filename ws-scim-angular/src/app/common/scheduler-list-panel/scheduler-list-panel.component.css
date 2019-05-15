@@ -1,0 +1,30 @@
+table.card-form{
+    table-layout: auto;
+    width: 100%;
+}
+td.card-label{
+    width: 120px;
+    text-align: left;
+}
+td.card-value{
+    width: 400px;
+    text-align: left;
+}
+td.card-button{
+    width: 200px;
+    text-align: center;
+}
+td.card-auto{
+    width:auto;
+    text-align: center;
+}
+
+table.result{
+    width:100%;
+    border-collapse: collapse;
+    text-align: center;
+    border: 1px solid black;
+}
+tr.result,td.result{
+    border: 1px solid black;
+}

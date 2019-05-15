@@ -1,0 +1,95 @@
+<p-panel header="스케줄러 정보"  [toggleable]="true" [collapsed]="false">
+    <p-table class="table-cell-center" [value]="_schedulers"  [responsive]="true" [rows]="5"  selectionMode="single" >
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID</th>
+                <th>이름</th>
+                <th>실행주기 </th>
+                <th>실행시간 </th>
+                <th>마지막 실행 시간</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-scheduler>
+            <tr (click)="onSelelectSchduler(scheduler)">
+                <td style="text-align: center">{{scheduler.schedulerId}}</td>
+                <td style="text-align: center">{{scheduler.schedulerName}}</td>
+                <td style="text-align: center">{{scheduler.triggerType}}</td>
+                <td style="text-align: center">{{scheduler.dayOfMonth}}/{{scheduler.dayOfWeek}}/{{scheduler.hourOfDay}}/{{scheduler.minuteOfHour}}</td>
+                <td style="text-align: center">{{scheduler.lastExecuteDate | date: 'yyyy/MM/dd hh:mm:ss' }}</td>
+            </tr>
+        </ng-template>
+  </p-table>  
+  <hr class="blue-line">
+  <p-card>
+      <table class="card-form"  *ngIf="_selectedScheduler">
+          <tr>
+              <td class="card-label"><label>설명</label></td>
+              <td class="card-value"><label> {{_selectedScheduler.schedulerDesc}} </label></td>
+              <td class="card-button" rowspan="3">
+                  <button  pButton type="button" icon="pi pi-check" label="실행 이력"   (click)="showSchedulerLog(scheduler)"></button>
+              </td>
+              <td  class="card-auto" rowspan="8">
+                <table class="result">
+                  <tr>
+                    <td class="result" colspan="3">마지막 실행 이력</td>
+                  </tr>
+                  <tr class="result">
+                    <td class="result">구분</td>
+                    <td class="result">성공</td>
+                    <td class="result">실패</td>
+                  </tr>
+                  <tr class="result">
+                    <td class="result">신규</td>
+                    <td class="result">1</td>
+                    <td class="result">2</td>
+                  </tr>
+                  <tr>
+                    <td class="result">변경</td>
+                    <td class="result">3</td>
+                    <td class="result">4</td>
+                  </tr>
+                </table>
+              </td>
+          </tr>
+          <tr>
+            <td colspan="2"><hr class="blue-line"></td>
+          </tr>
+          <tr>
+              <td class="card-label"><label>실행 주기</label></td>
+              <td class="card-value">
+                <label> {{_selectedScheduler.triggerType}} / </label>
+                <label> {{_selectedScheduler.hourOfDay}} 시</label>
+                <label> {{_selectedScheduler.minuteOfHour}} 분 </label>
+              </td>
+          </tr>
+          <tr>
+              <td colspan="2"><hr class="blue-line"></td>
+          </tr>
+          <tr>
+              <td class="card-label"><label>정책 클래스</label></td>
+              <td class="card-value" ><label> {{_selectedScheduler.jobClass}} </label></td>
+              <td class="card-button" rowspan="3">
+                  <button  pButton type="button" icon="pi pi-check" label="즉시 실행"  (click)="runSystemScheduler()"></button>
+              </td>
+          </tr>
+          <tr>
+              <td class="card-label"><label>방향</label></td>
+              <td class="card-value" ><label> {{_selectedScheduler.sourceSystemId}} => {{_selectedScheduler.targetSystemId}} </label></td>
+          </tr>
+      </table>
+    </p-card>
+    <p-footer>
+        <table>
+            <tr>
+                <td style="text-align:center"> <p-button label="추가"  (click)="addScheduler()" ></p-button> </td>
+                <td style="text-align:center"> <p-button label="변경"  (click)="editScheduler()" ></p-button> </td>
+                <td style="text-align:center"> <p-button label="삭제"  (click)="removeScheduler()" ></p-button> </td>
+            </tr>
+        </table>
+    </p-footer>
+</p-panel>
+
+<app-scheduler-info-dlg [schedulerData]="_schedulerData" (result)="onSchedulerEditResult($event)"></app-scheduler-info-dlg>
+<app-scheduler-history-dlg [(show)]="_showHistory"  [scheduler]="_selectedScheduler" ></app-scheduler-history-dlg>
+
+

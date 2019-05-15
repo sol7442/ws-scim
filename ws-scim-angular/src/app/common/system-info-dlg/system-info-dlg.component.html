@@ -1,0 +1,36 @@
+<p-dialog [(visible)]="_displayDialog" [resizable]="false" [modal]="true" width="550" [style]="{'margin-top':'-120px','margin-left':'80px', 'margin-right':'80px'}">
+  <p-header>
+    SYSTEM INFO
+  </p-header>
+  <div class="shadow-form-box">
+      <table class="input-form">
+          <tr>
+            <td class="form-label"><label>아이디</label></td>
+            <td class="form-input"><input [(ngModel)]="_system.systemId" class="input-text"  type="text" size="30"></td>
+          </tr>
+          <tr>
+            <td class="form-label"><label>이름</label></td>
+            <td class="form-input"> <input [(ngModel)]="_system.systemName" class="input-text"  type="text" size="30"> </td>
+          </tr>              
+          <tr>
+              <td class="form-label"><label>설명</label></td>
+              <td class="form-input"><input [(ngModel)]="_system.systemDesc" class="input-text"  type="text" size="50"></td>
+          </tr>       
+          <tr>
+              <td class="form-label"><label>타입</label></td>
+              <td class="form-input"><input [(ngModel)]="_system.systemType" class="input-text"  type="text" size="30"> </td>
+          </tr> 
+      </table>
+      <hr class="blue-line">
+      <table class="input-form">
+          <tr>
+            <td class="form-label"><label>URL</label></td>
+            <td class="form-input"><input [(ngModel)]="_system.systemUrl" class="input-text"  type="text" size="50"></td>
+          </tr>
+      </table>
+  </div>
+  <p-footer>
+      <button type="button" pButton label={{_okLabel}} (click)="okClose()"></button>
+      <button type="button" pButton label="닫기" (click)="cancelClose()"></button>
+  </p-footer>
+</p-dialog>

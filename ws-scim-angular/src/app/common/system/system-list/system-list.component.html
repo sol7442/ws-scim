@@ -1,3 +1,27 @@
 <p>
-  system-list works!
+    <p-panel header="시스템 연결 정보">          
+        <div class="form-input-text-box">
+          <div><label>ID</label></div>
+          <div><input type="text" style='width:70%' [(ngModel)]="selectedSystem.systemId" [disabled]="true" pInputText></div>
+
+          <div><label>NAME</label></div>
+          <div><input type="text" style='width:70%' [(ngModel)]="selectedSystem.systemName" pInputText></div>
+          
+          <div><label>DESCRIPTION</label></div>
+          <div><input type="text" style='width:70%' [(ngModel)]="selectedSystem.systemDesc" pInputText></div>
+
+          <div><label>URL</label></div>
+          <div><input type="text" style='width:70%' [(ngModel)]="selectedSystem.systemUrl" pInputText></div>
+          
+        </div>
+        <p-footer>
+          <table>
+              <tr>
+                  <td style="text-align:center"> <p-button label="추가"  (click)="addSystem()" ></p-button> </td>
+                  <td style="text-align:center"> <p-button label="변경"  (click)="editSystem()" ></p-button> </td>
+                  <td style="text-align:center"> <p-button label="삭제"  (click)="removeSystem()" ></p-button> </td>
+              </tr>
+          </table>
+        </p-footer>
+    </p-panel>
 </p>

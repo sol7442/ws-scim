@@ -1,0 +1,26 @@
+<p-dialog header="스케줄러 실행 이력" [(visible)]="show" [responsive]="true" [modal]="true" [style]="{'margin-left':'80px', 'margin-right':'80px'}"  (onHide)="onDialogHide()">
+    <div class="ui-g" *ngIf="_scheduler">       
+        <p-table class="text-center" [value]="_historys" [paginator]="true" [rows]="5">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>작업 ID</th>
+                    <th>실행자 ID</th>
+                    <th>성공 </th>
+                    <th>실패 </th>
+                    <th>동작 시간</th>
+                    <th>상세 내용</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-history>
+                <tr>
+                    <td>{{history.workId}}</td>
+                    <td>{{history.workerId}}</td>
+                    <td>{{history.successCount}}</td>
+                    <td>{{history.failCount}}</td>
+                    <td>{{history.workDate}}</td>
+                    <td> <p-button label="Click" (onClick)="showDetailLog(history)"> </p-button> </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</p-dialog>

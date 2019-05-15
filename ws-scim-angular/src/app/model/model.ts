@@ -12,6 +12,7 @@ export class System {
     systemId: string;
     systemName:string;
     systemDesc:string;
+    systemType:string;
     systemUrl:string;
 }
 

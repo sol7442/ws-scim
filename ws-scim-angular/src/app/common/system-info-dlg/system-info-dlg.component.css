@@ -1,0 +1,26 @@
+.shadow-form-box{
+    box-shadow: 0px 1px 1px 0px;
+    color:rgb(47, 47, 47);
+    padding: 10px;
+}
+
+table.input-form{
+    table-layout: auto;
+    width: 100%;
+}
+td.form-label{
+    width: 80px;
+    text-align: left;
+}
+td.form-input{
+    width: 250px;
+    text-align: left;
+}
+td.form-button{
+    width: 100px;
+    text-align: center;
+}
+td.form-auto{
+    width:auto;
+    text-align: center;
+}

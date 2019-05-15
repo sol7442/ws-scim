@@ -1,0 +1,79 @@
+<p-dialog [(visible)]="_displayDialog" [resizable]="false" [modal]="true" width="550" [style]="{'margin-top':'-120px','margin-left':'80px', 'margin-right':'80px'}">
+    <p-header>
+      SCHEDULER INFO
+    </p-header>
+    <div class="shadow-form-box">
+        <table class="input-form">
+            <tr>
+              <td class="form-label"><label>아이디</label></td>
+              <td class="form-input"><input [(ngModel)]="_scheduler.schedulerId" class="input-text"  type="text" size="30"></td>
+            </tr>
+            <tr>
+              <td class="form-label"><label>이름</label></td>
+              <td class="form-input"> <input [(ngModel)]="_scheduler.schedulerName" class="input-text"  type="text" size="30"> </td>
+            </tr>              
+            <tr>
+                <td class="form-label"><label>설명</label></td>
+                <td class="form-input"><input [(ngModel)]="_scheduler.schedulerDesc" class="input-text"  type="text" size="50"></td>
+            </tr>       
+            <tr>
+                <td class="form-label"><label>타입</label></td>
+                <td class="form-input"><input [(ngModel)]="_scheduler.schedulerType" class="input-text"  type="text" size="30"> </td>
+            </tr> 
+        </table>
+        <hr class="blue-line">
+        <table class="input-form">
+            <tr>
+              <td class="form-label"><label>정책 클래스</label></td>
+              <td class="form-input"><input [(ngModel)]="_scheduler.jobClass" class="input-text"  type="text" size="50"></td>
+            </tr>
+        </table>
+        <hr class="blue-line">
+        <table class="input-form">
+            <tr>
+              <td class="form-label"><label>동작 방식</label></td>
+              <td class="form-input" colspan="3"><input [(ngModel)]="_scheduler.triggerType" class="input-text"  type="text" size="10"></td>
+            </tr>
+            <tr>
+              <td class="hearder-label"><label>월</label></td>
+              <td class="hearder-label"><label>주</label></td>
+              <td class="hearder-label"><label>시</label></td>
+              <td class="hearder-label"><label>분</label></td>              
+            </tr>
+            <tr>
+                <td class="form-number"><input [(ngModel)]="_scheduler.dayOfMonth" class="input-number"  type="number" size="5"></td>              
+                <td class="form-number"><input [(ngModel)]="_scheduler.dayOfWeek" class="input-number"  type="number" size="5"></td>
+                <td class="form-number"><input [(ngModel)]="_scheduler.hourOfDay" class="input-number"  type="number" size="5"></td>
+                <td class="form-number"><input [(ngModel)]="_scheduler.minuteOfHour" class="input-number"  type="number" size="5"></td>
+            </tr>
+        </table>
+        <hr class="blue-line">
+        <table class="input-form">
+            <tr>
+              <td class="form-label"><label>정보 시스템</label></td>
+              <td class="form-input"><input [(ngModel)]="_scheduler.sourceSystemId" class="input-text"  type="text" size="50"></td>
+            </tr>
+            <tr>
+              <td class="form-label"><label>목표 시스템</label></td>
+              <td class="form-input"><input [(ngModel)]="_scheduler.targetSystemId" class="input-text"  type="text" size="50"></td>
+            </tr>
+            <tr>
+              <td class="form-label"><label>실행 시스템</label></td>
+              <td class="form-input"><input [(ngModel)]="_scheduler.executeSystemId" class="input-text"  type="text" size="50"></td>
+            </tr>
+        </table>
+        <hr class="blue-line">
+        <table class="input-form">
+            <tr>
+              <td class="form-label"><label>실행 시간</label></td>
+              <td class="form-input"><input [(ngModel)]="_scheduler.lastExecuteDate"  class="input-text"  type="text" size="50"></td>
+            </tr>
+        </table>
+        
+    </div>
+    <p-footer>
+        <button type="button" pButton label={{_okLabel}} (click)="okClose()"></button>
+        <button type="button" pButton label="닫기" (click)="cancelClose()"></button>
+    </p-footer>
+  </p-dialog>
+  
