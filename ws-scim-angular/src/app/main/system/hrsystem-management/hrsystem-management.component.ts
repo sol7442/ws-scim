@@ -5,6 +5,8 @@ import { ScimApiService } from './../../../service/scim-api.service';
 import { AlertService } from './../../../service/alert.service';
 import { System , Scheduler , SchedulerHistory} from '../../../model/model';
 
+import {DialogType} from '../../../model/dialog-type.enum';
+
 import { first } from 'rxjs/operators';
 
 @Component({
@@ -18,12 +20,15 @@ export class HrsystemManagementComponent implements OnInit {
   
   private systems:System[];
   private selectedSystem:System = new System();
+  private _systemData:any;
+
   private schedulers:Scheduler[];
+  private _schedulerData:any;
+
+
   private selectedScheduler:Scheduler;
   private schedulerHistorys:SchedulerHistory[];
-
   private systemColumns:SystemColumn[] = [];
-
   private displayDialog: boolean = false;
   private displayDetailDialog :boolean = false;
   private detailAuditLogs:any[] = [];
@@ -63,21 +68,62 @@ export class HrsystemManagementComponent implements OnInit {
     },error =>{
         console.log("login-error : ", error);
     });
-
-    this.scimApiService.getSystemComlumsBySystemId(this.selectedSystem.systemId)
-    .pipe(first())
-    .subscribe( data =>{
-      console.log("system-columns", data);
-      this.systemColumns = data;
-    },error =>{
-        console.log("login-error : ", error);
-    });
-   
-    this.displayContext();
   }
 
-  displayContext(){
-    console.log("item >> ",this.selectedSystem);
+  addSystem(){
+    this._systemData = {type:DialogType.ADD};
+  }
+
+  editSystem(){
+    this._systemData = {system:this.selectedSystem,type:DialogType.UPDATE};
+  }
+
+  removeSystem(){
+    this._systemData = {system:this.selectedSystem,type:DialogType.DELETE};
+  }
+  onSystemEditResult(event:any){
+    console.log("result",event)
+
+    this.scimApiService.getHrSystems()
+    .subscribe( data =>{
+      this.systems = data;
+      if(event.result === "OK" && event.type === DialogType.DELETE){
+        this.selectedSystem = data[0];
+      }else{
+        this.selectedSystem = event.system;
+      }
+      this.onSelect({value:this.selectedSystem});
+    },error =>{
+      console.log("login-error : ", error);
+    });
+  }
+
+  addScheduler(){
+    this._systemData = {type:DialogType.ADD};
+  }
+
+  editScheduler(){
+    this._systemData = {system:this.selectedSystem,type:DialogType.UPDATE};
+  }
+
+  removeScheduler(){
+    this._systemData = {system:this.selectedSystem,type:DialogType.DELETE};
+  }
+  onSchedulerResult(event:any){
+    console.log("result",event)
+
+    this.scimApiService.getHrSystems()
+    .subscribe( data =>{
+      this.systems = data;
+      if(event.result === "OK" && event.type === DialogType.DELETE){
+        this.selectedSystem = data[0];
+      }else{
+        this.selectedSystem = event.system;
+      }
+      this.onSelect({value:this.selectedSystem});
+    },error =>{
+      console.log("login-error : ", error);
+    });
   }
 
   showSchedulerLog(scheduler: Scheduler) {
@@ -102,15 +148,15 @@ export class HrsystemManagementComponent implements OnInit {
     this.selectedScheduler = scheduler;
     this.scimApiService.runSystemScheduler(scheduler.schedulerId)
     .pipe(first())
-    .subscribe( data =>{
-      console.log("result >>: ", data)
-      if(data == "InternalServerError"){
-        this.alertService.fail("스케줄러 실행 오류");
-      }else{
-        let message = "성공("+data.successCount+")/실패("+data.failCount+")"
-        this.alertService.success(message);
-      }
+    .subscribe( result =>{
+      console.log("result >>: ", result)
+      if(result.state === "Success") {
 
+        let message = "성공("+result.data.successCount+")/실패("+result.data.failCount+")"
+        this.alertService.success(message);
+      }else{
+        this.alertService.fail("스케줄러 실행 오류");
+      }
     },error =>{
         console.log("login-error>>: ", error);
     });

@@ -26,6 +26,8 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.wowsanta.scim.exception.SCIMError;
 import com.wowsanta.scim.exception.SCIMException;
@@ -33,6 +35,8 @@ import com.wowsanta.scim.json.AbstractJsonObject;
 import com.wowsanta.scim.json.SCIMJsonObject;
 import com.wowsanta.scim.message.SCIMBulkRequest;
 import com.wowsanta.scim.message.SCIMBulkResponse;
+import com.wowsanta.scim.message.SCIMFindRequest;
+import com.wowsanta.scim.message.SCIMListResponse;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.protocol.ClientReponse;
 import com.wowsanta.scim.protocol.ClientRequest;
@@ -45,43 +49,126 @@ import com.wowsanta.scim.sec.SCIMJWTToken;
 public class RESTClient {
 	
 	Logger logger = LoggerFactory.getLogger(RESTClient.class);
-	
-//	private SCIMUser user;
 	private Worker worker;
-	
-//	public RESTClient(SCIMUser user) {
-//		this.user = user;
-//	}
 	
 	public RESTClient(Worker worker) {
 		this.worker = worker;
 	}
-
-	public SCIMBulkResponse post_bulk(String url,SCIMBulkRequest request) throws SCIMException {
-		SCIMBulkResponse response = new SCIMBulkResponse();
-		
-		HttpResponse http_response = post(url, request);
-		int http_res_code = http_response.getStatusLine().getStatusCode();
-		if( http_res_code >= SCIMConstants.HtppConstants.OK && http_res_code <= SCIMConstants.HtppConstants.IM_Used) {
-			try {
-				response.parse(EntityUtils.toString(http_response.getEntity()));
-			} catch (ParseException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+	
+	
+	public ClientReponse get(String url) throws ClientException{
+		ClientReponse response = null;
+		try {
+			HttpGet get = new HttpGet(url);
+			get.addHeader("Content-Type", "application/json;UTF-8");
+			get.addHeader("Accept-Charset", "UTF-8");
+			get.addHeader("Authorization", RESTClientPool.getInstance().generateAuthorizationToken(worker, 1000*60));
+			
+			HttpResponse http_response = execute(get);
+			int http_res_code = http_response.getStatusLine().getStatusCode();
+			StringBuilder buffer = new StringBuilder();
+			if( http_res_code >= SCIMConstants.HtppConstants.OK && http_res_code <= SCIMConstants.HtppConstants.IM_Used) {
+				HttpEntity entity = http_response.getEntity();
+				InputStream content = entity.getContent();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+				String line;
+				while ((line = reader.readLine()) != null) {
+					buffer.append(line);
+				}
+				response = ClientReponse.parse(buffer.toString());
+			}else {
+				throw new ClientException("HTTP ERROR : " + http_res_code + url );
 			}
-		}else {
-			try {
-				System.out.println("================== : " + http_res_code);
-				System.out.println(EntityUtils.toString(http_response.getEntity()));
-				System.out.println("================== : " + http_res_code);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+		}catch (Exception e) {
+			throw new ClientException("HTTP ERROR : " + url, e );
+		} 
+		return response;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public SCIMListResponse post_find(String url, SCIMFindRequest request, String encoding) throws ClientException{
+		SCIMListResponse response = null;
+		try {
+			HttpPost post = new HttpPost(url);
+			post.addHeader("Content-Type", "application/json;");
+			if(worker != null) {
+				post.addHeader("Authorization", RESTClientPool.getInstance().generateAuthorizationToken(worker, 1000*60));
 			}
+			
+			post.setEntity(new StringEntity(request.toString(false)));
+			HttpResponse http_response = execute(post);
+			int http_res_code = http_response.getStatusLine().getStatusCode();
+			StringBuilder buffer = new StringBuilder();
+			if( http_res_code >= SCIMConstants.HtppConstants.OK && http_res_code <= SCIMConstants.HtppConstants.IM_Used) {
+				try {
+					HttpEntity entity = http_response.getEntity();
+					InputStream content = entity.getContent();
+					BufferedReader reader = new BufferedReader(new InputStreamReader(content,encoding));
+					String line;
+					while ((line = reader.readLine()) != null) {
+						buffer.append(line);
+					}
+				} catch (Exception e) {
+					logger.error("response read error : {}, ", e.getMessage(), e);
+					throw new SCIMException("RESULT READ ERROR", e);
+				}
+				response = SCIMListResponse.parse(buffer.toString());
+			}else {
+				logger.error("response string : {}, ", EntityUtils.toString(http_response.getEntity()));
+				throw new SCIMException("HTTP ERROR : " + url, SCIMError.InternalServerError);
+			}
+			
+		} catch (Exception e) {
+			logger.error("{}",e.getMessage(),e);
+			throw new ClientException("POST FAILED : " + url, e);
 		}
-
+		
+		return response;
+	}
+	public SCIMBulkResponse post_bulk(String url,SCIMBulkRequest request, String encoding ) throws SCIMException {
+		SCIMBulkResponse response = null;
+		
+		try {
+			HttpPost post = new HttpPost(url);
+			post.addHeader("Content-Type", "application/json;UTF-8");
+			if(worker != null) {
+				post.addHeader("Authorization", RESTClientPool.getInstance().generateAuthorizationToken(worker, 1000*60));
+			}
+			
+			post.setEntity(new StringEntity(request.toString(false),encoding));
+			HttpResponse http_response = execute(post);
+			int http_res_code = http_response.getStatusLine().getStatusCode();
+			StringBuilder buffer = new StringBuilder();
+			if( http_res_code >= SCIMConstants.HtppConstants.OK && http_res_code <= SCIMConstants.HtppConstants.IM_Used) {
+				try {
+					HttpEntity entity = http_response.getEntity();
+					InputStream content = entity.getContent();
+					BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+					String line;
+					while ((line = reader.readLine()) != null) {
+						buffer.append(line);
+					}
+				} catch (Exception e) {
+					logger.error("response read error : {}, ", e.getMessage(), e);
+					throw new SCIMException("RESULT READ ERROR", e);
+				}
+				response = SCIMBulkResponse.parse(buffer.toString());
+			}else {
+				logger.error("response string : {}, ", EntityUtils.toString(http_response.getEntity()));
+				throw new SCIMException("HTTP ERROR : " + url, SCIMError.InternalServerError);
+			}
+			
+		} catch (Exception e) {
+			throw new SCIMException("POST FAILED : " + url,SCIMError.noTarget, e);
+		}
+		
 		return response;
 	}
 	public HttpResponse post(String url, SCIMJsonObject request) throws SCIMException {
@@ -213,127 +300,156 @@ public class RESTClient {
 			throw new SCIMException("POST FAILED : " + url, e);
 		}
 	}
-
-	public String call(String url) throws SCIMException {
-		HttpResponse http_response = get(url);
-		int http_res_code = http_response.getStatusLine().getStatusCode();
-		
-		StringBuilder str = new StringBuilder();
-		
-		if( http_res_code >= SCIMConstants.HtppConstants.OK && http_res_code <= SCIMConstants.HtppConstants.IM_Used) {
-			try {
-				HttpEntity entity = http_response.getEntity();
-				InputStream content = entity.getContent();
-				BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-				String line;
-				while ((line = reader.readLine()) != null) {
-					str.append(line);
-				}
-			} catch (ParseException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}else {
-			System.out.println(http_response);
-			throw new SCIMException("call error : ");
-		}
-		
-		return str.toString();
-	}
-	public String run(String url,JsonObject params) throws SCIMException {
-		
-		HttpResponse http_response = post(url,params);
-		
-		int http_res_code = http_response.getStatusLine().getStatusCode();
-		
-		StringBuilder str = new StringBuilder();
-		
-		if( http_res_code >= SCIMConstants.HtppConstants.OK && http_res_code <= SCIMConstants.HtppConstants.IM_Used) {
-			try {
-				HttpEntity entity = http_response.getEntity();
-				InputStream content = entity.getContent();
-				BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-				String line;
-				while ((line = reader.readLine()) != null) {
-					str.append(line);
-				}
-			} catch (ParseException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}else {
-			throw new SCIMException("call error : ");
-		}
-		
-		return str.toString();
-	}
-	public HttpResponse get(String url) throws SCIMException {
-		try {
-			
-			HttpGet get = new HttpGet(url);
-			get.addHeader("Content-Type", "application/json;UTF-8");
-			get.addHeader("Accept-Charset", "UTF-8");
-			get.addHeader("Authorization", RESTClientPool.getInstance().generateAuthorizationToken(worker, 1000*60));
-			
-			return execute(get);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new SCIMException("CALL FAILED : " + url, SCIMError.InternalServerError,e);
-		}
-	}
 	
-	public String get2(String url) throws SCIMException{
-		
-		HttpResponse http_response = get(url);
-		int http_res_code = http_response.getStatusLine().getStatusCode();
-		StringBuilder buffer = new StringBuilder();
-		if( http_res_code >= SCIMConstants.HtppConstants.OK && http_res_code <= SCIMConstants.HtppConstants.IM_Used) {
-			try {
-				HttpEntity entity = http_response.getEntity();
-				InputStream content = entity.getContent();
-				BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-				String line;
-				while ((line = reader.readLine()) != null) {
-					buffer.append(line);
-				}
-				return buffer.toString();
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new SCIMException("RESULT READ ERROR", e);
-			} 
-		}else {
-			throw new SCIMException("HTTP ERROR : " + url, SCIMError.InternalServerError);
-		}
-	}
-
-	public void put(String url, SCIMJsonObject request) throws SCIMException {
-
-		HttpPut get = new HttpPut(url);
-		get.addHeader("Content-Type", "application/json");
-
-		execute(get);
+	
+	
+//	public SCIMBulkResponse post_bulk(String url,SCIMBulkRequest request) throws SCIMException {
+//	SCIMBulkResponse response = new SCIMBulkResponse();
+//	
+//	HttpResponse http_response = post(url, request);
+//	int http_res_code = http_response.getStatusLine().getStatusCode();
+//	if( http_res_code >= SCIMConstants.HtppConstants.OK && http_res_code <= SCIMConstants.HtppConstants.IM_Used) {
 //		try {
-//			EntityUtils.toString(result_entity);
-//		} catch (ParseException | IOException e) {
+//			response.parse(EntityUtils.toString(http_response.getEntity()));
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
 //			e.printStackTrace();
 //		}
-
-	}
-
-	public void delete(String url, SCIMJsonObject request) throws SCIMException {
-		HttpDelete del = new HttpDelete(url);
-		del.addHeader("Content-Type", "application/json");
-
-		execute(del);
+//	}else {
 //		try {
-//			EntityUtils.toString(result_entity);
-//		} catch (ParseException | IOException e) {
+//			System.out.println("================== : " + http_res_code);
+//			System.out.println(EntityUtils.toString(http_response.getEntity()));
+//			System.out.println("================== : " + http_res_code);
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
 //			e.printStackTrace();
 //		}
-	}
+//	}
+//
+//	return response;
+//}
+//	public String call(String url) throws SCIMException {
+//		HttpResponse http_response = get(url);
+//		int http_res_code = http_response.getStatusLine().getStatusCode();
+//		
+//		StringBuilder str = new StringBuilder();
+//		
+//		if( http_res_code >= SCIMConstants.HtppConstants.OK && http_res_code <= SCIMConstants.HtppConstants.IM_Used) {
+//			try {
+//				HttpEntity entity = http_response.getEntity();
+//				InputStream content = entity.getContent();
+//				BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+//				String line;
+//				while ((line = reader.readLine()) != null) {
+//					str.append(line);
+//				}
+//			} catch (ParseException e) {
+//				e.printStackTrace();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}else {
+//			System.out.println(http_response);
+//			throw new SCIMException("call error : ");
+//		}
+//		
+//		return str.toString();
+//	}
+//	public String run(String url,JsonObject params) throws SCIMException {
+//		
+//		HttpResponse http_response = post(url,params);
+//		
+//		int http_res_code = http_response.getStatusLine().getStatusCode();
+//		
+//		StringBuilder str = new StringBuilder();
+//		
+//		if( http_res_code >= SCIMConstants.HtppConstants.OK && http_res_code <= SCIMConstants.HtppConstants.IM_Used) {
+//			try {
+//				HttpEntity entity = http_response.getEntity();
+//				InputStream content = entity.getContent();
+//				BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+//				String line;
+//				while ((line = reader.readLine()) != null) {
+//					str.append(line);
+//				}
+//			} catch (ParseException e) {
+//				e.printStackTrace();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}else {
+//			throw new SCIMException("call error : ");
+//		}
+//		
+//		return str.toString();
+//	}
+//	public HttpResponse get(String url) throws SCIMException {
+//		try {
+//			
+//			HttpGet get = new HttpGet(url);
+//			get.addHeader("Content-Type", "application/json;UTF-8");
+//			get.addHeader("Accept-Charset", "UTF-8");
+//			get.addHeader("Authorization", RESTClientPool.getInstance().generateAuthorizationToken(worker, 1000*60));
+//			
+//			return execute(get);
+//			
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			throw new SCIMException("CALL FAILED : " + url, SCIMError.InternalServerError,e);
+//		}
+//	}
+//	
+//	public String get2(String url) throws SCIMException{
+//		
+//		HttpResponse http_response = get(url);
+//		int http_res_code = http_response.getStatusLine().getStatusCode();
+//		StringBuilder buffer = new StringBuilder();
+//		if( http_res_code >= SCIMConstants.HtppConstants.OK && http_res_code <= SCIMConstants.HtppConstants.IM_Used) {
+//			try {
+//				HttpEntity entity = http_response.getEntity();
+//				InputStream content = entity.getContent();
+//				BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+//				String line;
+//				while ((line = reader.readLine()) != null) {
+//					buffer.append(line);
+//				}
+//				return buffer.toString();
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//				throw new SCIMException("RESULT READ ERROR", e);
+//			} 
+//		}else {
+//			throw new SCIMException("HTTP ERROR : " + url, SCIMError.InternalServerError);
+//		}
+//	}
+//
+//	public void put(String url, SCIMJsonObject request) throws SCIMException {
+//
+//		HttpPut get = new HttpPut(url);
+//		get.addHeader("Content-Type", "application/json");
+//
+//		execute(get);
+////		try {
+////			EntityUtils.toString(result_entity);
+////		} catch (ParseException | IOException e) {
+////			e.printStackTrace();
+////		}
+//
+//	}
+//
+//	public void delete(String url, SCIMJsonObject request) throws SCIMException {
+//		HttpDelete del = new HttpDelete(url);
+//		del.addHeader("Content-Type", "application/json");
+//
+//		execute(del);
+////		try {
+////			EntityUtils.toString(result_entity);
+////		} catch (ParseException | IOException e) {
+////			e.printStackTrace();
+////		}
+//	}
 
 //	public void patch(String url, SCIMJsonObject request) throws SCIMException {
 ////		HttpPatch pat = new HttpPatch(url);
@@ -456,21 +572,20 @@ public class RESTClient {
 		RESTClientPool.getInstance().close();
 	}
 
-	public ClientReponse get3(String call_url) throws ClientException{
-		ClientReponse response = null;
-		try {
-			logger.info("call info : ", call_url);
-			String result_string = get2(call_url);
-			response = ClientReponse.parse(result_string);
-		} catch (SCIMException e) {
-			e.printStackTrace();
-			throw new ClientException(e.getMessage(),e);
-		}
-		return response;
-	}
 
+	
 
-
-
+//	public ClientReponse get3(String call_url) throws ClientException{
+//		ClientReponse response = null;
+//		try {
+//			logger.info("call info : ", call_url);
+//			String result_string = get2(call_url);
+//			response = ClientReponse.parse(result_string);
+//		} catch (SCIMException e) {
+//			e.printStackTrace();
+//			throw new ClientException(e.getMessage(),e);
+//		}
+//		return response;
+//	}
 
 }

@@ -24,8 +24,15 @@ import {HttpErrorInerceptor} from './service/http-error-inerceptor';
 
 
 import {LoginModule} from './login/login.module';
-
 import {AlertComponent} from './alert/alert.component';
+
+import {SchemaMappingPanelComponent} from './common/schema-mapping-panel/schema-mapping-panel.component'
+import {RepositoryMappingPanelComponent} from './common/repository-mapping-panel/repository-mapping-panel.component'
+import {SchedulerListPanelComponent} from './common/scheduler-list-panel/scheduler-list-panel.component'
+import {AdminInfoDlgComponent} from './common/admin-info-dlg/admin-info-dlg.component'
+import {SystemInfoDlgComponent} from './common/system-info-dlg/system-info-dlg.component'
+import {SchedulerInfoDlgComponent} from './common/scheduler-info-dlg/scheduler-info-dlg.component'
+import {SchedulerHistoryDlgComponent} from './common/scheduler-history-dlg/scheduler-history-dlg.component'
 
 import {TabMenuComponent} from './menu/tab-menu/tab-menu.component';
 import {TitleComponent} from './title/title.component';
@@ -58,6 +65,8 @@ import {ScrollPanelModule} from 'primeng/scrollpanel';
 import {EditorModule} from 'primeng/editor';
 import {FileUploadModule} from 'primeng/fileupload';
 import {ChartModule} from 'primeng/chart';
+import {InputSwitchModule} from 'primeng/inputswitch';
+import {PasswordModule} from 'primeng/password';
 
 
 
@@ -67,8 +76,9 @@ import 'rxjs/Rx';
 
 @NgModule({
    declarations: [
-      AppComponent,AlertComponent,
-      TabMenuComponent,TitleComponent,
+      AppComponent,AlertComponent,TabMenuComponent,TitleComponent,
+      SchemaMappingPanelComponent,RepositoryMappingPanelComponent,SchedulerListPanelComponent,
+      AdminInfoDlgComponent,SystemInfoDlgComponent,SchedulerInfoDlgComponent,SchedulerHistoryDlgComponent,
       SystemManagementComponent,HrsystemManagementComponent,
       AccountComponent,SystemAccountComponent,ImAccountComponent,
       AuditManagementComponent,
@@ -80,7 +90,7 @@ import 'rxjs/Rx';
       TabMenuModule,ToolbarModule,TooltipModule,
       ButtonModule,SplitButtonModule,PanelModule,DropdownModule,
       ListboxModule,DataViewModule,DialogModule,TableModule,PaginatorModule,CardModule,
-      ScrollPanelModule,EditorModule,FileUploadModule,ChartModule,
+      ScrollPanelModule,EditorModule,FileUploadModule,ChartModule,InputSwitchModule,PasswordModule,
       AppRouteModule,
       HttpClientModule,
       LoginModule,

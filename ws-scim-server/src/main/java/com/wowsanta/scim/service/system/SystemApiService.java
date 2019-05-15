@@ -8,6 +8,9 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.plaf.synth.SynthSpinnerUI;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -21,8 +24,8 @@ import com.wowsanta.scim.message.SCIMBulkResponse;
 import com.wowsanta.scim.obj.SCIMSystem;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
-import com.wowsanta.scim.resource.SCIMProviderRepository;
-import com.wowsanta.scim.resource.SCIMSystemRepository;
+import com.wowsanta.scim.repository.system.SCIMProviderRepository;
+import com.wowsanta.scim.repository.system.SCIMSystemRepository;
 import com.wowsanta.scim.scheduler.SCIMJob;
 import com.wowsanta.scim.scheduler.SCIMScheduler;
 import com.wowsanta.scim.schema.SCIMConstants;
@@ -35,6 +38,8 @@ import spark.Route;
 
 public class SystemApiService {
 
+	private static Logger logger = LoggerFactory.getLogger(SystemApiService.class);
+	
 	public static Route getAllSystems() {
 		return new Route() {
 			@Override
@@ -43,7 +48,7 @@ public class SystemApiService {
 				
 				List<SCIMSystem> system_list = system_repository.getSystemAll();
 				
-				System.out.println("system_list : " + system_list);
+				logger.debug("system_list : " + system_list);
 				return system_list;
 			}
 		};
@@ -57,7 +62,7 @@ public class SystemApiService {
 				
 				List<SCIMSystem> system_list = system_repository.getSystemAll("CONSUMER");
 				
-				System.out.println("system_list : " + system_list);
+				logger.debug("system_list : " + system_list);
 				return system_list;
 			}
 		};
@@ -71,7 +76,7 @@ public class SystemApiService {
 				
 				List<SCIMSystem> system_list = system_repository.getSystemAll("RESOURCE");
 				
-				System.out.println("system_list : " + system_list);
+				logger.debug("system_list : " + system_list);
 				return system_list;
 			}
 		};
@@ -82,7 +87,7 @@ public class SystemApiService {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
 				String systemId = request.params(":id");
-				System.out.println("systemId : " + systemId);
+				logger.debug("systemId : " + systemId);
 				
 				return "get-system";
 			}
@@ -108,17 +113,17 @@ public class SystemApiService {
 //				JsonObject request_json = json_parse(request.body());
 //				String schedulerId = request_json.get("schedulerId").getAsString();
 //
-//				System.out.println("remote-schedulerId : " + schedulerId);
+//				logger.debug("remote-schedulerId : " + schedulerId);
 //				
 //				SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
 //				SCIMScheduler scheduler 	= system_repository.getSchdulerById(schedulerId);
 //				
 //				SCIMUser login_user = request.session().attribute("loginUser");
 //				
-//				System.out.println("remote-schedulerId run >>: " + schedulerId);
+//				logger.debug("remote-schedulerId run >>: " + schedulerId);
 //				SCIMJob job =  (SCIMJob) Class.forName(scheduler.getJobClass()).newInstance();
 //				job.doExecute(scheduler, login_user, false);
-//				System.out.println("remote-schedulerId run <<: " + schedulerId);
+//				logger.debug("remote-schedulerId run <<: " + schedulerId);
 				
 				return SCIMError.NotImplemented;//"OK";
 			}
@@ -148,8 +153,8 @@ public class SystemApiService {
 ////					return SCIMScuessCode.OK;
 ////				}
 //				
-//				System.out.println("local system id : " + local_system_info.getSystemId());
-//				System.out.println("excute system id : " + scheduler.getExcuteSystemId());
+//				logger.debug("local system id : " + local_system_info.getSystemId());
+//				logger.debug("excute system id : " + scheduler.getExcuteSystemId());
 //				
 //				if( local_system_info.getSystemId().equals(scheduler.getExcuteSystemId())) {
 //			
@@ -181,16 +186,16 @@ public class SystemApiService {
 //						JsonObject params = new JsonObject();
 //						params.addProperty("schedulerId",schedulerId);
 //						
-//						System.out.println("remote-call -> schedulerId : " + schedulerId);
+//						logger.debug("remote-call -> schedulerId : " + schedulerId);
 //						String call_reslut = client.run(run_url, params);
 //						
-//						System.out.println(call_reslut);
+//						logger.debug(call_reslut);
 //						
 //						SCIMLogger.proc("system scheduler result : {}", "OK");
 //						
 //						return SCIMScuessCode.OK;
 //					}catch(Exception e) {
-//		System.out.println(">>>>eexcep" + e.getLocalizedMessage());
+//		logger.debug(">>>>eexcep" + e.getLocalizedMessage());
 //						return SCIMErrorCode.e404;
 //					}
 //				}

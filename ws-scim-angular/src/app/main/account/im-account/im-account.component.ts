@@ -104,6 +104,9 @@ export class ImAccountComponent implements OnInit {
     .subscribe( result =>{
       console.log("findUsers : ", result);
       this.accounts   = result.data.Resources;
+
+      console.log("this.accounts : ", this.accounts);
+
       this.totalCount = result.data.totalResults;
     },error =>{
         console.log("login-error : ", error);

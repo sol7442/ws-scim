@@ -1,0 +1,598 @@
+{
+  "tables": [
+    {
+      "name": "SSO_ORG_PERSON",
+      "index": 0,
+      "type": "StructuredTable",
+      "attributes": {
+        "TABLE_CATALOG": "scim_gw",
+        "TABLE_NAME": "SSO_ORG_PERSON",
+        "TABLE_SCHEMA": "dbo",
+        "TABLE_TYPE": "BASE TABLE"
+      },
+      "columns": [
+        {
+          "name": "UR_Code",
+          "attributeSchema": {
+            "uri": "urn:wowsanta:scim:schemas:core:2.0:User:id",
+            "name": "id",
+            "type": "STRING",
+            "multiValued": false,
+            "description": "",
+            "required": true,
+            "caseExact": true,
+            "mutability": "READ_ONLY",
+            "returned": "ALWAYS",
+            "uniqueness": "SERVER"
+          },
+          "attributes": {
+            "TABLE_CATALOG": "scim_gw",
+            "IS_NULLABLE": "YES",
+            "TABLE_NAME": "SSO_ORG_PERSON",
+            "TABLE_SCHEMA": "dbo",
+            "COLUMN_NAME": "UR_Code",
+            "CHARACTER_OCTET_LENGTH": "50",
+            "COLLATION_NAME": "Korean_Wansung_CI_AS",
+            "ORDINAL_POSITION": "1",
+            "CHARACTER_MAXIMUM_LENGTH": "50",
+            "DATA_TYPE": "varchar",
+            "CHARACTER_SET_NAME": "cp949",
+            "COLUMN_DEFAULT": "(NULL)"
+          },
+          "type": "PrimaryColumn",
+          "id": "UR_Code",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "name": "DisplayName",
+          "attributeSchema": {
+            "uri": "urn:wowsanta:scim:schemas:core:2.0:User:name",
+            "name": "name",
+            "type": "STRING",
+            "multiValued": false,
+            "description": "",
+            "required": false,
+            "caseExact": false,
+            "mutability": "READ_WRITE",
+            "returned": "DEFAULT",
+            "uniqueness": "NONE"
+          },
+          "attributes": {
+            "TABLE_CATALOG": "scim_gw",
+            "IS_NULLABLE": "YES",
+            "TABLE_NAME": "SSO_ORG_PERSON",
+            "TABLE_SCHEMA": "dbo",
+            "COLUMN_NAME": "DisplayName",
+            "CHARACTER_OCTET_LENGTH": "50",
+            "COLLATION_NAME": "Korean_Wansung_CI_AS",
+            "ORDINAL_POSITION": "2",
+            "CHARACTER_MAXIMUM_LENGTH": "50",
+            "DATA_TYPE": "varchar",
+            "CHARACTER_SET_NAME": "cp949",
+            "COLUMN_DEFAULT": "(NULL)"
+          },
+          "type": "ValueColumn",
+          "id": "DisplayName",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "name": "DN_Code",
+          "attributes": {
+            "TABLE_CATALOG": "scim_gw",
+            "IS_NULLABLE": "YES",
+            "TABLE_NAME": "SSO_ORG_PERSON",
+            "TABLE_SCHEMA": "dbo",
+            "COLUMN_NAME": "DN_Code",
+            "CHARACTER_OCTET_LENGTH": "50",
+            "COLLATION_NAME": "Korean_Wansung_CI_AS",
+            "ORDINAL_POSITION": "3",
+            "CHARACTER_MAXIMUM_LENGTH": "50",
+            "DATA_TYPE": "varchar",
+            "CHARACTER_SET_NAME": "cp949",
+            "COLUMN_DEFAULT": "(NULL)"
+          },
+          "type": "ValueColumn",
+          "id": "DN_Code",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "name": "ExGroupName",
+          "attributeSchema": {
+            "uri": "urn:wowsanta:scim:schemas:core:2.0:User:OrganizationName",
+            "name": "organizationName",
+            "type": "STRING",
+            "multiValued": false,
+            "description": "",
+            "required": false,
+            "caseExact": false,
+            "mutability": "READ_WRITE",
+            "returned": "DEFAULT",
+            "uniqueness": "NONE"
+          },
+          "attributes": {
+            "TABLE_CATALOG": "scim_gw",
+            "IS_NULLABLE": "YES",
+            "TABLE_NAME": "SSO_ORG_PERSON",
+            "TABLE_SCHEMA": "dbo",
+            "COLUMN_NAME": "ExGroupName",
+            "CHARACTER_OCTET_LENGTH": "50",
+            "COLLATION_NAME": "Korean_Wansung_CI_AS",
+            "ORDINAL_POSITION": "4",
+            "CHARACTER_MAXIMUM_LENGTH": "50",
+            "DATA_TYPE": "varchar",
+            "CHARACTER_SET_NAME": "cp949",
+            "COLUMN_DEFAULT": "(NULL)"
+          },
+          "type": "ValueColumn",
+          "defaultValue": "현대백화점그룹",
+          "id": "ExGroupName",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "name": "ExGroupPath",
+          "attributeSchema": {
+            "uri": "urn:wowsanta:scim:schemas:core:2.0:User:groupPath",
+            "name": "organizationPath",
+            "type": "STRING",
+            "multiValued": false,
+            "description": "",
+            "required": false,
+            "caseExact": false,
+            "mutability": "READ_WRITE",
+            "returned": "DEFAULT",
+            "uniqueness": "NONE"
+          },
+          "attributes": {
+            "TABLE_CATALOG": "scim_gw",
+            "IS_NULLABLE": "YES",
+            "TABLE_NAME": "SSO_ORG_PERSON",
+            "TABLE_SCHEMA": "dbo",
+            "COLUMN_NAME": "ExGroupPath",
+            "CHARACTER_OCTET_LENGTH": "50",
+            "COLLATION_NAME": "Korean_Wansung_CI_AS",
+            "ORDINAL_POSITION": "5",
+            "CHARACTER_MAXIMUM_LENGTH": "50",
+            "DATA_TYPE": "varchar",
+            "CHARACTER_SET_NAME": "cp949",
+            "COLUMN_DEFAULT": "(NULL)"
+          },
+          "type": "ValueColumn",
+          "defaultValue": "AAAA",
+          "id": "ExGroupPath",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "name": "JobPositionCode",
+          "attributeSchema": {
+            "uri": "urn:wowsanta:scim:schemas:core:2.0:User:PositionCode",
+            "name": "positionCode",
+            "type": "STRING",
+            "multiValued": false,
+            "description": "",
+            "required": false,
+            "caseExact": false,
+            "mutability": "READ_WRITE",
+            "returned": "DEFAULT",
+            "uniqueness": "NONE"
+          },
+          "attributes": {
+            "TABLE_CATALOG": "scim_gw",
+            "IS_NULLABLE": "YES",
+            "TABLE_NAME": "SSO_ORG_PERSON",
+            "TABLE_SCHEMA": "dbo",
+            "COLUMN_NAME": "JobPositionCode",
+            "CHARACTER_OCTET_LENGTH": "50",
+            "COLLATION_NAME": "Korean_Wansung_CI_AS",
+            "ORDINAL_POSITION": "6",
+            "CHARACTER_MAXIMUM_LENGTH": "50",
+            "DATA_TYPE": "varchar",
+            "CHARACTER_SET_NAME": "cp949",
+            "COLUMN_DEFAULT": "(NULL)"
+          },
+          "type": "ValueColumn",
+          "id": "JobPositionCode",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "name": "ExJobPositionName",
+          "attributeSchema": {
+            "uri": "urn:wowsanta:scim:schemas:core:2.0:User:PositionName",
+            "name": "positionName",
+            "type": "STRING",
+            "multiValued": false,
+            "description": "",
+            "required": false,
+            "caseExact": false,
+            "mutability": "READ_WRITE",
+            "returned": "DEFAULT",
+            "uniqueness": "NONE"
+          },
+          "attributes": {
+            "TABLE_CATALOG": "scim_gw",
+            "IS_NULLABLE": "YES",
+            "TABLE_NAME": "SSO_ORG_PERSON",
+            "TABLE_SCHEMA": "dbo",
+            "COLUMN_NAME": "ExJobPositionName",
+            "CHARACTER_OCTET_LENGTH": "50",
+            "COLLATION_NAME": "Korean_Wansung_CI_AS",
+            "ORDINAL_POSITION": "7",
+            "CHARACTER_MAXIMUM_LENGTH": "50",
+            "DATA_TYPE": "varchar",
+            "CHARACTER_SET_NAME": "cp949",
+            "COLUMN_DEFAULT": "(NULL)"
+          },
+          "type": "ValueColumn",
+          "id": "ExJobPositionName",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "name": "JobTitleCode",
+          "attributeSchema": {
+            "uri": "urn:wowsanta:scim:schemas:core:2.0:User:JobCode",
+            "name": "jobCode",
+            "type": "STRING",
+            "multiValued": false,
+            "description": "",
+            "required": false,
+            "caseExact": false,
+            "mutability": "READ_WRITE",
+            "returned": "DEFAULT",
+            "uniqueness": "NONE"
+          },
+          "attributes": {
+            "TABLE_CATALOG": "scim_gw",
+            "IS_NULLABLE": "YES",
+            "TABLE_NAME": "SSO_ORG_PERSON",
+            "TABLE_SCHEMA": "dbo",
+            "COLUMN_NAME": "JobTitleCode",
+            "CHARACTER_OCTET_LENGTH": "50",
+            "COLLATION_NAME": "Korean_Wansung_CI_AS",
+            "ORDINAL_POSITION": "8",
+            "CHARACTER_MAXIMUM_LENGTH": "50",
+            "DATA_TYPE": "varchar",
+            "CHARACTER_SET_NAME": "cp949",
+            "COLUMN_DEFAULT": "(NULL)"
+          },
+          "type": "ValueColumn",
+          "id": "JobTitleCode",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "name": "ExJobTitleName",
+          "attributeSchema": {
+            "uri": "urn:wowsanta:scim:schemas:core:2.0:User:JobName",
+            "name": "jobName",
+            "type": "STRING",
+            "multiValued": false,
+            "description": "",
+            "required": false,
+            "caseExact": false,
+            "mutability": "READ_WRITE",
+            "returned": "DEFAULT",
+            "uniqueness": "NONE"
+          },
+          "attributes": {
+            "TABLE_CATALOG": "scim_gw",
+            "IS_NULLABLE": "YES",
+            "TABLE_NAME": "SSO_ORG_PERSON",
+            "TABLE_SCHEMA": "dbo",
+            "COLUMN_NAME": "ExJobTitleName",
+            "CHARACTER_OCTET_LENGTH": "50",
+            "COLLATION_NAME": "Korean_Wansung_CI_AS",
+            "ORDINAL_POSITION": "9",
+            "CHARACTER_MAXIMUM_LENGTH": "50",
+            "DATA_TYPE": "varchar",
+            "CHARACTER_SET_NAME": "cp949",
+            "COLUMN_DEFAULT": "(NULL)"
+          },
+          "type": "ValueColumn",
+          "id": "ExJobTitleName",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "name": "JobLevelCode",
+          "attributeSchema": {
+            "uri": "urn:wowsanta:scim:schemas:core:2.0:User:RankCode",
+            "name": "rankCode",
+            "type": "STRING",
+            "multiValued": false,
+            "description": "",
+            "required": false,
+            "caseExact": false,
+            "mutability": "READ_WRITE",
+            "returned": "DEFAULT",
+            "uniqueness": "NONE"
+          },
+          "attributes": {
+            "TABLE_CATALOG": "scim_gw",
+            "IS_NULLABLE": "YES",
+            "TABLE_NAME": "SSO_ORG_PERSON",
+            "TABLE_SCHEMA": "dbo",
+            "COLUMN_NAME": "JobLevelCode",
+            "CHARACTER_OCTET_LENGTH": "50",
+            "COLLATION_NAME": "Korean_Wansung_CI_AS",
+            "ORDINAL_POSITION": "10",
+            "CHARACTER_MAXIMUM_LENGTH": "50",
+            "DATA_TYPE": "varchar",
+            "CHARACTER_SET_NAME": "cp949",
+            "COLUMN_DEFAULT": "(NULL)"
+          },
+          "type": "ValueColumn",
+          "id": "JobLevelCode",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "name": "ExJobLevelName",
+          "attributeSchema": {
+            "uri": "urn:wowsanta:scim:schemas:core:2.0:User:RankName",
+            "name": "rankName",
+            "type": "STRING",
+            "multiValued": false,
+            "description": "",
+            "required": false,
+            "caseExact": false,
+            "mutability": "READ_WRITE",
+            "returned": "DEFAULT",
+            "uniqueness": "NONE"
+          },
+          "attributes": {
+            "TABLE_CATALOG": "scim_gw",
+            "IS_NULLABLE": "YES",
+            "TABLE_NAME": "SSO_ORG_PERSON",
+            "TABLE_SCHEMA": "dbo",
+            "COLUMN_NAME": "ExJobLevelName",
+            "CHARACTER_OCTET_LENGTH": "50",
+            "COLLATION_NAME": "Korean_Wansung_CI_AS",
+            "ORDINAL_POSITION": "11",
+            "CHARACTER_MAXIMUM_LENGTH": "50",
+            "DATA_TYPE": "varchar",
+            "CHARACTER_SET_NAME": "cp949",
+            "COLUMN_DEFAULT": "(NULL)"
+          },
+          "type": "ValueColumn",
+          "id": "ExJobLevelName",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "name": "IsUse",
+          "attributeSchema": {
+            "uri": "urn:wowsanta:scim:schemas:core:2.0:User:Active",
+            "name": "active",
+            "type": "INTEGER",
+            "multiValued": false,
+            "description": "",
+            "required": false,
+            "caseExact": false,
+            "mutability": "READ_WRITE",
+            "returned": "DEFAULT",
+            "uniqueness": "NONE"
+          },
+          "attributes": {
+            "TABLE_CATALOG": "scim_gw",
+            "IS_NULLABLE": "YES",
+            "TABLE_NAME": "SSO_ORG_PERSON",
+            "TABLE_SCHEMA": "dbo",
+            "COLUMN_NAME": "IsUse",
+            "CHARACTER_OCTET_LENGTH": "50",
+            "COLLATION_NAME": "Korean_Wansung_CI_AS",
+            "ORDINAL_POSITION": "12",
+            "CHARACTER_MAXIMUM_LENGTH": "50",
+            "DATA_TYPE": "varchar",
+            "CHARACTER_SET_NAME": "cp949",
+            "COLUMN_DEFAULT": "(NULL)"
+          },
+          "type": "ValueColumn",
+          "dataMapper": {
+            "className": "com.wowsanta.scim.repository.convert.BooleanConverter",
+            "methodName": "integerToYnDefaultY"
+          },
+          "id": "IsUse",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "name": "EnterDate",
+          "attributeSchema": {
+            "uri": "urn:wowsanta:scim:schemas:core:2.0:User:joinDate",
+            "name": "joinDate",
+            "type": "DATE_TIME",
+            "multiValued": false,
+            "description": "",
+            "required": false,
+            "caseExact": false,
+            "mutability": "READ_WRITE",
+            "returned": "DEFAULT",
+            "uniqueness": "NONE"
+          },
+          "attributes": {
+            "TABLE_CATALOG": "scim_gw",
+            "IS_NULLABLE": "YES",
+            "TABLE_NAME": "SSO_ORG_PERSON",
+            "TABLE_SCHEMA": "dbo",
+            "COLUMN_NAME": "EnterDate",
+            "DATETIME_PRECISION": "3",
+            "ORDINAL_POSITION": "13",
+            "DATA_TYPE": "datetime",
+            "COLUMN_DEFAULT": "(NULL)"
+          },
+          "type": "ValueColumn",
+          "dataMapper": {
+            "className": "com.wowsanta.scim.repository.convert.DateConverter",
+            "methodName": "stringToSqlTimestampDefaultNull"
+          },
+          "id": "EnterDate",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "name": "RetireDate",
+          "attributeSchema": {
+            "uri": "urn:wowsanta:scim:schemas:core:2.0:User:RetireDate",
+            "name": "RetireDate",
+            "type": "DATE_TIME",
+            "multiValued": false,
+            "description": "",
+            "required": false,
+            "caseExact": false,
+            "mutability": "READ_WRITE",
+            "returned": "DEFAULT",
+            "uniqueness": "NONE"
+          },
+          "attributes": {
+            "TABLE_CATALOG": "scim_gw",
+            "IS_NULLABLE": "YES",
+            "TABLE_NAME": "SSO_ORG_PERSON",
+            "TABLE_SCHEMA": "dbo",
+            "COLUMN_NAME": "RetireDate",
+            "DATETIME_PRECISION": "3",
+            "ORDINAL_POSITION": "14",
+            "DATA_TYPE": "datetime",
+            "COLUMN_DEFAULT": "(NULL)"
+          },
+          "type": "ValueColumn",
+          "dataMapper": {
+            "className": "com.wowsanta.scim.repository.convert.DateConverter",
+            "methodName": "stringToSqlTimestampDefaultNull"
+          },
+          "id": "RetireDate",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "name": "RegistDate",
+          "attributeSchema": {
+            "uri": "urn:wowsanta:scim:schemas:core:2.0:User:createDate",
+            "name": "createDate",
+            "type": "DATE_TIME",
+            "multiValued": false,
+            "description": "",
+            "required": false,
+            "caseExact": false,
+            "mutability": "READ_WRITE",
+            "returned": "DEFAULT",
+            "uniqueness": "NONE"
+          },
+          "attributes": {
+            "TABLE_CATALOG": "scim_gw",
+            "IS_NULLABLE": "YES",
+            "TABLE_NAME": "SSO_ORG_PERSON",
+            "TABLE_SCHEMA": "dbo",
+            "COLUMN_NAME": "RegistDate",
+            "DATETIME_PRECISION": "3",
+            "ORDINAL_POSITION": "15",
+            "DATA_TYPE": "datetime",
+            "COLUMN_DEFAULT": "(NULL)"
+          },
+          "type": "ValueColumn",
+          "dataMapper": {
+            "className": "com.wowsanta.scim.repository.convert.DateConverter",
+            "methodName": "stringToSqlTimestampDefaultCurrentTime"
+          },
+          "id": "RegistDate",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "name": "ModifyDate",
+          "attributeSchema": {
+            "uri": "urn:wowsanta:scim:schemas:core:2.0:User:modifyDate",
+            "name": "modifyDate",
+            "type": "DATE_TIME",
+            "multiValued": false,
+            "description": "",
+            "required": false,
+            "caseExact": false,
+            "mutability": "READ_WRITE",
+            "returned": "DEFAULT",
+            "uniqueness": "NONE"
+          },
+          "attributes": {
+            "TABLE_CATALOG": "scim_gw",
+            "IS_NULLABLE": "YES",
+            "TABLE_NAME": "SSO_ORG_PERSON",
+            "TABLE_SCHEMA": "dbo",
+            "COLUMN_NAME": "ModifyDate",
+            "DATETIME_PRECISION": "3",
+            "ORDINAL_POSITION": "16",
+            "DATA_TYPE": "datetime",
+            "COLUMN_DEFAULT": "(NULL)"
+          },
+          "type": "ValueColumn",
+          "dataMapper": {
+            "className": "com.wowsanta.scim.repository.convert.DateConverter",
+            "methodName": "stringToSqlTimestampDefaultCurrentTime"
+          },
+          "id": "ModifyDate",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "name": "ExGroupCode",
+          "attributeSchema": {
+            "uri": "urn:wowsanta:scim:schemas:core:2.0:User:OrganizationCode",
+            "name": "organizationCode",
+            "type": "STRING",
+            "multiValued": false,
+            "description": "",
+            "required": false,
+            "caseExact": false,
+            "mutability": "READ_WRITE",
+            "returned": "DEFAULT",
+            "uniqueness": "NONE"
+          },
+          "attributes": {
+            "TABLE_CATALOG": "scim_gw",
+            "IS_NULLABLE": "YES",
+            "TABLE_NAME": "SSO_ORG_PERSON",
+            "TABLE_SCHEMA": "dbo",
+            "COLUMN_NAME": "ExGroupCode",
+            "CHARACTER_OCTET_LENGTH": "50",
+            "COLLATION_NAME": "Korean_Wansung_CI_AS",
+            "ORDINAL_POSITION": "17",
+            "CHARACTER_MAXIMUM_LENGTH": "50",
+            "DATA_TYPE": "varchar",
+            "CHARACTER_SET_NAME": "cp949",
+            "COLUMN_DEFAULT": "(NULL)"
+          },
+          "type": "ValueColumn",
+          "defaultValue": "AAAA",
+          "id": "ExGroupCode",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        }
+      ],
+      "id": "SSO_ORG_PERSON",
+      "schemas": [
+        "urn:com:wowsanta:scim:2.0:repository:mssql:table"
+      ]
+    }
+  ]
+}

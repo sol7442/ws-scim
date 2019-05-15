@@ -5,6 +5,7 @@ import { Admin} from '../../../model/model';
 
 import { ScimApiService } from './../../../service/scim-api.service';
 import { AlertService } from './../../../service/alert.service';
+import {DialogType} from '../../../model/dialog-type.enum';
 
 @Component({
   selector: 'app-env-admin',
@@ -16,12 +17,8 @@ export class EnvAdminComponent implements OnInit {
   private admins:Admin[];
   private selectedAdmin:Admin;
 
+  private adminData:any;
 
-  private displayDialog:Boolean = false;
-  private newAdmin:Admin = new Admin();
-
-  private newPassword:string;
-  private newPasswordC:string;
 
   constructor(
     private scimApiService:ScimApiService,
@@ -30,9 +27,13 @@ export class EnvAdminComponent implements OnInit {
   ngOnInit() {
     this.scimApiService.getAdminList()
     .pipe(first())
-    .subscribe( data =>{
-      console.log("admins >>>: ", data);
-      this.admins = data;
+    .subscribe( result =>{
+      console.log("result >>>: ", result);
+      if(result.state === "Success"){
+        this.admins = result.data;
+      }else{
+        this.alertService.fail(result.message);
+      }
     },error =>{
       console.log("login-error : ", error);
     });
@@ -44,75 +45,29 @@ export class EnvAdminComponent implements OnInit {
   } 
 
   onAdd(){
-    this.displayDialog = true;
+    this.adminData = {type:DialogType.ADD};
   }
   onRemove(){
-
+    this.adminData = {admin:this.selectedAdmin, type:DialogType.DELETE};
   }
   onEdit(){
-
+    this.adminData = {admin:this.selectedAdmin, type:DialogType.UPDATE};
   }
 
-
-  newPasswordCheck(){
-    if(this.newAdmin.password == null){
-      this.alertService.fail("패스워드가 입력되지 않았습니다.");
-      return false;
-    }
-
-    if(this.newAdmin.password != this.newPasswordC){
-      this.alertService.fail("패스워드 검증 실패");
-      return false;
-    }
-
-    return true;
-  }
-  showFindUserDialog(){
-    this.newAdmin = new Admin();
-    this.displayDialog = true;  
-  }
-  
-  selectClose(){
-    if(this.newPasswordCheck()){
-      
-      this.scimApiService.addAdmin(this.newAdmin)
-      .pipe(first())
-      .subscribe( data =>{
-        console.log("addAdmin-data >>>: ", data);
-       
-        //alert ///
-
-        this.displayDialog = false; 
+  onResult(event:any){
+    console.log("event : ",event);
+    if(event.result == "OK"){
+      this.scimApiService.getAdminList()
+      .subscribe( result =>{
+        console.log("result >>>: ", result);
+        if(result.state === "Success"){
+          this.admins = result.data;
+        }else{
+          this.alertService.fail(result.message);
+        }
       },error =>{
-        console.log("addAdmin-error : ", error);
+        console.log("error : ", error);
       });
-
-      
     }
   }
-  cancelClose(){
-    console.log("canceled....")
-    this.displayDialog = false;  
-    this.newAdmin = new Admin();
-  }
-
-  searchUserById(userId:string){
-    console.log("searchUserId : ", userId);
-
-    this.scimApiService.searchUserById(userId)
-    .pipe(first())
-    .subscribe( data =>{
-      console.log("searchUser >>>: ", data);
-
-      if(data == null){
-        this.alertService.fail("사용자를 찾지 못했습니다.");
-      }else{
-        this.newAdmin.adminId   = data.id;
-        this.newAdmin.adminName = data.userName;
-      }
-    },error =>{
-      console.log("login-error : ", error);
-    });
-  }
-
 }

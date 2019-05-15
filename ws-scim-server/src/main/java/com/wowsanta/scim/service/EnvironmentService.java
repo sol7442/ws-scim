@@ -2,24 +2,22 @@ package com.wowsanta.scim.service;
 
 import static com.wowsanta.scim.server.JsonUtil.json_parse;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.JsonObject;
 import com.wowsanta.scim.exception.SCIMError;
 import com.wowsanta.scim.exception.SCIMException;
-import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.obj.SCIMAdmin;
-import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.policy.impl.DefaultPasswordPoilcy;
+import com.wowsanta.scim.protocol.FrontReqeust;
+import com.wowsanta.scim.protocol.FrontResponse;
+import com.wowsanta.scim.protocol.ResponseState;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
-import com.wowsanta.scim.repository.SCIMResourceGetterRepository;
-import com.wowsanta.scim.repository.SCIMServerResourceRepository;
-import com.wowsanta.scim.resource.SCIMProviderRepository;
+import com.wowsanta.scim.repository.resource.SCIMResourceRepository;
+import com.wowsanta.scim.repository.system.SCIMSystemRepository;
 import com.wowsanta.scim.resource.user.LoginUserType;
 
 import spark.Request;
@@ -27,22 +25,35 @@ import spark.Response;
 import spark.Route;
 
 public class EnvironmentService {
-	Logger logger = LoggerFactory.getLogger(EnvironmentService.class);
+	static transient Logger logger = LoggerFactory.getLogger(EnvironmentService.class);
 
-	public static Route getAllAdmin() {
+	public Route getAllAdmin() {
 		return new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
-				System.out.println("get all admins");
-				SCIMProviderRepository system_repository = (SCIMProviderRepository) SCIMRepositoryManager.getInstance().getSystemRepository();
-				return system_repository.getAdminList();
+				FrontResponse front_response = new FrontResponse();
+				try {
+					SCIMSystemRepository system_repository =SCIMRepositoryManager.getInstance().getSystemRepository();
+					
+					List<SCIMAdmin> admin_list = system_repository.getAdminList();
+					for (SCIMAdmin admin : admin_list) {
+						admin.setPassword("********");
+					}
+					front_response.setData(admin_list);
+					front_response.setState(ResponseState.Success);
+					
+				}catch (Exception e) {
+					logger.error(e.getMessage(),e);
+					front_response.setMessage(e.getMessage());
+					front_response.setState(ResponseState.Fail);
+				}
+				return front_response;
 			}
 		};
 	}
 
-	public static Route getAdmin() {
+	public Route getAdmin() {
 		return new Route() {
-			
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
 				// TODO Auto-generated method stub
@@ -55,61 +66,79 @@ public class EnvironmentService {
 		return new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
-				SCIMAdmin admin = null;
-				try{
-					admin  = json_parse(request.body(),SCIMAdmin.class);
+				FrontResponse front_response = new FrontResponse();
+				try {
+					FrontReqeust front_request = FrontReqeust.parse(request.body());
 					
-					SCIMProviderRepository system_repository = (SCIMProviderRepository) SCIMRepositoryManager.getInstance().getSystemRepository();
-					SCIMResourceGetterRepository resource_repository = (SCIMResourceGetterRepository) SCIMRepositoryManager.getInstance().getResourceRepository();
-
-					if(system_repository.getAdmin(admin.getAdminId()) != null) {
-						throw new SCIMException("이미 존재하는 관리자 입니다.",SCIMError.uniqueness);
-					};
 					
-					admin.setAdminType(LoginUserType.ADMIN.toString());
+					Object admin_object_string = front_request.getParams().get("admin");
+					SCIMAdmin admin = SCIMAdmin.parse(admin_object_string.toString());
 					
-					DefaultPasswordPoilcy policy = new DefaultPasswordPoilcy();
-					admin.setPassword(policy.encrypt(admin.getAdminId()));
-					admin.setPwExpireTime(policy.getPasswordExpireTime(new Date()));
+					logger.info("create admin : {} ", admin);
+					SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
+					if(system_repository.getAdmin(admin.getAdminId()) == null) {
+						system_repository.createAdmin(admin);
+					}
 					
-					system_repository.createAdmin(admin);
-					
-					response.status(200);
-					return admin;
-				}catch(SCIMException e) {
-					logger.error("Create Admin FAILED : -- : {} ", e);
-					response.status(e.getError().getStatus());
-					
-					return e.getError();
+					front_response.setState(ResponseState.Success);
 				}catch (Exception e) {
-					logger.error("Create Admin FAILED : -- : {} ", e);
-					response.status(SCIMError.InternalServerError.getStatus());
-					return SCIMError.InternalServerError;
-				}finally {
-					logger.info("Create Admin  : {} ", admin);
+					front_response.setMessage(e.getMessage());;
+					front_response.setState(ResponseState.Fail);
 				}
+				return front_response;
 			}
 		};
 	}
 
-	public static Route updateAdmin() {
+	public  Route updateAdmin() {
 		return new Route() {
-			
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
-				// TODO Auto-generated method stub
-				return null;
+				FrontResponse front_response = new FrontResponse();
+				try {
+					FrontReqeust front_request = FrontReqeust.parse(request.body());
+					
+					
+					Object admin_object_string = front_request.getParams().get("admin");
+					SCIMAdmin admin = SCIMAdmin.parse(admin_object_string.toString());
+					
+					logger.info("update admin : {} ", admin);
+					SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
+					if(system_repository.getAdmin(admin.getAdminId()) != null) {
+						system_repository.updateAdmin(admin);
+					}
+					
+					front_response.setState(ResponseState.Success);
+				}catch (Exception e) {
+					front_response.setMessage(e.getMessage());;
+					front_response.setState(ResponseState.Fail);
+				}
+				return front_response;
 			}
 		};
 	}
 
-	public static Route deleteAdmin() {
+	public  Route deleteAdmin() {
 		return new Route() {
-			
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
-				// TODO Auto-generated method stub
-				return null;
+				FrontResponse front_response = new FrontResponse();
+				try {
+					
+					String admin_id = request.params("adminId");
+					SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
+					SCIMAdmin admin = system_repository.getAdmin(admin_id) ;
+					logger.info("remove admin : {} ", admin);
+					if(admin != null) {
+						system_repository.deleteAdmin(admin_id);
+					}
+					
+					front_response.setState(ResponseState.Success);
+				}catch (Exception e) {
+					front_response.setMessage(e.getMessage());;
+					front_response.setState(ResponseState.Fail);
+				}
+				return front_response;
 			}
 		};
 	}

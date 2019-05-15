@@ -16,12 +16,18 @@ import com.wowsanta.scim.message.SCIMListResponse;
 import com.wowsanta.scim.message.SCIMSearchRequest;
 import com.wowsanta.scim.obj.SCIMResource2;
 import com.wowsanta.scim.obj.SCIMUser;
+import com.wowsanta.scim.object.Resource_Object;
+import com.wowsanta.scim.object.SCIM_Object;
 import com.wowsanta.scim.object.SCIM_Resource;
 import com.wowsanta.scim.object.SCIM_User;
+import com.wowsanta.scim.repository.RepositoryInputMapper;
+import com.wowsanta.scim.repository.RepositoryOutputMapper;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
 import com.wowsanta.scim.repository.SCIMResourceGetterRepository;
-import com.wowsanta.scim.repository.SCIMUserResourceGetter;
-import com.wowsanta.scim.resource.SCIMProviderRepository;
+import com.wowsanta.scim.repository.impl.MsSqlRepository;
+import com.wowsanta.scim.repository.impl.OracleRepository;
+import com.wowsanta.scim.repository.resource.SCIMResourceRepository;
+import com.wowsanta.scim.repository.system.SCIMProviderRepository;
 import com.wowsanta.scim.resource.user.LoginUser;
 
 import spark.Request;
@@ -59,58 +65,47 @@ public class UserService {
 					
 					logger.debug("reqeust body : \n{}",request.body());
 					SCIMListResponse  result = new SCIMListResponse();
-					SCIMFindRequest find = json_parse(request.body(),SCIMFindRequest.class);
 					
-					logger.debug("find request > {}", find);
-					logger.debug("find where   > {}", find.getWhere());
+					SCIMFindRequest find = SCIMFindRequest.parse(request.body());
+					logger.info("find request > {}", find.toString(true));
+
+					SCIMResourceRepository resource_repository = SCIMRepositoryManager.getInstance().getResourceRepository();
+					
+//					/******************		//local test ********************/			
+//					final String gw_repository_config_file = "../config/backup_conf_20190429/default_mssql_gw_repository.json";
+//					final String gw_user_resource_output_mapper_file = "../config/backup_conf_20190429/default_mssql_gw_user_resource_output_mapper.json";
+//					final String gw_group_resource_output_mapper_file = "../config/backup_conf_20190429/default_mssql_gw_group_resource_output_mapper.json";
+//
+//					
+//					//RepositoryInputMapper user_resource_input_mapper = RepositoryInputMapper.load(gw_user_resource_input_mapper_file);
+//					RepositoryOutputMapper user_resource_output_mapper = RepositoryOutputMapper.load(gw_user_resource_output_mapper_file);
+//					RepositoryOutputMapper group_resource_output_mapper = RepositoryOutputMapper.load(gw_group_resource_output_mapper_file);
+//					//RepositoryInputMapper group_resource_input_mapper = RepositoryInputMapper.load(gw_group_resource_input_mapper_file);
+//					
+//					MsSqlRepository resource_repository = MsSqlRepository.load(gw_repository_config_file);
+//					resource_repository.initialize();
+//					//resource_repository.setUserInputMapper(user_resource_input_mapper);
+//					resource_repository.setUserOutputMapper(user_resource_output_mapper);
+//					//resource_repository.setGroupInputMapper(group_resource_input_mapper);
+//					resource_repository.setGrouptOutputMapper(group_resource_output_mapper);
+//					/******************		//local test ********************/
 					
 					
-					//SCIMProviderRepository provider_repository = (SCIMProviderRepository)SCIMRepositoryManager.getInstance().getSystemRepository();
-					//SCIMResourceGetterRepository resource_repository = (SCIMResourceGetterRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
-					
-					SCIMUserResourceGetter repository =  (SCIMUserResourceGetter)SCIMRepositoryManager.getInstance().getRepository();
-					
-					int total_count  = repository.getTotoalUserCount(find.getWhere());
+					int total_count  = resource_repository.getUserCount(find.getWhere());					
 					int page_count   = find.getCount();
 					int start_index   = find.getStartIndex();
 					
-					List<SCIM_Resource> user_list = repository.findUsers(find.getWhere(),find.getOrder(), start_index, page_count);
+					List<Resource_Object> user_list = resource_repository.searchUser(find.getWhere(), start_index, page_count, total_count);
 					logger.info("find user size : {}", user_list.size());
-					for (SCIM_Resource scim_User : user_list) {
-						System.out.println("find user >> " + scim_User.getId());
+					for (Resource_Object scim_User : user_list) {
+						System.out.println("find user >> " + scim_User);//TODO 변환.
 					}
 					
-					result.setResources(user_list);
+					result.setResources(user_list); //TODO
 					result.setTotalResults(total_count);
-//					if(page_count <=0) {
-//						page_count = total_count;
-//					}
-//					
-//					int total_page = total_count / page_count;
-//					if (total_count % page_count > 0) {
-//						total_page++;
-//					}
-//					
-//					int start_index = page_count * page_index + 1;
-//					int end_index   = page_count * (page_index + 1);
-//					
-//					logger.debug("find request > {}-{}-{}", start_index, end_index,total_page);
-
-//					
-//					List<SCIMResource2> user_list = resource_repository.getUsersByWhere(find.getWhere());
-//					for (SCIMResource2 scimUser : user_list) {
-//						result.addReource(scimUser);
-//					}
-//					result.setTotalResults(user_list.size());
-//					
-//					logger.debug("find response < {}", result.getTotalResults());
-//					
+					
 					response.status(200);
 					return result;
-				}catch(SCIMException e) {
-					e.printStackTrace();
-					response.status(e.getError().getStatus());
-					return e.getError();
 					
 				}catch (Exception e) {
 					e.printStackTrace();

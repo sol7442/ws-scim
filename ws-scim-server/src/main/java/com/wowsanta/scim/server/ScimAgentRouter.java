@@ -23,7 +23,9 @@ import com.wowsanta.scim.service.config.ConfigService;
 import com.wowsanta.scim.service.library.LibraryService;
 import com.wowsanta.scim.service.logger.LoggerService;
 import com.wowsanta.scim.service.repository.RepositoryService;
+import com.wowsanta.scim.service.schema.SchemaService;
 import com.wowsanta.scim.service.scim.v2.service.BlukService;
+import com.wowsanta.scim.service.scim.v2.service.GroupService;
 import com.wowsanta.scim.service.scim.v2.service.UserService;
 
 
@@ -34,6 +36,7 @@ public class ScimAgentRouter implements ServiceRouter  {
 	private AccessService accessService = new AccessService();
 	
 	private UserService userService = new UserService();
+	private GroupService groupService = new GroupService();
 	private BlukService blukService = new BlukService();
 
 	
@@ -41,6 +44,10 @@ public class ScimAgentRouter implements ServiceRouter  {
 	private LoggerService loggerService = new LoggerService();
 	private LibraryService libraryService = new LibraryService();
 	private RepositoryService repositoryService = new RepositoryService();
+
+	private SchemaService schemaService = new SchemaService();
+
+	
 	@Override
 	public void regist() throws ServiceException {
 		logger.info("ScimAgentRouter regist START ----------------------");
@@ -53,6 +60,7 @@ public class ScimAgentRouter implements ServiceRouter  {
 		log();
 		library();
 		repository();
+		schema();
 		logger.info("ScimAgentRouter regist START ----------------------");
 
 	}
@@ -101,7 +109,13 @@ public class ScimAgentRouter implements ServiceRouter  {
 //			patch("/library" 		,configService.patchLibrary(), new JsonTransformer());
 //		});
 //	}
-	
+	private void schema() {
+		path("/schema", () -> {			
+			get("/:fileName"   		,schemaService.getSchemaFile(), new JsonTransformer());
+			get("/mapper/output"   		,schemaService.getSchemaOutputMapper(), new JsonTransformer());
+			get("/mapper/input"   		,schemaService.getSchemaInputMapper(), new JsonTransformer());
+		});
+	}
 	private void scim_v2() {		
 		path("/scim/" + SCIMConstants.VERSION, () -> {
 			get    ("/Users/:userId",userService.getUser(), new JsonTransformer());
@@ -110,6 +124,13 @@ public class ScimAgentRouter implements ServiceRouter  {
 			post   ("/Users/search",userService.search(), new JsonTransformer());
 			post   ("/Users/find",userService.find(), new JsonTransformer());
 			patch  ("/Users",userService.patch(), new JsonTransformer());
+			
+			get    ("/Groups/:userId",	groupService.getGroup(), 	new JsonTransformer());
+			put    ("/Groups",			groupService.createGroup(), new JsonTransformer());
+			post   ("/Groups",			groupService.updateGroup(), new JsonTransformer());
+			post   ("/Groups/search",	groupService.searchGroup(), new JsonTransformer());
+			post   ("/Groups/find",		groupService.findGroup(), 	new JsonTransformer());
+			patch  ("/Groups",			groupService.patchGroup(),	new JsonTransformer());
 			
 			post   ("/Bulk",blukService.post(), new JsonTransformer());
 		});

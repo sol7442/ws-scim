@@ -16,26 +16,21 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.SCIMResource2;
+import com.wowsanta.scim.object.Resource_Object;
 import com.wowsanta.scim.object.SCIM_Resource;
 import com.wowsanta.scim.object.SCIM_User;
 import com.wowsanta.scim.repo.rdb.DBCP;
+import com.wowsanta.scim.repository.AttributeSchema;
 import com.wowsanta.scim.repository.RepositoryException;
+import com.wowsanta.scim.repository.RepositoryOutputMapper;
 import com.wowsanta.scim.repository.ResourceColumn;
 import com.wowsanta.scim.repository.ResourceTable;
-import com.wowsanta.scim.repository.SCIMResourceRepository;
-import com.wowsanta.scim.repository.SCIMSchemaMapper;
-import com.wowsanta.scim.repository.SchemaMapper;
-import com.wowsanta.scim.schema.SCIM_WOWSATA_Constans;
+import com.wowsanta.scim.repository.ResourceType;
+import com.wowsanta.scim.repository.SCIMRepositoryController;
+import com.wowsanta.scim.schema.SCIM_Repository_Constans;
 
-public class MsSqlRepository extends DefaultRepository implements SCIMResourceRepository {
+public class MsSqlRepository extends DefaultRepository implements SCIMRepositoryController {
 
-	private String userSchmeaMapperPath;
-	private String userResourceMapperPath;
-	private String groupSchmeaMapperPath;
-	private String groupResourceMapperPath;
-	
-	 
-	
 	public static MsSqlRepository load(String json_config_file) throws RepositoryException {
 		logger.info("REPOSITORY LOAD : {} ", json_config_file);
 		try {
@@ -43,13 +38,7 @@ public class MsSqlRepository extends DefaultRepository implements SCIMResourceRe
 			JsonReader reader = new JsonReader(new FileReader(json_config_file));
 			MsSqlRepository repository =  gson.fromJson(reader, MsSqlRepository.class);
 			
-			if(repository.userSchmeaMapperPath != null) {
-				SCIMSchemaMapper userSchemMapper = SCIMSchemaMapper.load(repository.userSchmeaMapperPath);
-				repository.setUserSchemaMapper(userSchemMapper);
-			}
-			
 			return repository;
-			
 		} catch (Exception e) {
 			logger.error("REPOSITORY LOAD FAILED : {} - {}", json_config_file, e.getMessage());
 			throw new RepositoryException("REPOSITORY LOAD FAILED ", e);
@@ -57,7 +46,6 @@ public class MsSqlRepository extends DefaultRepository implements SCIMResourceRe
 	}
 	
 	public List<ResourceTable> getTables() throws RepositoryException {
-
 		final String selectSQL = "select * from information_schema.tables";
 
 		Connection connection = null;
@@ -73,7 +61,7 @@ public class MsSqlRepository extends DefaultRepository implements SCIMResourceRe
 			ResultSetMetaData meta = resultSet.getMetaData();
 			while (resultSet.next()) {
 				ResourceTable table = new ResourceTable();
-				table.addSchema(SCIM_WOWSATA_Constans.WOWSTAN_REPOSITORY_MSSQL_TABLE_URI);
+				table.addSchema(SCIM_Repository_Constans.WOWSTAN_REPOSITORY_MSSQL_TABLE_URI);
 				for (int i = 1; i <= meta.getColumnCount(); i++) {
 					table.addAttribute(meta.getColumnName(i), resultSet.getString(meta.getColumnName(i)));
 				}
@@ -110,11 +98,12 @@ public class MsSqlRepository extends DefaultRepository implements SCIMResourceRe
 
 			while (resultSet.next()) {
 				ResourceColumn colum = new ResourceColumn();
-				colum.addSchema(SCIM_WOWSATA_Constans.WOWSTAN_REPOSITORY_MSSQL_COlUMN_URI);
+				colum.addSchema(SCIM_Repository_Constans.WOWSTAN_REPOSITORY_MSSQL_COlUMN_URI);
 				for (int i = 1; i <= meta.getColumnCount(); i++) {
 					colum.addAttribute(meta.getColumnName(i), resultSet.getString(meta.getColumnName(i)));
 				}
 				colum.setId(resultSet.getString("COLUMN_NAME"));
+				colum.setName(resultSet.getString("COLUMN_NAME"));
 				column_list.add(colum);
 			}
 		} catch (SQLException e) {
@@ -128,80 +117,118 @@ public class MsSqlRepository extends DefaultRepository implements SCIMResourceRe
 		return column_list;
 	}
 	
-	public List<SCIM_Resource> findUsers(String where, String order, int start_index, int page_count)throws RepositoryException{
-		ResourceTable table = this.userSchmeaMapper.getResourceTable();
-		ResourceColumn id_column =  this.userSchmeaMapper.getIdColumn();
+
+	public List<Resource_Object> searchSystemUser(RepositoryOutputMapper outMapper, String filter,int startIndex, int pageCount, int totalCount)throws RepositoryException{
+		
+		if(pageCount <= 0) {
+			pageCount = totalCount;
+		}
+		
+		if(totalCount == 0) {
+			return new ArrayList<Resource_Object>();
+		}
+		
+		ResourceColumn primaryColumn = null;
+		AttributeSchema key_attribute = outMapper.getKeyAttribte();
+		if(key_attribute != null) {
+			primaryColumn = key_attribute.getResourceColumn();
+		}
 		
 		StringBuffer sqlBuffer = new StringBuffer();
-		sqlBuffer.append("SELECT * FROM ").append(" ");
-		sqlBuffer.append(table.getName()).append(" ");
-		if(where != null) {
-			sqlBuffer.append("WHERE").append(" ");
-			sqlBuffer.append(where).append(" ");
-		}
+		sqlBuffer.append(outMapper.getSearchQuery(filter)).append(" ");
 		
 		sqlBuffer.append("ORDER BY").append(" ");
-		if(order != null) {
-			sqlBuffer.append(order).append(" ");
-		}else {
-			sqlBuffer.append(id_column.getId()).append(" ");
-		}
-		sqlBuffer.append("DESC").append(" ");
-		sqlBuffer.append("OFFSET ").append(start_index).append(" ROWS").append(" ");
-		sqlBuffer.append("FETCH NEXT ").append(page_count).append(" ROWS ONLY").append(" ");
+		sqlBuffer.append(primaryColumn.getName()).append(" ");
 		
+		sqlBuffer.append("DESC").append(" ");
+		sqlBuffer.append("OFFSET ").append(startIndex).append(" ROWS").append(" ");
+		sqlBuffer.append("FETCH NEXT ").append(pageCount).append(" ROWS ONLY").append(" ");
+		
+		return searchResource( outMapper, sqlBuffer.toString());
+	}
+	@Override
+	public List<Resource_Object> searchUser(String filter, int startIndex, int pageCount, int totalCount) throws RepositoryException {
+
+		if(pageCount <= 0) {
+			pageCount = totalCount;
+		}
+		
+		if(totalCount == 0) {
+			return new ArrayList<Resource_Object>();
+		}
+		
+		ResourceColumn primaryColumn = null;
+		AttributeSchema key_attribute = this.userOutputMapper.getKeyAttribte();
+		if(key_attribute != null) {
+			primaryColumn = key_attribute.getResourceColumn();
+		}
+		
+		StringBuffer sqlBuffer = new StringBuffer();
+		sqlBuffer.append(this.userOutputMapper.getSearchQuery(filter)).append(" ");
+		
+		sqlBuffer.append("ORDER BY").append(" ");
+		sqlBuffer.append(primaryColumn.getName()).append(" ");
+		
+		sqlBuffer.append("DESC").append(" ");
+		sqlBuffer.append("OFFSET ").append(startIndex).append(" ROWS").append(" ");
+		sqlBuffer.append("FETCH NEXT ").append(pageCount).append(" ROWS ONLY").append(" ");
+		
+		return searchResource( this.userOutputMapper, sqlBuffer.toString());
+	}
+
+	private List<Resource_Object> searchResource(RepositoryOutputMapper outputMapper, final String query_string) throws RepositoryException {
+		List<Resource_Object> resource_list = new ArrayList<Resource_Object>();
+
 		Connection connection = null;
 		PreparedStatement statement = null;
-	    ResultSet resultSet = null;              
-
-	    List<SCIM_Resource> user_list = new ArrayList<SCIM_Resource>();
+	    ResultSet resultSet = null; 
 	    
-        try {
+		try {
         	connection = getConnection();
-        	statement  = connection.prepareStatement(sqlBuffer.toString());
-
+        	statement  = connection.prepareStatement(query_string);
         	resultSet = statement.executeQuery();
+			ResultSetMetaData meta = resultSet.getMetaData();
         	while(resultSet.next()) {
-        		SCIM_Resource user = new SCIM_Resource();	
-				String id = (String) mappingOutData(getOutObject(resultSet,id_column),id_column.getMapper());
-				user.setId(id);
-				
-				Map<String, SchemaMapper> mapper_map = userSchmeaMapper.getSchemaMapper();
-				Set<String> map_key = mapper_map.keySet();
-				for (String mapper_key : map_key) {
-					SchemaMapper mapper = mapper_map.get(mapper_key);
-					ResourceColumn mapper_column = mapper.getColunm();
-					Object data = mappingOutData(getOutObject(resultSet,mapper_column),mapper_column.getMapper());
-					user.addAttribute(mapper_key, data);
-				}
-				
-				user_list.add(user);
+        		resource_list.add(newResourceFromResultSet(outputMapper, resultSet, meta));
         	}
         	
 		} catch (SQLException e) {
-			throw new RepositoryException(sqlBuffer.toString(), e);
+			throw new RepositoryException(query_string, e);
 		}finally {
-			DBCP.close(connection, statement, resultSet);
+			close(connection, statement, resultSet);
+			logger.info("query  : {}", query_string);
+			logger.info("result : {}", resource_list.size());
 		}
-        
-        return user_list;
+		
+		return resource_list;
 	}
-	
-	public Object getOutObject(ResultSet resultSet, ResourceColumn column) throws RepositoryException {
-		try {
-			String data_type = (String) column.getAttribute("DATA_TYPE");
-			switch (data_type) {
-			case "varchar":
-			case "nvarchar":
-			case "char":
-				return resultSet.getString(column.getId());
-			case "datetime":
-				return resultSet.getDate(column.getId());
-			default:
-				return null;
-			}
-		}catch (Exception e) {
-			throw new RepositoryException("DATA CONVERT FAILED ",e);
+
+	@Override
+	public List<Resource_Object> searchGroup(String filter, int startIndex, int pageCount, int totalCount) throws RepositoryException {
+		if(pageCount <= 0) {
+			pageCount = totalCount;
 		}
+		
+		if(totalCount == 0) {
+			return new ArrayList<Resource_Object>();
+		}
+		
+	    ResourceColumn primaryColumn = null;
+		AttributeSchema key_attribute = this.groupOutputMapper.getKeyAttribte();
+		if(key_attribute != null) {
+			primaryColumn = key_attribute.getResourceColumn();
+		}
+		
+		StringBuffer sqlBuffer = new StringBuffer();
+		sqlBuffer.append(this.groupOutputMapper.getSearchQuery(filter)).append(" ");
+		
+		sqlBuffer.append("ORDER BY").append(" ");
+		sqlBuffer.append(primaryColumn.getId()).append(" ");
+		
+		sqlBuffer.append("DESC").append(" ");
+		sqlBuffer.append("OFFSET ").append(startIndex).append(" ROWS").append(" ");
+		sqlBuffer.append("FETCH NEXT ").append(pageCount).append(" ROWS ONLY").append(" ");
+		
+		return searchResource( this.groupOutputMapper, sqlBuffer.toString());
 	}
 }

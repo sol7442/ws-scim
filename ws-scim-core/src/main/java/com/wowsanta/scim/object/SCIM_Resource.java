@@ -5,7 +5,6 @@ import java.util.Map;
 
 public class SCIM_Resource extends SCIM_Object {
 	private Map<String,Object> attributes = new HashMap<String, Object>();
-
 	public Map<String, Object> getAttributes() {
 		return attributes;
 	}

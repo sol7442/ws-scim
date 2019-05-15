@@ -13,11 +13,11 @@ import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
-import com.wowsanta.scim.repository.SCIMResourceRepository;
+import com.wowsanta.scim.repository.SCIMRepositoryController;
 import com.wowsanta.scim.repository.SCIMServerResourceRepository;
-import com.wowsanta.scim.resource.SCIMProviderRepository;
+import com.wowsanta.scim.repository.system.SCIMProviderRepository;
+import com.wowsanta.scim.repository.system.SCIMSystemRepository;
 import com.wowsanta.scim.resource.SCIMSystemColumn;
-import com.wowsanta.scim.resource.SCIMSystemRepository;
 import com.wowsanta.scim.util.Random;
 
 public class IMResourceRepositoryTest {

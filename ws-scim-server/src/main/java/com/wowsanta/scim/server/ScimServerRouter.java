@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import com.wowsanta.scim.ServiceException;
 import com.wowsanta.scim.ServiceRouter;
-import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.schema.SCIMConstants;
 import com.wowsanta.scim.service.EnvironmentService;
 import com.wowsanta.scim.service.account.AccountService;
@@ -26,7 +25,10 @@ import com.wowsanta.scim.service.auth.LoginService;
 import com.wowsanta.scim.service.config.ConfigService;
 import com.wowsanta.scim.service.library.LibraryService;
 import com.wowsanta.scim.service.logger.LoggerService;
+import com.wowsanta.scim.service.schema.SchemaService;
 import com.wowsanta.scim.service.schudler.SchedulerService;
+import com.wowsanta.scim.service.scim.v2.service.BlukService;
+import com.wowsanta.scim.service.scim.v2.service.GroupService;
 import com.wowsanta.scim.service.scim.v2.service.UserService;
 import com.wowsanta.scim.service.system.SystemApiService;
 import com.wowsanta.scim.service.system.SystemService;
@@ -35,9 +37,9 @@ import com.wowsanta.scim.service.system.SystemService;
 public class ScimServerRouter implements ServiceRouter  {
 	Logger logger = LoggerFactory.getLogger(ScimServerRouter.class);
 	
-	private UserService userService = new UserService();
 
-	
+
+	private EnvironmentService envService = new EnvironmentService();
 	private AuthorizationService authService = new AuthorizationService();
 	private LoginService loginService = new LoginService();
 	private AccessService accessService = new AccessService();
@@ -53,13 +55,17 @@ public class ScimServerRouter implements ServiceRouter  {
 	
 	private AccountService accountService = new AccountService();
 	
+	private UserService userService = new UserService();
+	private GroupService groupService = new GroupService();
+	private BlukService blukService = new BlukService();
+	
 	@Override
 	public void regist() throws ServiceException {
 		logger.info("ScimServerRouter regist START ----------------------");
 		before("/*",authService.verify());
 		after("/*", accessService.access());
 
-		front();
+		account();
 		login();
 		scim_v2();
 		hrsystem();
@@ -73,11 +79,8 @@ public class ScimServerRouter implements ServiceRouter  {
 		library();
 		logger.info("ScimServerRouter regist FINISH ----------------------");
 	}
-	
-	private void front() {
-//		path("/front/", () -> {			
-//
-//		});
+
+	private void account() {
 		
 		logger.info("-account");
 		path("/account", () -> {			
@@ -89,9 +92,9 @@ public class ScimServerRouter implements ServiceRouter  {
 			get("/sys/status/:systemId"  		,accountService.getSysUserStatus(), new JsonTransformer());
 			get("/im/usersys/:userId"  			,accountService.getUserSystemList(), new JsonTransformer());
 			get("/sys/userhis/:userId"   		,accountService.getAccountHistory(), new JsonTransformer());
-			
+			get("/history/:userId"   			,accountService.getAccountHistory(), new JsonTransformer());
+
 			//get("/system/:systemId"  			,accountService.getSystemAccount(), new JsonTransformer());
-			
 			//get("/state/system/:systemId"	,accountService.findUserList(), new JsonTransformer());
 			//get("/status/system/:systemId"	,accountService.findUserList(), new JsonTransformer());
 			
@@ -108,7 +111,14 @@ public class ScimServerRouter implements ServiceRouter  {
 			post   ("/Users/find",userService.find(), new JsonTransformer());
 			patch  ("/Users",userService.patch(), new JsonTransformer());
 			
-//			post   ("/Bulk",blukService.post(), new JsonTransformer());
+			get    ("/Groups/:userId",	groupService.getGroup(), 	new JsonTransformer());
+			put    ("/Groups",			groupService.createGroup(), new JsonTransformer());
+			post   ("/Groups",			groupService.updateGroup(), new JsonTransformer());
+			post   ("/Groups/search",	groupService.searchGroup(), new JsonTransformer());
+			post   ("/Groups/find",		groupService.findGroup(), 	new JsonTransformer());
+			patch  ("/Groups",			groupService.patchGroup(),	new JsonTransformer());
+			
+			post   ("/Bulk",blukService.post(), new JsonTransformer());
 		});
 		
 	}
@@ -149,6 +159,10 @@ public class ScimServerRouter implements ServiceRouter  {
 	private void system() {
 		logger.info("-system");
 		path("/system", () -> {
+			put("/"   				,systemService.createSystem(), new JsonTransformer());
+			post("/"   				,systemService.updateSystem(), new JsonTransformer());
+			delete("/:systemId"   	,systemService.deleteSystem(), new JsonTransformer());
+			
 			get("/columns/:systemId"   ,SystemApiService.getSystemColumnBySystemId(), new JsonTransformer());
 			get("/"   					,SystemApiService.getConsumerSystems(), new JsonTransformer());
 			get("/:id"					,SystemApiService.getSystem(), new JsonTransformer());
@@ -158,11 +172,15 @@ public class ScimServerRouter implements ServiceRouter  {
 	private void scheduler() {
 		logger.info("-scheduler");
 		path("/scheduler", () -> {
-			get("/:schedulerId"   			,schedulerService.getSchedulerById(), new JsonTransformer());
-			get("/system/:systemId"   		,schedulerService.getSchedulerBySystemId(), new JsonTransformer());
-			get("/history/:schedulerId"   	,schedulerService.getSchedulerHistoryById(), new JsonTransformer());
-			get("/history/work/:workId"   	,schedulerService.getSchedulerDetailHistoryByWorkId(), new JsonTransformer());
-			post("/run" 					,schedulerService.runSystemScheduler(), new JsonTransformer());
+			put("/"   				,schedulerService.createScheduler(), new JsonTransformer());
+			post("/"   				,schedulerService.updateScheduler(), new JsonTransformer());
+			delete("/:schedulerId"  ,schedulerService.deleteScheduler(), new JsonTransformer());
+			
+			get("/:schedulerId"   				,schedulerService.getSchedulerById(), new JsonTransformer());
+			get("/system/:systemId"   			,schedulerService.getSchedulerBySystemId(), new JsonTransformer());
+			get("/history/:schedulerId"   		,schedulerService.getSchedulerHistoryById(), new JsonTransformer());
+			get("/history/work/:workId"   		,schedulerService.getSchedulerDetailHistoryByWorkId(), new JsonTransformer());
+			post("/run/:schedulerId" 			,schedulerService.runSystemScheduler(), new JsonTransformer());
 		});
 	}
 	
@@ -170,11 +188,11 @@ public class ScimServerRouter implements ServiceRouter  {
 		logger.info("-env");
 		path("/env", () -> {	
 			path("/admins", () -> {
-				get(	"/"   			,EnvironmentService.getAllAdmin()		, new JsonTransformer());
-				put(	"/"   			,new EnvironmentService().createAdmin()	, new JsonTransformer());				
-				post(	"/"   			,EnvironmentService.updateAdmin()		, new JsonTransformer());
-				get(	"/:adminId"   	,EnvironmentService.getAdmin()			, new JsonTransformer());
-				delete(	"/:adminId"   	,EnvironmentService.deleteAdmin()		, new JsonTransformer());
+				get(	"/"   			, envService.getAllAdmin()		, new JsonTransformer());
+				put(	"/"   			, envService.createAdmin()		, new JsonTransformer());				
+				post(	"/"   			,envService.updateAdmin()		, new JsonTransformer());
+				get(	"/:adminId"   	,envService.getAdmin()			, new JsonTransformer());
+				delete(	"/:adminId"   	,envService.deleteAdmin()		, new JsonTransformer());
 			});
 		});
 	}
@@ -201,7 +219,10 @@ public class ScimServerRouter implements ServiceRouter  {
 			get("/repository/table/column/list/:systemId/:tableName" 	,agentService.getColumnList(), new JsonTransformer());
 			
 			get("/log/list/:systemId"   				 ,agentService.getLogFileList(), new JsonTransformer());
-			get("/log/file/:systemId/name/:fileName"   	 ,agentService.getLogFile());
+			get("/log/file/:systemId/name/:fileName"   	 ,agentService.getLogFile() );
+			
+			get("/schema/output/:systemId"   	 		 ,agentService.getSchemOutputMapper(), new JsonTransformer());
+			get("/schema/input/:systemId"   	 		 ,agentService.getSchemInputMapper(), new JsonTransformer());
 		});	
 	}
 }

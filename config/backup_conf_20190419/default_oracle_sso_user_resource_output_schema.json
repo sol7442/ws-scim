@@ -1,0 +1,924 @@
+{
+  "table": {
+    "name": "WA3_USER",
+    "index": 0,
+    "type": "StructuredTable",
+    "attributes": {
+      "TNAME": "WA3_USER",
+      "TABTYPE": "TABLE"
+    },
+    "columns": [
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "LOW_VALUE": "3131333733373230",
+          "CHAR_USED": "C",
+          "COLUMN_NAME": "ID",
+          "COLUMN_ID": "1",
+          "DATA_LENGTH": "256",
+          "SAMPLE_SIZE": "21",
+          "DENSITY": "0.0476190476190476",
+          "NUM_DISTINCT": "21",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "VARCHAR2",
+          "CHARACTER_SET_NAME": "CHAR_CS",
+          "NUM_BUCKETS": "1",
+          "HIGH_VALUE": "3935313333343131",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "N",
+          "GLOBAL_STATS": "YES",
+          "CHAR_COL_DECL_LENGTH": "256",
+          "AVG_COL_LEN": "9",
+          "CHAR_LENGTH": "64",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "0"
+        },
+        "type": "PrimaryColumn",
+        "dataMapper": {
+          "id": "id"
+        },
+        "id": "ID",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "LOW_VALUE": "EAB095EBA78CEC8B9D",
+          "CHAR_USED": "C",
+          "COLUMN_NAME": "NAME",
+          "COLUMN_ID": "2",
+          "DATA_LENGTH": "256",
+          "SAMPLE_SIZE": "21",
+          "DENSITY": "0.0476190476190476",
+          "NUM_DISTINCT": "21",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "VARCHAR2",
+          "CHARACTER_SET_NAME": "CHAR_CS",
+          "NUM_BUCKETS": "1",
+          "HIGH_VALUE": "ECB59CEC97B0ED9DA5",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "N",
+          "GLOBAL_STATS": "YES",
+          "CHAR_COL_DECL_LENGTH": "256",
+          "AVG_COL_LEN": "10",
+          "CHAR_LENGTH": "64",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "0"
+        },
+        "type": "ValueColumn",
+        "id": "NAME",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "CHAR_USED": "C",
+          "COLUMN_NAME": "RRN",
+          "COLUMN_ID": "3",
+          "DATA_LENGTH": "256",
+          "DENSITY": "0",
+          "NUM_DISTINCT": "0",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "VARCHAR2",
+          "CHARACTER_SET_NAME": "CHAR_CS",
+          "NUM_BUCKETS": "0",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "Y",
+          "GLOBAL_STATS": "YES",
+          "CHAR_COL_DECL_LENGTH": "256",
+          "AVG_COL_LEN": "0",
+          "CHAR_LENGTH": "64",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "21"
+        },
+        "type": "ValueColumn",
+        "id": "RRN",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "CHAR_USED": "C",
+          "COLUMN_NAME": "EMAIL",
+          "COLUMN_ID": "4",
+          "DATA_LENGTH": "1024",
+          "DENSITY": "0",
+          "NUM_DISTINCT": "0",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "VARCHAR2",
+          "CHARACTER_SET_NAME": "CHAR_CS",
+          "NUM_BUCKETS": "0",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "Y",
+          "GLOBAL_STATS": "YES",
+          "CHAR_COL_DECL_LENGTH": "1024",
+          "AVG_COL_LEN": "0",
+          "CHAR_LENGTH": "256",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "21"
+        },
+        "type": "ValueColumn",
+        "id": "EMAIL",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "CHAR_USED": "C",
+          "COLUMN_NAME": "CREATOR",
+          "COLUMN_ID": "5",
+          "DATA_LENGTH": "256",
+          "DENSITY": "0",
+          "NUM_DISTINCT": "0",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "VARCHAR2",
+          "CHARACTER_SET_NAME": "CHAR_CS",
+          "NUM_BUCKETS": "0",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "Y",
+          "GLOBAL_STATS": "YES",
+          "CHAR_COL_DECL_LENGTH": "256",
+          "AVG_COL_LEN": "0",
+          "CHAR_LENGTH": "64",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "21"
+        },
+        "type": "ValueColumn",
+        "id": "CREATOR",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "CHAR_USED": "C",
+          "COLUMN_NAME": "MODIFIER",
+          "COLUMN_ID": "6",
+          "DATA_LENGTH": "256",
+          "DENSITY": "0",
+          "NUM_DISTINCT": "0",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "VARCHAR2",
+          "CHARACTER_SET_NAME": "CHAR_CS",
+          "NUM_BUCKETS": "0",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "Y",
+          "GLOBAL_STATS": "YES",
+          "CHAR_COL_DECL_LENGTH": "256",
+          "AVG_COL_LEN": "0",
+          "CHAR_LENGTH": "64",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "21"
+        },
+        "type": "ValueColumn",
+        "id": "MODIFIER",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "CHAR_USED": "C",
+          "COLUMN_NAME": "INFO",
+          "COLUMN_ID": "7",
+          "DATA_LENGTH": "2048",
+          "DENSITY": "0",
+          "NUM_DISTINCT": "0",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "VARCHAR2",
+          "CHARACTER_SET_NAME": "CHAR_CS",
+          "NUM_BUCKETS": "0",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "Y",
+          "GLOBAL_STATS": "YES",
+          "CHAR_COL_DECL_LENGTH": "2048",
+          "AVG_COL_LEN": "0",
+          "CHAR_LENGTH": "512",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "21"
+        },
+        "type": "ValueColumn",
+        "id": "INFO",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "LOW_VALUE": "ED9884EB8C80EBB0B1ED9994ECA090",
+          "CHAR_USED": "C",
+          "COLUMN_NAME": "DIV_ID",
+          "COLUMN_ID": "8",
+          "DATA_LENGTH": "256",
+          "SAMPLE_SIZE": "21",
+          "DENSITY": "1",
+          "NUM_DISTINCT": "1",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "VARCHAR2",
+          "CHARACTER_SET_NAME": "CHAR_CS",
+          "NUM_BUCKETS": "1",
+          "HIGH_VALUE": "ED9884EB8C80EBB0B1ED9994ECA090",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "N",
+          "GLOBAL_STATS": "YES",
+          "CHAR_COL_DECL_LENGTH": "256",
+          "AVG_COL_LEN": "16",
+          "CHAR_LENGTH": "64",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "0"
+        },
+        "type": "ValueColumn",
+        "id": "DIV_ID",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "LOW_VALUE": "47726F757031",
+          "CHAR_USED": "C",
+          "COLUMN_NAME": "ORG_ID",
+          "COLUMN_ID": "9",
+          "DATA_LENGTH": "256",
+          "SAMPLE_SIZE": "21",
+          "DENSITY": "0.333333333333333",
+          "NUM_DISTINCT": "3",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "VARCHAR2",
+          "CHARACTER_SET_NAME": "CHAR_CS",
+          "NUM_BUCKETS": "1",
+          "HIGH_VALUE": "47726F757033",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "N",
+          "GLOBAL_STATS": "YES",
+          "CHAR_COL_DECL_LENGTH": "256",
+          "AVG_COL_LEN": "7",
+          "CHAR_LENGTH": "64",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "0"
+        },
+        "type": "ValueColumn",
+        "id": "ORG_ID",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "LOW_VALUE": "4E4F5420444546494E45442D",
+          "CHAR_USED": "C",
+          "COLUMN_NAME": "PATH_ID",
+          "COLUMN_ID": "10",
+          "DATA_LENGTH": "2048",
+          "SAMPLE_SIZE": "21",
+          "DENSITY": "0.0238095238095238",
+          "NUM_DISTINCT": "1",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "VARCHAR2",
+          "CHARACTER_SET_NAME": "CHAR_CS",
+          "NUM_BUCKETS": "1",
+          "HIGH_VALUE": "4E4F5420444546494E45442D",
+          "HISTOGRAM": "FREQUENCY",
+          "NULLABLE": "N",
+          "GLOBAL_STATS": "YES",
+          "CHAR_COL_DECL_LENGTH": "2048",
+          "AVG_COL_LEN": "13",
+          "CHAR_LENGTH": "512",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "0"
+        },
+        "type": "ValueColumn",
+        "id": "PATH_ID",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "CHAR_USED": "C",
+          "COLUMN_NAME": "PWD1",
+          "COLUMN_ID": "11",
+          "DATA_LENGTH": "1024",
+          "DENSITY": "0",
+          "NUM_DISTINCT": "0",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "VARCHAR2",
+          "CHARACTER_SET_NAME": "CHAR_CS",
+          "NUM_BUCKETS": "0",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "Y",
+          "GLOBAL_STATS": "YES",
+          "CHAR_COL_DECL_LENGTH": "1024",
+          "AVG_COL_LEN": "0",
+          "CHAR_LENGTH": "256",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "21"
+        },
+        "type": "ValueColumn",
+        "id": "PWD1",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "CHAR_USED": "C",
+          "COLUMN_NAME": "PWD2",
+          "COLUMN_ID": "12",
+          "DATA_LENGTH": "1024",
+          "DENSITY": "0",
+          "NUM_DISTINCT": "0",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "VARCHAR2",
+          "CHARACTER_SET_NAME": "CHAR_CS",
+          "NUM_BUCKETS": "0",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "Y",
+          "GLOBAL_STATS": "YES",
+          "CHAR_COL_DECL_LENGTH": "1024",
+          "AVG_COL_LEN": "0",
+          "CHAR_LENGTH": "256",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "21"
+        },
+        "type": "ValueColumn",
+        "id": "PWD2",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "LOW_VALUE": "C102",
+          "COLUMN_NAME": "PWD_MUST_CHANGE",
+          "COLUMN_ID": "13",
+          "DATA_LENGTH": "22",
+          "SAMPLE_SIZE": "21",
+          "DENSITY": "1",
+          "DATA_SCALE": "0",
+          "NUM_DISTINCT": "1",
+          "DATA_PRECISION": "10",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "NUMBER",
+          "NUM_BUCKETS": "1",
+          "HIGH_VALUE": "C102",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "N",
+          "GLOBAL_STATS": "YES",
+          "AVG_COL_LEN": "3",
+          "CHAR_LENGTH": "0",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "0"
+        },
+        "type": "ValueColumn",
+        "id": "PWD_MUST_CHANGE",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "COLUMN_NAME": "PWD_CHANGE_TIME",
+          "COLUMN_ID": "14",
+          "DATA_LENGTH": "22",
+          "DENSITY": "0",
+          "DATA_SCALE": "0",
+          "NUM_DISTINCT": "0",
+          "DATA_PRECISION": "38",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "NUMBER",
+          "NUM_BUCKETS": "0",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "Y",
+          "GLOBAL_STATS": "YES",
+          "AVG_COL_LEN": "0",
+          "CHAR_LENGTH": "0",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "21"
+        },
+        "type": "ValueColumn",
+        "id": "PWD_CHANGE_TIME",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "LOW_VALUE": "C104",
+          "COLUMN_NAME": "PWD_RETRY_COUNT",
+          "COLUMN_ID": "15",
+          "DATA_LENGTH": "22",
+          "SAMPLE_SIZE": "21",
+          "DENSITY": "1",
+          "DATA_SCALE": "0",
+          "NUM_DISTINCT": "1",
+          "DATA_PRECISION": "10",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "NUMBER",
+          "NUM_BUCKETS": "1",
+          "HIGH_VALUE": "C104",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "N",
+          "GLOBAL_STATS": "YES",
+          "AVG_COL_LEN": "3",
+          "CHAR_LENGTH": "0",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "0"
+        },
+        "type": "ValueColumn",
+        "id": "PWD_RETRY_COUNT",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "LOW_VALUE": "C70238165B56305A",
+          "COLUMN_NAME": "PWD_RETRY_TIME",
+          "COLUMN_ID": "16",
+          "DATA_LENGTH": "22",
+          "SAMPLE_SIZE": "21",
+          "DENSITY": "0.05",
+          "DATA_SCALE": "0",
+          "NUM_DISTINCT": "20",
+          "DATA_PRECISION": "38",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "NUMBER",
+          "NUM_BUCKETS": "1",
+          "HIGH_VALUE": "C70238170D391D28",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "N",
+          "GLOBAL_STATS": "YES",
+          "AVG_COL_LEN": "9",
+          "CHAR_LENGTH": "0",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "0"
+        },
+        "type": "ValueColumn",
+        "id": "PWD_RETRY_TIME",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "COLUMN_NAME": "ACCOUNT_PROFILE",
+          "COLUMN_ID": "17",
+          "DATA_LENGTH": "4000",
+          "DENSITY": "0",
+          "NUM_DISTINCT": "0",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "CLOB",
+          "CHARACTER_SET_NAME": "CHAR_CS",
+          "NUM_BUCKETS": "0",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "Y",
+          "GLOBAL_STATS": "YES",
+          "CHAR_COL_DECL_LENGTH": "4000",
+          "AVG_COL_LEN": "0",
+          "CHAR_LENGTH": "0",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "21"
+        },
+        "type": "ValueColumn",
+        "id": "ACCOUNT_PROFILE",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "LOW_VALUE": "C102",
+          "COLUMN_NAME": "ACCESS_ALLOW",
+          "COLUMN_ID": "18",
+          "DATA_LENGTH": "22",
+          "SAMPLE_SIZE": "21",
+          "DENSITY": "1",
+          "DATA_SCALE": "0",
+          "NUM_DISTINCT": "1",
+          "DATA_PRECISION": "10",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "NUMBER",
+          "NUM_BUCKETS": "1",
+          "HIGH_VALUE": "C102",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "N",
+          "GLOBAL_STATS": "YES",
+          "AVG_COL_LEN": "3",
+          "CHAR_LENGTH": "0",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "0"
+        },
+        "type": "ValueColumn",
+        "id": "ACCESS_ALLOW",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "LOW_VALUE": "80",
+          "COLUMN_NAME": "DISABLED",
+          "COLUMN_ID": "19",
+          "DATA_LENGTH": "22",
+          "SAMPLE_SIZE": "21",
+          "DENSITY": "0.5",
+          "DATA_SCALE": "0",
+          "NUM_DISTINCT": "2",
+          "DATA_PRECISION": "10",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "NUMBER",
+          "NUM_BUCKETS": "1",
+          "HIGH_VALUE": "C102",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "N",
+          "GLOBAL_STATS": "YES",
+          "AVG_COL_LEN": "3",
+          "CHAR_LENGTH": "0",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "0"
+        },
+        "type": "ValueColumn",
+        "id": "DISABLED",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "CHAR_USED": "C",
+          "COLUMN_NAME": "DISABLED_REASON",
+          "COLUMN_ID": "20",
+          "DATA_LENGTH": "2048",
+          "DENSITY": "0",
+          "NUM_DISTINCT": "0",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "VARCHAR2",
+          "CHARACTER_SET_NAME": "CHAR_CS",
+          "NUM_BUCKETS": "0",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "Y",
+          "GLOBAL_STATS": "YES",
+          "CHAR_COL_DECL_LENGTH": "2048",
+          "AVG_COL_LEN": "0",
+          "CHAR_LENGTH": "512",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "21"
+        },
+        "type": "ValueColumn",
+        "id": "DISABLED_REASON",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "LOW_VALUE": "80",
+          "COLUMN_NAME": "LOCKED",
+          "COLUMN_ID": "21",
+          "DATA_LENGTH": "22",
+          "SAMPLE_SIZE": "21",
+          "DENSITY": "1",
+          "DATA_SCALE": "0",
+          "NUM_DISTINCT": "1",
+          "DATA_PRECISION": "10",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "NUMBER",
+          "NUM_BUCKETS": "1",
+          "HIGH_VALUE": "80",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "N",
+          "GLOBAL_STATS": "YES",
+          "AVG_COL_LEN": "2",
+          "CHAR_LENGTH": "0",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "0"
+        },
+        "type": "ValueColumn",
+        "id": "LOCKED",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "COLUMN_NAME": "LOGIN_POLICY_ID",
+          "COLUMN_ID": "22",
+          "DATA_LENGTH": "22",
+          "DENSITY": "0",
+          "DATA_SCALE": "0",
+          "NUM_DISTINCT": "0",
+          "DATA_PRECISION": "38",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "NUMBER",
+          "NUM_BUCKETS": "0",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "Y",
+          "GLOBAL_STATS": "YES",
+          "AVG_COL_LEN": "0",
+          "CHAR_LENGTH": "0",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "21"
+        },
+        "type": "ValueColumn",
+        "id": "LOGIN_POLICY_ID",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "LOW_VALUE": "C70238165B56305A",
+          "COLUMN_NAME": "VALID_FROM",
+          "COLUMN_ID": "23",
+          "DATA_LENGTH": "22",
+          "SAMPLE_SIZE": "21",
+          "DENSITY": "0.05",
+          "DATA_SCALE": "0",
+          "NUM_DISTINCT": "20",
+          "DATA_PRECISION": "38",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "NUMBER",
+          "NUM_BUCKETS": "1",
+          "HIGH_VALUE": "C70238170D391D28",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "N",
+          "GLOBAL_STATS": "YES",
+          "AVG_COL_LEN": "9",
+          "CHAR_LENGTH": "0",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "0"
+        },
+        "type": "ValueColumn",
+        "id": "VALID_FROM",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "LOW_VALUE": "C51630312530",
+          "COLUMN_NAME": "VALID_TO",
+          "COLUMN_ID": "24",
+          "DATA_LENGTH": "22",
+          "SAMPLE_SIZE": "21",
+          "DENSITY": "1",
+          "DATA_SCALE": "0",
+          "NUM_DISTINCT": "1",
+          "DATA_PRECISION": "38",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "NUMBER",
+          "NUM_BUCKETS": "1",
+          "HIGH_VALUE": "C51630312530",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "N",
+          "GLOBAL_STATS": "YES",
+          "AVG_COL_LEN": "7",
+          "CHAR_LENGTH": "0",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "0"
+        },
+        "type": "ValueColumn",
+        "id": "VALID_TO",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "LOW_VALUE": "C70238165B56305A",
+          "COLUMN_NAME": "LAST_LOGON_TIME",
+          "COLUMN_ID": "25",
+          "DATA_LENGTH": "22",
+          "SAMPLE_SIZE": "21",
+          "DENSITY": "0.05",
+          "DATA_SCALE": "0",
+          "NUM_DISTINCT": "20",
+          "DATA_PRECISION": "38",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "NUMBER",
+          "NUM_BUCKETS": "1",
+          "HIGH_VALUE": "C70238170D391D28",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "N",
+          "GLOBAL_STATS": "YES",
+          "AVG_COL_LEN": "9",
+          "CHAR_LENGTH": "0",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "0"
+        },
+        "type": "ValueColumn",
+        "id": "LAST_LOGON_TIME",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "CHAR_USED": "C",
+          "COLUMN_NAME": "LAST_LOGON_IP",
+          "COLUMN_ID": "26",
+          "DATA_LENGTH": "80",
+          "DENSITY": "0",
+          "NUM_DISTINCT": "0",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "VARCHAR2",
+          "CHARACTER_SET_NAME": "CHAR_CS",
+          "NUM_BUCKETS": "0",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "Y",
+          "GLOBAL_STATS": "YES",
+          "CHAR_COL_DECL_LENGTH": "80",
+          "AVG_COL_LEN": "0",
+          "CHAR_LENGTH": "20",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "21"
+        },
+        "type": "ValueColumn",
+        "id": "LAST_LOGON_IP",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "CHAR_USED": "C",
+          "COLUMN_NAME": "ORG_DELAY_INFO",
+          "COLUMN_ID": "27",
+          "DATA_LENGTH": "256",
+          "DENSITY": "0",
+          "NUM_DISTINCT": "0",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "VARCHAR2",
+          "CHARACTER_SET_NAME": "CHAR_CS",
+          "NUM_BUCKETS": "0",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "Y",
+          "GLOBAL_STATS": "YES",
+          "CHAR_COL_DECL_LENGTH": "256",
+          "AVG_COL_LEN": "0",
+          "CHAR_LENGTH": "64",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "21"
+        },
+        "type": "ValueColumn",
+        "id": "ORG_DELAY_INFO",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "LOW_VALUE": "C70238165B56305A",
+          "COLUMN_NAME": "CREATE_TIME",
+          "COLUMN_ID": "28",
+          "DATA_LENGTH": "22",
+          "SAMPLE_SIZE": "21",
+          "DENSITY": "0.05",
+          "DATA_SCALE": "0",
+          "NUM_DISTINCT": "20",
+          "DATA_PRECISION": "38",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "NUMBER",
+          "NUM_BUCKETS": "1",
+          "HIGH_VALUE": "C70238170D391D28",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "Y",
+          "GLOBAL_STATS": "YES",
+          "AVG_COL_LEN": "9",
+          "CHAR_LENGTH": "0",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "0"
+        },
+        "type": "ValueColumn",
+        "id": "CREATE_TIME",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_NAME": "WA3_USER",
+          "DATA_UPGRADED": "YES",
+          "LOW_VALUE": "C7023818070B143F",
+          "COLUMN_NAME": "MODIFY_TIME",
+          "COLUMN_ID": "29",
+          "DATA_LENGTH": "22",
+          "SAMPLE_SIZE": "21",
+          "DENSITY": "0.0476190476190476",
+          "DATA_SCALE": "0",
+          "NUM_DISTINCT": "21",
+          "DATA_PRECISION": "38",
+          "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+          "USER_STATS": "NO",
+          "DATA_TYPE": "NUMBER",
+          "NUM_BUCKETS": "1",
+          "HIGH_VALUE": "C702381F091C582A",
+          "HISTOGRAM": "NONE",
+          "NULLABLE": "Y",
+          "GLOBAL_STATS": "YES",
+          "AVG_COL_LEN": "9",
+          "CHAR_LENGTH": "0",
+          "V80_FMT_IMAGE": "NO",
+          "NUM_NULLS": "0"
+        },
+        "type": "ValueColumn",
+        "id": "MODIFY_TIME",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+        ]
+      }
+    ],
+    "id": "WA3_USER",
+    "schemas": [
+      "urn:com:wowsanta:scim:2.0:repository:mssql:table"
+    ]
+  }
+}

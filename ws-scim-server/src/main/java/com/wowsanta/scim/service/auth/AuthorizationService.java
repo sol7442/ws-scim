@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.resource.user.LoginUser;
+import com.wowsanta.scim.resource.user.LoginUserType;
+import com.wowsanta.scim.schema.SCIMDefinitions.UserType;
 import com.wowsanta.scim.sec.SCIMJWTToken;
 
 import spark.Filter;
@@ -25,9 +27,14 @@ public class AuthorizationService {
 				logger.info("contentType : " + request.uri());
 				logger.info("contentType : " + request.contentType());
 				
+				
 				if(request.uri().equals("/login")){
 					return;
 				}
+				if(request.uri().startsWith("/test")){
+					return;
+				}
+				
 				
 				if(request.uri().startsWith("/agent/library/")){
 					String auth_token = request.headers("Authorization");
@@ -62,7 +69,6 @@ public class AuthorizationService {
 				}
 				
 				response.header("Content-Type", "application/scim+json");
-				
 				LoginUser login_user = request.session().attribute("loginUser");
 				if(login_user == null) {
 					String auth_token = request.headers("Authorization");
@@ -75,7 +81,6 @@ public class AuthorizationService {
 						if(login_user != null) {
 							request.session(true).attribute("loginUser",login_user);
 						}
-						
 					} catch (SCIMException e) {
 						response.status(401);
 						halt(401);

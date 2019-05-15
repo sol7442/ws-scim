@@ -17,6 +17,8 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.wowsanta.scim.json.AbstractJsonObject;
 import com.wowsanta.scim.log.SCIMLogger;
@@ -132,10 +134,16 @@ public class DBCP extends AbstractJsonObject{
 		this.maxTotal = maxTotal;
 	}
 
-
-	
-	
-
+	public static void close(Connection con){
+        try{
+            try{
+                if(con != null && !con.isClosed()){
+                	con.close();
+                }
+            }catch(Exception e){}
+            
+        }catch(Exception e){}
+    }
 	
 	public static void close(Connection con, PreparedStatement pstmt, ResultSet rs){
         try{
@@ -181,5 +189,20 @@ public class DBCP extends AbstractJsonObject{
 		logger.info("load dbcp => {} : {}",this.poolName, this.jdbcUrl);
 	}
 
-
+	public String toString() {
+		return toString(false);
+	}
+	public String toString(boolean pretty) {
+		try {
+			GsonBuilder builder = new GsonBuilder().disableHtmlEscaping();
+			if (pretty) {
+				builder.setPrettyPrinting();
+			}
+			Gson gson = builder.create();
+			return gson.toJson(this);
+		} catch (Exception e) {
+			logger.error(e.getMessage() + " : ",  e);
+		}
+		return null;
+	}
 }

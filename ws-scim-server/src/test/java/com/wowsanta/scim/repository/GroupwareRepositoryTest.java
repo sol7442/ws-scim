@@ -9,7 +9,7 @@ import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
-import com.wowsanta.scim.repository.SCIMResourceRepository;
+import com.wowsanta.scim.repository.SCIMRepositoryController;
 import com.wowsanta.scim.util.Random;
 
 public class GroupwareRepositoryTest {
@@ -40,7 +40,7 @@ public class GroupwareRepositoryTest {
 	}
 	
 	public void createUsers(int size) {
-		SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
+		SCIMRepositoryController res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
 		
 		for (int i = 0; i < size; i++) {
 			User user = new User();

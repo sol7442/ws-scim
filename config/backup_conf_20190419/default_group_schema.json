@@ -1,0 +1,190 @@
+{
+	"schemas": [
+		"urn:wowsanta:scim:schemas:core:2.0:Group"
+	],
+	"attributes": {
+		"meta": {
+			"uri": "urn:ietf:params:scim:schemas:core:2.0:meta",
+			"name": "meta",
+			"type": "COMPLEX",
+			"multiValued": false,
+			"description": "A complex attribute containing resource metadata.",
+			"required": false,
+			"caseExact": false,
+			"mutability": "READ_ONLY",
+			"returned": "DEFAULT",
+			"uniqueness": "NONE",
+			"subAttributes": [
+				{
+					"uri": "urn:ietf:params:scim:schemas:core:2.0:meta.resourceType",
+					"name": "resourceType",
+					"type": "STRING",
+					"multiValued": false,
+					"description": "The name of the resource type of the resource.",
+					"required": false,
+					"caseExact": true,
+					"mutability": "READ_ONLY",
+					"returned": "DEFAULT",
+					"uniqueness": "NONE"
+				},
+				{
+					"uri": "urn:ietf:params:scim:schemas:core:2.0:meta.created",
+					"name": "created",
+					"type": "DATE_TIME",
+					"multiValued": false,
+					"description": "",
+					"required": false,
+					"caseExact": false,
+					"mutability": "READ_ONLY",
+					"returned": "DEFAULT",
+					"uniqueness": "NONE"
+				},
+				{
+					"uri": "urn:ietf:params:scim:schemas:core:2.0:meta.lastModified",
+					"name": "lastModified",
+					"type": "DATE_TIME",
+					"multiValued": false,
+					"description": "",
+					"required": false,
+					"caseExact": false,
+					"mutability": "READ_ONLY",
+					"returned": "DEFAULT",
+					"uniqueness": "NONE"
+				},
+				{
+					"uri": "urn:ietf:params:scim:schemas:core:2.0:meta.location",
+					"name": "location",
+					"type": "STRING",
+					"multiValued": false,
+					"description": "Location  The uri of the resource being returned",
+					"required": false,
+					"caseExact": false,
+					"mutability": "READ_ONLY",
+					"returned": "DEFAULT",
+					"uniqueness": "NONE"
+				},
+				{
+					"uri": "urn:ietf:params:scim:schemas:core:2.0:meta.version",
+					"name": "version",
+					"type": "STRING",
+					"multiValued": false,
+					"description": "The version of the resource being returned.",
+					"required": false,
+					"caseExact": true,
+					"mutability": "READ_ONLY",
+					"returned": "DEFAULT",
+					"uniqueness": "NONE"
+				}
+			]
+		},		
+		
+		"modifyDate": {
+			"uri": "urn:wowsanta:scim:schemas:core:2.0:Group:modifyDate",
+			"name": "modifyDate",
+			"type": "DATE_TIME",
+			"multiValued": false,
+			"description": "",
+			"required": false,
+			"caseExact": false,
+			"mutability": "READ_WRITE",
+			"returned": "DEFAULT",
+			"uniqueness": "NONE"
+		},
+		"createDate": {
+			"uri": "urn:wowsanta:scim:schemas:core:2.0:Group:createDate",
+			"name": "createDate",
+			"type": "DATE_TIME",
+			"multiValued": false,
+			"description": "",
+			"required": false,
+			"caseExact": false,
+			"mutability": "READ_WRITE",
+			"returned": "DEFAULT",
+			"uniqueness": "NONE"
+		},
+		"organizationDescription": {
+			"uri": "urn:wowsanta:scim:schemas:core:2.0:Group:OrganizationDescription",
+			"name": "OrganizationDescription",
+			"type": "STRING",
+			"multiValued": false,
+			"description": "",
+			"required": false,
+			"caseExact": false,
+			"mutability": "READ_WRITE",
+			"returned": "DEFAULT",
+			"uniqueness": "NONE"
+		},
+		"organizationParent": {
+			"uri": "urn:wowsanta:scim:schemas:core:2.0:Group:OrganizationParent",
+			"name": "OrganizationParent",
+			"type": "STRING",
+			"multiValued": false,
+			"description": "",
+			"required": false,
+			"caseExact": false,
+			"mutability": "READ_WRITE",
+			"returned": "DEFAULT",
+			"uniqueness": "NONE"
+		},
+		"organizationName": {
+			"uri": "urn:wowsanta:scim:schemas:core:2.0:Group:OrganizationName",
+			"name": "OrganizationName",
+			"type": "STRING",
+			"multiValued": false,
+			"description": "",
+			"required": false,
+			"caseExact": false,
+			"mutability": "READ_WRITE",
+			"returned": "DEFAULT",
+			"uniqueness": "NONE"
+		},
+		"organizationCode": {
+			"uri": "urn:wowsanta:scim:schemas:core:2.0:Group:OrganizationCode",
+			"name": "OrganizationCode",
+			"type": "STRING",
+			"multiValued": false,
+			"description": "",
+			"required": false,
+			"caseExact": false,
+			"mutability": "READ_WRITE",
+			"returned": "DEFAULT",
+			"uniqueness": "NONE"
+		},
+		"organizationPath": {
+			"uri": "urn:wowsanta:scim:schemas:core:2.0:Group:groupPath",
+			"name": "OrganizationPath",
+			"type": "STRING",
+			"multiValued": false,
+			"description": "",
+			"required": false,
+			"caseExact": false,
+			"mutability": "READ_WRITE",
+			"returned": "DEFAULT",
+			"uniqueness": "NONE"
+		},
+		"active": {
+			"uri": "urn:wowsanta:scim:schemas:core:2.0:Group:Active",
+			"name": "Active",
+			"type": "INTEGER",
+			"multiValued": false,
+			"description": "",
+			"required": false,
+			"caseExact": false,
+			"mutability": "READ_WRITE",
+			"returned": "DEFAULT",
+			"uniqueness": "NONE"
+		},
+		"id": {
+			"uri": "urn:wowsanta:scim:schemas:core:2.0:Group:id",
+			"name": "id",
+			"type": "INTEGER",
+			"multiValued": false,
+			"description": "",
+			"required": true,
+			"caseExact": true,
+			"mutability": "READ_ONLY",
+			"returned": "ALWAYS",
+			"uniqueness": "SERVER"
+		}
+	}
+}

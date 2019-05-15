@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.wowsanta.scim.protocol.ClientReponse;
+import com.wowsanta.scim.protocol.ResponseState;
 
 import spark.Request;
 import spark.Response;
@@ -22,11 +24,25 @@ public class LoggerService {
 		return new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
-				String log_path = System.getProperty("logback.path");
-				logger.debug("log path : {}", log_path);
-				File log_dir = new File(log_path); 
+				ClientReponse client_response = new ClientReponse();
+				try {
+					String log_path = System.getProperty("logback.path");
+					File log_dir = new File(log_path);
+					
+					logger.debug("log path : {}", log_path);
+
+					client_response.setData(log_dir.list());
+					client_response.setState(ResponseState.Success);
+					
+					logger.debug("log file size  : {}", log_dir.list().length);
+					
+				}catch (Exception e) {
+					logger.error(e.getMessage(),e);
+					client_response.setState(ResponseState.Fail);
+					client_response.setMessage(e.getMessage());
+				}
 				
-				return log_dir.listFiles();//gson.toJson(log_dir.listFiles());
+				return client_response;
 			}
 		};
 	}
@@ -56,11 +72,8 @@ public class LoggerService {
 				}
 				
 				System.out.println("file ?? >> " + request_file);
-				
 				if(request_file != null) {
-					
 					System.out.println("...write file...: " + fileName);
-					
 			        response.header("Content-Disposition", String.format("attachment; filename=", fileName));
 			        response.raw().setContentType("application/octet-stream");
 			        response.raw().setContentLength((int) request_file.length());

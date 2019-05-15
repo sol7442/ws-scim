@@ -65,6 +65,17 @@ public class SCIMResourceTypeSchema implements Serializable{
 		writer.close();
 	}
 
+	public String toString() {
+		return toString(false);
+	}
+	public String toString(boolean pretty) {
+		GsonBuilder builder = new GsonBuilder().disableHtmlEscaping();
+		if(pretty) {
+			builder.setPrettyPrinting();
+		}
+		Gson gson = builder.create(); 
+		return gson.toJson(this);
+	}
 	public String toJson() {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		return gson.toJson(this);

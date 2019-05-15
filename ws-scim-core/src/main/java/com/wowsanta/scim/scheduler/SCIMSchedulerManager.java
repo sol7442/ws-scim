@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.wowsanta.scim.exception.SCIMException;
-import com.wowsanta.scim.resource.SCIMSystemRepository;
 
 public class SCIMSchedulerManager{
 	

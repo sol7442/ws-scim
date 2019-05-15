@@ -3,15 +3,31 @@ import { HttpClient,HttpHeaders,HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from "rxjs/Observable";
 
-import { Admin } from '../model/model';
+import { Admin, System,Scheduler } from '../model/model';
 
-import { SCIMFindRequest } from '../model/scim.model';
+import { SCIMFindRequest , FrontRequest } from '../model/scim.model';
 
 
 @Injectable()
 export class ScimApiService {
   constructor(private http: HttpClient) { }
   
+
+  getSchemaOutputMapper(systemId:string){
+    let api_url = '/agent/schema/output/' + systemId;
+    return this.http.get<any>(api_url)
+    .pipe(map( result =>{
+      return result;
+    })); 
+  }
+
+  getSchemaInputMapper(systemId:string){
+    let api_url = '/agent/schema/input/' + systemId;
+    return this.http.get<any>(api_url)
+    .pipe(map( result =>{
+      return result;
+    })); 
+  }
   /**************************************************
    * 
    **************************************************/  
@@ -85,14 +101,40 @@ export class ScimApiService {
   }
 
 
-  // Managered - System 
+  //********************************************/
+  createSystem(system:System){
+    let request = new FrontRequest();
+    request.method = "PUT";
+    request.params = {'system':system}
+
+    let api_url = '/system/';
+    return this.http.put<any>(api_url, JSON.stringify(request))
+    .pipe(map( result =>{
+      return result;
+    }));
+  }
+  updateSystem(system:System){
+    let request = new FrontRequest();
+    request.method = "POST";
+    request.params = {'system':system}
+
+    let api_url = '/system/';
+    return this.http.post<any>(api_url, JSON.stringify(request))
+    .pipe(map( result =>{
+      return result;
+    }));
+  }
+  deleteSystem(system:System){
+    let api_url = '/system/' +  system.systemId;
+    return this.http.delete<any>(api_url)
+    .pipe(map( result =>{
+      return result;
+    }));
+  }
   getSystems(){
     let api_url = '/system/';
     return this.http.get<any>(api_url)
     .pipe(map( result =>{
-
-      
-
       return result;
     }));
   }
@@ -119,6 +161,38 @@ export class ScimApiService {
     }));
   }
 
+  /********************************************************* */
+  createScheduler(scheduler:Scheduler){
+    let request = new FrontRequest();
+    request.method = "PUT";
+    request.params = {'scheduler':scheduler}
+
+    let api_url = '/scheduler/';
+    return this.http.put<any>(api_url, JSON.stringify(request))
+    .pipe(map( result =>{
+      return result;
+    }));
+  }
+
+  updateScheduler(scheduler:Scheduler){
+    let request = new FrontRequest();
+    request.method = "POST";
+    request.params = {'scheduler':scheduler}
+
+    let api_url = '/scheduler/';
+    return this.http.post<any>(api_url, JSON.stringify(request))
+    .pipe(map( result =>{
+      return result;
+    }));
+  }
+  deleteScheduler(scheduler:Scheduler){
+    let api_url = '/scheduler/' +  scheduler.schedulerId;
+    return this.http.delete<any>(api_url)
+    .pipe(map( result =>{
+      return result;
+    }));
+  }
+
   getSchedulerBySystemId(systemId:string){
     let api_url = '/scheduler/system/' + systemId;
     return this.http.get<any>(api_url)
@@ -128,11 +202,12 @@ export class ScimApiService {
   }
 
   getSystemComlumsBySystemId(systemId:string){
-    let api_url = '/system/columns/' + systemId;
-    return this.http.get<any>(api_url)
-    .pipe(map( result =>{
-      return result;
-    }));
+    return null;
+    // let api_url = '/system/columns/' + systemId;
+    // return this.http.get<any>(api_url)
+    // .pipe(map( result =>{
+    //   return result;
+    // }));
   }
   
 
@@ -148,9 +223,9 @@ export class ScimApiService {
   }
 
   runSystemScheduler(schedulerId:string){
-    let api_url = '/scheduler/run';    
+    let api_url = '/scheduler/run/' + schedulerId;    
     let  httpParams = new HttpParams();
-    httpParams.append("schedulerId",schedulerId);    
+   //httpParams.append("schedulerId",schedulerId);    
     return this.http.post<any>(api_url,{'schedulerId': schedulerId})
     .pipe(map( result =>{
       return result;
@@ -220,6 +295,42 @@ export class ScimApiService {
     }));
   }
 
+  deleteAdimn(admin:any){    
+    let api_url = '/env/admins/' +  admin.adminId;
+    console.log("delete admin request : ",api_url )
+    return this.http.delete<any>(api_url)
+    .pipe(map( result =>{
+      console.log("http result : ", result);
+      return result;
+    }));
+  }
+  updateAdimn(admin:any){
+    let request = new FrontRequest();
+    request.method = "POST";
+    request.params = {'admin':admin}
+
+    console.log("update admin request : ",request )
+
+    let api_url = '/env/admins/';
+    return this.http.post<any>(api_url, JSON.stringify(request))
+    .pipe(map( result =>{
+      return result;
+    }));
+   }
+   createAdimn(admin:any){
+
+    let request = new FrontRequest();
+    request.method = "PUT";
+    request.params = {'admin':admin}
+
+    console.log("create admin request : ",request )
+
+    let api_url = '/env/admins/';
+    return this.http.put<any>(api_url, JSON.stringify(request))
+    .pipe(map( result =>{
+      return result;
+    }));
+  }
   getAdminList(){    
     let api_url = '/env/admins/';
     return this.http.get<any>(api_url)
@@ -228,13 +339,7 @@ export class ScimApiService {
     }));
   }
 
-  addAdmin(admin:Admin){    
-    let api_url = '/env/admins/';
-    return this.http.put<any>(api_url, JSON.stringify(admin))
-    .pipe(map( result =>{
-      return result;
-    }));
-  }
+
 
   searchUserById(userId:string){
     let api_url = '/scim/v2.0/Users/' + userId;

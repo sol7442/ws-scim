@@ -35,6 +35,9 @@ public abstract class AbstractRDBRepository extends AbstractSCIMRepository {
 	public DBCP getDbcp() {
 		return this.dbcp;
 	}
+	public void setDbcp(DBCP dbcp) {
+		this.dbcp = dbcp;
+	}
 	
 //	@Override
 //	public void fromJson(JsonObject jsonObject)throws SCIMException{

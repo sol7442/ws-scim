@@ -45,10 +45,17 @@ export class EnvLogComponent implements OnInit {
 
     this.scimApiService.getLogFileList(this.selectedSystem.systemId)
     .pipe(first())
-    .subscribe( data =>{
-      console.log("files >>>: ", data);
-      this.logFiles = data;
-
+    .subscribe( result =>{
+      console.log("result >>>: ", result);
+      if(result.state === "Success"){
+        var i=0;
+        var len = result.data.length;
+        for (i=0; i<len; ++i) {
+          this.logFiles.push({label:result.data[i], value:result.data[i]});
+        }
+      }else{
+        this.alertService.fail(result.message);
+      }
     },error =>{
       console.log("login-error : ", error);
     });

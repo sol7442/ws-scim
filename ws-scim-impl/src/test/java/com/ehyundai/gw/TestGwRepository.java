@@ -15,7 +15,7 @@ import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
 import com.wowsanta.scim.repository.SCIMResourceGetterRepository;
-import com.wowsanta.scim.repository.SCIMResourceRepository;
+import com.wowsanta.scim.repository.SCIMRepositoryController;
 import com.wowsanta.scim.util.Random;
 
 public class TestGwRepository {

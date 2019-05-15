@@ -1,10 +1,10 @@
 <table>
     <tr>
         <td>
-            <p-dropdown [options]="systems" [style]="{'width':'100%'}"	 [(ngModel)]="selectedSystem" optionLabel="systemName" (onChange)="onSelectSystem($event)"></p-dropdown>
+            <p-dropdown [options]="systems" [style]="{'width':'100%'}"	[(ngModel)]="selectedSystem" optionLabel="systemName" placeholder="시스템 선택" (onChange)="onSelectSystem($event)"></p-dropdown>
         </td>
         <td>
-            <p-dropdown [options]="logFiles" [style]="{'width':'100%'}"	 [(ngModel)]="selectedlogFile" editable="true" optionLabel="path" ></p-dropdown>
+            <p-dropdown [options]="logFiles" [style]="{'width':'100%'}"	[(ngModel)]="selectedlogFile" editable="true" placeholder="파일 선택" ></p-dropdown>
         </td>        
         <td style="width:10%;text-align: center"><button type="button" pButton label="파일 가져오기" (click)="onSelectLogFile()"></button></td>
     </tr>

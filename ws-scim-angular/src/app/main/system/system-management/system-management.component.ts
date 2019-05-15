@@ -102,13 +102,12 @@ export class SystemManagementComponent implements OnInit {
     
     this.scimApiService.runSystemScheduler(scheduler.schedulerId)
     .pipe(first())
-    .subscribe( data =>{
-      console.log("result >>: ", data)
-      if(data == "InternalServerError"){
-        this.alertService.fail("스케줄러 실행 오류");
-      }else{
-        let message = "성공("+data.successCount+")/실패("+data.failCount+")"
+    .subscribe( result =>{
+      if(result.state === "Success") {
+        let message = "성공("+result.data.successCount+")/실패("+result.data.failCount+")"
         this.alertService.success(message);
+      }else{
+        this.alertService.fail("스케줄러 실행 오류");
       }
 
     },error =>{

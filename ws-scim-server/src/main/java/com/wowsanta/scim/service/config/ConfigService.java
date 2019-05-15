@@ -24,9 +24,11 @@ import com.wowsanta.scim.SCIMSystemManager;
 import com.wowsanta.scim.exception.SCIMError;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.log.SCIMLogger;
+import com.wowsanta.scim.protocol.ClientReponse;
+import com.wowsanta.scim.protocol.ResponseState;
 import com.wowsanta.scim.repository.AbstractSCIMRepository;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
-import com.wowsanta.scim.repository.SCIMResourceRepository;
+import com.wowsanta.scim.repository.SCIMRepositoryController;
 
 import spark.Request;
 import spark.Response;
@@ -165,8 +167,17 @@ public class ConfigService {
 		return new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
-				File config_dir = new File("../config");
-				return config_dir.listFiles();				
+				ClientReponse client_response = new ClientReponse();
+				try {
+					File config_dir = new File("../config");
+					client_response.setData(config_dir.list());
+					client_response.setState(ResponseState.Success);
+				}catch (Exception e) {
+					logger.error(e.getMessage(), e);
+					client_response.setState(ResponseState.Fail);
+					client_response.setMessage(e.getMessage());
+				}
+				return client_response;				
 			}
 		};
 	}

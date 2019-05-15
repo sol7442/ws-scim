@@ -29,6 +29,9 @@ export class SystemAccountComponent implements OnInit {
   private integrateCount:number = 1;
   private ghostCount:number = 1;
 
+  private accountHistory:any[];
+
+
   constructor(
     private scimApiService:ScimApiService,
     private route: ActivatedRoute
@@ -140,8 +143,23 @@ export class SystemAccountComponent implements OnInit {
     });
   }
 
-  onSelelectAccount(account){
+  onSelelectAccount(account:any){
     console.log("selected account",account)
+
+    this.scimApiService.getAccountHistory(account.id)
+    .pipe(first())
+    .subscribe( result =>{
+      console.log("history : ", result);
+      if(result.state === "Success"){
+        this.accountHistory = result.data;
+      }else{
+        console.log("history : ", result.message);
+      }
+    },error =>{
+        console.log("login-error : ", error);
+    });
+
+
 
   }
 

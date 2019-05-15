@@ -1,0 +1,65 @@
+<p>
+    <p-panel header="스키마 매핑 정보 : {{_system.systemName}}" [toggleable]="true" [collapsed]="true">
+        <div class="shadow-form-box">
+          <table class="input-form">
+            <tr>
+              <td class="form-label"><label>스키마 매핑 파일</label></td>
+              <td class="form-input">
+                  <p-dropdown [options]="_mappers" (onChange)="onSelectMapper($event.value)" placeholder="Select a Mapper" optionLabel="name"></p-dropdown>
+              </td>
+              <!--
+              <td class="form-button">
+                  <button type="button" pButton label="가져오기" (click)="loadSchemaMapper()"></button>
+              </td>
+              <td class="form-button">
+                  <button type="button" pButton label="저장하기" (click)="saveSchemaMaaper()"></button>
+              </td>
+              -->
+              <td class="form-auto"></td>
+            </tr>                    
+          </table>
+        </div>  
+        <hr class="blue-line">
+        <p-table [value]="_schemaAttributes" [paginator]="true" [rows]="10">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th colspan="2">스키마 정보</th>
+                    <th colspan="2">매핑 정보</th>
+                    <th colspan="3">테이블 정보 <span *ngIf="_tableName" >({{_tableName}})</span> </th>
+                </tr>
+                <tr>
+                    <th>속성명</th>
+                    <th>속성타입</th>
+                    <th>함수</th>
+                    <th>기본값</th>
+                    <th>컬럼명</th>
+                    <th>타입</th>
+                    <th>수정</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-attribute>
+                <tr>
+                    <td>{{attribute.name}}</td>
+                    <td>{{attribute.type}}</td>
+                    <td>
+                      <div *ngIf="attribute.dataMapper">
+                        {{attribute.dataMapper.methodName}}
+                      </div>
+                    </td>
+                    <td>{{attribute.mapper}}</td>
+                    <td>
+                      <div *ngIf="attribute.resourceColumn">
+                          {{attribute.resourceColumn.name}}
+                      </div>
+                    </td>
+                    <td>
+                      <div *ngIf="attribute.resourceColumn">
+                        {{attribute.resourceColumn.attributes.DATA_TYPE}}
+                    </div>
+                  </td>
+                    <td style="text-align: center"><button type="button" pButton label="변경" (click)="changeColumn()"></button></td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-panel> 
+</p>

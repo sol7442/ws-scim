@@ -1,0 +1,345 @@
+{
+  "tables": [
+    {
+      "name": "SCIM_GROUP",
+      "index": 0,
+      "type": "StructuredTable",
+      "attributes": {
+        "TNAME": "SCIM_GROUP",
+        "TABTYPE": "TABLE"
+      },
+      "columns": [
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_GROUP",
+            "DATA_UPGRADED": "YES",
+            "CHAR_USED": "B",
+            "COLUMN_NAME": "GROUPID",
+            "COLUMN_ID": "1",
+            "DATA_LENGTH": "50",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_COL_DECL_LENGTH": "50",
+            "CHAR_LENGTH": "50",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "PrimaryColumn",
+          "id": "GROUPID",
+          "dataMapper": {
+            "id": "id"
+          },
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_GROUP",
+            "DATA_UPGRADED": "YES",
+            "CHAR_USED": "B",
+            "COLUMN_NAME": "GROUPNAME",
+            "COLUMN_ID": "2",
+            "DATA_LENGTH": "50",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_COL_DECL_LENGTH": "50",
+            "CHAR_LENGTH": "50",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "ValueColumn",
+          "id": "GROUPNAME",
+          "dataMapper": {
+            "id": "organizationName"
+          },
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        }
+      ],
+      "id": "SCIM_GROUP",
+      "schemas": [
+        "urn:com:wowsanta:scim:2.0:repository:oracle:table"
+      ]
+    },
+    {
+      "name": "SCIM_GROUP_META",
+      "index": 1,
+      "type": "StructuredTable",
+      "attributes": {
+        "TNAME": "SCIM_GROUP_META",
+        "TABTYPE": "TABLE"
+      },
+      "columns": [
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_GROUP_META",
+            "DATA_UPGRADED": "YES",
+            "CHAR_USED": "C",
+            "COLUMN_NAME": "GROUPID",
+            "COLUMN_ID": "1",
+            "DATA_LENGTH": "200",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "N",
+            "GLOBAL_STATS": "NO",
+            "CHAR_COL_DECL_LENGTH": "200",
+            "CHAR_LENGTH": "50",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "PrimaryColumn",
+          "id": "GROUPID",
+          "dataMapper": {
+            "id": "id"
+          },
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_GROUP_META",
+            "DATA_UPGRADED": "YES",
+            "COLUMN_NAME": "ACTIVE",
+            "COLUMN_ID": "2",
+            "DATA_LENGTH": "22",
+            "DATA_SCALE": "0",
+            "DATA_PRECISION": "10",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "NUMBER",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_LENGTH": "0",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "ValueColumn",
+          "id": "ACTIVE",
+          "dataMapper": {
+            "id": "active",
+            "defaultData":false
+          },
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_GROUP_META",
+            "DATA_UPGRADED": "YES",
+            "COLUMN_NAME": "CREATEDATE",
+            "COLUMN_ID": "3",
+            "DATA_LENGTH": "11",
+            "DATA_SCALE": "6",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "TIMESTAMP(6)",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_LENGTH": "0",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "ValueColumn",
+          "id": "CREATEDATE",
+          "dataMapper": {
+            "id": "createDate",
+            "className": "com.wowsanta.scim.repository.convert.DateConverter",
+            "methodName" : "stringToSqlTimestamp"
+          },
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_GROUP_META",
+            "DATA_UPGRADED": "YES",
+            "COLUMN_NAME": "MODIFYDATE",
+            "COLUMN_ID": "4",
+            "DATA_LENGTH": "11",
+            "DATA_SCALE": "6",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "TIMESTAMP(6)",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_LENGTH": "0",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "ValueColumn",
+          "id": "MODIFYDATE",
+          "dataMapper": {
+            "id": "modifyDate",
+            "className": "com.wowsanta.scim.repository.convert.DateConverter",
+            "methodName" : "stringToSqlTimestamp"
+          },
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_GROUP_META",
+            "DATA_UPGRADED": "YES",
+            "COLUMN_NAME": "EXPIREDATE",
+            "COLUMN_ID": "5",
+            "DATA_LENGTH": "7",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "DATE",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_LENGTH": "0",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "ValueColumn",
+          "id": "EXPIREDATE",
+          "dataMapper": {
+            "id": "expireDate",
+            "className": "com.wowsanta.scim.repository.convert.DateConverter",
+            "methodName" : "stringToSqlDate"
+          },
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        }
+      ],
+      "id": "SCIM_GROUP_META",
+      "schemas": [
+        "urn:com:wowsanta:scim:2.0:repository:oracle:table"
+      ]
+    },
+    {
+      "name": "SCIM_GROUP_PROFILE",
+      "index": 2,
+      "type": "StructuredTable",
+      "attributes": {
+        "TNAME": "SCIM_GROUP_PROFILE",
+        "TABTYPE": "TABLE"
+      },
+      "columns": [
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_GROUP_PROFILE",
+            "DATA_UPGRADED": "YES",
+            "CHAR_USED": "B",
+            "COLUMN_NAME": "GROUPID",
+            "COLUMN_ID": "1",
+            "DATA_LENGTH": "50",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "N",
+            "GLOBAL_STATS": "NO",
+            "CHAR_COL_DECL_LENGTH": "50",
+            "CHAR_LENGTH": "50",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "PrimaryColumn",
+          "dataMapper": {
+            "id": "id"
+          },
+          "id": "GROUPID",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_GROUP_PROFILE",
+            "DATA_UPGRADED": "YES",
+            "CHAR_USED": "B",
+            "COLUMN_NAME": "GROUPPATH",
+            "COLUMN_ID": "2",
+            "DATA_LENGTH": "256",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_COL_DECL_LENGTH": "256",
+            "CHAR_LENGTH": "256",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "ValueColumn",
+          "id": "GROUPPATH",
+          "dataMapper": {
+            "id": "organizationPath"
+          },
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_GROUP_PROFILE",
+            "DATA_UPGRADED": "YES",
+            "CHAR_USED": "B",
+            "COLUMN_NAME": "GROUPDESC",
+            "COLUMN_ID": "3",
+            "DATA_LENGTH": "256",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_COL_DECL_LENGTH": "256",
+            "CHAR_LENGTH": "256",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "ValueColumn",
+          "id": "GROUPDESC",
+          "dataMapper": {
+            "id": "organizationDescription"
+          },
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_GROUP_PROFILE",
+            "DATA_UPGRADED": "YES",
+            "CHAR_USED": "B",
+            "COLUMN_NAME": "PARENTID",
+            "COLUMN_ID": "4",
+            "DATA_LENGTH": "50",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_COL_DECL_LENGTH": "50",
+            "CHAR_LENGTH": "50",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "ValueColumn",
+          "id": "PARENTID",
+          "dataMapper": {
+            "id": "organizationParent"
+          },
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        }
+      ],
+      "id": "SCIM_GROUP_PROFILE",
+      "schemas": [
+        "urn:com:wowsanta:scim:2.0:repository:oracle:table"
+      ]
+    }
+  ]
+}

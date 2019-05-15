@@ -1,0 +1,18 @@
+{
+	"dbcp": {
+		"poolName": "im-resource",
+		"driverName": "oracle.jdbc.driver.OracleDriver",
+		"jdbcUrl": "jdbc:oracle:thin:@192.168.0.200:1521:xe",
+		"userName": "scimdbuser",
+		"password": "Abcd1234",
+		"valiationQuery": "select count(*) from SCIM_USER",
+		"timeBetweenEvictionRunsMillis": 60000,
+		"testWhileIdle": true,
+		"minIdle": 5,
+		"maxTotal": 10
+	},
+	"userSchmeaMapperPath":"../config/default_im_user_resource_shema_mapper.json",
+	"userResourceMapperPath":"",
+	"groupSchmeaMapperPath":"",
+	"groupResourceMapperPath":""
+}

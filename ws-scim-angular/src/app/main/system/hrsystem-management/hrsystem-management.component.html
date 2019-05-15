@@ -2,20 +2,16 @@
     <div class="context-left" id="context-left-box">
       <p-listbox [style]="{'width':'100%'}" [options]="systems" (onChange)="onSelect($event)"  optionLabel="systemName">
         <p-header>
-          <p>시스템 목록</p>
+          <table style="width:100%">
+              <tr>
+                <td style="text-align:center">시스템 목록</td>
+              </tr>
+          </table>
         </p-header>
       </p-listbox>
     </div>
     <div class="context-right">
-      <p-panel>
-          <p-header>
-              <div class="ui-helper-clearfix">
-                  <span class="ui-panel-title context-header-text" style="display:inline-block;margin-top:4px;font-weight:bold">
-                    시스템 연결 정보
-                  </span>
-                  <p-button class="context-header-button" label="Save" icon="pi pi-check" (onClick)="save()"></p-button>
-              </div>
-          </p-header>
+      <p-panel header="시스템 연결 정보">          
           <div class="form-input-text-box">
             <div><label>ID</label></div>
             <div><input type="text" style='width:70%' [(ngModel)]="selectedSystem.systemId" [disabled]="true" pInputText></div>
@@ -31,112 +27,27 @@
             
           </div>
           <p-footer>
-              
+            <table>
+                <tr>
+                    <td style="text-align:center"> <p-button label="추가"  (click)="addSystem()" ></p-button> </td>
+                    <td style="text-align:center"> <p-button label="변경"  (click)="editSystem()" ></p-button> </td>
+                    <td style="text-align:center"> <p-button label="삭제"  (click)="removeSystem()" ></p-button> </td>
+                </tr>
+            </table>
           </p-footer>
       </p-panel>
   
-      <p-panel>
-        <p-header>
-            <div class="ui-helper-clearfix">
-                <span class="ui-panel-title context-header-text" style="display:inline-block;margin-top:4px;font-weight:bold">
-                  시스템 스케줄러 정보
-                </span>
-            </div>
-        </p-header>
-        
-        <p-dataView #dv [value]="schedulers">
-            <ng-template let-scheduler pTemplate="listItem">
-                <div class="p-grid context-scheduler-box">
-                    <div class="p-col-5" >
-                        <div class="p-grid">
-                          <div class="p-col-3">ID</div>
-                          <div class="p-col-1 context-label-seperator" >:</div>
-                          <div class="p-col-8">{{scheduler.schedulerId}}</div>
-                          <div class="p-col-3">Name</div>
-                          <div class="p-col-1 context-label-seperator" >:</div>
-                          <div class="p-col-8">{{scheduler.schedulerName}}</div>
-                          <div class="p-col-3">Description</div>
-                          <div class="p-col-1 context-label-seperator" >:</div>
-                          <div class="p-col-8">{{scheduler.schedulerDesc}}</div>
-                        </div>             
-                    </div>
-                    <div class="p-col-5" >
-                        <div class="p-grid">
-                            <div class="p-col-5">실행 주기</div>
-                            <div class="p-col-1 context-label-seperator" >:</div>
-                            <div class="p-col-6">{{scheduler.triggerType}}</div>
-                            <div class="p-col-5">실행 시간(월/주/시/분)</div>
-                            <div class="p-col-1 context-label-seperator" >:</div>
-                            <div class="p-col-6">{{scheduler.dayOfMonth}}/{{scheduler.dayOfWeek}}/{{scheduler.hourOfDay}}/{{scheduler.minuteOfHour}}</div>
-                            <div class="p-col-5">마지막 실행 시간</div>
-                            <div class="p-col-1 context-label-seperator" >:</div>
-                            <div class="p-col-6">{{scheduler.lastExecuteDate}}</div>
-                        </div> 
-                    </div>
-                    <div class="p-col-2 p-align-center vertical-container" >
-                        <div class="p-grid">
-                            <div class="p-col-12" >
-                                <button class="context-scheduler-button-area" pButton type="button" icon="pi pi-check" label="실행 이력"   (click)="showSchedulerLog(scheduler)"></button>
-                            </div>
-                            <div class="p-col-12">
-                                <button class="context-scheduler-button-area" pButton type="button" icon="pi pi-check" label="즉시 실행"  (click)="runSystemScheduler(scheduler)"></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </ng-template>
-        </p-dataView>
-        <p-footer>
-        </p-footer>
-      </p-panel>
+      <app-scheduler-list-panel [system]="selectedSystem"></app-scheduler-list-panel>
 
-      <p-panel header="테이블 연결 정보" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
-        <p-table [value]="systemColumns" >
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>컬럼 Name</th>
-                    <th>컬럼 ID</th>
-                    <th>연결 컬럼</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-sysCol>
-                <tr>
-                    <td>{{sysCol.displayName}}</td>
-                    <td>{{sysCol.columnName}}</td>
-                    <td>{{sysCol.mappingColumn}}</td>
-                </tr>
-            </ng-template>
-        </p-table>
-      </p-panel>
+      <app-schema-mapping-panel [system]="selectedSystem"></app-schema-mapping-panel>
 
+      <app-system-info-dlg [systemData]="_systemData" (result)="onSystemEditResult($event)"></app-system-info-dlg>
     </div>
   </div>
-<p-dialog header="스케줄러 실행 이력" [(visible)]="displayDialog" [responsive]="true" [modal]="true" [style]="{'margin-left':'80px', 'margin-right':'80px'}"  (onAfterHide)="onDialogHide()">
-    <div class="ui-g" *ngIf="selectedScheduler">       
-        <p-table class="text-center" [value]="schedulerHistorys" [paginator]="true" [rows]="5">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>작업 ID</th>
-                    <th>실행자 ID</th>
-                    <th>성공 </th>
-                    <th>실패 </th>
-                    <th>동작 시간</th>
-                    <th>상세 내용</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-history>
-                <tr>
-                    <td>{{history.workId}}</td>
-                    <td>{{history.workerId}}</td>
-                    <td>{{history.successCount}}</td>
-                    <td>{{history.failCount}}</td>
-                    <td>{{history.workDate}}</td>
-                    <td> <p-button label="Click" (onClick)="showDetailLog(history)"> </p-button> </td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </div>
-</p-dialog>
+
+
+
+
 
 <p-dialog header="스케줄러 상세 작업 내용" [(visible)]="displayDetailDialog" [responsive]="true" [modal]="true" [style]="{'margin-left':'80px', 'margin-right':'80px'}"  (onAfterHide)="onDialogHide()">
     <div class="ui-g" *ngIf="selectedScheduler">       
@@ -154,7 +65,7 @@
             </ng-template>
             <ng-template pTemplate="body" let-audit>
                 <tr>
-                    <td>{{audit.userId}}</td>
+                    <td>{{audit.resourceId}}</td>
                     <td>{{audit.method}}</td>
                     <td>{{audit.sourceSystemId}}</td>
                     <td>{{audit.targetSystemId}}</td>

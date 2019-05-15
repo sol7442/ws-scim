@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.wowsanta.scim.obj.SCIMAudit;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
-import com.wowsanta.scim.resource.SCIMProviderRepository;
+import com.wowsanta.scim.repository.system.SCIMProviderRepository;
 
 import spark.Request;
 import spark.Response;

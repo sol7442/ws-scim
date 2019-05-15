@@ -1,11 +1,4 @@
-<p-panel >
-    <p-header>
-        <div >
-            <span class="ui-panel-title context-header-text" style="display:inline-block;margin-top:4px;font-weight:bold">
-              원장 시스템 리스트
-            </span>
-        </div>
-    </p-header>
+<p-panel header="원장 시스템 리스트">
     <div >
         <p-table class="table-cell-center" [value]="systems" [paginator]="true" [rows]="5" [responsive]="true"
           selectionMode="single" [(selection)]="selectedSystem" dataKey="systemId">
@@ -50,7 +43,7 @@
         <tr><td>+ {{this.selectedSystem.systemName}}</td></tr>
         <tr>
             <td style="width:10%;text-align: center"><button type="button" pButton label="리스트 가져오기" (click)="getConfigList()"></button></td>            
-            <td style="width:70%"><p-dropdown [options]="configFiles" [(ngModel)]="selectedConfig" editable="true" [style]="{'width':'100%'}" optionLabel="path"></p-dropdown></td>
+            <td style="width:70%"><p-dropdown [options]="configFiles" [(ngModel)]="selectedConfig" editable="true" placeholder="파일 선택" [style]="{'width':'100%'}" ></p-dropdown></td>
             <td style="width:10%;text-align: center"><button type="button" pButton label="파일 가져오기" (click)="onSelectConfigFile()"></button></td>            
             <td style="width:10%;text-align: center"><p-fileUpload mode="basic" chooseLabel="패치" (onUpload)="uploadConfig($event)" (onBeforeUpload)="onBeforeConfigUpload($event)"  url="{{configUploadUrl}}" multiple="multiple"  maxFileSize="10000000"></p-fileUpload></td>
         </tr>

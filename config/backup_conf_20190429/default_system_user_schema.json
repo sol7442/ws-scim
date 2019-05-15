@@ -1,0 +1,103 @@
+{
+	"schemas": [
+		"urn:wowsanta:scim:schemas:core:2.0:SystemUser"
+	],
+	"attributes": {			
+		"modifyDate": {
+			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:modifyDate",
+			"name": "modifyDate",
+			"type": "DATE_TIME",
+			"multiValued": false,
+			"description": "",
+			"required": false,
+			"caseExact": false,
+			"mutability": "READ_WRITE",
+			"returned": "DEFAULT",
+			"uniqueness": "NONE"
+		},
+		"createDate": {
+			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:createDate",
+			"name": "createDate",
+			"type": "DATE_TIME",
+			"multiValued": false,
+			"description": "",
+			"required": false,
+			"caseExact": false,
+			"mutability": "READ_WRITE",
+			"returned": "DEFAULT",
+			"uniqueness": "NONE"
+		},		
+		"expireDate": {
+			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:joinDate",
+			"name": "expireDate",
+			"type": "DATE",
+			"multiValued": false,
+			"description": "",
+			"required": false,
+			"caseExact": false,
+			"mutability": "READ_WRITE",
+			"returned": "DEFAULT",
+			"uniqueness": "NONE"
+		},
+		"active": {
+			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:Active",
+			"name": "active",
+			"type": "INTEGER",
+			"multiValued": false,
+			"description": "",
+			"required": false,
+			"caseExact": false,
+			"mutability": "READ_WRITE",
+			"returned": "DEFAULT",
+			"uniqueness": "NONE"
+		},
+		"state": {
+			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:State",
+			"name": "active",
+			"type": "INTEGER",
+			"multiValued": false,
+			"description": "",
+			"required": false,
+			"caseExact": false,
+			"mutability": "READ_WRITE",
+			"returned": "DEFAULT",
+			"uniqueness": "NONE"
+		},		
+		"employeeNumber": {
+			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:employeeNumber",
+			"name": "employeeNumber",
+			"type": "STRING",
+			"multiValued": false,
+			"description": "",
+			"required": false,
+			"caseExact": false,
+			"mutability": "READ_WRITE",
+			"returned": "DEFAULT",
+			"uniqueness": "NONE"
+		},
+		"name": {
+			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:name",
+			"name": "name",
+			"type": "STRING",
+			"multiValued": false,
+			"description": "",
+			"required": false,
+			"caseExact": false,
+			"mutability": "READ_WRITE",
+			"returned": "DEFAULT",
+			"uniqueness": "NONE"
+		},
+		"id": {
+			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:id",
+			"name": "id",
+			"type": "STRING",
+			"multiValued": false,
+			"description": "",
+			"required": true,
+			"caseExact": true,
+			"mutability": "READ_ONLY",
+			"returned": "ALWAYS",
+			"uniqueness": "SERVER"
+		}
+	}
+}

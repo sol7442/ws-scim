@@ -11,6 +11,7 @@ import com.google.gson.JsonParser;
 import com.wowsanta.scim.exception.SCIMError;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.json.SCIMJsonObject;
+import com.wowsanta.scim.object.SCIM_Object;
 
 //import spark.ResponseTransformer;
 
@@ -25,7 +26,11 @@ public class JsonUtil {
 			SCIMError jons_object = (SCIMError) object;
 			return jons_object.toJson();
 			
-		}else {
+		}else if (object instanceof SCIM_Object){
+			SCIM_Object jons_object = (SCIM_Object) object;
+			return jons_object.toString();
+		}
+		else {
 			Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 			return gson.toJson(object);
 		}

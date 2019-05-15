@@ -3,9 +3,12 @@ package com.wowsanta.scim.service.scim.v2.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.wowsanta.scim.exception.SCIMError;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.log.SCIMLogger;
@@ -14,14 +17,19 @@ import com.wowsanta.scim.message.SCIMBulkRequest;
 import com.wowsanta.scim.message.SCIMBulkResponse;
 import com.wowsanta.scim.obj.SCIMResource;
 import com.wowsanta.scim.obj.SCIMUser;
+import com.wowsanta.scim.object.Resource_Object;
 import com.wowsanta.scim.repository.AbstractSCIMRepository;
+import com.wowsanta.scim.repository.RepositoryInputMapper;
+import com.wowsanta.scim.repository.RepositoryOutputMapper;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
 import com.wowsanta.scim.repository.SCIMResourceGetterRepository;
-import com.wowsanta.scim.repository.SCIMResourceRepository;
+import com.wowsanta.scim.repository.impl.OracleRepository;
+import com.wowsanta.scim.repository.resource.SCIMResourceRepository;
+import com.wowsanta.scim.repository.system.SCIMProviderRepository;
+import com.wowsanta.scim.repository.system.SCIMSystemRepository;
+import com.wowsanta.scim.repository.SCIMRepositoryController;
 import com.wowsanta.scim.resource.SCIMLocationFactory;
-import com.wowsanta.scim.resource.SCIMProviderRepository;
 import com.wowsanta.scim.resource.SCIMResourceSetterRepository;
-import com.wowsanta.scim.resource.SCIMSystemRepository;
 import com.wowsanta.scim.resource.user.LoginUser;
 import com.wowsanta.scim.resource.worker.Worker;
 import com.wowsanta.scim.scheduler.SCIMScheduler;
@@ -43,57 +51,96 @@ public class BlukService {
 		return new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
-				LoginUser login_user = request.session().attribute("loginUser");
-
-				Worker worker = new Worker();
-				worker.setWorkerId(login_user.getUserId());
-				worker.setWorkerType(login_user.getType().toString());
-
-			
-				SCIMResourceGetterRepository resource_getter_repository  = (SCIMResourceGetterRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
-				SCIMResourceSetterRepository resource_settter_repository = (SCIMResourceSetterRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
-
+				try {
+					LoginUser login_user = request.session().attribute("loginUser");
 				
-				SCIMBulkRequest  scim_bluk_request  = new SCIMBulkRequest();
-				scim_bluk_request.parse(request.body());
-				
-				logger.info("Bluk Request [{}][{}] start > {} ", scim_bluk_request.getRequestId(),scim_bluk_request.getOperations().size(), worker);
-
-				List<SCIMBulkOperation> operation_result_list = new ArrayList<SCIMBulkOperation>();
-				for (SCIMBulkOperation operation : scim_bluk_request.getOperations()) {
+					SCIMResourceRepository resource_repository = SCIMRepositoryManager.getInstance().getResourceRepository();
+////					/******************		//local test ********************/			
+//					final String sso_repository_config_file = "../config/backup_conf_20190429/default_oracle_sso_repository.json";
+//					final String sso_user_resource_output_mapper_file = "../config/backup_conf_20190429/default_oracle_sso_user_resource_output_mapper.json";
+//					final String sso_user_resource_input_mapper_file = "../config/backup_conf_20190429/default_oracle_sso_user_resource_input_mapper.json";
+//
+//					final String sso_group_resource_output_mapper_file = "../config/backup_conf_20190429/default_oracle_sso_group_resource_output_mapper.json";
+//					final String sso_group_resource_input_mapper_file = "../config/backup_conf_20190429/default_oracle_sso_group_resource_input_mapper.json";
+//
+//					
+//					RepositoryInputMapper user_resource_input_mapper = RepositoryInputMapper.load(sso_user_resource_input_mapper_file);
+//					RepositoryOutputMapper user_resource_output_mapper = RepositoryOutputMapper.load(sso_user_resource_output_mapper_file);
+//					RepositoryOutputMapper group_resource_output_mapper = RepositoryOutputMapper.load(sso_group_resource_output_mapper_file);
+//					RepositoryInputMapper group_resource_input_mapper = RepositoryInputMapper.load(sso_group_resource_input_mapper_file);
+//					
+//					OracleRepository resource_repository = OracleRepository.load(sso_repository_config_file);
+//					resource_repository.initialize();
+//					resource_repository.setUserInputMapper(user_resource_input_mapper);
+//					resource_repository.setUserOutputMapper(user_resource_output_mapper);
+//					resource_repository.setGroupInputMapper(group_resource_input_mapper);
+//					resource_repository.setGrouptOutputMapper(group_resource_output_mapper);
+////					/******************		//local test ********************/
 					
-					SCIMBulkOperation operation_result = new SCIMBulkOperation(operation);
-					logger.debug("Bluk : ({}) > {}", scim_bluk_request.getRequestId() , operation);
-					try {
+					
+					Worker worker = new Worker();
+					worker.setWorkerId(login_user.getUserId());
+					worker.setWorkerType(login_user.getType().toString());
+				
+					SCIMBulkRequest scim_bluk_request = SCIMBulkRequest.parse(request.body());
+					logger.info("Bluk Request [{}][{}] start > {} ", scim_bluk_request.getRequestId(),scim_bluk_request.getOperations().size(), worker);
+
+					List<SCIMBulkOperation> operation_result_list = new ArrayList<SCIMBulkOperation>();
+					for (SCIMBulkOperation operation : scim_bluk_request.getOperations()) {
+						SCIMBulkOperation operation_result = new SCIMBulkOperation(operation);
+						Resource_Object resource = operation.getData();
 						
-						SCIMUser bulk_user = (SCIMUser)operation.getData();
-						SCIMUser old_user = resource_getter_repository.getUser(bulk_user.getId());
-						if(old_user == null) {
-							resource_settter_repository.createUser(bulk_user);
-						}else {
-							resource_settter_repository.updateUser(bulk_user);
+						logger.debug("Bluk operation : {}", operation);
+						
+						try {
+							if(operation.getPath().equals("/Groups")) {
+								Resource_Object old_group = resource_repository.getGroup(resource.getId());
+								if(old_group == null) {
+									operation_result.setMethod("CREATE");
+									resource_repository.createGroup(resource);
+								}else {
+									operation_result.setMethod("UPDATE");
+									resource_repository.updateGroup(resource);
+								}
+							}else if(operation.getPath().equals("/Users")) {
+								Resource_Object old_user = resource_repository.getUser(resource.getId());
+								if(old_user == null) {
+									operation_result.setMethod("CREATE");
+									resource_repository.createUser(resource);
+								}else {
+									operation_result.setMethod("UPDATE");
+									resource_repository.updateUser(resource);
+								}
+							}else {
+								logger.error("Bluk unkown : \n{}", operation.toString());
+							}
+							
+							operation_result.setStatus(SCIMConstants.SatusConstants.SCUESS_CODE);
+						}catch (Exception e) {
+							operation_result.setStatus("409");
+							SCIMError error = SCIMError.InternalServerError;
+							error.addDetail(e.getMessage());
+							operation_result.setResponse(error);
+							
+							logger.error("Bluk ERROR : {} {} ", e.getMessage(),resource.toString(true),e);
 						}
 						
-						operation_result.setLocation(SCIMLocationFactory.getInstance().get(operation.getData()));
-						operation_result.setStatus(SCIMConstants.SatusConstants.SCUESS_CODE);
-					}catch (Exception e) {
-						e.printStackTrace();
-						operation_result.setStatus("409");
-						SCIMError error = SCIMError.InternalServerError;
-						error.addDetail(e.getMessage());
-						operation_result.setResponse(error);
+						//operation_result.setLocation(SCIMLocationFactory.getInstance().get(operation.getData()));
+						logger.info("Bluk result : {}", operation_result );
+						operation_result_list.add(operation_result);
 					}
-					
-					logger.info("Bluk Request operation result > {} ", operation_result);
-					operation_result_list.add(operation_result);
-				}
 
-				logger.info("Bluk Request [{}][{}] end > {} ", scim_bluk_request.getRequestId(),scim_bluk_request.getOperations().size(), worker);
-				
-				SCIMBulkResponse scim_bluk_response = new SCIMBulkResponse();
-				scim_bluk_response.setOperations(operation_result_list);
-				response.status(SCIMConstants.HtppConstants.CREATED);
-				return scim_bluk_response;
+					logger.info("Bluk Request [{}][{}] end > {} ", scim_bluk_request.getRequestId(),scim_bluk_request.getOperations().size(), worker);
+					
+					SCIMBulkResponse scim_bluk_response = new SCIMBulkResponse();
+					scim_bluk_response.setOperations(operation_result_list);
+					response.status(SCIMConstants.HtppConstants.CREATED);
+					return scim_bluk_response;
+					
+				}catch (Exception e) {
+					logger.error("SERVER ERROR : {} ",e.getMessage(),e);
+					return SCIMError.InternalServerError;
+				}
 			}
 		};
 	}

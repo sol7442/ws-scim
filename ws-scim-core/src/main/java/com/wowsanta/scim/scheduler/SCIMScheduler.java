@@ -1,6 +1,10 @@
 package com.wowsanta.scim.scheduler;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -8,24 +12,29 @@ import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.internal.LinkedTreeMap;
+import com.mchange.net.SmtpException;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.json.AbstractJsonObject;
+import com.wowsanta.scim.obj.SCIMSystem;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.resource.user.LoginUser;
 import com.wowsanta.scim.resource.worker.Worker;
 import com.wowsata.util.json.WowsantaJson;
 
-public class SCIMScheduler extends WowsantaJson {
+public class SCIMScheduler  {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2975295174595106979L;
+	static transient Logger logger = LoggerFactory.getLogger(SCIMScheduler.class);
+	
 	private String schedulerId;
 	private String schedulerName;
 	private String schedulerType;
@@ -42,6 +51,72 @@ public class SCIMScheduler extends WowsantaJson {
 	private Date lastExecuteDate;
 	
 	private transient Scheduler scheduler;
+	
+	public static SCIMScheduler parse(LinkedTreeMap scheduler_object) {
+		SCIMScheduler scheduler = new SCIMScheduler();
+		scheduler.schedulerId   	= (String) scheduler_object.get("schedulerId");
+		scheduler.schedulerName   	= (String) scheduler_object.get("schedulerName");
+		scheduler.schedulerType   	= (String) scheduler_object.get("schedulerType");
+		scheduler.schedulerDesc   	= (String) scheduler_object.get("schedulerDesc");
+		scheduler.jobClass   		= (String) scheduler_object.get("jobClass");
+		scheduler.triggerType   	= (String) scheduler_object.get("triggerType");
+		
+		if(scheduler_object.get("dayOfMonth") != null) {
+			Double _dayOfMonth 		= (Double) scheduler_object.get("dayOfMonth");
+			scheduler.dayOfMonth   		= _dayOfMonth.intValue();
+		}
+		
+		if(scheduler_object.get("dayOfWeek") != null) {
+			Double _dayOfWeek 		= (Double) scheduler_object.get("dayOfWeek");
+			scheduler.dayOfWeek  		= _dayOfWeek.intValue();
+		}
+		
+		if(scheduler_object.get("hourOfDay") != null) {
+			Double _hourOfDay 		= (Double) scheduler_object.get("hourOfDay");
+			scheduler.hourOfDay   		= _hourOfDay.intValue();
+		}
+		
+		if(scheduler_object.get("minuteOfHour") != null) {
+			Double _minuteOfHour 	= (Double) scheduler_object.get("minuteOfHour");
+			scheduler.minuteOfHour   	= _minuteOfHour.intValue();
+		}
+
+		scheduler.executeSystemId   = (String) scheduler_object.get("executeSystemId");
+		scheduler.sourceSystemId   	= (String) scheduler_object.get("sourceSystemId");
+		scheduler.targetSystemId   	= (String) scheduler_object.get("targetSystemId");
+
+		if(scheduler_object.get("lastExecuteDate") != null) {
+			Object date_object = scheduler_object.get("lastExecuteDate");
+			System.out.println(date_object.getClass().getName());
+			System.out.println(date_object);
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy hh:mm:ss a",Locale.US);
+			try {
+				scheduler.lastExecuteDate = sdf.parse((String) date_object);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return scheduler;
+	}
+	
+	public String toString() {
+		return toString(false);
+	}
+	public String toString(boolean pretty) {
+		try {
+			GsonBuilder builder = new GsonBuilder().disableHtmlEscaping();
+			if (pretty) {
+				builder.setPrettyPrinting();
+			}
+			Gson gson = builder.create();
+			return gson.toJson(this);
+		} catch (Exception e) {
+			logger.error(e.getMessage() + " : ",  e);
+		}
+		return null;
+	}
 	
 	public String getSchedulerId() {
 		return schedulerId;
@@ -207,4 +282,5 @@ public class SCIMScheduler extends WowsantaJson {
 			throw new SCIMException("Scheduler build Failed ",e);
 		}
 	}
+
 }

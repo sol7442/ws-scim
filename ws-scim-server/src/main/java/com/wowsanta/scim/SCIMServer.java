@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
-import com.wowsanta.scim.resource.SCIMSystemRepository;
+import com.wowsanta.scim.repository.system.SCIMSystemRepository;
 import com.wowsanta.scim.scheduler.SCIMScheduler;
 import com.wowsanta.scim.scheduler.SCIMSchedulerManager;
 import com.wowsanta.scim.server.SparkConfiguration;
@@ -51,7 +51,7 @@ public class SCIMServer  {
 			
 			
 			loadRepository(service_config);
-			loadSsheduler();
+			loadScheduler();
 			
 			Spark.initExceptionHandler(new Consumer<Exception>() {
 				@Override
@@ -87,13 +87,13 @@ public class SCIMServer  {
 		return this;
     }
 
-	private void loadSsheduler() {
+	private void loadScheduler() {
 		try {
 			SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();	
 			if(system_repository != null) {
 				List<SCIMScheduler> scheduler_list = system_repository.getSchdulerAll();
 				for (SCIMScheduler scimScheduler : scheduler_list) {
-					logger.info("SCHEDULER INITIALIZE : {} ", scimScheduler.tojson(false));
+					logger.info("SCHEDULER INITIALIZE : {} ", scimScheduler);
 					SCIMSchedulerManager.getInstance().addScheduler(scimScheduler);
 				}
 				SCIMSchedulerManager.getInstance().initialize();
@@ -104,13 +104,12 @@ public class SCIMServer  {
 	}
 
 	private void loadRepository(SparkConfiguration service_config) {
-		logger.info("REPOSITORY CONFIG    : {}", service_config.getRepositoryConfig());
+		logger.info("- REPOSITORY CONFIG    : {}", service_config.getRepositoryConfig());
 		try {
-			
-			SCIMRepositoryManager.loadFromFile(service_config.getRepositoryClass(),service_config.getRepositoryConfig()).initailze();
-			
+			SCIMRepositoryManager.load(service_config.getRepositoryConfig()).initailze();
+		
 		}catch (Exception e) {
-			logger.error("REPOSITORY INITIALIZE FAILED ",e);
+			logger.error(e.getMessage() + " : {} ",service_config, e);
 		}
 	}
     //@Override

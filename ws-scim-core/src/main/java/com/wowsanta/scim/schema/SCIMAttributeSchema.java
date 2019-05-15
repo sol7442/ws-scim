@@ -46,6 +46,7 @@ public class SCIMAttributeSchema implements Serializable {
 	private String description;
 	private Boolean required;
 	private Boolean caseExact;
+	private String defaultValue;
 	private SCIMDefinitions.Mutability mutability;
 	private SCIMDefinitions.Returned returned;
 	private SCIMDefinitions.Uniqueness uniqueness;
@@ -53,6 +54,21 @@ public class SCIMAttributeSchema implements Serializable {
 	private ArrayList<String> canonicalValues;
 	private ArrayList<SCIMDefinitions.ReferenceType> referenceTypes;
 
+	public SCIMAttributeSchema(SCIMAttributeSchema attributeSchema) {
+		this.uri 			= attributeSchema.uri;
+		this.name 			= attributeSchema.name;
+		this.type 			= attributeSchema.type;
+		this.multiValued 	= attributeSchema.multiValued;
+		this.description 	= attributeSchema.description;
+		this.required 		= attributeSchema.required;
+		this.caseExact 		= attributeSchema.caseExact;
+		this.mutability 	= attributeSchema.mutability;
+		this.returned 		= attributeSchema.returned;
+		this.uniqueness 	= attributeSchema.uniqueness;
+		this.subAttributes 	= attributeSchema.subAttributes;
+		this.canonicalValues= attributeSchema.canonicalValues;
+		this.referenceTypes = attributeSchema.referenceTypes;
+	}
 	public SCIMAttributeSchema(String uri, String name, SCIMDefinitions.DataType type, Boolean multiValued,
 			String description, Boolean required, Boolean caseExact, SCIMDefinitions.Mutability mutability,
 			SCIMDefinitions.Returned returned, SCIMDefinitions.Uniqueness uniqueness, ArrayList<String> canonicalValues,
@@ -202,5 +218,11 @@ public class SCIMAttributeSchema implements Serializable {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		JsonReader reader = new JsonReader(new FileReader(file_name));
 		return gson.fromJson(reader, SCIMAttributeSchema.class);
+	}
+	public String getDefaultValue() {
+		return defaultValue;
+	}
+	public void setDefaultValue(String defaultValue) {
+		this.defaultValue = defaultValue;
 	}
 }

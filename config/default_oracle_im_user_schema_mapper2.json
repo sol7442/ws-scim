@@ -1,0 +1,727 @@
+{
+  "tables": [
+    {
+      "name": "SCIM_USER",
+      "index": 0,
+      "type": "StructuredTable",
+      "attributes": {
+        "TABLE_NAME": "SCIM_USER",
+        "MAX_TRANS": "255",
+        "MONITORING": "YES",
+        "SECONDARY": "N",
+        "CELL_FLASH_CACHE": "DEFAULT",
+        "INSTANCES": "         1",
+        "AVG_SPACE_FREELIST_BLOCKS": "0",
+        "DEPENDENCIES": "DISABLED",
+        "LOGGING": "YES",
+        "INITIAL_EXTENT": "65536",
+        "CHAIN_CNT": "0",
+        "STATUS": "VALID",
+        "MAX_EXTENTS": "2147483645",
+        "NUM_FREELIST_BLOCKS": "0",
+        "LAST_ANALYZED": "2019-04-18 22:00:07.0",
+        "SKIP_CORRUPT": "DISABLED",
+        "PCT_USED": "40",
+        "RESULT_CACHE": "DEFAULT",
+        "AVG_ROW_LEN": "17",
+        "AVG_SPACE": "0",
+        "CACHE": "    N",
+        "GLOBAL_STATS": "YES",
+        "DROPPED": "NO",
+        "DEGREE": "         1",
+        "MIN_EXTENTS": "1",
+        "NUM_ROWS": "2",
+        "TABLESPACE_NAME": "SYSTEM",
+        "BUFFER_POOL": "DEFAULT",
+        "FREELIST_GROUPS": "1",
+        "BACKED_UP": "N",
+        "SAMPLE_SIZE": "2",
+        "READ_ONLY": "NO",
+        "SEGMENT_CREATED": "YES",
+        "FLASH_CACHE": "DEFAULT",
+        "ROW_MOVEMENT": "DISABLED",
+        "TEMPORARY": "N",
+        "USER_STATS": "NO",
+        "TABLE_LOCK": "ENABLED",
+        "INI_TRANS": "1",
+        "NEXT_EXTENT": "1048576",
+        "EMPTY_BLOCKS": "0",
+        "COMPRESSION": "DISABLED",
+        "BLOCKS": "1",
+        "PCT_FREE": "10",
+        "PARTITIONED": "NO",
+        "NESTED": "NO",
+        "FREELISTS": "1"
+      },
+      "columns": [
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_USER",
+            "DATA_UPGRADED": "YES",
+            "LOW_VALUE": "3131313131",
+            "CHAR_USED": "C",
+            "COLUMN_NAME": "USERID",
+            "COLUMN_ID": "1",
+            "DATA_LENGTH": "200",
+            "SAMPLE_SIZE": "2",
+            "DENSITY": "0.5",
+            "NUM_DISTINCT": "2",
+            "LAST_ANALYZED": "2019-04-18 22:00:07.0",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "NUM_BUCKETS": "1",
+            "HIGH_VALUE": "3232323232",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "N",
+            "GLOBAL_STATS": "YES",
+            "CHAR_COL_DECL_LENGTH": "200",
+            "AVG_COL_LEN": "6",
+            "CHAR_LENGTH": "50",
+            "V80_FMT_IMAGE": "NO",
+            "NUM_NULLS": "0"
+          },
+          "type": "PrimaryColumn",
+          "id": "USERID",
+          "dataMapper": {
+            "id": "id"
+          },
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_USER",
+            "DATA_UPGRADED": "YES",
+            "LOW_VALUE": "74657374657231",
+            "CHAR_USED": "C",
+            "COLUMN_NAME": "USERNAME",
+            "COLUMN_ID": "2",
+            "DATA_LENGTH": "200",
+            "SAMPLE_SIZE": "2",
+            "DENSITY": "0.5",
+            "NUM_DISTINCT": "2",
+            "LAST_ANALYZED": "2019-04-18 22:00:07.0",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "NUM_BUCKETS": "1",
+            "HIGH_VALUE": "74657374657232",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "YES",
+            "CHAR_COL_DECL_LENGTH": "200",
+            "AVG_COL_LEN": "8",
+            "CHAR_LENGTH": "50",
+            "V80_FMT_IMAGE": "NO",
+            "NUM_NULLS": "0"
+          },
+          "type": "ValueColumn",
+          "id": "USERNAME",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_USER",
+            "DATA_UPGRADED": "YES",
+            "CHAR_USED": "C",
+            "COLUMN_NAME": "PASSWORD",
+            "COLUMN_ID": "3",
+            "DATA_LENGTH": "200",
+            "DENSITY": "0",
+            "NUM_DISTINCT": "0",
+            "LAST_ANALYZED": "2019-04-18 22:00:07.0",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "NUM_BUCKETS": "0",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "YES",
+            "CHAR_COL_DECL_LENGTH": "200",
+            "AVG_COL_LEN": "0",
+            "CHAR_LENGTH": "50",
+            "V80_FMT_IMAGE": "NO",
+            "NUM_NULLS": "2"
+          },
+          "type": "ValueColumn",
+          "id": "PASSWORD",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_USER",
+            "DATA_UPGRADED": "YES",
+            "CHAR_USED": "C",
+            "COLUMN_NAME": "USERTYPE",
+            "COLUMN_ID": "4",
+            "DATA_LENGTH": "200",
+            "DENSITY": "0",
+            "NUM_DISTINCT": "0",
+            "LAST_ANALYZED": "2019-04-18 22:00:07.0",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "NUM_BUCKETS": "0",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "YES",
+            "CHAR_COL_DECL_LENGTH": "200",
+            "AVG_COL_LEN": "0",
+            "CHAR_LENGTH": "50",
+            "V80_FMT_IMAGE": "NO",
+            "NUM_NULLS": "2"
+          },
+          "type": "ValueColumn",
+          "id": "USERTYPE",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_USER",
+            "DEFAULT_LENGTH": "4",
+            "DATA_UPGRADED": "YES",
+            "COLUMN_NAME": "PWCHANGEDATE",
+            "COLUMN_ID": "5",
+            "DATA_LENGTH": "11",
+            "DENSITY": "0",
+            "DATA_SCALE": "6",
+            "NUM_DISTINCT": "0",
+            "LAST_ANALYZED": "2019-04-18 22:00:07.0",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "TIMESTAMP(6)",
+            "NUM_BUCKETS": "0",
+            "DATA_DEFAULT": "NULL",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "YES",
+            "AVG_COL_LEN": "1",
+            "CHAR_LENGTH": "0",
+            "V80_FMT_IMAGE": "NO",
+            "NUM_NULLS": "2"
+          },
+          "type": "ValueColumn",
+          "id": "PWCHANGEDATE",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        }
+      ],
+      "id": "SCIM_USER",
+      "schemas": [
+        "urn:com:wowsanta:scim:2.0:repository:mssql:table"
+      ]
+    },
+    {
+      "name": "SCIM_USER_PROFILE",
+      "index": 2,
+      "type": "StructuredTable",
+      "attributes": {
+        "TABLE_NAME": "SCIM_USER_PROFILE",
+        "MAX_TRANS": "255",
+        "MONITORING": "YES",
+        "SECONDARY": "N",
+        "CELL_FLASH_CACHE": "DEFAULT",
+        "INSTANCES": "         1",
+        "AVG_SPACE_FREELIST_BLOCKS": "0",
+        "DEPENDENCIES": "DISABLED",
+        "LOGGING": "YES",
+        "INITIAL_EXTENT": "65536",
+        "CHAIN_CNT": "0",
+        "STATUS": "VALID",
+        "MAX_EXTENTS": "2147483645",
+        "NUM_FREELIST_BLOCKS": "0",
+        "LAST_ANALYZED": "2019-04-18 22:00:07.0",
+        "SKIP_CORRUPT": "DISABLED",
+        "PCT_USED": "40",
+        "RESULT_CACHE": "DEFAULT",
+        "AVG_ROW_LEN": "28",
+        "AVG_SPACE": "0",
+        "CACHE": "    N",
+        "GLOBAL_STATS": "YES",
+        "DROPPED": "NO",
+        "DEGREE": "         1",
+        "MIN_EXTENTS": "1",
+        "NUM_ROWS": "6",
+        "TABLESPACE_NAME": "SYSTEM",
+        "BUFFER_POOL": "DEFAULT",
+        "FREELIST_GROUPS": "1",
+        "BACKED_UP": "N",
+        "SAMPLE_SIZE": "6",
+        "READ_ONLY": "NO",
+        "SEGMENT_CREATED": "YES",
+        "FLASH_CACHE": "DEFAULT",
+        "ROW_MOVEMENT": "DISABLED",
+        "TEMPORARY": "N",
+        "USER_STATS": "NO",
+        "TABLE_LOCK": "ENABLED",
+        "INI_TRANS": "1",
+        "NEXT_EXTENT": "1048576",
+        "EMPTY_BLOCKS": "0",
+        "COMPRESSION": "DISABLED",
+        "BLOCKS": "3",
+        "PCT_FREE": "10",
+        "PARTITIONED": "NO",
+        "NESTED": "NO",
+        "FREELISTS": "1"
+      },
+      "columns": [
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_USER_PROFILE",
+            "DATA_UPGRADED": "YES",
+            "CHAR_USED": "B",
+            "COLUMN_NAME": "RANKCODE",
+            "COLUMN_ID": "7",
+            "DATA_LENGTH": "50",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_COL_DECL_LENGTH": "50",
+            "CHAR_LENGTH": "50",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "ValueColumn",
+          "id": "RANKCODE",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_USER_PROFILE",
+            "DATA_UPGRADED": "YES",
+            "CHAR_USED": "B",
+            "COLUMN_NAME": "ORGANIZATIONNAME",
+            "COLUMN_ID": "8",
+            "DATA_LENGTH": "50",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_COL_DECL_LENGTH": "50",
+            "CHAR_LENGTH": "50",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "ValueColumn",
+          "id": "ORGANIZATIONNAME",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_USER_PROFILE",
+            "DATA_UPGRADED": "YES",
+            "CHAR_USED": "B",
+            "COLUMN_NAME": "ORGANIZATIONCODE",
+            "COLUMN_ID": "9",
+            "DATA_LENGTH": "50",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_COL_DECL_LENGTH": "50",
+            "CHAR_LENGTH": "50",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "ValueColumn",
+          "id": "ORGANIZATIONCODE",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_USER_PROFILE",
+            "DATA_UPGRADED": "YES",
+            "CHAR_USED": "B",
+            "COLUMN_NAME": "ORGANIZATIONPATH",
+            "COLUMN_ID": "10",
+            "DATA_LENGTH": "256",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_COL_DECL_LENGTH": "256",
+            "CHAR_LENGTH": "256",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "ValueColumn",
+          "dataMapper": {
+            "id": "OrganizationPath",
+            "className": "com.wowsanta.scim.repository.impl.DefaultDataMapper",
+            "inMethod": "divIn",
+            "outMethod": "divOut"
+          },
+          "id": "ORGANIZATIONPATH",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_USER_PROFILE",
+            "DATA_UPGRADED": "YES",
+            "CHAR_USED": "B",
+            "COLUMN_NAME": "EMPLOYEENUMBER",
+            "COLUMN_ID": "11",
+            "DATA_LENGTH": "50",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_COL_DECL_LENGTH": "50",
+            "CHAR_LENGTH": "50",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "ValueColumn",
+          "id": "EMPLOYEENUMBER",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_USER_PROFILE",
+            "DATA_UPGRADED": "YES",
+            "CHAR_USED": "B",
+            "COLUMN_NAME": "POSITIONNAME",
+            "COLUMN_ID": "2",
+            "DATA_LENGTH": "50",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_COL_DECL_LENGTH": "50",
+            "CHAR_LENGTH": "50",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "ValueColumn",
+          "id": "POSITIONNAME",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_USER_PROFILE",
+            "DATA_UPGRADED": "YES",
+            "CHAR_USED": "B",
+            "COLUMN_NAME": "POSITIONCODE",
+            "COLUMN_ID": "3",
+            "DATA_LENGTH": "50",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_COL_DECL_LENGTH": "50",
+            "CHAR_LENGTH": "50",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "ValueColumn",
+          "id": "POSITIONCODE",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_USER_PROFILE",
+            "DATA_UPGRADED": "YES",
+            "CHAR_USED": "B",
+            "COLUMN_NAME": "JOBNAME",
+            "COLUMN_ID": "4",
+            "DATA_LENGTH": "50",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_COL_DECL_LENGTH": "50",
+            "CHAR_LENGTH": "50",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "ValueColumn",
+          "id": "JOBNAME",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_USER_PROFILE",
+            "DATA_UPGRADED": "YES",
+            "LOW_VALUE": "3131313131",
+            "CHAR_USED": "C",
+            "COLUMN_NAME": "USERID",
+            "COLUMN_ID": "1",
+            "DATA_LENGTH": "200",
+            "SAMPLE_SIZE": "6",
+            "DENSITY": "0.0833333333333333",
+            "NUM_DISTINCT": "2",
+            "LAST_ANALYZED": "2019-04-18 22:00:07.0",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "NUM_BUCKETS": "2",
+            "HIGH_VALUE": "3232323232",
+            "HISTOGRAM": "FREQUENCY",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "YES",
+            "CHAR_COL_DECL_LENGTH": "200",
+            "AVG_COL_LEN": "6",
+            "CHAR_LENGTH": "50",
+            "V80_FMT_IMAGE": "NO",
+            "NUM_NULLS": "0"
+          },
+          "type": "PrimaryColumn",
+          "dataMapper": {
+            "id": "id"
+          },
+          "id": "USERID",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_USER_PROFILE",
+            "DATA_UPGRADED": "YES",
+            "CHAR_USED": "B",
+            "COLUMN_NAME": "JOBCODE",
+            "COLUMN_ID": "5",
+            "DATA_LENGTH": "50",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_COL_DECL_LENGTH": "50",
+            "CHAR_LENGTH": "50",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "ValueColumn",
+          "id": "JOBCODE",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_USER_PROFILE",
+            "DATA_UPGRADED": "YES",
+            "CHAR_USED": "B",
+            "COLUMN_NAME": "RANKNAME",
+            "COLUMN_ID": "6",
+            "DATA_LENGTH": "50",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_COL_DECL_LENGTH": "50",
+            "CHAR_LENGTH": "50",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "ValueColumn",
+          "id": "RANKNAME",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        }
+      ],
+      "id": "SCIM_USER_PROFILE",
+      "schemas": [
+        "urn:com:wowsanta:scim:2.0:repository:mssql:table"
+      ]
+    },
+    {
+      "name": "SCIM_USER_META",
+      "index": 1,
+      "type": "StructuredTable",
+      "attributes": {
+        "TABLE_NAME": "SCIM_USER_META",
+        "MAX_TRANS": "255",
+        "MONITORING": "YES",
+        "SECONDARY": "N",
+        "CELL_FLASH_CACHE": "DEFAULT",
+        "INSTANCES": "         1",
+        "DEPENDENCIES": "DISABLED",
+        "LOGGING": "YES",
+        "INITIAL_EXTENT": "65536",
+        "STATUS": "VALID",
+        "MAX_EXTENTS": "2147483645",
+        "SKIP_CORRUPT": "DISABLED",
+        "PCT_USED": "40",
+        "RESULT_CACHE": "DEFAULT",
+        "CACHE": "    N",
+        "GLOBAL_STATS": "NO",
+        "DROPPED": "NO",
+        "DEGREE": "         1",
+        "MIN_EXTENTS": "1",
+        "TABLESPACE_NAME": "SYSTEM",
+        "BUFFER_POOL": "DEFAULT",
+        "FREELIST_GROUPS": "1",
+        "BACKED_UP": "N",
+        "READ_ONLY": "NO",
+        "SEGMENT_CREATED": "YES",
+        "FLASH_CACHE": "DEFAULT",
+        "ROW_MOVEMENT": "DISABLED",
+        "TEMPORARY": "N",
+        "USER_STATS": "NO",
+        "TABLE_LOCK": "ENABLED",
+        "INI_TRANS": "1",
+        "NEXT_EXTENT": "1048576",
+        "COMPRESSION": "DISABLED",
+        "PCT_FREE": "10",
+        "PARTITIONED": "NO",
+        "NESTED": "NO",
+        "FREELISTS": "1"
+      },
+      "columns": [
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_USER_META",
+            "DATA_UPGRADED": "YES",
+            "CHAR_USED": "C",
+            "COLUMN_NAME": "USERID",
+            "COLUMN_ID": "1",
+            "DATA_LENGTH": "200",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "N",
+            "GLOBAL_STATS": "NO",
+            "CHAR_COL_DECL_LENGTH": "200",
+            "CHAR_LENGTH": "50",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "PrimaryColumn",
+          "id": "USERID",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_USER_META",
+            "DATA_UPGRADED": "YES",
+            "COLUMN_NAME": "EXPIREDATE",
+            "COLUMN_ID": "5",
+            "DATA_LENGTH": "7",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "DATE",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_LENGTH": "0",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "ValueColumn",
+          "id": "EXPIREDATE",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_USER_META",
+            "DATA_UPGRADED": "YES",
+            "COLUMN_NAME": "ACTIVE",
+            "COLUMN_ID": "2",
+            "DATA_LENGTH": "22",
+            "DATA_SCALE": "0",
+            "DATA_PRECISION": "10",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "NUMBER",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_LENGTH": "0",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "ValueColumn",
+          "id": "ACTIVE",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_USER_META",
+            "DATA_UPGRADED": "YES",
+            "COLUMN_NAME": "CREATEDATE",
+            "COLUMN_ID": "3",
+            "DATA_LENGTH": "11",
+            "DATA_SCALE": "6",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "TIMESTAMP(6)",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_LENGTH": "0",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "ValueColumn",
+          "id": "CREATEDATE",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        },
+        {
+          "attributes": {
+            "TABLE_NAME": "SCIM_USER_META",
+            "DATA_UPGRADED": "YES",
+            "COLUMN_NAME": "MODIFYDATE",
+            "COLUMN_ID": "4",
+            "DATA_LENGTH": "11",
+            "DATA_SCALE": "6",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "TIMESTAMP(6)",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "NO",
+            "CHAR_LENGTH": "0",
+            "V80_FMT_IMAGE": "NO"
+          },
+          "type": "ValueColumn",
+          "id": "MODIFYDATE",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+          ]
+        }
+      ],
+      "id": "SCIM_USER_META",
+      "schemas": [
+        "urn:com:wowsanta:scim:2.0:repository:mssql:table"
+      ]
+    }
+  ]
+}

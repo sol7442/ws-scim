@@ -2,6 +2,8 @@ package com.wowsanta.scim.obj;
 
 import java.util.Date;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.wowsanta.scim.json.AbstractJsonObject;
 
 public class SCIMSchedulerHistory extends AbstractJsonObject {
@@ -18,14 +20,11 @@ public class SCIMSchedulerHistory extends AbstractJsonObject {
 		this.schedulerId = schedulerId;
 	}
 	public void addAudit(SCIMAudit audit) {
-//		this.workId   = audit.getWorkId(); 
-//		this.workerId = audit.getWorkerId();
 		if(audit.getResult().equals("SUCCESS")) {
 			this.successCount++;
 		}else{
 			this.failCount++;
 		};
-//		this.workDate = audit.getWorkDate();
 	}
 	public String getSchedulerId() {
 		return schedulerId;
@@ -64,4 +63,20 @@ public class SCIMSchedulerHistory extends AbstractJsonObject {
 		this.workId = workId;
 	}
 	 
+	public String toString() {
+		return toString(false);
+	}
+	public String toString(boolean pretty) {
+		try {
+			GsonBuilder builder = new GsonBuilder().disableHtmlEscaping();
+			if(pretty) {
+				builder.setPrettyPrinting();
+			}
+			Gson gson  = builder.create();
+			return gson.toJson(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

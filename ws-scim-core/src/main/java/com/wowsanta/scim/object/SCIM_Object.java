@@ -5,13 +5,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 public class SCIM_Object {
-	private String id;
-	private List<String> schemas = new ArrayList<String>();
+	private static transient Logger logger = LoggerFactory.getLogger(SCIM_Object.class);
+	
+	protected String id;
+	protected List<String> schemas = new ArrayList<String>();
 	
 	public String getId() {
 		return id;
@@ -33,12 +38,17 @@ public class SCIM_Object {
 		return toString(false);
 	}
 	public String toString(boolean pretty) {
-		GsonBuilder builder = new GsonBuilder().disableHtmlEscaping();
-		if(pretty) {
-			builder.setPrettyPrinting();
+		try {
+			GsonBuilder builder = new GsonBuilder().disableHtmlEscaping();
+			if(pretty) {
+				builder.setPrettyPrinting();
+			}
+			Gson gson = builder.create();
+			return gson.toJson(this);
+		}catch (Exception e) {
+			logger.error("OBJECT ERRORR : {} ",e.getMessage(),e);
 		}
-		Gson gson = builder.create();
-		return gson.toJson(this);
+		return this.toString();
 	}
 }
 

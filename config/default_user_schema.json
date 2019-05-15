@@ -101,7 +101,7 @@
 			"returned": "DEFAULT",
 			"uniqueness": "NONE"
 		},
-		"RetireDate": {
+		"retireDate": {
 			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:RetireDate",
 			"name": "RetireDate",
 			"type": "DATE_TIME",
@@ -125,7 +125,7 @@
 			"returned": "DEFAULT",
 			"uniqueness": "NONE"
 		},
-		"Active": {
+		"active": {
 			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:Active",
 			"name": "Active",
 			"type": "BOOLEAN",
@@ -137,7 +137,7 @@
 			"returned": "DEFAULT",
 			"uniqueness": "NONE"
 		},
-		"RankName": {
+		"rankName": {
 			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:RankName",
 			"name": "RankName",
 			"type": "STRING",
@@ -149,7 +149,7 @@
 			"returned": "DEFAULT",
 			"uniqueness": "NONE"
 		},
-		"RankCode": {
+		"rankCode": {
 			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:RankCode",
 			"name": "RankCode",
 			"type": "STRING",
@@ -161,7 +161,7 @@
 			"returned": "DEFAULT",
 			"uniqueness": "NONE"
 		},
-		"JobName": {
+		"jobName": {
 			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:JobName",
 			"name": "JobName",
 			"type": "STRING",
@@ -173,7 +173,7 @@
 			"returned": "DEFAULT",
 			"uniqueness": "NONE"
 		},
-		"JobCode": {
+		"jobCode": {
 			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:JobCode",
 			"name": "JobCode",
 			"type": "STRING",
@@ -185,7 +185,7 @@
 			"returned": "DEFAULT",
 			"uniqueness": "NONE"
 		},
-		"PositionName": {
+		"positionName": {
 			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:PositionName",
 			"name": "PositionName",
 			"type": "STRING",
@@ -197,7 +197,7 @@
 			"returned": "DEFAULT",
 			"uniqueness": "NONE"
 		},
-		"PositionCode": {
+		"positionCode": {
 			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:PositionCode",
 			"name": "PositionCode",
 			"type": "STRING",
@@ -209,7 +209,7 @@
 			"returned": "DEFAULT",
 			"uniqueness": "NONE"
 		},
-		"OrganizationName": {
+		"organizationName": {
 			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:OrganizationName",
 			"name": "OrganizationName",
 			"type": "STRING",
@@ -221,7 +221,7 @@
 			"returned": "DEFAULT",
 			"uniqueness": "NONE"
 		},
-		"OrganizationCode": {
+		"organizationCode": {
 			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:OrganizationCode",
 			"name": "OrganizationCode",
 			"type": "STRING",
@@ -233,7 +233,7 @@
 			"returned": "DEFAULT",
 			"uniqueness": "NONE"
 		},
-		"OrganizationPath": {
+		"organizationPath": {
 			"uri": "urn:wowsanta:scim:schemas:core:2.0:User:groupPath",
 			"name": "OrganizationPath",
 			"type": "STRING",

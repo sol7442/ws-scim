@@ -42,7 +42,8 @@ public class SparkRouterController extends SparkController{
 	private BlukService blukService = new BlukService();
 	private AuditService auditService = new AuditService();
 	private AccountService accountService = new AccountService();
-	
+	private EnvironmentService envService = new EnvironmentService(); 
+			
 	public void control() {
 		before("/*",authService.verify());
 		
@@ -89,7 +90,7 @@ public class SparkRouterController extends SparkController{
 		path("/agent", () -> {	
 			get("/service/:systemId"   		,agentService.getSystemInfo(), new JsonTransformer());
 			post("/service/:systemId"   	,agentService.setSystemInfo(), new JsonTransformer());
-			get("/repository/:systemId"   	,agentService.getRepositoryInfo(), new JsonTransformer());
+//			get("/repository/:systemId"   	,agentService.getRepositoryInfo(), new JsonTransformer());
 			post("/repository/:systemId"   	,agentService.setRepositoryInfo(), new JsonTransformer());
 			
 			get("/library/:systemId" 		,agentService.getLibrary(), new JsonTransformer());			
@@ -102,11 +103,11 @@ public class SparkRouterController extends SparkController{
 	private void env() {
 		path("/env", () -> {	
 			path("/admins", () -> {
-				get(	"/"   			,EnvironmentService.getAllAdmin()		, new JsonTransformer());
-				put(	"/"   			,new EnvironmentService().createAdmin()	, new JsonTransformer());				
-				post(	"/"   			,EnvironmentService.updateAdmin()		, new JsonTransformer());
-				get(	"/:adminId"   	,EnvironmentService.getAdmin()			, new JsonTransformer());
-				delete(	"/:adminId"   	,EnvironmentService.deleteAdmin()		, new JsonTransformer());
+				//get(	"/"   			,EnvironmentService.getAllAdmin()		, new JsonTransformer());
+				put(	"/"   			,envService.createAdmin()	, new JsonTransformer());				
+				post(	"/"   			,envService.updateAdmin()		, new JsonTransformer());
+				get(	"/:adminId"   	,envService.getAdmin()			, new JsonTransformer());
+				delete(	"/:adminId"   	,envService.deleteAdmin()		, new JsonTransformer());
 			});
 		});
 	}

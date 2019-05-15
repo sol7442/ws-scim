@@ -12,7 +12,7 @@ import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
-import com.wowsanta.scim.repository.SCIMResourceRepository;
+import com.wowsanta.scim.repository.SCIMRepositoryController;
 import com.wowsanta.scim.util.Random;
 
 public class SsoRepositoryTest {
@@ -38,7 +38,7 @@ public class SsoRepositoryTest {
 			
 			load_manager(config_file);
 			
-			SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
+			SCIMRepositoryController res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
 			
 			Calendar cal = Calendar.getInstance();
 			Date to = cal.getTime();
@@ -69,7 +69,7 @@ public class SsoRepositoryTest {
 			
 			load_manager(config_file);
 			
-			SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
+			SCIMRepositoryController res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
 			
 			Calendar cal = Calendar.getInstance();
 			Date to = cal.getTime();
@@ -99,7 +99,7 @@ public class SsoRepositoryTest {
 	
 	
 	public void createUsers(int size) {
-		SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
+		SCIMRepositoryController res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
 		
 		for (int i = 0; i < size; i++) {
 			User user = new User();

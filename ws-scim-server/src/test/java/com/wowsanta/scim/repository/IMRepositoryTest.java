@@ -12,7 +12,7 @@ import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
-import com.wowsanta.scim.repository.SCIMResourceRepository;
+import com.wowsanta.scim.repository.SCIMRepositoryController;
 import com.wowsanta.scim.resource.SCIMResourceSetterRepository;
 import com.wowsanta.scim.util.Random;
 
@@ -39,7 +39,7 @@ public class IMRepositoryTest {
 			
 			load_manager(config_file);
 			
-			SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
+			SCIMRepositoryController res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
 			
 //			List<SCIMUser> user_list = res_repo.getAllActiveUsers();
 //			System.out.println("user_list["+user_list.size()+"]");
@@ -63,7 +63,7 @@ public class IMRepositoryTest {
 			
 			load_manager(config_file);
 			
-			SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
+			SCIMRepositoryController res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
 			
 //			List<SCIMUser> user_list = res_repo.getAllActiveUsers();
 //			System.out.println("user_list["+user_list.size()+"]");
@@ -81,7 +81,7 @@ public class IMRepositoryTest {
 			
 			load_manager(config_file);
 			
-			SCIMResourceRepository res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
+			SCIMRepositoryController res_repo = SCIMRepositoryManager.getInstance().getResourceRepository();
 			
 			Calendar cal = Calendar.getInstance();
 			Date to = cal.getTime();

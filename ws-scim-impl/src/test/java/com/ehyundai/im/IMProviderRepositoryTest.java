@@ -16,9 +16,9 @@ import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.policy.impl.DefaultPasswordPoilcy;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
 import com.wowsanta.scim.repository.SCIMServerResourceRepository;
-import com.wowsanta.scim.resource.SCIMProviderRepository;
+import com.wowsanta.scim.repository.system.SCIMProviderRepository;
+import com.wowsanta.scim.repository.system.SCIMSystemRepository;
 import com.wowsanta.scim.resource.SCIMSystemColumn;
-import com.wowsanta.scim.resource.SCIMSystemRepository;
 import com.wowsanta.scim.schema.SCIMDefinitions;
 import com.wowsanta.scim.util.Random;
 

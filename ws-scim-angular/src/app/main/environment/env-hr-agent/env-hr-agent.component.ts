@@ -31,13 +31,6 @@ export class EnvHrAgentComponent implements OnInit {
 
   private displayDialog:boolean = false;
 
-  //string = "testaassssssaa";
-  //private repositorys:RepositoryType[];// = ["Oracle","MsSql","MySql"];
-  //private selectcedRepository;//:String;
-
-  //private jdbcUrl:string;
-  //private repository:any = null;
-
   private librayUploadUrl:string;
   private configUploadUrl:string;
 
@@ -70,12 +63,20 @@ export class EnvHrAgentComponent implements OnInit {
   }
 
   getConfigList(){
+    this.configFiles = [];
     this.scimApiService.getConfigFileList(this.selectedSystem.systemId)
     .pipe(first())
-    .subscribe( data =>{
-      console.log("config file list >>>: ", data);
-      this.configFiles = data;
-
+    .subscribe( result =>{
+      console.log("result >>>: ", result);
+      if(result.state === "Success"){
+        var i=0;
+        var len = result.data.length;
+        for (i=0; i<len; ++i) {
+          this.configFiles.push({label:result.data[i], value:result.data[i]});
+        }
+      }else{
+        this.alertService.fail(result.message);
+      }
     },error =>{
       console.log("login-error : ", error);
     });
@@ -134,18 +135,20 @@ export class EnvHrAgentComponent implements OnInit {
   uploadConfig(event:any){
     console.log("selected system : ", this.selectedSystem.systemId);
     console.log("uploadConfig result : ", event);
-    //this.configUploadUrl = "/agent/config/" + this.selectedSystem.systemId;
   }
 
   getTableList(){
     this.scimApiService.getTableList(this.selectedSystem.systemId)
     .pipe(first())
-    .subscribe( data =>{
-      console.log("table list >>>: ", data);
-      this.repositoryTables = data.data.data;
-      this.schemaData = JSON.stringify(data.data.data,null, 2);
-      console.log("schema data >>>: ", this.schemaData );
-
+    .subscribe( result =>{
+      console.log("table list >>>: ", result);
+      if(result.state === "Success"){
+        this.repositoryTables = result.data;
+        this.schemaData = JSON.stringify(result.data,null, 2);
+      }else{
+        console.error(result.message);
+        this.alertService.fail(result.message);
+      }
     },error =>{
       console.log("login-error : ", error);
     });
@@ -158,9 +161,7 @@ export class EnvHrAgentComponent implements OnInit {
     .pipe(first())
     .subscribe( data =>{
       console.log("table list >>>: ", data);
-      //
-      //console.log("schema data >>>: ", this.schemaData );
-
+      this.schemaData = JSON.stringify(data.data.data,null, 2);
     },error =>{
       console.log("login-error : ", error);
     });

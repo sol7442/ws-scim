@@ -10,9 +10,11 @@ import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.MultipartConfigElement;
@@ -37,11 +39,13 @@ import com.wowsanta.scim.protocol.ClientReponse;
 import com.wowsanta.scim.protocol.FrontResponse;
 import com.wowsanta.scim.protocol.ResponseState;
 import com.wowsanta.scim.repository.AbstractSCIMRepository;
+import com.wowsanta.scim.repository.RepositoryOutputMapper;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.user.LoginUser;
 import com.wowsanta.scim.resource.worker.Worker;
 import com.wowsata.util.net.WowsantaURLEncoder;
 
+import oracle.net.aso.c;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -64,37 +68,6 @@ public class AgentService {
 	public Route setSystemInfo() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	public Route getRepositoryInfo() {
-		return new Route() {
-			@Override
-			public Object handle(Request request, Response response) throws Exception {
-				try {
-					String systemId = request.params(":systemId");
-					SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
-					if(system == null) {
-						SCIMError error = SCIMError.invalidValue;
-						error.addDetail("system ID not found : " + systemId);
-						throw new SCIMException(error);
-					}
-					
-					
-					String system_url = system.getSystemUrl();
-					String call_url   = system_url + "/config/repository";
-							
-					Worker worker = findWorker(request);
-					RESTClient clinent = new RESTClient(worker);
-					String result = clinent.get2(call_url);
-					
-					logger.debug("REMOTE REPOSITORY : {} ", result);
-					
-					return AbstractSCIMRepository.loadFromString(result);
-				}catch(Exception e) {
-					return e;//.getError();
-				}
-			}
-		};
 	}
 
 	public Route setRepositoryInfo() {
@@ -291,27 +264,32 @@ public class AgentService {
 		return new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
-				String systemId = request.params(":systemId");
-				SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
-				String system_url = system.getSystemUrl();
-				String call_url   = system_url + "/log/list";
-				
-				Worker worker = findWorker(request);
-				RESTClient clinent = new RESTClient(worker);
-				
-				logger.info("getLogFileList systemId : {}, call_url : {}",systemId,call_url);
-
-				String resul_str = clinent.call(call_url);
-				
-				Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
-				File[] log_files = gson.fromJson(resul_str,File[].class);
-				
-				File[] log_file_array = new File[log_files.length];
-				for(int i=0; i<log_files.length; i++) {
-					log_file_array[i] = new File(log_files[i].getName());
+				FrontResponse front_response = new FrontResponse();
+				RESTClient client = null;
+				try {
+					String systemId = request.params(":systemId");
+					SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
+					String system_url = system.getSystemUrl();
+					String call_url   = system_url + "/log/list";
+					
+					Worker worker = findWorker(request);
+					client = new RESTClient(worker);
+					ClientReponse client_response = client.get(call_url);
+					if(client_response != null) {
+						front_response.setData(client_response.getData());
+						front_response.setState(ResponseState.Success);	
+					}else {
+						front_response.setState(ResponseState.Fail);
+						front_response.setMessage("service response is null");
+					}
+				}catch (Exception e) {
+					front_response.setState(ResponseState.Fail);;
+					front_response.setMessage(e.getMessage());
+					logger.error("getConfigFileList failed : " + e.getMessage(),e);
+				}finally {
+					client.close();
 				}
-
-				return log_file_array;
+				return front_response;
 			}
 		};
 	}
@@ -360,7 +338,7 @@ public class AgentService {
 		return new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
-				
+				FrontResponse front_response = new FrontResponse();
 				RESTClient client = null;
 				try {
 					String systemId = request.params(":systemId");
@@ -368,33 +346,26 @@ public class AgentService {
 					SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
 					String system_url = system.getSystemUrl();
 					String call_url   = system_url + "/config/list";
-					
-					
 					Worker worker = findWorker(request);
 					client = new RESTClient(worker);
-						
-					logger.info("getConfigFileList systemId : {}, call_url : {}",systemId,call_url);
-					String result = client.call(call_url);
 					
-					logger.info("getConfigFileList result : {} ",result);
-					
-					Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
-					File[] config__files = gson.fromJson(result,File[].class);
-					
-					File[] config_file_array = new File[config__files.length];
-					for(int i=0; i<config__files.length; i++) {
-						String config_file_name = config__files[i].getName();
-						config_file_array[i] = new File(config_file_name);
+					ClientReponse client_response = client.get(call_url);
+					if(client_response != null) {
+						front_response.setData(client_response.getData());
+						front_response.setState(ResponseState.Success);	
+					}else {
+						front_response.setState(ResponseState.Fail);
+						front_response.setMessage("service response is null");
 					}
-
-					return config_file_array;
-					
 				}catch (Exception e) {
-					client.close();
-					
+					front_response.setState(ResponseState.Fail);;
+					front_response.setMessage(e.getMessage());
 					logger.error("getConfigFileList failed : " + e.getMessage(),e);
+				}finally {
+					client.close();
 				}
-				return "fail";
+				
+				return front_response;
 			}
 		};
 	}
@@ -493,10 +464,7 @@ public class AgentService {
 		return new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
-				
 				FrontResponse front_response = new FrontResponse();
-
-				
 				RESTClient client = null;
 				try {
 					String systemId = request.params(":systemId");
@@ -508,10 +476,14 @@ public class AgentService {
 					Worker worker = findWorker(request);
 					client = new RESTClient(worker);
 						
-					ClientReponse client_response = client.get3(call_url);
-					front_response.setData(client_response);
-					front_response.setState(ResponseState.Success);;
-					
+					ClientReponse client_response = client.get(call_url);
+					if(client_response != null) {
+						front_response.setData(client_response.getData());
+						front_response.setState(ResponseState.Success);	
+					}else {
+						front_response.setState(ResponseState.Fail);
+						front_response.setMessage("service response is null");
+					}
 				}catch (Exception e) {
 					front_response.setState(ResponseState.Fail);;
 					front_response.setMessage(e.getMessage());
@@ -529,10 +501,7 @@ public class AgentService {
 		return new Route() {
 			@Override
 			public Object handle(Request request, Response response) throws Exception {
-				
 				FrontResponse front_response = new FrontResponse();
-
-				
 				RESTClient client = null;
 				try {
 					String systemId = request.params(":systemId");
@@ -545,7 +514,7 @@ public class AgentService {
 					Worker worker = findWorker(request);
 					client = new RESTClient(worker);
 						
-					ClientReponse client_response = client.get3(call_url);
+					ClientReponse client_response = client.get(call_url);
 					front_response.setData(client_response);
 					front_response.setState(ResponseState.Success);;
 					
@@ -557,6 +526,74 @@ public class AgentService {
 					client.close();
 				}
 				
+				return front_response;
+			}
+		};
+	}
+
+	public Route getSchemOutputMapper() {
+		return new Route() {
+			@Override
+			public Object handle(Request request, Response response) throws Exception {
+				FrontResponse front_response = new FrontResponse();
+				RESTClient client = null;
+
+				try {
+					String systemId = request.params("systemId");
+					SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
+					String system_url = system.getSystemUrl();
+					String call_url   = system_url + "/schema/mapper/output";
+					
+					Worker worker = findWorker(request);
+					client = new RESTClient(worker);
+					ClientReponse client_response = client.get(call_url);
+					if(client_response != null) {
+						front_response.setData(client_response.getData());
+						front_response.setState(ResponseState.Success);	
+					}else {
+						front_response.setState(ResponseState.Fail);
+						front_response.setMessage("service response is null");
+					}
+					
+				}catch (Exception e) {
+					logger.error("{}",e.getMessage(), e);
+					front_response.setState(ResponseState.Fail);
+					front_response.setMessage(e.getMessage());
+				}
+				return front_response;
+			}
+		};
+	}
+
+	public Route getSchemInputMapper() {
+		return new Route() {
+			@Override
+			public Object handle(Request request, Response response) throws Exception {
+				FrontResponse front_response = new FrontResponse();
+				RESTClient client = null;
+
+				try {
+					String systemId = request.params("systemId");
+					SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
+					String system_url = system.getSystemUrl();
+					String call_url   = system_url + "/schema/mapper/input";
+					
+					Worker worker = findWorker(request);
+					client = new RESTClient(worker);
+					ClientReponse client_response = client.get(call_url);
+					if(client_response != null) {
+						front_response.setData(client_response.getData());
+						front_response.setState(ResponseState.Success);	
+					}else {
+						front_response.setState(ResponseState.Fail);
+						front_response.setMessage("service response is null");
+					}
+					
+				}catch (Exception e) {
+					logger.error("{}",e.getMessage(), e);
+					front_response.setState(ResponseState.Fail);
+					front_response.setMessage(e.getMessage());
+				}
 				return front_response;
 			}
 		};

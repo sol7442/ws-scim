@@ -1,44 +1,31 @@
-<p-panel class="context-body" >
-        <p-header>
-            <div class="ui-helper-clearfix">
-                <span class="ui-panel-title context-header-text" style="display:inline-block;margin-top:4px;font-weight:bold">
-                  시스템 계정 현황[{{systemId}}]
-                </span>
-            </div>
-        </p-header>
-        <p-card >
-            <table>
-                <tr>
-                    <td >
-                        <p-card >
-                            <label> 총 계정 : </label> {{totalCount}}
-                            <hr class="red-line">
-                            <label> 계정 상태 </label> : <label> 통합 : </label> {{integrateCount}} , <label> 고스트 : </label> {{ghostCount}}                        
-                            <hr class="red-line">
-                            <label> 계정 종류 </label> : <label> 활성 : </label> {{activeCount}} , <label> 비활성 : </label> {{inActiveCount}}
-                        </p-card>
-                    </td>
-                    <td class="chart-box" >
-                        <p-chart type="pie" [data]="accountState"></p-chart>
-                    </td >
-                    <td class="chart-box">
-                        <p-chart type="pie" [data]="accountStatus"></p-chart>
-                    </td>
-                </tr>
-            </table>
-        </p-card>
-    </p-panel>
-    <p-panel>
-        <p-header>
-            <div class="ui-helper-clearfix">
-                <span class="ui-panel-title context-header-text" style="display:inline-block;margin-top:4px;font-weight:bold">
-                    계정 리스트
-                </span>
-            </div>
-        </p-header>
-    
-        <p-table class="table-cell-center" [value]="accounts"  [responsive]="true"  selectionMode="single" >
+<p-panel class="context-body" header="시스템 계정 현황[{{systemId}}]" >
+        
+    <p-card >
+        <table>
+            <tr>
+                <td >
+                    <p-card >
+                        <label> 총 계정 : </label> {{totalCount}}
+                        <hr class="red-line">
+                        <label> 계정 상태 </label> : <label> 통합 : </label> {{integrateCount}} , <label> 고스트 : </label> {{ghostCount}}                        
+                        <hr class="red-line">
+                        <label> 계정 종류 </label> : <label> 활성 : </label> {{activeCount}} , <label> 비활성 : </label> {{inActiveCount}}
+                    </p-card>
+                </td>
+                <td class="chart-box" >
+                    <p-chart type="pie" [data]="accountState"></p-chart>
+                </td >
+                <td class="chart-box">
+                    <p-chart type="pie" [data]="accountStatus"></p-chart>
+                </td>
+            </tr>
+        </table>
+    </p-card>
+</p-panel>
+<p-panel header="계정 리스트">
+    <p-table class="table-cell-center" [value]="accounts"  [responsive]="true" [paginator]="true" [rows]="5" selectionMode="single" >
         <ng-template pTemplate="header">
+            <!--
             <tr>
                 <td>
                     <table>
@@ -57,6 +44,7 @@
                     </table>
                 </td>
             </tr>    
+            -->
             <tr>
                 <th>사용자 사번</th>
                 <th>사용자 이름</th>
@@ -67,13 +55,14 @@
         </ng-template>
         <ng-template pTemplate="body" let-account>
             <tr (click)="onSelelectAccount(account)">
-                <td style="text-align: center">{{account.employeeNumber}}</td>
-                <td style="text-align: center">{{account.userName}}</td>
-                <td style="text-align: center">{{account.active}}</td>
-                <td style="text-align: center">{{account.created | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
-                <td style="text-align: center">{{account.lastModified | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
+                <td style="text-align: center">{{account.attributes.employeeNumber}}</td>
+                <td style="text-align: center">{{account.attributes.name}}</td>
+                <td style="text-align: center">{{account.attributes.active}}</td>
+                <td style="text-align: center">{{account.attributes.createDate | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
+                <td style="text-align: center">{{account.attributes.modifyDate | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
             </tr>
         </ng-template>
+        <!--
         <ng-template pTemplate="footer">
             <tr>
                 <td colspan="5">
@@ -81,38 +70,25 @@
                 </td>
             </tr>
         </ng-template>
+        -->
         </p-table>
     </p-panel>
-    <p-panel>
-        <p-header>
-            <div class="ui-helper-clearfix">
-                <span class="ui-panel-title context-header-text" style="display:inline-block;margin-top:4px;font-weight:bold">
-                    계정 배포 현황
-                </span>
-            </div>
-        </p-header>
-    
-        <p-table class="table-cell-center" [value]="sysAccounts" [paginator]="true" [rows]="5" [responsive]="true"  selectionMode="single">
+    <p-panel header="계정 변경 이력">
+        <p-table class="table-cell-center" [value]="accountHistory" [paginator]="true" [rows]="5" [responsive]="true"  selectionMode="single">
         <ng-template pTemplate="header">
             <tr>
-                <th>시스템</th>
-                <th>아이디</th>
-                <th>이름</th>
-                <th>상태</th>
-                <th>생성일</th>
                 <th>변경일</th>
-                <th>배포일일</th>
+                <th>작업자</th>
+                <th>내용</th>
+                <th>상태</th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-sys_account>
+        <ng-template pTemplate="body" let-history>
             <tr>
-                <td style="text-align: center">{{sys_account.systemId}}</td>
-                <td style="text-align: center">{{sys_account.id}}</td>
-                <td style="text-align: center">{{sys_account.userName}}</td>
-                <td style="text-align: center">{{sys_account.active}}</td>
-                <td style="text-align: center">{{sys_account.created | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
-                <td style="text-align: center">{{sys_account.lastModified | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
-                <td style="text-align: center">{{sys_account.provisionDate | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
+                <td style="text-align: center">{{history.workDate }}</td>
+                <td style="text-align: center">{{history.workerId}}</td>
+                <td style="text-align: center">{{history.method}}</td>
+                <td style="text-align: center">{{history.active}}</td>
             </tr>
         </ng-template>
         </p-table>

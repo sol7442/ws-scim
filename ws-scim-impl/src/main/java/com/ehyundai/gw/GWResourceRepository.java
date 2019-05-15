@@ -25,7 +25,7 @@ import com.wowsanta.scim.repository.RepositoryException;
 import com.wowsanta.scim.repository.ResourceColumn;
 import com.wowsanta.scim.repository.ResourceTable;
 import com.wowsanta.scim.repository.SCIMResourceGetterRepository;
-import com.wowsanta.scim.repository.SCIMResourceRepository;
+import com.wowsanta.scim.repository.SCIMRepositoryController;
 import com.wowsanta.scim.resource.SCIMGroup;
 import com.wowsanta.scim.resource.SCIMSystemColumn;
 import com.wowsanta.scim.schema.SCIMResourceTypeSchema;

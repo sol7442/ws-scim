@@ -1,0 +1,18 @@
+{
+	"dbcp": {
+		"poolName": "sso-resource",
+		"driverName": "oracle.jdbc.driver.OracleDriver",
+		"jdbcUrl": "jdbc:oracle:thin:@192.168.0.200:1521:xe",
+		"userName": "ssodbuser",
+		"password": "Abcd1234",
+		"valiationQuery": "SELECT 1",
+		"timeBetweenEvictionRunsMillis": 60000,
+		"testWhileIdle": true,
+		"minIdle": 5,
+		"maxTotal": 10
+	},
+    "userOutputMapper": "../config/sso_user_resource_output_mapper.json",
+    "userInputMapper": "../config/sso_user_resource_input_mapper.json",
+    "groupOutputMapper": "../config/sso_group_resource_output_mapper.json",
+    "groupInputMapper": "../config/sso_group_resource_input_mapper.json"    
+}

@@ -1,0 +1,179 @@
+{
+  "table": {
+    "name": "GW_ORG_INFO",
+    "index": 0,
+    "type": "StructuredTable",
+    "attributes": {
+      "TABLE_CATALOG": "scim_gw",
+      "TABLE_NAME": "GW_ORG_INFO",
+      "TABLE_SCHEMA": "dbo",
+      "TABLE_TYPE": "BASE TABLE"
+    },
+    "columns": [
+      {
+        "attributes": {
+          "TABLE_CATALOG": "scim_gw",
+          "IS_NULLABLE": "YES",
+          "TABLE_NAME": "GW_ORG_INFO",
+          "TABLE_SCHEMA": "dbo",
+          "COLUMN_NAME": "GROUPID",
+          "CHARACTER_OCTET_LENGTH": "50",
+          "COLLATION_NAME": "Korean_Wansung_CI_AS",
+          "ORDINAL_POSITION": "1",
+          "CHARACTER_MAXIMUM_LENGTH": "50",
+          "DATA_TYPE": "varchar",
+          "CHARACTER_SET_NAME": "cp949"
+        },
+        "type": "PrimaryColumn",
+        "dataMapper": {
+          "id": "id"
+        },
+        "id": "GROUPID",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_CATALOG": "scim_gw",
+          "IS_NULLABLE": "YES",
+          "TABLE_NAME": "GW_ORG_INFO",
+          "TABLE_SCHEMA": "dbo",
+          "COLUMN_NAME": "GROUPNAME",
+          "CHARACTER_OCTET_LENGTH": "50",
+          "COLLATION_NAME": "Korean_Wansung_CI_AS",
+          "ORDINAL_POSITION": "2",
+          "CHARACTER_MAXIMUM_LENGTH": "50",
+          "DATA_TYPE": "varchar",
+          "CHARACTER_SET_NAME": "cp949"
+        },
+        "type": "ValueColumn",
+        "id": "GROUPNAME",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_CATALOG": "scim_gw",
+          "IS_NULLABLE": "YES",
+          "TABLE_NAME": "GW_ORG_INFO",
+          "TABLE_SCHEMA": "dbo",
+          "COLUMN_NAME": "GROUPDESC",
+          "CHARACTER_OCTET_LENGTH": "50",
+          "COLLATION_NAME": "Korean_Wansung_CI_AS",
+          "ORDINAL_POSITION": "3",
+          "CHARACTER_MAXIMUM_LENGTH": "50",
+          "DATA_TYPE": "varchar",
+          "CHARACTER_SET_NAME": "cp949"
+        },
+        "type": "ValueColumn",
+        "id": "GROUPDESC",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_CATALOG": "scim_gw",
+          "IS_NULLABLE": "YES",
+          "TABLE_NAME": "GW_ORG_INFO",
+          "TABLE_SCHEMA": "dbo",
+          "COLUMN_NAME": "PARRENTID",
+          "CHARACTER_OCTET_LENGTH": "50",
+          "COLLATION_NAME": "Korean_Wansung_CI_AS",
+          "ORDINAL_POSITION": "4",
+          "CHARACTER_MAXIMUM_LENGTH": "50",
+          "DATA_TYPE": "varchar",
+          "CHARACTER_SET_NAME": "cp949"
+        },
+        "type": "ValueColumn",
+        "id": "PARRENTID",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_CATALOG": "scim_gw",
+          "IS_NULLABLE": "YES",
+          "TABLE_NAME": "GW_ORG_INFO",
+          "TABLE_SCHEMA": "dbo",
+          "COLUMN_NAME": "ACTIVE",
+          "CHARACTER_OCTET_LENGTH": "50",
+          "COLLATION_NAME": "Korean_Wansung_CI_AS",
+          "ORDINAL_POSITION": "5",
+          "CHARACTER_MAXIMUM_LENGTH": "50",
+          "DATA_TYPE": "varchar",
+          "CHARACTER_SET_NAME": "cp949",
+          "COLUMN_DEFAULT": "(NULL)"
+        },
+        "type": "ValueColumn",
+        "id": "ACTIVE",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_CATALOG": "scim_gw",
+          "IS_NULLABLE": "YES",
+          "TABLE_NAME": "GW_ORG_INFO",
+          "TABLE_SCHEMA": "dbo",
+          "COLUMN_NAME": "CREATEDATE",
+          "DATETIME_PRECISION": "3",
+          "ORDINAL_POSITION": "6",
+          "DATA_TYPE": "datetime",
+          "COLUMN_DEFAULT": "(NULL)"
+        },
+        "type": "ValueColumn",
+        "id": "CREATEDATE",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_CATALOG": "scim_gw",
+          "IS_NULLABLE": "YES",
+          "TABLE_NAME": "GW_ORG_INFO",
+          "TABLE_SCHEMA": "dbo",
+          "COLUMN_NAME": "MODIFYDATE",
+          "DATETIME_PRECISION": "3",
+          "ORDINAL_POSITION": "7",
+          "DATA_TYPE": "datetime"
+        },
+        "type": "ValueColumn",
+        "id": "MODIFYDATE",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+        ]
+      },
+      {
+        "attributes": {
+          "TABLE_CATALOG": "scim_gw",
+          "IS_NULLABLE": "YES",
+          "TABLE_NAME": "GW_ORG_INFO",
+          "TABLE_SCHEMA": "dbo",
+          "COLUMN_NAME": "GROUPPATH",
+          "CHARACTER_OCTET_LENGTH": "50",
+          "COLLATION_NAME": "Korean_Wansung_CI_AS",
+          "ORDINAL_POSITION": "8",
+          "CHARACTER_MAXIMUM_LENGTH": "50",
+          "DATA_TYPE": "varchar",
+          "CHARACTER_SET_NAME": "cp949",
+          "COLUMN_DEFAULT": "(NULL)"
+        },
+        "type": "ValueColumn",
+        "id": "GROUPPATH",
+        "schemas": [
+          "urn:com:wowsanta:scim:2.0:repository:mssql:colunm"
+        ]
+      }
+    ],
+    "id": "GW_ORG_INFO",
+    "schemas": [
+      "urn:com:wowsanta:scim:2.0:repository:mssql:table"
+    ]
+  }
+}

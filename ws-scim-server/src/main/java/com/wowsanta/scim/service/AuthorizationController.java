@@ -4,7 +4,7 @@ import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.obj.SCIMAdmin;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
-import com.wowsanta.scim.resource.SCIMSystemRepository;
+import com.wowsanta.scim.repository.system.SCIMSystemRepository;
 import com.wowsanta.scim.resource.user.LoginUser;
 import com.wowsanta.scim.sec.SCIMJWTToken;
 

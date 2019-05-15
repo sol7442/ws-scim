@@ -54,5 +54,10 @@
       "target": "https://localhost:5000/",
       "secure": false,
       "logLevel": "debug"
+    },
+    "/schema/*": {
+      "target": "https://localhost:5000/",
+      "secure": false,
+      "logLevel": "debug"
     }
 }

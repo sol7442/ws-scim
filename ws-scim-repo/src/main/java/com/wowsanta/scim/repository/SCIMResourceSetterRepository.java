@@ -8,7 +8,7 @@ import com.wowsanta.scim.obj.SCIMResource2;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.resource.SCIMGroup;
 
-public interface SCIMResourceSetterRepository extends SCIMResourceRepository{
+public interface SCIMResourceSetterRepository extends SCIMRepositoryController{
 	
 	
 	

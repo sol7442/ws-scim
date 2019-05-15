@@ -8,7 +8,7 @@ import com.wowsanta.scim.obj.SCIMResource2;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.resource.SCIMGroup;
 
-public interface SCIMResourceGetterRepository extends SCIMResourceRepository{
+public interface SCIMResourceGetterRepository extends SCIMRepositoryController{
 	public SCIMUser getUser(String userId) throws SCIMException;
 	public List<SCIMUser> getUsersByActive() throws SCIMException;
 	public List<SCIMUser> getUsersByDate(Date from, Date to)throws SCIMException;

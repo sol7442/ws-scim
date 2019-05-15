@@ -1,15 +1,19 @@
 package com.wowsanta.scim.message;
 
-import com.google.gson.JsonObject;
-import com.wowsanta.scim.obj.JsonUtil;
+import com.wowsanta.scim.exception.SCIMError;
+import com.wowsanta.scim.object.Resource_Object;
+import com.wowsanta.scim.object.SCIM_Object;
 
-public class SCIMBulkOperation extends SCIMOperation{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2290817678960481644L;
+public class SCIMBulkOperation extends SCIM_Object {
 	
 	private String bulkId;
+	
+	private String method;
+	private String path;
+	private Resource_Object data;
+	private String location;
+	private String status;
+	private SCIMError response;
 	
 	public SCIMBulkOperation() {}
 	public SCIMBulkOperation(SCIMBulkOperation operation) {
@@ -23,17 +27,42 @@ public class SCIMBulkOperation extends SCIMOperation{
 		this.bulkId = bulkId;
 	}
 	
-	@Override
-	public JsonObject parse(String json_str) {
-		JsonObject json_obj = super.parse(json_str);
-		this.bulkId = JsonUtil.toString(json_obj.get("bulkId"));
-		return json_obj;
+	public String getMethod() {
+		return method;
 	}
-
-	@Override
-	public JsonObject encode() {
-		JsonObject json_obj = super.encode();
-		json_obj.addProperty("bulkId",	this.bulkId);
-		return json_obj ;
+	public void setMethod(String method) {
+		this.method = method;
 	}
+	public String getPath() {
+		return path;
+	}
+	public void setPath(String path) {
+		this.path = path;
+	}
+	public Resource_Object getData() {
+		return data;
+	}
+	public void setData(Resource_Object data) {
+		this.data = data;
+	}
+	public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public SCIMError getResponse() {
+		return response;
+	}
+	public void setResponse(SCIMError response) {
+		this.response = response;
+	}
+	
+	
 }

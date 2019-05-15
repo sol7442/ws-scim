@@ -1,11 +1,4 @@
-<p-panel class="context-body" >
-    <p-header>
-        <div class="ui-helper-clearfix">
-            <span class="ui-panel-title context-header-text" style="display:inline-block;margin-top:4px;font-weight:bold">
-              시스템 계정 현황
-            </span>
-        </div>
-    </p-header>
+<p-panel class="context-body" header="시스템 계정 현황" >
     <p-card >
         <table>
             <tr>
@@ -28,17 +21,10 @@
         </table>
     </p-card>
 </p-panel>
-<p-panel>
-    <p-header>
-        <div class="ui-helper-clearfix">
-            <span class="ui-panel-title context-header-text" style="display:inline-block;margin-top:4px;font-weight:bold">
-                계정 리스트
-            </span>
-        </div>
-    </p-header>
-
-    <p-table class="table-cell-center" [value]="accounts"  [responsive]="true"  selectionMode="single" >
+<p-panel header="계정 리스트">
+    <p-table class="table-cell-center" [value]="accounts"  [responsive]="true" [paginator]="true" [rows]="5"  selectionMode="single" >
     <ng-template pTemplate="header">
+        <!--
         <tr>
             <td>
                 <table>
@@ -57,6 +43,7 @@
                 </table>
             </td>
         </tr>    
+        -->
         <tr>
             <th>사용자 사번</th>
             <th>사용자 이름</th>
@@ -67,20 +54,22 @@
     </ng-template>
     <ng-template pTemplate="body" let-account>
         <tr (click)="onSelelectAccount(account)">
-            <td style="text-align: center">{{account.employeeNumber}}</td>
-            <td style="text-align: center">{{account.userName}}</td>
-            <td style="text-align: center">{{account.active}}</td>
-            <td style="text-align: center">{{account.created | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
-            <td style="text-align: center">{{account.lastModified | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
+            <td style="text-align: center">{{account.attributes.employeeNumber}}</td>
+            <td style="text-align: center">{{account.attributes.name}}</td>
+            <td style="text-align: center">{{account.attributes.active}}</td>
+            <td style="text-align: center">{{account.attributes.createDate | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
+            <td style="text-align: center">{{account.attributes.modifyDate | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
         </tr>
     </ng-template>
+    <!--
     <ng-template pTemplate="footer">
         <tr>
             <td colspan="5">
-                <p-paginator [rows]="5" [totalRecords]="totalCount" (onPageChange)="onPaginate($event)" ></p-paginator>
+                <p-paginator [rows]="5" [totalRecords]="totalCount"></p-paginator>
             </td>
         </tr>
     </ng-template>
+    -->
     </p-table>
 </p-panel>
 <p-panel>
@@ -101,18 +90,18 @@
             <th>상태</th>
             <th>생성일</th>
             <th>변경일</th>
-            <th>배포일일</th>
+            <th>배포일</th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-sys_account>
         <tr>
-            <td style="text-align: center">{{sys_account.systemId}}</td>
-            <td style="text-align: center">{{sys_account.id}}</td>
-            <td style="text-align: center">{{sys_account.userName}}</td>
-            <td style="text-align: center">{{sys_account.active}}</td>
-            <td style="text-align: center">{{sys_account.created | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
-            <td style="text-align: center">{{sys_account.lastModified | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
-            <td style="text-align: center">{{sys_account.provisionDate | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
+            <td style="text-align: center">{{sys_account.attributes.systemId}}</td>
+            <td style="text-align: center">{{sys_account.attributes.id}}</td>
+            <td style="text-align: center">{{sys_account.attributes.name}}</td>
+            <td style="text-align: center">{{sys_account.attributes.active}}</td>
+            <td style="text-align: center">{{sys_account.attributes.createDate | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
+            <td style="text-align: center">{{sys_account.attributes.modifyDate | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
+            <td style="text-align: center">{{sys_account.attributes.provisionDate | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
         </tr>
     </ng-template>
     </p-table>

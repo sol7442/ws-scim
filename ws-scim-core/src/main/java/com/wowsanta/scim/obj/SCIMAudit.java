@@ -2,14 +2,18 @@ package com.wowsanta.scim.obj;
 
 import java.util.Date;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.wowsanta.scim.json.AbstractJsonObject;
+import com.wowsanta.scim.schema.SCIMDefinitions.ResoureType;
 import com.wowsanta.scim.util.Random;
 
 public class SCIMAudit extends AbstractJsonObject{
 	private String workId;
 	private String workerId;
 	private String workerType;
-	private String userId;
+	private ResoureType  resourceType;
+	private String resourceId;
 	private String sourceSystemId;
 	private String targetSystemId;
 	private String action; // 동기화 - 배포           - 상신/승인
@@ -43,11 +47,17 @@ public class SCIMAudit extends AbstractJsonObject{
 	public void setWorkerType(String workerType) {
 		this.workerType = workerType;
 	}
-	public String getUserId() {
-		return userId;
+	public ResoureType getResourceType() {
+		return this.resourceType;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setResourceType(ResoureType type) {
+		this.resourceType = type;
+	}
+	public String getResourceId() {
+		return resourceId;
+	}
+	public void setResourceId(String id) {
+		this.resourceId = id;
 	}
 	public String getSourceSystemId() {
 		return sourceSystemId;
@@ -91,4 +101,22 @@ public class SCIMAudit extends AbstractJsonObject{
 	public void setWorkDate(Date workDate) {
 		this.workDate = workDate;
 	}
+	
+	public String toString() {
+		return toString(false);
+	}
+	public String toString(boolean pretty) {
+		try {
+			GsonBuilder builder = new GsonBuilder().disableHtmlEscaping();
+			if(pretty) {
+				builder.setPrettyPrinting();
+			}
+			Gson gson  = builder.create();
+			return gson.toJson(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }
