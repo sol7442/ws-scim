@@ -49,6 +49,7 @@ public class SCIMScheduler  {
 	private String sourceSystemId;
 	private String targetSystemId;
 	private Date lastExecuteDate;
+	private String encode;
 	
 	private transient Scheduler scheduler;
 	
@@ -84,7 +85,8 @@ public class SCIMScheduler  {
 		scheduler.executeSystemId   = (String) scheduler_object.get("executeSystemId");
 		scheduler.sourceSystemId   	= (String) scheduler_object.get("sourceSystemId");
 		scheduler.targetSystemId   	= (String) scheduler_object.get("targetSystemId");
-
+		scheduler.encode            = (String) scheduler_object.get("encode");
+		
 		if(scheduler_object.get("lastExecuteDate") != null) {
 			Object date_object = scheduler_object.get("lastExecuteDate");
 			System.out.println(date_object.getClass().getName());
@@ -97,6 +99,7 @@ public class SCIMScheduler  {
 				e.printStackTrace();
 			}
 		}
+		
 		
 		return scheduler;
 	}
@@ -281,6 +284,14 @@ public class SCIMScheduler  {
 		}catch (Exception e) {
 			throw new SCIMException("Scheduler build Failed ",e);
 		}
+	}
+
+	public String getEncode() {
+		return this.encode;
+	}
+
+	public void setEncode(String encode) {
+		this.encode = encode;
 	}
 
 }

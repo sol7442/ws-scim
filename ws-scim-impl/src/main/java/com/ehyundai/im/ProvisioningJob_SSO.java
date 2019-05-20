@@ -107,7 +107,7 @@ public class ProvisioningJob_SSO extends SCIMJob {
 //			String bluk_request_url = "https://127.0.0.1:5000" + "/scim/v2.0/Bulk";
 			
 			RESTClient client = new RESTClient(worker);
-			SCIMBulkResponse scim_bluk_response = client.post_bulk(bluk_request_url, scim_bluk_request, "EUC-KR");
+			SCIMBulkResponse scim_bluk_response = client.post_bulk(bluk_request_url, scim_bluk_request, scheduler.getEncode());
 
 			logger.info("SCIMBulkResponse : {} " , scim_bluk_response.toString(false));
 			

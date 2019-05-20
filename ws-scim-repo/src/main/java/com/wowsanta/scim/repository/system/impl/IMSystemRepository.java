@@ -787,13 +787,6 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMSys
         	statement.execute();
 	    } catch (SQLException e) {
 	    	throw new SCIMException("ADD DATA FAILED : " + insertSQL , e);
-//	    	
-//	    	System.out.println(">>>>>>> L : " +  e.getMessage());
-//	    	if (e instanceof SQLIntegrityConstraintViolationException) {
-//				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
-//			}else {
-//				throw new SCIMException("ADD AUDIT DATA FAILED : " + insertSQL , e);
-//			}
 		}finally {
 	    	DBCP.close(connection, statement, resultSet);
 	    }
@@ -842,7 +835,7 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMSys
 			scheduler.setExecuteSystemId(resultSet.getString("executeSystemId"));
 			scheduler.setSourceSystemId(resultSet.getString("sourceSystemId"));
 			scheduler.setTargetSystemId(resultSet.getString("targetSystemId"));
-			
+			scheduler.setEncode(resultSet.getString("encode"));
 			scheduler.setLastExecuteDate(toJavaDate (resultSet.getTimestamp("lastExecuteDate")));
 			
 		}catch(Exception e) {
@@ -1040,11 +1033,11 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMSys
 		query_buffer.append("INSERT INTO SCIM_SCHEDULER ");
 		query_buffer.append("(SCHEDULERID, SCHEDULERNAME, SCHEDULERTYPE, SCHEDULERDESC");
 		query_buffer.append(",JOBCLASS, TRIGGERTYPE, DAYOFMONTH, DAYOFWEEK, HOUROFDAY, MINUTEOFHOUR");
-		query_buffer.append(",EXECUTESYSTEMID, SOURCESYSTEMID,TARGETSYSTEMID)");
+		query_buffer.append(",EXECUTESYSTEMID, SOURCESYSTEMID,TARGETSYSTEMID,ENCODE)");
 		
 		query_buffer.append(" VALUES (?,?,?,?");
 		query_buffer.append(" ,?,?,?,?,?,?");
-		query_buffer.append(" ,?,?,?)");
+		query_buffer.append(" ,?,?,?,?)");
 
 		final String query_string = query_buffer.toString();
 		
@@ -1071,7 +1064,8 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMSys
         	statement.setString(11, scheduler.getExecuteSystemId());
         	statement.setString(12, scheduler.getSourceSystemId());
         	statement.setString(13, scheduler.getTargetSystemId());
-        	
+        	statement.setString(14, scheduler.getEncode());
+
         	result = statement.executeUpdate();
 	    } catch (SQLException e) {
 	    	logger.error(e.getMessage(),e);
@@ -1088,7 +1082,7 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMSys
 		query_buffer.append("UPDATE SCIM_SCHEDULER ");
 		query_buffer.append("SET SCHEDULERNAME=? , SCHEDULERTYPE=? ,SCHEDULERDESC=? ,JOBCLASS=?, TRIGGERTYPE=? ");
 		query_buffer.append(", DAYOFMONTH=? , DAYOFWEEK=? ,HOUROFDAY=? ,MINUTEOFHOUR=? ");
-		query_buffer.append(", EXECUTESYSTEMID=? , SOURCESYSTEMID=? ,TARGETSYSTEMID=? ,LASTEXECUTEDATE=? ");
+		query_buffer.append(", EXECUTESYSTEMID=? , SOURCESYSTEMID=? ,TARGETSYSTEMID=? ,LASTEXECUTEDATE=? , ENCODE=?");
 		query_buffer.append("WHERE SCHEDULERID=?");
 		
 		final String query_string = query_buffer.toString();
@@ -1116,12 +1110,11 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMSys
         	statement.setString(11, scheduler.getSourceSystemId());
         	statement.setString(12, scheduler.getTargetSystemId());
         	
-        	Timestamp tamestemp = null;
-        	if(scheduler.getLastExecuteDate() != null) {
-        		tamestemp = new Timestamp(scheduler.getLastExecuteDate().getTime());
-        	}
-        	statement.setTimestamp(13, tamestemp);
-        	statement.setString(14, scheduler.getSchedulerId());
+        	statement.setDate(13,toSqlDate(scheduler.getLastExecuteDate()));
+
+        	statement.setString(14, scheduler.getEncode());
+        	
+        	statement.setString(15, scheduler.getSchedulerId());
 
         	result = statement.executeUpdate();
         	
@@ -1129,7 +1122,7 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMSys
 	    	logger.error(e.getMessage(),e);
 	    	throw new SCIMException("UPDATE FAILED : ", e);
 		}finally {
-			logger.info("query : {}", query_string);
+			logger.info("query : {},\n{}", query_string,scheduler.toString(true));
 			logger.info("result : {}", result);
 	    	DBCP.close(connection, statement, resultSet);
 	    }

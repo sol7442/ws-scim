@@ -6,6 +6,7 @@ import { AlertService } from './../../../service/alert.service';
 
 
 import { System , Scheduler , SchedulerHistory, SystemColumn} from '../../../model/model';
+import {DialogType} from '../../../model/dialog-type.enum';
 
 import { first } from 'rxjs/operators';
 
@@ -23,7 +24,8 @@ export class SystemManagementComponent implements OnInit {
   private selectedScheduler:Scheduler;
   private schedulerHistorys:SchedulerHistory[];
   private systemColumns:SystemColumn[] = [];
-
+  private _systemData:any;
+  
   private displayDialog: boolean = false;
   private displayDetailDialog:boolean = false;
   private detailAuditLogs:any[] = [];
@@ -38,7 +40,6 @@ export class SystemManagementComponent implements OnInit {
 
   ngOnInit() {
     this.scimApiService.getSystems()
-    .pipe(first())
     .subscribe( data =>{
       this.systems = data;
       this.selectedSystem = this.systems[0];
@@ -54,18 +55,8 @@ export class SystemManagementComponent implements OnInit {
   onSelect(event){
     this.selectedSystem = event.value;   
     this.scimApiService.getSchedulerBySystemId(this.selectedSystem.systemId)
-    .pipe(first())
     .subscribe( data =>{
       this.schedulers = data;
-    },error =>{
-        console.log("login-error : ", error);
-    });
-
-    this.scimApiService.getSystemComlumsBySystemId(this.selectedSystem.systemId)
-    .pipe(first())
-    .subscribe( data =>{
-      console.log("system-columns", data);
-      this.systemColumns = data;
     },error =>{
         console.log("login-error : ", error);
     });
@@ -131,6 +122,49 @@ export class SystemManagementComponent implements OnInit {
         console.log("login-error : ", error);
     });
   }
+
+  addSystem(){
+    this._systemData = {type:DialogType.ADD};
+  }
+
+  editSystem(){
+    this._systemData = {system:this.selectedSystem,type:DialogType.UPDATE};
+  }
+
+  removeSystem(){
+    this._systemData = {system:this.selectedSystem,type:DialogType.DELETE};
+  }
+  onSystemEditResult(event:any){
+    console.log("onSystemEditResult ",event)
+
+    this.scimApiService.getSystems()
+    .subscribe( data =>{
+      console.log("getSystems : ", data);
+
+      this.systems = data;
+      this.selectedSystem = this.systems[0];
+      console.log("systems : ", this.systems);
+
+      this.onSelect({value:this.selectedSystem});
+    },error =>{
+        console.log("login-error : ", error);
+    });
+    
+    // this.scimApiService.getHrSystems()
+    // .subscribe( data =>{
+    //   this.systems = data;
+    //   if(event.result === "OK" && event.type === DialogType.DELETE){
+    //     this.selectedSystem = data[0];
+    //   }else{
+    //     this.selectedSystem = event.system;
+    //   }
+    //   this.onSelect({value:this.selectedSystem});
+    // },error =>{
+    //   console.log("login-error : ", error);
+    // });
+  }
+
+
 
 
   onDialogHide(){

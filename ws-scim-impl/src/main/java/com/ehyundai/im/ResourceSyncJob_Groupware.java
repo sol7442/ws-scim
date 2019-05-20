@@ -105,7 +105,7 @@ public class ResourceSyncJob_Groupware extends SCIMJob {
 			
 			//SCIMListResponse find_res = findRequestPost(worker, find_request_url, req_msg);
 			RESTClient client = new RESTClient(worker);
-			SCIMListResponse find_res = client.post_find(find_request_url, req_msg, "UTF-8");
+			SCIMListResponse find_res = client.post_find(find_request_url, req_msg,scheduler.getEncode());
 			logger.info("Syn ListResponse : count : {} ", find_res.getTotalResults());	
 			
 			List<Resource_Object> user_list =  find_res.getResources();

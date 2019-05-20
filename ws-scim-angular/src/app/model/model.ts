@@ -29,6 +29,7 @@ export class Scheduler {
     sourceSystemId:string;
     tragetSystemId:string;
     lastExecuteDate:string;
+    encode:string;
 }
 
 export class SchedulerHistory {

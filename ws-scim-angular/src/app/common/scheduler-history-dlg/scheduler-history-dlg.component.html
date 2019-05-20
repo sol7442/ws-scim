@@ -24,3 +24,35 @@
         </p-table>
     </div>
 </p-dialog>
+
+<p-dialog header="스케줄러 상세 작업 내용" [(visible)]="_displayDetailDialog" [responsive]="true" [modal]="true" [style]="{'margin-left':'80px', 'margin-right':'80px'}"  (onAfterHide)="onDialogHide()">
+    <div class="ui-g" >       
+        <p-table class="text-center" [value]="_audits" [paginator]="true" [rows]="10">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>사용자 ID</th>
+                    <th>수행 내용</th>
+                    <th>원본 시스템</th>
+                    <th>타겟 시스템</th>
+                    <th>작업 결과</th>
+                    <th>작업자/타입</th>
+                    <th>실패 원인</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-audit>
+                <tr>
+                    <td>{{audit.resourceId}}</td>
+                    <td>{{audit.method}}</td>
+                    <td>{{audit.sourceSystemId}}</td>
+                    <td>{{audit.targetSystemId}}</td>
+                    <td>{{audit.result}}</td>
+                    <td>{{audit.workerId}}/{{audit.workerType}}</td>
+                    <td>{{audit.detail}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <p-footer>
+        <button type="button" pButton icon="pi pi-close"  label="Close" (click)="_displayDetailDialog=false"></button>
+    </p-footer>
+</p-dialog>

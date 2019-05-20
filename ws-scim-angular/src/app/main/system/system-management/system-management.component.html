@@ -41,4 +41,5 @@
 
     <app-schema-mapping-panel [system]="selectedSystem"></app-schema-mapping-panel>
     <app-repository-mapping-panel  [system]="selectedSystem"></app-repository-mapping-panel>
+    <app-system-info-dlg [systemData]="_systemData" (result)="onSystemEditResult($event)"></app-system-info-dlg>
 

@@ -15,6 +15,9 @@ export class SchedulerHistoryDlgComponent implements OnInit {
   private _scheduler:Scheduler;
   private _historys:any;
 
+  private _displayDetailDialog:boolean = false;
+  private _audits:any;
+
   constructor(private scimApiService:ScimApiService,) { }
 
   ngOnInit() {
@@ -43,8 +46,18 @@ export class SchedulerHistoryDlgComponent implements OnInit {
     return this._displayDialog;
   }
 
-
   onDialogHide(){
-    console.log("Hide...,");
+    this._displayDetailDialog = false;
+  }
+
+  showDetailLog(history:any){
+    this.scimApiService.getSchedulerWorkHistoryByWorkId(history.workId)
+    .subscribe( data =>{
+      console.log("result : ", data)
+      this._displayDetailDialog = true;  
+      this._audits = data;
+    },error =>{
+        console.log("login-error : ", error);
+    });
   }
 }

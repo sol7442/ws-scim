@@ -53,7 +53,7 @@ public class AnalysisJob_SingleSignOn extends SCIMJob {
 			
 			logger.info("Syn FindRequest  : where : {} ", where);
 			RESTClient client = new RESTClient(worker);
-			SCIMListResponse find_res = client.post_find(find_request_url, req_msg, "UTF-8");
+			SCIMListResponse find_res = client.post_find(find_request_url, req_msg,scheduler.getEncode());
 			logger.info("Syn ListResponse : count : {} ", find_res.getTotalResults());			
 			
 			sync(source_system.getSystemId(),find_res, audit, history);
