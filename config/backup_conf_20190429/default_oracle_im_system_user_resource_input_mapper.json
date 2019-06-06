@@ -228,6 +228,52 @@
           ]
         },
         {
+          "name": "USERSTATE",
+          "attributeSchema": {
+            "uri": "urn:wowsanta:scim:schemas:core:2.0:User:State",
+            "name": "state",
+            "type": "STRING",
+            "multiValued": false,
+            "description": "",
+            "required": false,
+            "caseExact": false,
+            "mutability": "READ_WRITE",
+            "returned": "DEFAULT",
+            "uniqueness": "NONE"
+          },
+          "attributes": {
+            "TABLE_NAME": "SCIM_SYSTEM_USER",
+            "DATA_UPGRADED": "YES",
+            "LOW_VALUE": "44756D6D7955736572",
+            "CHAR_USED": "C",
+            "COLUMN_NAME": "USERSTATE",
+            "COLUMN_ID": "5",
+            "DATA_LENGTH": "256",
+            "SAMPLE_SIZE": "21",
+            "DENSITY": "0.5",
+            "NUM_DISTINCT": "2",
+            "LAST_ANALYZED": "2019-03-23 15:07:31.0",
+            "USER_STATS": "NO",
+            "DATA_TYPE": "VARCHAR2",
+            "CHARACTER_SET_NAME": "CHAR_CS",
+            "NUM_BUCKETS": "1",
+            "HIGH_VALUE": "55534552",
+            "HISTOGRAM": "NONE",
+            "NULLABLE": "Y",
+            "GLOBAL_STATS": "YES",
+            "CHAR_COL_DECL_LENGTH": "256",
+            "AVG_COL_LEN": "6",
+            "CHAR_LENGTH": "64",
+            "V80_FMT_IMAGE": "NO",
+            "NUM_NULLS": "0"
+          },
+          "type": "ValueColumn",
+          "id": "USERSTATE",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
           "name": "ACTIVE",
           "attributeSchema": {
             "uri": "urn:wowsanta:scim:schemas:core:2.0:User:Active",
@@ -464,7 +510,7 @@
           "id": "PROVISIONDATE",
           "dataMapper": {
 	        "className": "com.wowsanta.scim.repository.convert.CnvtTimestamp",
-	        "methodName": "J2D"
+	        "methodName": "fromJavaDate"
       	  },
           "schemas": [
             "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"

@@ -126,11 +126,7 @@ public class AnalysisJob_SingleSignOn extends SCIMJob {
 		List<Resource_Object> resource_list = find_res.getResources();
 		for (Resource_Object resource : resource_list) {
 			resource.put("systemId",systemId);
-			
-//			audit.setResourceId(resource.getId());
-//			audit.setMethod("UPDATE");
-//			audit.setResourceType(ResoureType.USER);
-//			audit.setResult("SUCCESS");
+
 			try {
 				
 				AttributeValue system_id_value = new AttributeValue("systemId",systemId);
@@ -139,6 +135,11 @@ public class AnalysisJob_SingleSignOn extends SCIMJob {
 				List<AttributeValue> attribute_list = new ArrayList<AttributeValue>();
 				attribute_list.add(system_id_value);
 				attribute_list.add(user_id_value);
+				
+				Resource_Object im_user  = resource_repository.getUser(resource.getId());
+				if(im_user == null) {
+					resource.put("state","Ghost");
+				}
 				
 				Resource_Object old_user  = resource_repository.getSystemUser(system_user_resource_output_mapper, attribute_list);
 				logger.debug("old sys user : {}", old_user);

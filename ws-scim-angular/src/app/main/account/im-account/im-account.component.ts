@@ -129,7 +129,7 @@ export class ImAccountComponent implements OnInit {
   onSelelectAccount(account:any){
     console.log("selected account",account)
 
-    this.scimApiService.getSysAccountByUserId(account.id)
+    this.scimApiService.getSysAccountByUserId(account.attributes.id)
     .pipe(first())
     .subscribe( result =>{
       console.log("getSysAccountByUserId : ", result);

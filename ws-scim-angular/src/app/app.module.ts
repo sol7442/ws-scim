@@ -27,7 +27,9 @@ import {LoginModule} from './login/login.module';
 import {AlertComponent} from './alert/alert.component';
 
 import {SchemaMappingPanelComponent} from './common/schema-mapping-panel/schema-mapping-panel.component'
+import {SchemaMappingDlgComponent} from './common/schema-mapping-dlg/schema-mapping-dlg.component'
 import {RepositoryMappingPanelComponent} from './common/repository-mapping-panel/repository-mapping-panel.component'
+import {RepositoryMappingDlgComponent} from './common/repository-mapping-dlg/repository-mapping-dlg.component'
 import {SchedulerListPanelComponent} from './common/scheduler-list-panel/scheduler-list-panel.component'
 import {AdminInfoDlgComponent} from './common/admin-info-dlg/admin-info-dlg.component'
 import {SystemInfoDlgComponent} from './common/system-info-dlg/system-info-dlg.component'
@@ -77,7 +79,9 @@ import 'rxjs/Rx';
 @NgModule({
    declarations: [
       AppComponent,AlertComponent,TabMenuComponent,TitleComponent,
-      SchemaMappingPanelComponent,RepositoryMappingPanelComponent,SchedulerListPanelComponent,
+      SchemaMappingPanelComponent,SchemaMappingDlgComponent,
+      RepositoryMappingPanelComponent,RepositoryMappingDlgComponent,
+      SchedulerListPanelComponent,
       AdminInfoDlgComponent,SystemInfoDlgComponent,SchedulerInfoDlgComponent,SchedulerHistoryDlgComponent,
       SystemManagementComponent,HrsystemManagementComponent,
       AccountComponent,SystemAccountComponent,ImAccountComponent,

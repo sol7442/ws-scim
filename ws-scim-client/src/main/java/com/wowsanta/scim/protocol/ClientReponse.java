@@ -41,4 +41,21 @@ public class ClientReponse {
 		return response;
 		
 	}
+	
+	public String toString() {
+		return toString(false);
+	}
+	public String toString(boolean pretty) {
+		try {
+			GsonBuilder builder = new GsonBuilder().disableHtmlEscaping();
+			if (pretty) {
+				builder.setPrettyPrinting();
+			}
+			Gson gson = builder.create();
+			return gson.toJson(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

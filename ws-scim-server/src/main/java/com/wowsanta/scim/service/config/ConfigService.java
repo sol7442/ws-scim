@@ -10,6 +10,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletException;
@@ -25,8 +27,10 @@ import com.wowsanta.scim.exception.SCIMError;
 import com.wowsanta.scim.exception.SCIMException;
 import com.wowsanta.scim.log.SCIMLogger;
 import com.wowsanta.scim.protocol.ClientReponse;
+import com.wowsanta.scim.protocol.FrontResponse;
 import com.wowsanta.scim.protocol.ResponseState;
 import com.wowsanta.scim.repository.AbstractSCIMRepository;
+import com.wowsanta.scim.repository.ResourceTypeSchema;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
 import com.wowsanta.scim.repository.SCIMRepositoryController;
 
@@ -271,6 +275,39 @@ public class ConfigService {
 					e.printStackTrace();
 					return "Fail";
 				}
+			}
+		};
+	}
+
+	public Route getSystemSchemaList() {
+		return new Route() {
+			@Override
+			public Object handle(Request request, Response response) throws Exception {
+				FrontResponse front_response = new FrontResponse();
+				try {
+
+					File scim_config_path = new File("../config");
+					logger.info("scim_config_path  : {}", scim_config_path);
+
+					Map<String,ResourceTypeSchema> schema_map = new HashMap<String,ResourceTypeSchema>();
+					File[] config_files = scim_config_path.listFiles();
+					for (File file : config_files) {
+						if(file.getName().equals("scim_schema_group.json") ||
+						   file.getName().equals("scim_schema_user.json")) {
+							ResourceTypeSchema schema = ResourceTypeSchema.load(file.getAbsolutePath());
+							schema_map.put(file.getName(), schema);
+						}
+					}
+
+					front_response.setData(schema_map);
+					front_response.setState(ResponseState.Success);
+				} catch (Exception e) {
+					e.printStackTrace();
+					front_response.setMessage(e.getMessage());
+					front_response.setState(ResponseState.Fail);
+				}
+				
+				return front_response;
 			}
 		};
 	}

@@ -23,6 +23,9 @@ export class SchemaMappingPanelComponent implements OnInit {
   private _schemaAttributes:any[];
   private _tableColumns:any[];
 
+  private _selectedAttribute:any;
+  private _showMappingDlg:boolean = false;
+
   constructor(
     private scimApiService:ScimApiService,
     private alertService:AlertService,
@@ -78,8 +81,25 @@ export class SchemaMappingPanelComponent implements OnInit {
       console.log("error : ", error);
     });
   }
-  loadSchemaMapper(){
-   
-    
+
+  editMapping(attribute:any){
+    console.log("attribute : ", attribute);
+    this._selectedAttribute = attribute;
+    console.log("this._showMappingDlg : ", this._showMappingDlg);
+    this._showMappingDlg = true;
+  }
+
+  onEditMappingResult(event:any){
+    console.log("result : ", event);
+    if(event.result ==="OK"){      
+      this._selectedMapper.attributes[event.attribute.name] = event.attribute;
+      this.onSelectMapper(this._selectedMapper);
+      console.log(this._mappers);
+       
+      this.scimApiService.updateSchemaOutputMapper(this._system.systemId,this._selectedMapper)
+      .subscribe(result =>{
+        console.log("result : ", result);
+      });
+    }
   }
 }

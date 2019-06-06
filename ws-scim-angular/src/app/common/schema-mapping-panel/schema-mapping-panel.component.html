@@ -7,14 +7,6 @@
               <td class="form-input">
                   <p-dropdown [options]="_mappers" (onChange)="onSelectMapper($event.value)" placeholder="Select a Mapper" optionLabel="name"></p-dropdown>
               </td>
-              <!--
-              <td class="form-button">
-                  <button type="button" pButton label="가져오기" (click)="loadSchemaMapper()"></button>
-              </td>
-              <td class="form-button">
-                  <button type="button" pButton label="저장하기" (click)="saveSchemaMaaper()"></button>
-              </td>
-              -->
               <td class="form-auto"></td>
             </tr>                    
           </table>
@@ -57,9 +49,10 @@
                         {{attribute.resourceColumn.attributes.DATA_TYPE}}
                     </div>
                   </td>
-                    <td style="text-align: center"><button type="button" pButton label="변경" (click)="changeColumn()"></button></td>
+                    <td style="text-align: center"><button type="button" pButton label="변경" (click)="editMapping(attribute)"></button></td>
                 </tr>
             </ng-template>
         </p-table>
     </p-panel> 
 </p>
+<app-schema-mapping-dlg [(display)]="_showMappingDlg" [attribute]="_selectedAttribute" [system]="_system" (result)="onEditMappingResult($event)"></app-schema-mapping-dlg>

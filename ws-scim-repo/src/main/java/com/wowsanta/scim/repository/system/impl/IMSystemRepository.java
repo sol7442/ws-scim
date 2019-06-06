@@ -3,6 +3,7 @@ package com.wowsanta.scim.repository.system.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -26,6 +27,10 @@ import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.object.Resource_Object;
 import com.wowsanta.scim.repo.rdb.AbstractRDBRepository;
 import com.wowsanta.scim.repo.rdb.DBCP;
+import com.wowsanta.scim.repository.AttributeSchema;
+import com.wowsanta.scim.repository.AttributeValue;
+import com.wowsanta.scim.repository.DataMapper;
+import com.wowsanta.scim.repository.RepositoryException;
 import com.wowsanta.scim.repository.system.SCIMProviderRepository;
 import com.wowsanta.scim.repository.system.SCIMSystemRepository;
 import com.wowsanta.scim.resource.SCIMAuditData;
@@ -44,6 +49,250 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMSys
 	
 	public static IMSystemRepository loadFromFile(String file_name) throws JsonException{ 
 		return (IMSystemRepository)WowsantaJson.loadFromFile(file_name);
+	}
+	
+	public int getAccountCount()throws SCIMException{
+		int user_count = 0;
+		
+		final String query_string = "SELECT COUNT(*) AS USER_COUNT FROM SCIM_USER ";
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		
+		try {
+			connection = getConnection();
+			statement  = connection.prepareStatement(query_string);
+        	resultSet = statement.executeQuery();
+        	if(resultSet.next()) {
+        		user_count = resultSet.getInt("USER_COUNT");
+        	}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			logger.info("query  : {}", query_string);
+			logger.info("user_count  : {}", user_count);
+			
+			DBCP.close(connection, statement, resultSet);
+		}	
+		
+		return user_count;
+	}
+	public List<Resource_Object> getAccountList()throws SCIMException{
+		List<Resource_Object> resource_list = new ArrayList<Resource_Object>();
+		
+		final String query_string = "SELECT A.USERID, A.USERNAME, B.ACTIVE, A.USERSTATE, B.CREATEDATE, B.MODIFYDATE FROM SCIM_USER A, SCIM_USER_META B WHERE A.USERID=B.USERID";
+
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		try {
+			connection = getConnection();
+			statement  = connection.prepareStatement(query_string);
+		    
+		    resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				Resource_Object resource = new Resource_Object();
+				resource.put("id", resultSet.getString("USERID"));
+				resource.put("employeeNumber", resultSet.getString("USERID"));
+				resource.put("name", resultSet.getString("USERNAME"));
+				resource.put("state", resultSet.getString("USERSTATE"));
+				resource.put("active", resultSet.getInt("ACTIVE"));
+				resource.put("createDate", resultSet.getTimestamp("CREATEDATE"));
+				resource.put("modifyDate", resultSet.getTimestamp("MODIFYDATE"));
+				resource_list.add(resource);
+			}
+
+        	statement.execute();
+        	statement.close();
+        	
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+
+			logger.info("query  : {}", query_string);
+			logger.info("result : {}", resource_list.size());
+		}
+		
+		return resource_list;
+	};
+	
+	public int getSystemActiveAccountCount(String systemId)throws SCIMException{
+		int user_count = 0;
+		
+		final String query_string = "SELECT COUNT(*) AS USER_COUNT FROM SCIM_SYSTEM_USER WHERE SYSTEMID=? AND ACTIVE=1";
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		
+		try {
+			connection = getConnection();
+			statement  = connection.prepareStatement(query_string);
+			statement.setString(1, systemId);
+			
+        	resultSet = statement.executeQuery();
+        	if(resultSet.next()) {
+        		user_count = resultSet.getInt("USER_COUNT");
+        	}
+			
+        	
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			logger.info("query  : {}", query_string);
+			logger.info("user_count  : {}", user_count);
+			
+			DBCP.close(connection, statement, resultSet);
+		}	
+		
+		return user_count;
+	}
+	public int getSystemGhostAccountCount(String systemId)throws SCIMException{
+		int user_count = 0;
+		
+		final String query_string = "SELECT COUNT(*) AS USER_COUNT FROM SCIM_SYSTEM_USER WHERE SYSTEMID=? AND USERSTATE='Ghost'";
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		
+		try {
+			connection = getConnection();
+			statement  = connection.prepareStatement(query_string);
+			statement.setString(1, systemId);
+			
+        	resultSet = statement.executeQuery();
+        	if(resultSet.next()) {
+        		user_count = resultSet.getInt("USER_COUNT");
+        	}
+			
+        	
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			logger.info("query  : {}", query_string);
+			logger.info("user_count  : {}", user_count);
+			
+			DBCP.close(connection, statement, resultSet);
+		}	
+		
+		return user_count;
+	}
+	public int getSystemAccountCount(String systemId)throws SCIMException{
+		int user_count = 0;
+		
+		final String query_string = "SELECT COUNT(*) AS USER_COUNT FROM SCIM_SYSTEM_USER WHERE SYSTEMID=? ";
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		
+		try {
+			connection = getConnection();
+			statement  = connection.prepareStatement(query_string);
+			statement.setString(1, systemId);
+			
+        	resultSet = statement.executeQuery();
+        	if(resultSet.next()) {
+        		user_count = resultSet.getInt("USER_COUNT");
+        	}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			logger.info("query  : {}", query_string);
+			logger.info("user_count  : {}", user_count);
+			
+			DBCP.close(connection, statement, resultSet);
+		}	
+		
+		return user_count;
+	}
+	public List<Resource_Object> getSystemAccountList(String systemId)throws SCIMException{
+		List<Resource_Object> resource_list = new ArrayList<Resource_Object>();
+		
+		final String query_string = "SELECT USERID, EXTERNALID, USERNAME, ACTIVE, USERSTATE, CREATEDATE, MODIFYDATE, LASTACCESSDATE,PROVISIONDATE FROM SCIM_SYSTEM_USER WHERE SYSTEMID=?";
+
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		try {
+			connection = getConnection();
+			statement  = connection.prepareStatement(query_string);
+			statement.setString(1, systemId);
+			
+		    resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				Resource_Object resource = new Resource_Object();
+				resource.put("id", resultSet.getString("EXTERNALID"));
+				resource.put("employeeNumber", resultSet.getString("USERID"));
+				resource.put("name", resultSet.getString("USERNAME"));
+				resource.put("state", resultSet.getString("USERSTATE"));
+				resource.put("active", resultSet.getInt("ACTIVE"));
+				resource.put("createDate", resultSet.getTimestamp("CREATEDATE"));
+				resource.put("modifyDate", resultSet.getTimestamp("MODIFYDATE"));
+				resource.put("lastAceessDate", resultSet.getTimestamp("LASTACCESSDATE"));
+				resource.put("provisionDate", resultSet.getTimestamp("PROVISIONDATE"));
+				
+				resource_list.add(resource);
+			}
+
+        	statement.execute();
+        	statement.close();
+        	
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+
+			logger.info("query  : {}", query_string);
+			logger.info("result : {}", resource_list.size());
+		}
+		
+		return resource_list;
+	}
+	public List<Resource_Object> getSystemAccountListByUserId(String userId) throws SCIMException{
+		List<Resource_Object> resource_list = new ArrayList<Resource_Object>();
+		
+		final String query_string = "SELECT SYSTEMID, USERID, EXTERNALID, USERNAME, ACTIVE, USERSTATE, CREATEDATE, MODIFYDATE, LASTACCESSDATE,PROVISIONDATE FROM SCIM_SYSTEM_USER WHERE USERID=?";
+
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		try {
+			connection = getConnection();
+			statement  = connection.prepareStatement(query_string);
+			statement.setString(1, userId);
+			
+		    resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				Resource_Object resource = new Resource_Object();
+				resource.put("systemId", resultSet.getString("SYSTEMID"));
+				resource.put("id", resultSet.getString("EXTERNALID"));
+				resource.put("employeeNumber", resultSet.getString("USERID"));
+				resource.put("name", resultSet.getString("USERNAME"));
+				resource.put("state", resultSet.getString("USERSTATE"));
+				resource.put("active", resultSet.getInt("ACTIVE"));
+				resource.put("createDate", resultSet.getTimestamp("CREATEDATE"));
+				resource.put("modifyDate", resultSet.getTimestamp("MODIFYDATE"));
+				resource.put("lastAceessDate", resultSet.getTimestamp("LASTACCESSDATE"));
+				resource.put("provisionDate", resultSet.getTimestamp("PROVISIONDATE"));
+				
+				resource_list.add(resource);
+			}
+
+        	statement.execute();
+        	statement.close();
+        	
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+
+			logger.info("query  : {}", query_string);
+			logger.info("result : {}", resource_list.size());
+		}
+		
+		return resource_list;
 	}
 	
 //	public Resource_Object getSystemUser(String systemId, String id) throws SCIMException{
@@ -207,32 +456,32 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMSys
 //		return user_count;
 //	}
 //
-//	public int getIsolatatedAccountCount()throws SCIMException{
-//		StringBuffer sql_buffer = new StringBuffer();
-//		sql_buffer.append("SELECT count(*) as USER_COUNT FROM SCIM_USER A LEFT JOIN SCIM_SYSTEM_USER B ON A.USERID = B.USERID WHERE B.USERID IS NULL");
-//		
-//		int user_count = 0;		
-//		Connection connection = null;
-//		PreparedStatement statement = null;
-//	    ResultSet resultSet = null;              
-//
-//        try {
-//        	connection = getConnection();
-//        	statement  = connection.prepareStatement(sql_buffer.toString());
-//
-//        	resultSet = statement.executeQuery();
-//        	if(resultSet.next()) {
-//        		user_count = resultSet.getInt("USER_COUNT");
-//        	}
-//        	
-//		} catch (SQLException e) {
-//			throw new SCIMException(sql_buffer.toString(), e);
-//		}finally {
-//			DBCP.close(connection, statement, resultSet);
-//		}
-//        
-//		return user_count;
-//	}
+	public int getIsolatatedAccountCount()throws SCIMException{
+		StringBuffer sql_buffer = new StringBuffer();
+		sql_buffer.append("SELECT count(*) as USER_COUNT FROM SCIM_USER A LEFT JOIN SCIM_SYSTEM_USER B ON A.USERID = B.USERID WHERE B.USERID IS NULL");
+		
+		int user_count = 0;		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;              
+
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(sql_buffer.toString());
+
+        	resultSet = statement.executeQuery();
+        	if(resultSet.next()) {
+        		user_count = resultSet.getInt("USER_COUNT");
+        	}
+        	
+		} catch (SQLException e) {
+			throw new SCIMException(sql_buffer.toString(), e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+        
+		return user_count;
+	}
 //	
 //	public int getGhostSysAccountCount(String systemId)throws SCIMException{
 //		StringBuffer sql_buffer = new StringBuffer();
@@ -909,6 +1158,35 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMSys
 		}
 	}
 	
+	
+	public List<SCIMAudit> getSystemAccountHistory(String systemId, String userId)throws SCIMException{
+		final String selectSQL = "SELECT * FROM SCIM_AUDIT WHERE TARGETSYSTEMID=? AND RESOURCEID=? ORDER BY WORKDATE DESC";
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+	    ResultSet resultSet = null;        
+
+	    List<SCIMAudit> audit_list = new ArrayList<SCIMAudit>();
+        try {
+        	connection = getConnection();
+        	statement  = connection.prepareStatement(selectSQL);
+        	
+        	statement.setString(1, systemId);
+        	statement.setString(2, userId);
+        	
+        	resultSet = statement.executeQuery();
+        	while(resultSet.next()) {
+        		audit_list.add(newAuditFromDB(resultSet));
+        	}
+        	
+		} catch (SQLException e) {
+			throw new SCIMException(selectSQL, e);
+		}finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+		
+		return audit_list;
+	}
 	
 	@Override
 	public List<SCIMAudit> findAuditByUserId(String userId)throws SCIMException{

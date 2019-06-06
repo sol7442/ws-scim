@@ -146,12 +146,15 @@ export class SystemAccountComponent implements OnInit {
   onSelelectAccount(account:any){
     console.log("selected account",account)
 
-    this.scimApiService.getAccountHistory(account.id)
+    this.scimApiService.getSystemAccountHistory(this.systemId , account.attributes.id)
     .pipe(first())
     .subscribe( result =>{
       console.log("history : ", result);
       if(result.state === "Success"){
         this.accountHistory = result.data;
+
+        console.log("history : ", this.accountHistory);
+
       }else{
         console.log("history : ", result.message);
       }

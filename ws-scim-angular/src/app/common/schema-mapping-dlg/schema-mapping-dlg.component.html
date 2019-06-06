@@ -1,0 +1,76 @@
+<p>
+  <p-dialog [(visible)]="_displayDialog" [resizable]="false" [modal]="true" width="700" [style]="{'margin-top':'-120px','margin-left':'80px', 'margin-right':'80px'}">
+      <p-header>
+          SCHEMA MAPPINGS INFO
+      </p-header>
+      <div class="shadow-form-box">
+          <table class="input-form">
+              <tr>
+                  <td class="form-label"><label>URI</label></td>
+                  <td class="form-input" colspan="3"><input [(ngModel)]="_attribute.uri" class="input-text"  type="text" size="60" disabled></td>
+              </tr>
+              <tr>
+                  <td class="form-label"><label>description</label></td>
+                  <td class="form-input" colspan="3"><input [(ngModel)]="_attribute.description" class="input-text"  type="text" size="60" ></td>
+              </tr>
+              <tr>
+                  <td class="form-label"><label>name</label></td>
+                  <td class="form-input"><input [(ngModel)]="_attribute.name" class="input-text"  type="text" size="30" disabled></td>
+                  <td class="form-label"><label>type</label></td>
+                  <td class="form-input"><input [(ngModel)]="_attribute.type" class="input-text"  type="text" size="30" disabled></td>
+              </tr>              
+          </table>
+          <hr class="blue-line">
+          <table class="table-form">
+              <tr>
+                  <td class="form-colum">required</td>
+                  <td class="form-colum">uniqueness</td>
+                  <td class="form-colum">caseExact</td>
+                  <td class="form-colum">multiValued</td>
+                  <td class="form-colum">uniqueness</td>
+                  <td class="form-colum">mutability</td>
+                  <td class="form-colum">returned</td>
+              </tr>
+              <tr>
+                  <td class="form-row">{{_attribute.required}}</td>
+                  <td class="form-row">{{_attribute.uniqueness}}</td>
+                  <td class="form-row">{{_attribute.caseExact}}</td>
+                  <td class="form-row">{{_attribute.multiValued}}</td>
+                  <td class="form-row">{{_attribute.uniqueness}}</td>
+                  <td class="form-row">{{_attribute.mutability}}</td>
+                  <td class="form-row">{{_attribute.returned}}</td>             
+              </tr>
+          </table>
+      </div>
+      <div class="shadow-form-box">
+          <table class="input-form">
+              <tr>
+                  <td class="option-label"><label>TABLE</label></td>
+                  <td class="form-option"><p-dropdown [style]="{'width':'150px'}" [options]="_tables" optionLabel="name" placeholder="테이블 선택" (onChange)="onSelectTable($event)" ></p-dropdown></td>
+                  <td class="option-label"><label>COLUMN</label></td>
+                  <td class="form-option"><p-dropdown [style]="{'width':'150px'}" [options]="_columns" optionLabel="name" placeholder="컬럼 선택" (onChange)="onSelectColumn($event)"></p-dropdown></td>
+                  <td class="form-auto"></td>
+              </tr>
+          </table>          
+      </div>  
+      <div class="shadow-form-box">
+          <table class="input-form">
+              <tr>
+                  <td class="form-label"><label>Default</label></td>
+                  <td class="form-input"><input [(ngModel)]="_attribute.defaultValue" class="input-text"  type="text" size="60" ></td>
+              </tr>
+              <tr>
+                  <td class="form-label"><label>Class</label></td>
+                  <td class="form-input"><input [(ngModel)]="_dataMapper.className" class="input-text"  type="text" size="60" ></td>
+              </tr>
+              <tr>
+                  <td class="form-label"><label>Method</label></td>
+                  <td class="form-input"><input [(ngModel)]="_dataMapper.methodName" class="input-text"  type="text" size="60" ></td>              </tr>
+          </table>
+      </div>
+      <p-footer>
+          <button type="button" pButton label="저장" (click)="okClose()"></button>
+          <button type="button" pButton label="닫기" (click)="cancelClose()"></button>
+      </p-footer>
+  </p-dialog>
+</p>

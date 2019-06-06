@@ -62,10 +62,20 @@ public interface SCIMSystemRepository {
 	public List<SCIMScheduler> getSchdulerAll()throws SCIMException;
 	public List<SCIMScheduler> getSchdulerBySystemId(String systemId)throws SCIMException;
 	
+	public int getAccountCount()throws SCIMException;
+	public List<Resource_Object> getAccountList()throws SCIMException;
+	public int getSystemAccountCount(String systemId)throws SCIMException;;
+	public List<Resource_Object> getSystemAccountList(String systemId)throws SCIMException;
+	public List<Resource_Object> getSystemAccountListByUserId(String userId) throws SCIMException;
+	public List<SCIMAudit> getSystemAccountHistory(String systemId, String userId)throws SCIMException;
+	
+	public int getSystemGhostAccountCount(String systemId)throws SCIMException;
+	public int getSystemActiveAccountCount(String systemId)throws SCIMException;
+	public int getIsolatatedAccountCount()throws SCIMException;
 	
 //	public int getTotoalAccountCount()throws SCIMException;
 //	public int getInactiveAccountCount()throws SCIMException;
-//	public int getIsolatatedAccountCount()throws SCIMException;
+
 //
 //	public int getTotoalSystemAccountCount(String systemId) throws SCIMException;
 //	public int getInactiveSystemAccountCount(String systemId)throws SCIMException;

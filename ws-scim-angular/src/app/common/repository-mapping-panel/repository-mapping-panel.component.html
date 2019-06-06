@@ -55,9 +55,10 @@
                         {{column.attributeSchema.type}}
                     </div>
                   </td>
-                    <td style="text-align: center"><button type="button" pButton label="변경" (click)="changeColumn()"></button></td>
+                    <td style="text-align: center"><button type="button" pButton label="변경" (click)="editMapping(column)"></button></td>
                 </tr>
             </ng-template>
         </p-table>
   </p-panel>
 </p>
+<app-repository-mapping-dlg [(display)]="_showMappingDlg" [column]="_selectedColumn" [system]="_system" (result)="onEditMappingResult($event)"></app-repository-mapping-dlg>

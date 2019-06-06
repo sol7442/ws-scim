@@ -32,6 +32,23 @@ public class CnvtTimestamp {
 		return value;
 	}
 	
+	public Object fromJavaDate(Object obj) {
+		Timestamp value = null;
+		try {
+			if(obj != null) {
+				if (obj instanceof java.util.Date) {
+					Date date_value = (Date) obj;
+					value = new Timestamp(date_value.getTime());
+				}else {
+					logger.error("instance type {} : {}",obj, obj.getClass().getName());
+				}	
+			}
+		}catch (Exception e) {
+			logger.error("{}",obj, e );
+		}
+		logger.debug("J2D : {} > {}",obj,value);
+		return value;
+	}
 	
 	public Object toLong (Object obj) {
 		long value = 0;

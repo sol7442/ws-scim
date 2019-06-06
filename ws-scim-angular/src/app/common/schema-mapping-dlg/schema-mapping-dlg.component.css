@@ -1,0 +1,49 @@
+.shadow-form-box{
+    box-shadow: 0px 1px 1px 0px;
+    color:rgb(47, 47, 47);
+    padding: 10px;
+}
+
+table.input-form{
+    table-layout: auto;
+    width: 100%;
+}
+td.form-label{
+    width: 130px;
+    text-align: left;
+}
+td.form-input{
+    width: 500px;
+    text-align: left;
+}
+td.form-auto{
+    width:auto;
+    text-align: center;
+}
+table.table-form{
+    table-layout: auto;
+    width: 100%;
+    border: 1px solid black;
+    text-align: center;
+    border-collapse: collapse;
+}
+td.form-colum{
+    border: 1px solid black;
+    text-align: center;
+    border-collapse: collapse;
+    background-color: rgb(136, 136, 136);
+}
+td.form-row{
+    border: 1px solid black;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+td.option-label{
+    text-align: left;
+    width: 80px;
+}
+td.form-option{
+    text-align: left;
+    width: 200px;
+}

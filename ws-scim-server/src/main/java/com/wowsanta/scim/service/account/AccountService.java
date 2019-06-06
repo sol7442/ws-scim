@@ -80,21 +80,20 @@ public class AccountService {
 				FrontResponse front_response = new FrontResponse();
 				try {
 					logger.debug("reqeust body : \n{}",request.body());
-					SCIMListResponse  result = new SCIMListResponse();
-					
+					SCIMListResponse  result = new SCIMListResponse();					
 					SCIMFindRequest find = WowsantaJson.parse(request.body(),SCIMFindRequest.class);
 					
 					logger.debug("find request > {}", find);
 					logger.debug("find where   > {}", find.getWhere());
 					
-					SCIMResourceRepository  resource_repository  =  SCIMRepositoryManager.getInstance().getResourceRepository();
 					
-					int total_count  = resource_repository.getUserCount(null);
-
-					List<Resource_Object> user_list = resource_repository.searchUser(null,0,0, total_count);
+					SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
+					
+					int total_count = system_repository.getAccountCount();
+					List<Resource_Object> user_list = system_repository.getAccountList();
+					
 					result.setTotalResults(total_count);
 					result.setResources(user_list);
-					
 					logger.debug("find response < {}", result.getTotalResults());
 										
 					front_response.setState(ResponseState.Success);
@@ -120,14 +119,10 @@ public class AccountService {
 					String userId = request.params(":userId");
 					logger.debug("getUserSystemList : {}", userId);
 					
-					List<Resource_Object> user_list = new ArrayList<Resource_Object>();
-					SCIMResourceRepository  resource_repository  =  SCIMRepositoryManager.getInstance().getResourceRepository();
-					//List<Resource_Object> user_list = resource_repository.searchUser(null,0,0, resource_repository.getUserCount(null));
+					List<Resource_Object> user_list = null;
 					
-					Resource_Object resource = resource_repository.getUser(userId);
-					resource.put("systemId", "sys-scim-sso");
-					user_list.add(resource);
-					
+					SCIMSystemRepository system_repository  =  SCIMRepositoryManager.getInstance().getSystemRepository();
+					user_list = system_repository.getSystemAccountListByUserId(userId);
 					
 					front_response.setState(ResponseState.Success);
 					front_response.setData(user_list);
@@ -156,10 +151,10 @@ public class AccountService {
 				
 				try {
 					
-					SCIMSystemRepository  system_repository  =  SCIMRepositoryManager.getInstance().getSystemRepository();
+					SCIMResourceRepository resource_repository  =  SCIMRepositoryManager.getInstance().getResourceRepository();
 					
-					int total_count  = 21;//system_repository.getTotoalAccountCount();
-					int active_count = 18;//system_repository.getInactiveAccountCount();
+					int total_count  = resource_repository.getUserCount(null);
+					int active_count = resource_repository.getUserCount("active eq 1");
 					
 					Map<String,Integer> user_state_map = new HashMap<String,Integer>(); 
 					user_state_map.put("total", total_count);
@@ -193,9 +188,8 @@ public class AccountService {
 
 					SCIMSystemRepository  system_repository  =  SCIMRepositoryManager.getInstance().getSystemRepository();
 					
-					///SCIMProviderRepository provider_repository = (SCIMProviderRepository)SCIMRepositoryManager.getInstance().getSystemRepository();
-					int total_count  = 29;//system_repository.getTotoalSystemAccountCount(systemId);
-					int active_count = 23;//system_repository.getInactiveSystemAccountCount(systemId);
+					int total_count  = system_repository.getSystemAccountCount(systemId);
+					int active_count = system_repository.getSystemActiveAccountCount(systemId);
 					
 					Map<String,Integer> user_state_map = new HashMap<String,Integer>(); 
 					user_state_map.put("total", total_count);
@@ -224,12 +218,13 @@ public class AccountService {
 			public Object handle(Request request, Response response) throws Exception {
 				FrontResponse front_response = new FrontResponse();
 				try {
-					SCIMSystemRepository  system_repository  =  SCIMRepositoryManager.getInstance().getSystemRepository();
-
-//					SCIMProviderRepository provider_repository = (SCIMProviderRepository)SCIMRepositoryManager.getInstance().getSystemRepository();
-					int total_count    = 31;// provider_repository.getTotoalAccountCount();
-					int isolated_count = 3;//provider_repository.getIsolatatedAccountCount();
 					
+					SCIMResourceRepository resource_repository  =  SCIMRepositoryManager.getInstance().getResourceRepository();
+					SCIMSystemRepository  system_repository  =  SCIMRepositoryManager.getInstance().getSystemRepository();
+					
+					int total_count    = resource_repository.getUserCount(null);
+					int isolated_count = system_repository.getIsolatatedAccountCount();
+										
 					Map<String,Integer> user_state_map = new HashMap<String,Integer>(); 
 					user_state_map.put("total", total_count);
 					
@@ -263,9 +258,8 @@ public class AccountService {
 
 					SCIMSystemRepository  system_repository  =  SCIMRepositoryManager.getInstance().getSystemRepository();
 
-//					SCIMProviderRepository provider_repository = (SCIMProviderRepository)SCIMRepositoryManager.getInstance().getSystemRepository();
-					int total_count    = 23;//provider_repository.getTotoalSystemAccountCount(systemId);
-					int ghost_count =    4;//provider_repository.getGhostSysAccountCount(systemId);
+					int total_count    = system_repository.getSystemAccountCount(systemId);
+					int ghost_count =    system_repository.getSystemGhostAccountCount(systemId);
 					
 					Map<String,Integer> user_state_map = new HashMap<String,Integer>(); 
 					user_state_map.put("total", total_count);
@@ -301,22 +295,51 @@ public class AccountService {
 					SCIMFindRequest find = WowsantaJson.parse(request.body(),SCIMFindRequest.class);
 
 					String systemId = request.params("systemId");
-//					
-//					logger.debug("find system > {}", systemId);
-//					logger.debug("find request > {}", find);
-//					logger.debug("find where   > {}", find.getWhere());
-					
-					SCIMResourceRepository  resource_repository  =  SCIMRepositoryManager.getInstance().getResourceRepository();
-					int total_count  = resource_repository.getUserCount(null);
 
-					List<Resource_Object> user_list = resource_repository.searchUser(null,0,0, total_count);
 					
-					result.setResources(user_list);
+					SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
+					
+					int total_count = system_repository.getSystemAccountCount(systemId);
+					List<Resource_Object> user_list = system_repository.getSystemAccountList(systemId);
+					
 					result.setTotalResults(total_count);
-					
-					
+					result.setResources(user_list);
+					logger.debug("find response < {}", result.getTotalResults());
+										
 					front_response.setState(ResponseState.Success);
 					front_response.setData(result);
+				}catch(Exception e) {
+					front_response.setState(ResponseState.Fail);
+					front_response.setMessage(e.getMessage());
+					
+					logger.error("Acount Error",e);
+				}
+				
+				return front_response;
+			}
+		};
+	}
+
+	public Route getSystemAccountHistory() {
+		return new Route() {
+			@Override
+			public Object handle(Request request, Response response) throws Exception {
+				FrontResponse front_response = new FrontResponse();
+				try {
+					
+					String systemId = request.params("systemId");
+					String userId = request.params("userId");
+					
+					logger.debug("find systemId < {}", systemId);
+					logger.debug("find userId < {}", userId);
+					
+					
+					SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository(); 
+
+					List<SCIMAudit> audit_list = system_repository.getSystemAccountHistory(systemId,userId);
+										
+					front_response.setData(audit_list);
+					front_response.setState(ResponseState.Success);
 				}catch(Exception e) {
 					front_response.setState(ResponseState.Fail);
 					front_response.setMessage(e.getMessage());

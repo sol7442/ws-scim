@@ -1062,9 +1062,9 @@
       "returned": "DEFAULT",
       "uniqueness": "NONE"
     },
-    "employeeNumber": {
-      "uri": "urn:wowsanta:scim:schemas:core:2.0:User:employeeNumber",
-      "name": "employeeNumber",
+    "externalId": {
+      "uri": "urn:wowsanta:scim:schemas:core:2.0:User:externalId",
+      "name": "externalId",
       "type": "STRING",
       "multiValued": false,
       "description": "",

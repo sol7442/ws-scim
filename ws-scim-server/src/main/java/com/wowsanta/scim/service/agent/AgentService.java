@@ -34,15 +34,19 @@ import com.google.gson.JsonParser;
 import com.wowsanta.scim.client.RESTClient;
 import com.wowsanta.scim.exception.SCIMError;
 import com.wowsanta.scim.exception.SCIMException;
+import com.wowsanta.scim.message.SCIMFindRequest;
 import com.wowsanta.scim.obj.SCIMSystem;
 import com.wowsanta.scim.protocol.ClientReponse;
+import com.wowsanta.scim.protocol.ClientRequest;
 import com.wowsanta.scim.protocol.FrontResponse;
+import com.wowsanta.scim.protocol.OutputMapperRequest;
 import com.wowsanta.scim.protocol.ResponseState;
 import com.wowsanta.scim.repository.AbstractSCIMRepository;
 import com.wowsanta.scim.repository.RepositoryOutputMapper;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.user.LoginUser;
 import com.wowsanta.scim.resource.worker.Worker;
+import com.wowsata.util.json.WowsantaJson;
 import com.wowsata.util.net.WowsantaURLEncoder;
 
 import oracle.net.aso.c;
@@ -548,6 +552,9 @@ public class AgentService {
 					client = new RESTClient(worker);
 					ClientReponse client_response = client.get(call_url);
 					if(client_response != null) {
+						
+						System.out.println(client_response.getData());
+						
 						front_response.setData(client_response.getData());
 						front_response.setState(ResponseState.Success);	
 					}else {
@@ -555,6 +562,51 @@ public class AgentService {
 						front_response.setMessage("service response is null");
 					}
 					
+				}catch (Exception e) {
+					logger.error("{}",e.getMessage(), e);
+					front_response.setState(ResponseState.Fail);
+					front_response.setMessage(e.getMessage());
+				}
+				return front_response;
+			}
+		};
+	}
+	
+	public Route updateSchemOutputMapper() {
+		return new Route() {
+			@Override
+			public Object handle(Request request, Response response) throws Exception {
+				FrontResponse front_response = new FrontResponse();
+				RESTClient client = null;
+
+				try {
+					String systemId = request.params("systemId");
+					
+					OutputMapperRequest mapper_request = WowsantaJson.parse(request.body(),OutputMapperRequest.class);
+					
+					System.out.println(mapper_request.toString(true));
+					
+					SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
+					String system_url = system.getSystemUrl();
+					String call_url   = system_url + "/schema/mapper/output";
+					
+					Worker worker = findWorker(request);
+					client = new RESTClient(worker);
+					
+					front_response.setState(ResponseState.Fail);
+					front_response.setMessage("service response is null");
+
+					ClientReponse client_response = client.post(call_url, mapper_request,ClientReponse.class, "UTF-8");
+
+					if(client_response != null) {
+						front_response.setData(client_response.getData());
+						front_response.setState(ResponseState.Success);	
+					}else {
+						front_response.setState(ResponseState.Fail);
+						front_response.setMessage("service response is null");
+					}
+					
+					System.out.println(client_response.toString(true));
 				}catch (Exception e) {
 					logger.error("{}",e.getMessage(), e);
 					front_response.setState(ResponseState.Fail);
@@ -598,4 +650,6 @@ public class AgentService {
 			}
 		};
 	}
+
+
 }

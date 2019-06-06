@@ -23,6 +23,7 @@
 </p-panel>
 <p-panel header="계정 리스트">
     <p-table class="table-cell-center" [value]="accounts"  [responsive]="true" [paginator]="true" [rows]="5"  selectionMode="single" >
+        
     <ng-template pTemplate="header">
         <!--
         <tr>
@@ -47,7 +48,8 @@
         <tr>
             <th>사용자 사번</th>
             <th>사용자 이름</th>
-            <th>상태 </th>
+            <th>상태</th>
+            <th>활성</th>
             <th>생성일 </th>
             <th>변경일 </th>
         </tr>
@@ -56,6 +58,7 @@
         <tr (click)="onSelelectAccount(account)">
             <td style="text-align: center">{{account.attributes.employeeNumber}}</td>
             <td style="text-align: center">{{account.attributes.name}}</td>
+            <td style="text-align: center">{{account.attributes.state}}</td>
             <td style="text-align: center">{{account.attributes.active}}</td>
             <td style="text-align: center">{{account.attributes.createDate | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
             <td style="text-align: center">{{account.attributes.modifyDate | date: 'yyyy/MM/dd hh:mm:ss'}}</td>

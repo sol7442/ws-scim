@@ -46,20 +46,24 @@
             </tr>    
             -->
             <tr>
+                <th>시스템 계정</th>
                 <th>사용자 사번</th>
                 <th>사용자 이름</th>
                 <th>상태 </th>
-                <th>생성일 </th>
-                <th>변경일 </th>
+                <th>활성 </th>                
+                <th>접속일 </th>
+                <th>배포일 </th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-account>
             <tr (click)="onSelelectAccount(account)">
+                <td style="text-align: center">{{account.attributes.id}}</td>
                 <td style="text-align: center">{{account.attributes.employeeNumber}}</td>
                 <td style="text-align: center">{{account.attributes.name}}</td>
+                <td style="text-align: center">{{account.attributes.state}}</td>
                 <td style="text-align: center">{{account.attributes.active}}</td>
-                <td style="text-align: center">{{account.attributes.createDate | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
-                <td style="text-align: center">{{account.attributes.modifyDate | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
+                <td style="text-align: center">{{account.attributes.lastAceessDate }}</td>
+                <td style="text-align: center">{{account.attributes.provisionDate }}</td>
             </tr>
         </ng-template>
         <!--

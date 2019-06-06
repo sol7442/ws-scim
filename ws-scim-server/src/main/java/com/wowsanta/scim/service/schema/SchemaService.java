@@ -8,11 +8,13 @@ import org.slf4j.LoggerFactory;
 
 import com.wowsanta.scim.protocol.ClientReponse;
 import com.wowsanta.scim.protocol.FrontResponse;
+import com.wowsanta.scim.protocol.OutputMapperRequest;
 import com.wowsanta.scim.protocol.ResponseState;
 import com.wowsanta.scim.repository.RepositoryInputMapper;
 import com.wowsanta.scim.repository.RepositoryOutputMapper;
 import com.wowsanta.scim.repository.ResourceTypeSchema;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
+import com.wowsata.util.json.WowsantaJson;
 
 import spark.Request;
 import spark.Response;
@@ -110,6 +112,38 @@ public class SchemaService {
 					}
 					
 					client_response.setData(output_mapper_list);
+					client_response.setState(ResponseState.Success);
+				}catch (Exception e) {
+					client_response.setMessage(e.getMessage());
+					client_response.setState(ResponseState.Fail);
+				}
+				return client_response;
+			}
+		};
+	}
+
+	public Route updateSchemaOutputMapper() {
+		return new Route() {
+			@Override
+			public Object handle(Request request, Response response) throws Exception {
+				ClientReponse client_response = new ClientReponse();
+				try {
+					
+					OutputMapperRequest mapper_request = WowsantaJson.parse(request.body(),OutputMapperRequest.class);
+					RepositoryOutputMapper mapper = mapper_request.getMapper();
+					
+					String mapper_file_name = "";
+					if(mapper.getName().equals("group_mapper")) {
+						mapper_file_name = SCIMRepositoryManager.getInstance().getResourceRepositoryConfig().getGroupOutputMapper();
+					}else {
+						mapper_file_name = SCIMRepositoryManager.getInstance().getResourceRepositoryConfig().getUserOutputMapper();
+					}
+
+					mapper.save(mapper_file_name);
+					
+					logger.debug(mapper_request.toString(true));
+
+					client_response.setData(mapper_file_name);
 					client_response.setState(ResponseState.Success);
 				}catch (Exception e) {
 					client_response.setMessage(e.getMessage());

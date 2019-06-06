@@ -5,6 +5,12 @@ export class SCIMFindRequest{
     startIndex : number;
     count : number;
 }
+export class MapperRequest{
+    name : string;
+    type : string;
+    mapper:any;
+}
+
 export class FrontRequest{
     method:string;
     params:{};

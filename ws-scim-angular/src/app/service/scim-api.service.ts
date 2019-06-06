@@ -5,7 +5,7 @@ import { Observable } from "rxjs/Observable";
 
 import { Admin, System,Scheduler } from '../model/model';
 
-import { SCIMFindRequest , FrontRequest } from '../model/scim.model';
+import { SCIMFindRequest , MapperRequest, FrontRequest } from '../model/scim.model';
 
 
 @Injectable()
@@ -13,6 +13,19 @@ export class ScimApiService {
   constructor(private http: HttpClient) { }
   
 
+  updateSchemaOutputMapper(systemId:string, mapper:any){
+
+    let _request:MapperRequest = new MapperRequest();
+    _request.name = mapper.name;
+    _request.type = "output";
+    _request.mapper = mapper;
+
+    let api_url = '/agent/schema/output/' + systemId;
+    return this.http.post<any>(api_url,_request)
+    .pipe(map( result =>{
+      return result;
+    }));  
+  }
   getSchemaOutputMapper(systemId:string){
     let api_url = '/agent/schema/output/' + systemId;
     return this.http.get<any>(api_url)
@@ -273,8 +286,8 @@ export class ScimApiService {
     }));
   }
 
-  getAccountHistory(id:string){
-    let api_url = '/account/history/' + id;
+  getSystemAccountHistory(systemdId:string, userId:string){
+    let api_url = '/account/sys/userhis/' + systemdId + '/' + userId;
     return this.http.get<any>(api_url,
       {
         headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
@@ -413,6 +426,9 @@ export class ScimApiService {
       return result;
     }));
   }
+
+
+
   getTableList(id:string) {
     let api_url = '/agent/repository/table/list/' + id;
     return this.http.get<any>(api_url,
@@ -433,6 +449,18 @@ export class ScimApiService {
       return result;
     })); 
   }
+
+  getScimSchemas(){
+    let api_url = '/config/schemas';
+    return this.http.get<any>(api_url,
+      {
+        headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
+      })
+    .pipe(map( result =>{
+      return result;
+    })); 
+   }
+   
   getConfigFileList(id:string){
     let api_url = '/agent/config/list/' + id;
     return this.http.get<any>(api_url,

@@ -113,6 +113,7 @@ public class ScimAgentRouter implements ServiceRouter  {
 		path("/schema", () -> {			
 			get("/:fileName"   		,schemaService.getSchemaFile(), new JsonTransformer());
 			get("/mapper/output"   		,schemaService.getSchemaOutputMapper(), new JsonTransformer());
+			post("/mapper/output"   	,schemaService.updateSchemaOutputMapper(), new JsonTransformer());
 			get("/mapper/input"   		,schemaService.getSchemaInputMapper(), new JsonTransformer());
 		});
 	}

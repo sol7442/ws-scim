@@ -1,0 +1,74 @@
+<p>
+    <p-dialog [(visible)]="_displayDialog" [resizable]="false" [modal]="true" width="700" [style]="{'margin-top':'-120px','margin-left':'80px', 'margin-right':'80px'}">
+        <p-header>
+            REPOSITORY MAPPINGS INFO
+        </p-header>
+        <div class="shadow-form-box">
+            <table class="input-form">
+                <tr>
+                    <td class="form-colum">table</td>
+                    <td class="form-colum">column</td>
+                    <td class="form-colum">type</td>
+                </tr>
+                <tr>
+                    <td class="form-row">{{_column.attributes.TABLE_NAME}}</td>
+                    <td class="form-row">{{_column.attributes.COLUMN_NAME}}</td>
+                    <td class="form-row">{{_column.attributes.DATA_TYPE}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="shadow-form-box">
+            <table class="input-form">
+                <tr>
+                    <td class="option-label"><label>SCHEMA</label></td>
+                    <td class="form-option"><p-dropdown [style]="{'width':'150px'}" [options]="_schemas" optionLabel="label" placeholder="스키마 선택" (onChange)="onSelectSchema($event)" ></p-dropdown></td>
+                    <td class="option-label"><label>ATTRIBUTE</label></td>
+                    <td class="form-option"><p-dropdown [style]="{'width':'150px'}" [options]="_attributes" optionLabel="label" placeholder="속성 선택" (onChange)="onSelectAttribute($event)"></p-dropdown></td>
+                    <td class="form-auto"></td>
+                </tr>
+            </table>   
+            <hr class="blue-line">
+            {{_selectedAttribute.name}}
+            <table class="table-form">
+                <tr>
+                    <td class="form-colum">type</td>
+                    <td class="form-colum">required</td>
+                    <td class="form-colum">uniqueness</td>
+                    <td class="form-colum">caseExact</td>
+                    <td class="form-colum">multiValued</td>
+                    <td class="form-colum">uniqueness</td>
+                    <td class="form-colum">mutability</td>
+                </tr>
+                <tr>
+                    <td class="form-row">{{_selectedAttribute.type}}</td>             
+                    <td class="form-row">{{_selectedAttribute.required}}</td>
+                    <td class="form-row">{{_selectedAttribute.uniqueness}}</td>
+                    <td class="form-row">{{_selectedAttribute.caseExact}}</td>
+                    <td class="form-row">{{_selectedAttribute.multiValued}}</td>
+                    <td class="form-row">{{_selectedAttribute.uniqueness}}</td>
+                    <td class="form-row">{{_selectedAttribute.mutability}}</td>
+                    
+                </tr>
+            </table>
+        </div>  
+        <div class="shadow-form-box">
+            <table class="input-form">
+                <tr>
+                    <td class="form-label"><label>Default</label></td>
+                    <td class="form-input"><input [(ngModel)]="_column.defaultValue" class="input-text"  type="text" size="60" ></td>
+                </tr>
+                <tr>
+                    <td class="form-label"><label>Class</label></td>
+                    <td class="form-input"><input [(ngModel)]="_dataMapper.className" class="input-text"  type="text" size="60" ></td>
+                </tr>
+                <tr>
+                    <td class="form-label"><label>Method</label></td>
+                    <td class="form-input"><input [(ngModel)]="_dataMapper.methodName" class="input-text"  type="text" size="60" ></td>              </tr>
+            </table>
+        </div>
+        <p-footer>
+            <button type="button" pButton label="저장" (click)="okClose()"></button>
+            <button type="button" pButton label="닫기" (click)="cancelClose()"></button>
+        </p-footer>
+    </p-dialog>
+</p>

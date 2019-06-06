@@ -20,8 +20,10 @@ export class RepositoryMappingPanelComponent implements OnInit {
 
   private _tableName:string;
   private _schemaName:string
-
   private _schemaAttributes:any[];
+
+  private _selectedColumn:any;
+  private _showMappingDlg:boolean = false;
 
   constructor(
     private scimApiService:ScimApiService,
@@ -63,5 +65,15 @@ export class RepositoryMappingPanelComponent implements OnInit {
     console.log("table,", table);
 
     this._columns = table.columns;
+  }
+
+  editMapping(column:any){
+    console.log("column : ", column);
+    this._selectedColumn = column;
+    this._showMappingDlg = true;
+  }
+
+  onEditMappingResult(event:any){
+    
   }
 }

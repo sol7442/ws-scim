@@ -55,8 +55,6 @@ export class AdminInfoDlgComponent implements OnInit {
   @Output() result: EventEmitter<any> = new EventEmitter();
 
   okClose(){
-
-
     if(this._type == DialogType.ADD){
       this.scimApiService.createAdimn(this._admin)
       .subscribe(result=>{

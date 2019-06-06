@@ -35,4 +35,13 @@ public class BooleanConverter {
 			return 0;
 		}
 	}
+	
+	public Object reversNumber(Object number) {
+		if (number instanceof Integer) {
+			int value  = (Integer) number;
+			return value == 0 ? 1 : 0;
+		}else {
+			return 0;
+		}
+	}
 }

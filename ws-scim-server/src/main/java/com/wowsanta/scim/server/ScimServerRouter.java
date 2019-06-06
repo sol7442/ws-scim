@@ -86,12 +86,14 @@ public class ScimServerRouter implements ServiceRouter  {
 		path("/account", () -> {			
 			post("/im/find"   		 			,accountService.findUserList(), new JsonTransformer());
 			post("/sys/find/:systemId"   		,accountService.findSysUserList(), new JsonTransformer());
+			
+			
 			get("/im/state"   		     		,accountService.getUserState(), new JsonTransformer());
 			get("/sys/state/:systemId"   		,accountService.getSysUserState(), new JsonTransformer());
 			get("/im/status"  		     		,accountService.getUserStatus(), new JsonTransformer());
 			get("/sys/status/:systemId"  		,accountService.getSysUserStatus(), new JsonTransformer());
 			get("/im/usersys/:userId"  			,accountService.getUserSystemList(), new JsonTransformer());
-			get("/sys/userhis/:userId"   		,accountService.getAccountHistory(), new JsonTransformer());
+			get("/sys/userhis/:systemId/:userId",accountService.getSystemAccountHistory(), new JsonTransformer());
 			get("/history/:userId"   			,accountService.getAccountHistory(), new JsonTransformer());
 
 			//get("/system/:systemId"  			,accountService.getSystemAccount(), new JsonTransformer());
@@ -135,6 +137,7 @@ public class ScimServerRouter implements ServiceRouter  {
 		path("/config", () -> {
 			get("/list"				,configService.getSystemConfigList(), new JsonTransformer());
 			get("/file/:fileName"	,configService.getSystemConfigFile());
+			get("/schemas"			,configService.getSystemSchemaList(), new JsonTransformer());
 		});
 	}
 
@@ -222,6 +225,7 @@ public class ScimServerRouter implements ServiceRouter  {
 			get("/log/file/:systemId/name/:fileName"   	 ,agentService.getLogFile() );
 			
 			get("/schema/output/:systemId"   	 		 ,agentService.getSchemOutputMapper(), new JsonTransformer());
+			post("/schema/output/:systemId"   	 		 ,agentService.updateSchemOutputMapper(), new JsonTransformer());
 			get("/schema/input/:systemId"   	 		 ,agentService.getSchemInputMapper(), new JsonTransformer());
 		});	
 	}

@@ -1,9 +1,12 @@
 package com.ehyundai.im;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +25,9 @@ import com.wowsanta.scim.obj.SCIMSchedulerHistory;
 import com.wowsanta.scim.obj.SCIMSystem;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.object.Resource_Object;
+import com.wowsanta.scim.repository.AttributeValue;
+import com.wowsanta.scim.repository.RepositoryInputMapper;
+import com.wowsanta.scim.repository.RepositoryOutputMapper;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
 import com.wowsanta.scim.repository.SCIMResourceGetterRepository;
 import com.wowsanta.scim.repository.SCIMServerResourceRepository;
@@ -111,6 +117,19 @@ public class ProvisioningJob_SSO extends SCIMJob {
 
 			logger.info("SCIMBulkResponse : {} " , scim_bluk_response.toString(false));
 			
+			String system_user_input_mapper_file = SCIMRepositoryManager.getInstance().getResourceRepositoryConfig().getSystemUserInputMapper();
+			String system_user_output_mapper_file = SCIMRepositoryManager.getInstance().getResourceRepositoryConfig().getSystemUseroutputMapper();
+			logger.info("system_user_input_mapper : {} ", system_user_input_mapper_file);
+			logger.info("system_user_output_mapper_file : {} ", system_user_output_mapper_file);
+			RepositoryOutputMapper system_user_resource_output_mapper = null;
+			RepositoryInputMapper  system_user_resource_input_mapper = null;
+			try {
+				system_user_resource_input_mapper  = RepositoryInputMapper.load(system_user_input_mapper_file);
+				system_user_resource_output_mapper = RepositoryOutputMapper.load(system_user_output_mapper_file);
+			} catch (Exception e) {
+				logger.error(e.getMessage(),e);
+			}
+			
 			for (SCIMBulkOperation request_operation : scim_bluk_request.getOperations()) {
 
 				SCIMBulkOperation response_operation = findResponseOperation(request_operation,scim_bluk_response.getOperations());
@@ -122,27 +141,42 @@ public class ProvisioningJob_SSO extends SCIMJob {
 					audit.setResourceType(ResoureType.USER);
 				}
 				
-				if(request_operation.getMethod().equals(SCIMDefinitions.MethodType.PUT.toString())) {
-					audit.setMethod("CREATE");
-				}else {
-					audit.setMethod("UPDATE");
-				}
 				
-				if(response_operation.getStatus().equals("200")) {
+				if(response_operation.getStatus().equals("200")) {		
+					if(request_operation.getPath().equals(SCIMConstants.USER_ENDPOINT)) {
+						AttributeValue system_id_value = new AttributeValue("systemId",target_system_id);
+						AttributeValue user_id_value = new AttributeValue("id",request_operation.getData().getId());
+						
+						List<AttributeValue> attribute_list = new ArrayList<AttributeValue>();
+						attribute_list.add(system_id_value);
+						attribute_list.add(user_id_value);
+						
+						Resource_Object old_user  = resource_repository.getSystemUser(system_user_resource_output_mapper, attribute_list);
+						Resource_Object new_user  =	request_operation.getData();
+						new_user.put("systemId",target_system_id);
+						new_user.put("provisionDate", new Date());
+						
+						
+						String detail = compareResource(old_user,new_user);
+						
+						if(old_user == null) {
+							audit.setMethod("CREATE");
+							resource_repository.createSystemUser(system_user_resource_input_mapper,new_user );
+							audit.setResult("SUCCESS");
+						}else {
+							audit.setMethod("UPDATE");
+							resource_repository.updateSystemUser(system_user_resource_input_mapper, new_user);
+							audit.setResult("SUCCESS");
+							audit.setDetail(detail);
+						}
+					}
+					
 					audit.setResult("SUCCESS");
 				}else {
 					audit.setResult("FAILED");
 					audit.setDetail(response_operation.getResponse().getDetail());
 				}
 
-//				if(response_operation.getStatus().equals("200")) {
-//					if(request_operation.getMethod().equals(SCIMDefinitions.MethodType.PUT.toString())){
-//						resource_repository.createSystemUser(target_system_id, (SCIMUser) request_operation.getData());
-//					}else {
-//						resource_repository.updateSystemUser(target_system_id, (SCIMUser) request_operation.getData());
-//					}
-//				}
-				//logger.info("Provision Response : {} > {} : {} ",audit.getWorkId(),request_operation );
 				audit_logger.info("Provisioning SSO : {}", audit);
 				system_repository.addAudit(audit);
 				history.addAudit(audit);
@@ -161,6 +195,43 @@ public class ProvisioningJob_SSO extends SCIMJob {
 		}
 		
 		return history;
+	}
+
+	private String compareResource(Resource_Object old_user, Resource_Object new_user) {
+		logger.debug("old sys user : {}", old_user);
+		logger.debug("old sys user : {}", new_user);
+		
+		Map<String,Object> old_data = old_user.getAttributes();
+		Map<String,Object> new_data = new_user.getAttributes();
+		Set<String> data_keys = old_data.keySet();
+		
+		StringBuffer buffer = new StringBuffer();
+		for (String key : data_keys) {
+			if(
+				key.equals("provisionDate") ||
+				key.equals("lastAccessDate") ||
+				key.equals("modifyDate") ||
+				key.equals("createDate") ||
+				key.equals("externalId")
+				) {
+				
+				continue;
+			}
+			
+			if(old_data.get(key) != null) {
+				if(!old_data.get(key).equals(new_data.get(key))) {
+					buffer.append(key).append(":");
+					buffer.append(old_data.get(key));
+					buffer.append("-");
+					buffer.append(new_data.get(key));
+					buffer.append(",");
+				}
+			}		
+		}
+
+		System.out.println(buffer.toString());
+		
+		return buffer.toString();
 	}
 
 	private SCIMBulkOperation findResponseOperation(SCIMBulkOperation request_operation,

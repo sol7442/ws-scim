@@ -4,6 +4,11 @@
       "secure": false,
       "logLevel": "debug"
     },
+    "/config/*": {
+      "target": "https://localhost:5000/",
+      "secure": false,
+      "logLevel": "debug"
+    },
     "/system/*": {
       "target": "https://localhost:5000/",
       "secure": false,

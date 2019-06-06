@@ -60,8 +60,7 @@ public class RepositoryOutputMapper {
 		return null;
 	}
 	
-	public void save(String file_name) {
-		
+	public void save(String file_name) throws RepositoryException{
 		try {
 			GsonBuilder builder = new GsonBuilder().disableHtmlEscaping();
 			builder.setPrettyPrinting();
@@ -71,7 +70,7 @@ public class RepositoryOutputMapper {
 			writer.write(gson.toJson(this));
 			writer.close();
 		}catch (Exception e) {
-			e.printStackTrace();
+			throw new RepositoryException("RepositoryMapper SAVE FAILED ", e);
 		}
 	}
 
