@@ -313,11 +313,7 @@
             "NUM_NULLS": "0"
           },
           "type": "ValueColumn",
-          "id": "ACTIVE",
-          "dataMapper": {
-	        "className": "com.wowsanta.scim.repository.convert.CnvInteger",
-	        "methodName": "J2D"
-      	  },
+          "id": "ACTIVE",          
           "schemas": [
             "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
           ]

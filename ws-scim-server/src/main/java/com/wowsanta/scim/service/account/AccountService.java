@@ -14,7 +14,12 @@ import com.wowsanta.scim.obj.SCIMAudit;
 import com.wowsanta.scim.object.Resource_Object;
 import com.wowsanta.scim.protocol.FrontReqeust;
 import com.wowsanta.scim.protocol.FrontResponse;
+import com.wowsanta.scim.protocol.FrontSearchRequest;
 import com.wowsanta.scim.protocol.ResponseState;
+import com.wowsanta.scim.repository.AttributeValue;
+import com.wowsanta.scim.repository.RepositoryException;
+import com.wowsanta.scim.repository.RepositoryInputMapper;
+import com.wowsanta.scim.repository.RepositoryOutputMapper;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
 import com.wowsanta.scim.repository.resource.SCIMResourceRepository;
 import com.wowsanta.scim.repository.system.SCIMSystemRepository;
@@ -80,17 +85,18 @@ public class AccountService {
 				FrontResponse front_response = new FrontResponse();
 				try {
 					logger.debug("reqeust body : \n{}",request.body());
-					SCIMListResponse  result = new SCIMListResponse();					
-					SCIMFindRequest find = WowsantaJson.parse(request.body(),SCIMFindRequest.class);
+					SCIMListResponse result = new SCIMListResponse();
+					FrontSearchRequest search = WowsantaJson.parse(request.body(),FrontSearchRequest.class);
 					
-					logger.debug("find request > {}", find);
-					logger.debug("find where   > {}", find.getWhere());
+					logger.debug("search request > {}", search);
+					logger.debug("search where   > {}", search.getWhere());
 					
+					SCIMResourceRepository resource_repository = SCIMRepositoryManager.getInstance().getResourceRepository();
+					String filter = makeFilter(search.getAttributes());
+
+					int total_count = resource_repository.getUserCount(filter);
+					List<Resource_Object> user_list = resource_repository.searchUser(filter, search.getStartIndex(),search.getCount(), total_count);
 					
-					SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
-					
-					int total_count = system_repository.getAccountCount();
-					List<Resource_Object> user_list = system_repository.getAccountList();
 					
 					result.setTotalResults(total_count);
 					result.setResources(user_list);
@@ -106,6 +112,22 @@ public class AccountService {
 				}
 				
 				return front_response;
+			}
+
+			private String makeFilter(List<AttributeValue> attributes) {
+				if(attributes == null) {
+					return null;
+				}
+				
+				StringBuffer buffer = new StringBuffer();
+				for (AttributeValue attributeValue : attributes) {
+					buffer.append(attributeValue.getName());
+					buffer.append(" ").append("eq").append(" ");
+					buffer.append(attributeValue.getValue());
+				}
+				
+				
+				return buffer.toString();
 			}
 		};
 	}
@@ -291,16 +313,36 @@ public class AccountService {
 				try {
 					
 					logger.debug("reqeust body : \n{}",request.body());
+					FrontSearchRequest search = WowsantaJson.parse(request.body(),FrontSearchRequest.class);
+					
 					SCIMListResponse  result = new SCIMListResponse();
-					SCIMFindRequest find = WowsantaJson.parse(request.body(),SCIMFindRequest.class);
-
 					String systemId = request.params("systemId");
-
 					
 					SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
+					SCIMResourceRepository resource_repository = SCIMRepositoryManager.getInstance().getResourceRepository();
+					
+					
+					
+					String system_user_input_mapper_file = SCIMRepositoryManager.getInstance().getResourceRepositoryConfig().getSystemUserInputMapper();
+					String system_user_output_mapper_file = SCIMRepositoryManager.getInstance().getResourceRepositoryConfig().getSystemUseroutputMapper();
+					logger.info("system_user_input_mapper : {} ", system_user_input_mapper_file);
+					logger.info("system_user_output_mapper_file : {} ", system_user_output_mapper_file);
+					RepositoryOutputMapper system_user_resource_output_mapper = null;
+					RepositoryInputMapper  system_user_resource_input_mapper = null;
+					try {
+						system_user_resource_input_mapper  = RepositoryInputMapper.load(system_user_input_mapper_file);
+						system_user_resource_output_mapper = RepositoryOutputMapper.load(system_user_output_mapper_file);
+					} catch (Exception e) {
+						logger.error(e.getMessage(),e);
+					}
 					
 					int total_count = system_repository.getSystemAccountCount(systemId);
-					List<Resource_Object> user_list = system_repository.getSystemAccountList(systemId);
+					
+					List<AttributeValue> attribute_list = search.getAttributes();
+					AttributeValue system_id_value = new AttributeValue("systemId",systemId);
+					attribute_list.add(system_id_value);
+					
+					List<Resource_Object> user_list = resource_repository.searchSystemUser(system_user_resource_output_mapper, attribute_list, search.getStartIndex(), search.getCount(), total_count);
 					
 					result.setTotalResults(total_count);
 					result.setResources(user_list);

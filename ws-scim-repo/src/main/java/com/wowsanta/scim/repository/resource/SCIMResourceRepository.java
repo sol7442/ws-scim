@@ -25,8 +25,11 @@ public interface SCIMResourceRepository{
 
 	public int getSystemUserCount(RepositoryOutputMapper outMapper, String filter) throws RepositoryException;
 	public List<Resource_Object> searchSystemUser(RepositoryOutputMapper outMapper, String filter, int startIndex, int pageCont, int totalCount)throws RepositoryException;
+	public List<Resource_Object> searchSystemUser(RepositoryOutputMapper outMapper,	List<AttributeValue> attribute_list, int startIndex, int pageCont, int totalCount)  throws RepositoryException;
+	
 	public void createSystemUser(RepositoryInputMapper inMapper,Resource_Object resource)  throws RepositoryException;
 	public void updateSystemUser(RepositoryInputMapper inMapper,Resource_Object resource)  throws RepositoryException;
 	public Resource_Object getSystemUser(RepositoryOutputMapper outMapper,	List<AttributeValue> attribute_list)  throws RepositoryException;
+	
 	
 }

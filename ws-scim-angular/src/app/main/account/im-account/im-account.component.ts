@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 import { ScimApiService } from './../../../service/scim-api.service';
 import { AlertService } from './../../../service/alert.service';
 
+import { FrontSearchRequest } from '../../../model/scim.model';
 
 @Component({
   selector: 'app-im-account',
@@ -26,7 +27,9 @@ export class ImAccountComponent implements OnInit {
   private integrateCount:number;
   private isolatateCount:number;
   
-
+  private searchOption:any[]=[];
+  private selectedSearchOption:any;
+  private searchValue:any;
 
   constructor(
     private alertService:AlertService,
@@ -34,6 +37,13 @@ export class ImAccountComponent implements OnInit {
    }
 
   ngOnInit() {
+
+    
+    this.searchOption = [
+      {label: '사번', name: 'id'},
+      {label: '이름', name: 'name'},
+    ]
+
     this.scimApiService.getAccountState()
     .pipe(first())
     .subscribe( result =>{
@@ -98,24 +108,27 @@ export class ImAccountComponent implements OnInit {
     },error =>{
         console.log("login-error : ", error);
     });
-
-    this.scimApiService.findAccounts("","",0,5)
-    .pipe(first())
-    .subscribe( result =>{
-      console.log("findUsers : ", result);
-      this.accounts   = result.data.Resources;
-
-      console.log("this.accounts : ", this.accounts);
-
-      this.totalCount = result.data.totalResults;
-    },error =>{
-        console.log("login-error : ", error);
-    });
   }
 
   onPaginate(event:any){
     console.log("event",event)
-    this.scimApiService.findAccounts("","",event.page,event.rows)
+    console.log("selectedSearchOption",this.selectedSearchOption)
+    console.log("this.searchValue",this.searchValue)
+
+    let search_request:FrontSearchRequest = new FrontSearchRequest();
+    if(this.selectedSearchOption != undefined){
+      if(this.searchValue != ""){
+        this.selectedSearchOption["value"] = this.searchValue;
+        search_request.attributes = [this.selectedSearchOption]
+      }
+    }
+    
+    search_request.startIndex = event.first / event.rows;
+    search_request.count      = event.rows;
+
+    console.log("search_request : ", search_request);
+
+    this.scimApiService.findAccounts(search_request)
     .pipe(first())
     .subscribe( result =>{
       console.log("findUsers : ", result);
@@ -137,6 +150,33 @@ export class ImAccountComponent implements OnInit {
     },error =>{
         console.log("login-error : ", error);
     });
+  }
 
+  onSearch(){    
+    console.log("selectedSearchOption",this.selectedSearchOption)
+    console.log("this.searchValue",this.searchValue)
+
+    let search_request:FrontSearchRequest = new FrontSearchRequest();
+    if(this.selectedSearchOption != undefined){
+      if(this.searchValue != ""){
+        this.selectedSearchOption["value"] = this.searchValue;
+        search_request.attributes = [this.selectedSearchOption]
+      }
+    }
+
+    search_request.where      = "eq";    
+    search_request.startIndex = 0;
+    search_request.count      = 5;
+
+    console.log("search_request : ", search_request);
+    this.scimApiService.findAccounts(search_request)
+    .pipe(first())
+    .subscribe( result =>{
+      console.log("findUsers : ", result);
+      this.accounts   = result.data.Resources;
+      this.totalCount = result.data.totalResults;
+    },error =>{
+        console.log("login-error : ", error);
+    });
   }
 }

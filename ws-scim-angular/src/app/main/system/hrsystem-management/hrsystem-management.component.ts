@@ -48,15 +48,11 @@ export class HrsystemManagementComponent implements OnInit {
       this.systems = data;
       this.selectedSystem = this.systems[0];
       console.log("systems >>>: ", this.systems);
-      
       this.onSelect({value:this.selectedSystem});
 
     },error =>{
       console.log("login-error : ", error);
     });
-
-
-
   }
 
   onSelect(event){
@@ -84,18 +80,21 @@ export class HrsystemManagementComponent implements OnInit {
   onSystemEditResult(event:any){
     console.log("result",event)
 
-    this.scimApiService.getHrSystems()
-    .subscribe( data =>{
-      this.systems = data;
-      if(event.result === "OK" && event.type === DialogType.DELETE){
-        this.selectedSystem = data[0];
-      }else{
-        this.selectedSystem = event.system;
-      }
+    if(event.result === "OK"){
+      this.scimApiService.getHrSystems()
+      .subscribe( data =>{
+        this.systems = data;
+        if(event.type === DialogType.DELETE){
+          this.selectedSystem = data[0];
+        }else{
+          this.selectedSystem = event.system;
+        }
+      },error =>{
+        console.log("login-error : ", error);
+      });
+
       this.onSelect({value:this.selectedSystem});
-    },error =>{
-      console.log("login-error : ", error);
-    });
+    }
   }
 
   addScheduler(){

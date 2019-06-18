@@ -1,4 +1,4 @@
-export class SCIMFindRequest{
+export class FrontSearchRequest{
     attributes : string[];
     where : string;
     order : string;

@@ -98,7 +98,7 @@ public class SCIMServer  {
 				}
 				SCIMSchedulerManager.getInstance().initialize();
 			}
-		} catch (SCIMException e) {
+		} catch (Exception e) {
 			logger.error("Scheduler INITIALIZE FAILED ",e);
 		}
 	}
@@ -106,8 +106,7 @@ public class SCIMServer  {
 	private void loadRepository(SparkConfiguration service_config) {
 		logger.info("- REPOSITORY CONFIG    : {}", service_config.getRepositoryConfig());
 		try {
-			SCIMRepositoryManager.load(service_config.getRepositoryConfig()).initailze();
-		
+			SCIMRepositoryManager.load(service_config.getRepositoryConfig()).initailze();		
 		}catch (Exception e) {
 			logger.error(e.getMessage() + " : {} ",service_config, e);
 		}

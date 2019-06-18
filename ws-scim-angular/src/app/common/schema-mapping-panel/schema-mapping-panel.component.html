@@ -1,9 +1,9 @@
 <p>
-    <p-panel header="스키마 매핑 정보 : {{_system.systemName}}" [toggleable]="true" [collapsed]="true">
+    <p-panel header="가저오기 설정 : {{_system.systemName}}" [toggleable]="true" [collapsed]="true">
         <div class="shadow-form-box">
           <table class="input-form">
             <tr>
-              <td class="form-label"><label>스키마 매핑 파일</label></td>
+              <td class="form-label"><label>가져오기 매핑 파일</label></td>
               <td class="form-input">
                   <p-dropdown [options]="_mappers" (onChange)="onSelectMapper($event.value)" placeholder="Select a Mapper" optionLabel="name"></p-dropdown>
               </td>
@@ -16,7 +16,7 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th colspan="2">스키마 정보</th>
-                    <th colspan="2">매핑 정보</th>
+                    <th colspan="2">데이터 변환</th>
                     <th colspan="3">테이블 정보 <span *ngIf="_tableName" >({{_tableName}})</span> </th>
                 </tr>
                 <tr>

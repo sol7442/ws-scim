@@ -21,6 +21,7 @@ import com.wowsanta.scim.object.SCIM_Resource;
 import com.wowsanta.scim.object.SCIM_User;
 import com.wowsanta.scim.repo.rdb.DBCP;
 import com.wowsanta.scim.repository.AttributeSchema;
+import com.wowsanta.scim.repository.AttributeValue;
 import com.wowsanta.scim.repository.RepositoryException;
 import com.wowsanta.scim.repository.RepositoryOutputMapper;
 import com.wowsanta.scim.repository.ResourceColumn;
@@ -117,9 +118,10 @@ public class MsSqlRepository extends DefaultRepository implements SCIMRepository
 		return column_list;
 	}
 	
-
+	public List<Resource_Object> searchSystemUser(RepositoryOutputMapper outMapper,	List<AttributeValue> attribute_list, int startIndex, int pageCount, int totalCount)  throws RepositoryException{
+		return null;
+	}
 	public List<Resource_Object> searchSystemUser(RepositoryOutputMapper outMapper, String filter,int startIndex, int pageCount, int totalCount)throws RepositoryException{
-		
 		if(pageCount <= 0) {
 			pageCount = totalCount;
 		}

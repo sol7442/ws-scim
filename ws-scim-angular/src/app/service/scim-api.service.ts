@@ -5,7 +5,7 @@ import { Observable } from "rxjs/Observable";
 
 import { Admin, System,Scheduler } from '../model/model';
 
-import { SCIMFindRequest , MapperRequest, FrontRequest } from '../model/scim.model';
+import { FrontSearchRequest , MapperRequest, FrontRequest } from '../model/scim.model';
 
 
 @Injectable()
@@ -78,33 +78,35 @@ export class ScimApiService {
     }));  
   }
 
-  findAccounts(where:string, order:string, startIndex:number, count:number){
-    let find_request:SCIMFindRequest = new SCIMFindRequest();
-    find_request.where = where;
-    find_request.order = order;
-    find_request.startIndex = startIndex;
-    find_request.count = count;
-
+  findAccounts(search_request:FrontSearchRequest){    
     let api_url = '/account/im/find';
-    return this.http.post<any>(api_url,find_request)
+    return this.http.post<any>(api_url,search_request)
     .pipe(map( result =>{
       return result;
     }));  
   }
 
-  findSystemAccount(systemId:string, where:string, order:string, startIndex:number, count:number){
-    let find_request:SCIMFindRequest = new SCIMFindRequest();
-    find_request.where = where;
-    find_request.order = order;
-    find_request.startIndex = startIndex;
-    find_request.count = count;
-
+  findSystemAccount(systemId:string, search_request:FrontSearchRequest){    
     let api_url = '/account/sys/find/' + systemId;
-    return this.http.post<any>(api_url,find_request)
+    return this.http.post<any>(api_url,search_request)
     .pipe(map( result =>{
       return result;
     }));  
   }
+  
+  // findSystemAccount(systemId:string, where:string, order:string, startIndex:number, count:number){
+  //   let find_request:FrontSearchRequest = new FrontSearchRequest();
+  //   find_request.where = where;
+  //   find_request.order = order;
+  //   find_request.startIndex = startIndex;
+  //   find_request.count = count;
+
+  //   let api_url = '/account/sys/find/' + systemId;
+  //   return this.http.post<any>(api_url,find_request)
+  //   .pipe(map( result =>{
+  //     return result;
+  //   }));  
+  // }
   getSysAccountByUserId(userId:string){
     let api_url = '/account/im/usersys/' + userId;
     return this.http.get<any>(api_url)

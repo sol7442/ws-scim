@@ -102,29 +102,11 @@ public class SCIMRepositoryManager {
 	}
 
 	private void systemRepositoryInitialize() throws SCIMException {
-		System.out.println(systemRepositoryConfig.getDbcp());
-		
-//				DefaultRepository repository = null;
-//				switch (resourceRepositoryConfig.getType()) {
-//				case ORACLE:
-//					repository = new OracleRepository();
-//					break;
-//				case MSSQL:
-//					break;
-//				case MYSQL:
-//					break;
-//				case SQLITE:
-//					break;
-//				default:
-//					break;
-//				}
-		
 		IMSystemRepository repository = new IMSystemRepository();
 		repository.setDbcp(systemRepositoryConfig.getDbcp());
 		repository.initialize();
 		
 		this.systemRepository = repository;
-		// validate
 	}
 
 	private void resourceRepositoryInitialize() {

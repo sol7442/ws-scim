@@ -117,7 +117,32 @@ public class OracleRepository extends DefaultRepository implements SCIMRepositor
 		return column_list;
 	}
 	
-	
+	public List<Resource_Object> searchSystemUser(RepositoryOutputMapper outMapper,	List<AttributeValue> attribute_list, int startIndex, int pageCount, int totalCount)  throws RepositoryException{
+		startIndex++; // oracle -- start index = 1;			
+		if(pageCount <= 0) {
+			pageCount = totalCount;
+		}
+		
+		if(totalCount == 0) {
+			return new ArrayList<Resource_Object>();
+		}
+		
+		int startCount = (startIndex - 1) * pageCount + 1;   
+		int endCount = startIndex * pageCount; 				 
+		if(endCount >totalCount) {
+			endCount = totalCount;
+		}
+		
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("SELECT * FROM ");
+		buffer.append("(SELECT ROWNUM AS NUM , A.* FROM (");
+		buffer.append(outMapper.getSelectQuery(attribute_list));
+		buffer.append(") A").append(" ");
+		buffer.append("WHERE ROWNUM <=?)");
+		buffer.append(" B WHERE B.NUM>=?");
+		
+		return searchResource(outMapper, startCount, endCount, buffer.toString());
+	}
 	public List<Resource_Object> searchSystemUser(RepositoryOutputMapper outMapper, String filter,int startIndex, int pageCount, int totalCount)throws RepositoryException{
 		startIndex++; // oracle -- start index = 1;			
 		if(pageCount <= 0) {

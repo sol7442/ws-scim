@@ -31,7 +31,7 @@ public class GW_UserSchemaMapper_Generator_Test {
 	public static final String gw_user_resource_input_mapper_file = "../config/backup_conf_20190429/default_mssql_gw_user_resource_input_mapper.json";
 	public static final String gw_user_resource_input_schema_file = "../config/backup_conf_20190429/default_mssql_gw_user_resource_input_schema.json";
 
-	@Test
+	//@Test
 	public void get_user_by_out_mapper_test() {
 		try {
 			GsonBuilder builder = new GsonBuilder().disableHtmlEscaping();

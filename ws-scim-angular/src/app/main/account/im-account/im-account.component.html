@@ -22,33 +22,30 @@
     </p-card>
 </p-panel>
 <p-panel header="계정 리스트">
-    <p-table class="table-cell-center" [value]="accounts"  [responsive]="true" [paginator]="true" [rows]="5"  selectionMode="single" >
-        
+    <p-table class="table-cell-center" [value]="accounts" [lazy]="true" [responsive]="true" [paginator]="true" (onPage)="onPaginate($event)" [rows]="5" [totalRecords]="totalCount" selectionMode="single" >
     <ng-template pTemplate="header">
-        <!--
         <tr>
-            <td>
-                <table>
+            <td colspan="5">
+                <table class="search-form">
                     <tr>
-                        <td>
-                            <p-dropdown [options]="cities1" [(ngModel)]="selectedCity1"></p-dropdown>       
+                        <td class="form-label">검색</td>
+                        <td class="form-option">
+                            <p-dropdown [options]="searchOption" [(ngModel)]="selectedSearchOption" optionLabel="label" placeholder="Select Search Type"></p-dropdown>       
                         </td>
-                        <td>
-                            <input type="text" pInputText [(ngModel)]="property"/>
-
+                        <td class="form-input">
+                            <input type="text" pInputText [(ngModel)]="searchValue" size="50"/>
                         </td>
-                        <td>
-                            <p-button label="Click" ></p-button>
+                        <td class="form-button">
+                            <p-button label="Click" (click)="onSearch()"></p-button>
                         </td>
+                        <td class="form-auto"></td>
                     </tr>
-                </table>
+                </table>        
             </td>
-        </tr>    
-        -->
+        </tr>        
         <tr>
             <th>사용자 사번</th>
             <th>사용자 이름</th>
-            <th>상태</th>
             <th>활성</th>
             <th>생성일 </th>
             <th>변경일 </th>
@@ -58,21 +55,11 @@
         <tr (click)="onSelelectAccount(account)">
             <td style="text-align: center">{{account.attributes.employeeNumber}}</td>
             <td style="text-align: center">{{account.attributes.name}}</td>
-            <td style="text-align: center">{{account.attributes.state}}</td>
             <td style="text-align: center">{{account.attributes.active}}</td>
             <td style="text-align: center">{{account.attributes.createDate | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
             <td style="text-align: center">{{account.attributes.modifyDate | date: 'yyyy/MM/dd hh:mm:ss'}}</td>
         </tr>
-    </ng-template>
-    <!--
-    <ng-template pTemplate="footer">
-        <tr>
-            <td colspan="5">
-                <p-paginator [rows]="5" [totalRecords]="totalCount"></p-paginator>
-            </td>
-        </tr>
-    </ng-template>
-    -->
+    </ng-template>    
     </p-table>
 </p-panel>
 <p-panel>

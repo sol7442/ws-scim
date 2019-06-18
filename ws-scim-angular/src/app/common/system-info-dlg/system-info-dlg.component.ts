@@ -86,7 +86,7 @@ export class SystemInfoDlgComponent implements OnInit {
     this._resultData = {
       result:'CANCEL',
       type  : this._type,
-      admin : this._system
+      system : this._system
     };
 
     this.onDialogHide();

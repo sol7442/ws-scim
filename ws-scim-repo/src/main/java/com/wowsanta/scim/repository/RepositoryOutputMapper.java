@@ -130,7 +130,7 @@ public class RepositoryOutputMapper {
 				}
 				
 				if( set_data != null) {
-					query_buffer.append(column.getName()).append("=").append("?");
+					query_buffer.append(column.getName()).append("='").append(set_data).append("'");
 				}
 				
 				if(i < attribute_list.size() - 1) {// OPERATOR .. FILTER

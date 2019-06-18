@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { ScimApiService } from './../../../service/scim-api.service';
 import { System , Scheduler , SchedulerHistory} from '../../../model/model';
+import { FrontSearchRequest } from '../../../model/scim.model';
 
 import { first } from 'rxjs/operators';
 
@@ -31,6 +32,9 @@ export class SystemAccountComponent implements OnInit {
 
   private accountHistory:any[];
 
+  private searchOption:any[]=[];
+  private selectedSearchOption:any;
+  private searchValue:any;
 
   constructor(
     private scimApiService:ScimApiService,
@@ -46,6 +50,12 @@ export class SystemAccountComponent implements OnInit {
       this.systemId = params['id'];
       console.log("systemId : ", this.systemId);
       
+      this.searchOption = [
+        {label: '사번', name: 'id'},
+        {label: '이름', name: 'name'},
+      ]
+
+
       this.scimApiService.getSysAccountState(this.systemId)
         .pipe(first())
         .subscribe( result =>{
@@ -110,16 +120,6 @@ export class SystemAccountComponent implements OnInit {
       },error =>{
           console.log("login-error : ", error);
       });
-      
-    this.scimApiService.findSystemAccount(this.systemId,"","",0,5)
-      .pipe(first())
-      .subscribe( result =>{
-        console.log("findSystemAccount : ", result);
-        this.accounts   = result.data.Resources;
-        this.totalCount = result.data.totalResults;
-      },error =>{
-          console.log("login-error : ", error);
-      });
     });
   }
 
@@ -130,12 +130,27 @@ export class SystemAccountComponent implements OnInit {
   }
 
   onPaginate(event:any){
-    console.log("onPaginate",event)
+    console.log("event",event)
+    console.log("selectedSearchOption",this.selectedSearchOption)
+    console.log("this.searchValue",this.searchValue)
 
-    this.scimApiService.findSystemAccount(this.systemId,"","",event.page,event.rows)
+    let search_request:FrontSearchRequest = new FrontSearchRequest();
+    if(this.selectedSearchOption != undefined){
+      if(this.searchValue != ""){
+        this.selectedSearchOption["value"] = this.searchValue;
+        search_request.attributes = [this.selectedSearchOption]
+      }
+    }
+    
+    search_request.startIndex = event.first / event.rows;
+    search_request.count      = event.rows;
+
+    console.log("search_request : ", search_request);
+
+    this.scimApiService.findSystemAccount(this.systemId,search_request)
     .pipe(first())
     .subscribe( result =>{
-      console.log("findSystemAccount : ", result);
+      console.log("findUsers : ", result);
       this.accounts   = result.data.Resources;
       this.totalCount = result.data.totalResults;
     },error =>{
@@ -161,9 +176,34 @@ export class SystemAccountComponent implements OnInit {
     },error =>{
         console.log("login-error : ", error);
     });
+  }
 
+  onSearch(){    
+    console.log("selectedSearchOption",this.selectedSearchOption)
+    console.log("this.searchValue",this.searchValue)
 
+    let search_request:FrontSearchRequest = new FrontSearchRequest();
+    if(this.selectedSearchOption != undefined){
+      if(this.searchValue != ""){
+        this.selectedSearchOption["value"] = this.searchValue;
+        search_request.attributes = [this.selectedSearchOption]
+      }
+    }
 
+    search_request.where      = "eq";    
+    search_request.startIndex = 0;
+    search_request.count      = 5;
+
+    console.log("search_request : ", search_request);
+    this.scimApiService.findSystemAccount(this.systemId,search_request)
+    .pipe(first())
+    .subscribe( result =>{
+      console.log("findUsers : ", result);
+      this.accounts   = result.data.Resources;
+      this.totalCount = result.data.totalResults;
+    },error =>{
+        console.log("login-error : ", error);
+    });
   }
 
 }

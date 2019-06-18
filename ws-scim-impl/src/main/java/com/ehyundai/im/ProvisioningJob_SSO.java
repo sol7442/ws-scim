@@ -153,24 +153,22 @@ public class ProvisioningJob_SSO extends SCIMJob {
 						
 						Resource_Object old_user  = resource_repository.getSystemUser(system_user_resource_output_mapper, attribute_list);
 						Resource_Object new_user  =	request_operation.getData();
+						
 						new_user.put("systemId",target_system_id);
 						new_user.put("provisionDate", new Date());
-						
-						
-						String detail = compareResource(old_user,new_user);
-						
+												
+						new_user.put("externalId", new_user.getId());
 						if(old_user == null) {
 							audit.setMethod("CREATE");
-							resource_repository.createSystemUser(system_user_resource_input_mapper,new_user );
-							audit.setResult("SUCCESS");
+							resource_repository.createSystemUser(system_user_resource_input_mapper, new_user );
 						}else {
 							audit.setMethod("UPDATE");
 							resource_repository.updateSystemUser(system_user_resource_input_mapper, new_user);
-							audit.setResult("SUCCESS");
+							
+							String detail = compareResource(old_user,new_user);
 							audit.setDetail(detail);
 						}
 					}
-					
 					audit.setResult("SUCCESS");
 				}else {
 					audit.setResult("FAILED");
@@ -199,7 +197,7 @@ public class ProvisioningJob_SSO extends SCIMJob {
 
 	private String compareResource(Resource_Object old_user, Resource_Object new_user) {
 		logger.debug("old sys user : {}", old_user);
-		logger.debug("old sys user : {}", new_user);
+		logger.debug("new sys user : {}", new_user);
 		
 		Map<String,Object> old_data = old_user.getAttributes();
 		Map<String,Object> new_data = new_user.getAttributes();

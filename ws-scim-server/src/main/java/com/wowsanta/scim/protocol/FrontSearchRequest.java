@@ -1,4 +1,4 @@
-package com.wowsanta.scim.message;
+package com.wowsanta.scim.protocol;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,31 +9,32 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wowsanta.scim.object.SCIM_Object;
+import com.wowsanta.scim.repository.AttributeValue;
 import com.wowsanta.scim.schema.SCIMConstants;
 
-public class SCIMFindRequest extends SCIM_Object{
-	static transient Logger logger = LoggerFactory.getLogger(SCIMFindRequest.class);
+public class FrontSearchRequest extends SCIM_Object{
+	static transient Logger logger = LoggerFactory.getLogger(FrontSearchRequest.class);
 
-	//private List<String> attributes = new ArrayList<String>();
-	private String where ;
-	private String order;
+	private List<AttributeValue> attributes = new ArrayList<AttributeValue>();
+	private String where ;	
 	private int startIndex;
 	private int count;
+	private String order;
 	
-	public SCIMFindRequest() {
+	public FrontSearchRequest() {
 		addSchema(SCIMConstants.SEARCH_SCHEMA_URI);
 	}
 
-//	public void addAttribute(String attribute) {
-//		this.attributes.add(attribute);
-//	}
-//	public List<String> getAttributes() {
-//		return attributes;
-//	}
-//
-//	public void setAttributes(List<String> attributes) {
-//		this.attributes = attributes;
-//	}
+	public void addAttribute(AttributeValue attribute) {
+		this.attributes.add(attribute);
+	}
+	public List<AttributeValue> getAttributes() {
+		return attributes;
+	}
+
+	public void setAttributes(List<AttributeValue> attributes) {
+		this.attributes = attributes;
+	}
 
 	public String getWhere() {
 		return where;
@@ -59,12 +60,12 @@ public class SCIMFindRequest extends SCIM_Object{
 		this.count = count;
 	}
 	
-	public static SCIMFindRequest parse(String json_string) {
-		SCIMFindRequest object = null;
+	public static FrontSearchRequest parse(String json_string) {
+		FrontSearchRequest object = null;
 		try {
 			GsonBuilder builder = new GsonBuilder().disableHtmlEscaping();
 			Gson gson  = builder.create();
-			object = gson.fromJson(json_string, SCIMFindRequest.class);	
+			object = gson.fromJson(json_string, FrontSearchRequest.class);	
 		}catch (Exception e) {
 			logger.error("JSON PARSE ERROR {},\n{}",e.getMessage(),json_string,e);
 		}
