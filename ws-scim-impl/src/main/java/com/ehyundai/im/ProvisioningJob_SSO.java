@@ -154,8 +154,11 @@ public class ProvisioningJob_SSO extends SCIMJob {
 						Resource_Object old_user  = resource_repository.getSystemUser(system_user_resource_output_mapper, attribute_list);
 						Resource_Object new_user  =	request_operation.getData();
 						
+						
+						final SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+						
 						new_user.put("systemId",target_system_id);
-						new_user.put("provisionDate", new Date());
+						new_user.put("provisionDate", fmt.format(new Date()));
 												
 						new_user.put("externalId", new_user.getId());
 						if(old_user == null) {
@@ -220,15 +223,12 @@ public class ProvisioningJob_SSO extends SCIMJob {
 				if(!old_data.get(key).equals(new_data.get(key))) {
 					buffer.append(key).append(":");
 					buffer.append(old_data.get(key));
-					buffer.append("-");
+					buffer.append("->");
 					buffer.append(new_data.get(key));
 					buffer.append(",");
 				}
 			}		
 		}
-
-		System.out.println(buffer.toString());
-		
 		return buffer.toString();
 	}
 

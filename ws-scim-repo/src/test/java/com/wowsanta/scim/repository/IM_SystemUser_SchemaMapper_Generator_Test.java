@@ -15,17 +15,17 @@ import com.wowsanta.scim.repository.impl.OracleRepository;
 
 public class IM_SystemUser_SchemaMapper_Generator_Test {
 
-	public static final String im_repository_config_file = "../config/backup_conf_20190429/default_oracle_im_repository.json";
-	public static final String user_resource_schema_file = "../config/backup_conf_20190429/default_user_schema.json";
+	public static final String im_repository_config_file = "../config/backup_conf_20190619/default_oracle_im_repository.json";
+	public static final String user_resource_schema_file = "../config/backup_conf_20190619/default_user_schema.json";
 	
-	public static final String im_system_user_resource_output_mapper_file = "../config/backup_conf_20190429/default_oracle_im_system_user_resource_output_mapper.json";
-	public static final String im_system_user_resource_output_schema_file = "../config/backup_conf_20190429/default_oracle_im_system_user_resource_output_schema.json";
-	public static final String im_system_user_resource_input_mapper_file = "../config/backup_conf_20190429/default_oracle_im_system_user_resource_input_mapper.json";
-	public static final String im_system_user_resource_input_schema_file = "../config/backup_conf_20190429/default_oracle_im_system_user_resource_input_schema.json";
+	public static final String im_system_user_resource_output_mapper_file = "../config/backup_conf_20190619/default_oracle_im_system_user_resource_output_mapper.json";
+	public static final String im_system_user_resource_output_schema_file = "../config/backup_conf_20190619/default_oracle_im_system_user_resource_output_schema.json";
+	public static final String im_system_user_resource_input_mapper_file = "../config/backup_conf_20190619/default_oracle_im_system_user_resource_input_mapper.json";
+	public static final String im_system_user_resource_input_schema_file = "../config/backup_conf_20190619/default_oracle_im_system_user_resource_input_schema.json";
 
 	
 	
-	@Test
+	//@Test
 	public void get_user_by_out_mapper_test() {
 		try {
 			GsonBuilder builder = new GsonBuilder().disableHtmlEscaping();
@@ -64,14 +64,15 @@ public class IM_SystemUser_SchemaMapper_Generator_Test {
 		}	
 		
 	}
-	//@Test
+	
+	@Test
 	public void gen_im_systemuser_input_out_mapper_test() {
 		
 		try {
 			ResourceTypeSchema user_schema = ResourceTypeSchema.load(user_resource_schema_file);
-			//System.out.println(user_schema.toString(true));
-			SCIMRepositoryManager repository_mgr = SCIMRepositoryManager.load(im_repository_config_file).initailze();
-			OracleRepository repository = (OracleRepository) repository_mgr.getResourceRepository();
+			
+			SCIMRepositoryManager.load(im_repository_config_file).initailze();
+			SCIMRepositoryController repository = (SCIMRepositoryController)SCIMRepositoryManager.getInstance().getResourceRepository();
 			
 			RepositoryInputMapper systemuser_resource_input_mapper = new RepositoryInputMapper();
 
@@ -80,38 +81,37 @@ public class IM_SystemUser_SchemaMapper_Generator_Test {
 			for (ResourceTable table : table_list) {
 				if (table.getName().equals("SCIM_SYSTEM_USER")) {
 					table.setIndex(0);			
-					List<ResourceColumn> columns = repository.getTableColums("SCIM_SYSTEM_USER");
+					List<ResourceColumn> columns = repository.getTableColums("SCIM_SYSTEM_USER","USERID");
 					for (ResourceColumn column : columns) {
 						if(column.getName().equals("USERID")) {
 							AttributeSchema attribute = user_schema.getAttribute("id");
-							column.setAttributeSchema(attribute);
-							column.setType(ResourceType.PrimaryColumn);
-							
+							column.setAttributeSchema(attribute.getName());;
+							column.setPrimary(true);
 						}else if( column.getName().equals("SYSTEMID")) {
 							AttributeSchema attribute = user_schema.getAttribute("systemId");
-							column.setAttributeSchema(attribute);
-							column.setType(ResourceType.PrimaryColumn);
+							column.setPrimary(true);
+							column.setAttributeSchema(attribute.getName());;
 						}else if( column.getName().equals("USERNAME")) {
 							AttributeSchema attribute = user_schema.getAttribute("name");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());;
 						}else if( column.getName().equals("EXTERNALID")) {
 							AttributeSchema attribute = user_schema.getAttribute("externalId");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());;
 						}else if( column.getName().equals("ACTIVE")) {
 							AttributeSchema attribute = user_schema.getAttribute("active");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());;
 						}else if( column.getName().equals("CREATEDATE")) {
 							AttributeSchema attribute = user_schema.getAttribute("createDate");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());;
 						}else if( column.getName().equals("MODIFYDATE")) {
 							AttributeSchema attribute = user_schema.getAttribute("modifyDate");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());;
 						}else if( column.getName().equals("LASTACCESSDATE")) {
 							AttributeSchema attribute = user_schema.getAttribute("lastAccessDate");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());;
 						}else if( column.getName().equals("PROVISIONDATE")) {
 							AttributeSchema attribute = user_schema.getAttribute("provisionDate");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());;
 						}else {
 							System.out.println("not used colum name " + column.getName());
 						}
@@ -130,7 +130,7 @@ public class IM_SystemUser_SchemaMapper_Generator_Test {
 			for (ResourceTable table : table_list) {
 				if (table.getName().equals("SCIM_SYSTEM_USER")) {
 					table.setIndex(0);	
-					List<ResourceColumn> columns = repository.getTableColums("SCIM_SYSTEM_USER");
+					List<ResourceColumn> columns = repository.getTableColums("SCIM_SYSTEM_USER","USERID");
 					table.setColumns(columns);
 					out_table = table;
 				}

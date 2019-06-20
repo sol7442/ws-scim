@@ -106,7 +106,7 @@ export class EnvSysAgentComponent implements OnInit {
   getTableColumnList(){
     
     console.log("selected table>>>: ", this.selectedTable);
-    this.scimApiService.getTableColumnList(this.selectedSystem.systemId,this.selectedTable.id )
+    this.scimApiService.getTableColumnList(this.selectedSystem.systemId,this.selectedTable.id,"ID" )
     .pipe(first())
     .subscribe( data =>{
       console.log("table list >>>: ", data);

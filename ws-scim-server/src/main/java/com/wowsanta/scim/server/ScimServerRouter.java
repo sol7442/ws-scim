@@ -218,8 +218,8 @@ public class ScimServerRouter implements ServiceRouter  {
 			get("/config/file/:systemId/name/:fileName"  ,agentService.getConfigFile());
 			post("/config/:systemId" 				 	 ,agentService.patchConfigFile());
 			
-			get("/repository/table/list/:systemId" 			 			,agentService.getTableList(), new JsonTransformer());
-			get("/repository/table/column/list/:systemId/:tableName" 	,agentService.getColumnList(), new JsonTransformer());
+			get("/repository/table/list/:systemId" 		,agentService.getTableList(), new JsonTransformer());
+			post("/repository/table/column/list" 		,agentService.getColumnList(), new JsonTransformer());
 			
 			get("/log/list/:systemId"   				 ,agentService.getLogFileList(), new JsonTransformer());
 			get("/log/file/:systemId/name/:fileName"   	 ,agentService.getLogFile() );

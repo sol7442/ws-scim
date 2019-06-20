@@ -81,8 +81,8 @@ public class MsSqlRepository extends DefaultRepository implements SCIMRepository
 		return table_list;
 	}
 
-	public List<ResourceColumn> getTableColums(String tableName) throws RepositoryException {
-		final String selectSQL = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME=?";
+	public  List<ResourceColumn> getTableColums(String tableName, String keyColumn) throws RepositoryException{
+		final String selectSQL = "SELECT * FROM "+tableName+" ORDER BY "+ keyColumn +" DESC OFFSET 0 ROWS FETCH NEXT 1 ROWS ONLY ;";
 
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -92,19 +92,29 @@ public class MsSqlRepository extends DefaultRepository implements SCIMRepository
 		try {
 			connection = getConnection();
 			statement = connection.prepareStatement(selectSQL);
-			statement.setString(1, tableName);
-
 			resultSet = statement.executeQuery();
 			ResultSetMetaData meta = resultSet.getMetaData();
-
-			while (resultSet.next()) {
+			int column_count = meta.getColumnCount();
+			for(int i=1; i<=column_count; i++) {
 				ResourceColumn colum = new ResourceColumn();
-				colum.addSchema(SCIM_Repository_Constans.WOWSTAN_REPOSITORY_MSSQL_COlUMN_URI);
-				for (int i = 1; i <= meta.getColumnCount(); i++) {
-					colum.addAttribute(meta.getColumnName(i), resultSet.getString(meta.getColumnName(i)));
-				}
-				colum.setId(resultSet.getString("COLUMN_NAME"));
-				colum.setName(resultSet.getString("COLUMN_NAME"));
+				
+				colum.setName(meta.getColumnName(i));
+				colum.setLabel(meta.getColumnLabel(i));
+				colum.setPrecision(meta.getPrecision(i));
+				colum.setDisplaySize(meta.getColumnDisplaySize(i));
+				colum.setType(meta.getColumnType(i));
+				colum.setTypeName(meta.getColumnTypeName(i));
+				colum.setClassName(meta.getColumnClassName(i));
+				colum.setIsNullable(meta.isNullable(i));
+				colum.setAutoIncrement(meta.isAutoIncrement(i));
+				colum.setCaseSensitive(meta.isCaseSensitive(i));
+				colum.setCurrency(meta.isCurrency(i));
+				colum.setDefinitelyWritable(meta.isDefinitelyWritable(i));
+				colum.setReadOnly(meta.isReadOnly(i));
+				colum.setSigned(meta.isSigned(i));
+				colum.setWritable(meta.isWritable(i));
+				colum.setSearchable(meta.isSearchable(i));
+				
 				column_list.add(colum);
 			}
 		} catch (SQLException e) {
@@ -117,6 +127,43 @@ public class MsSqlRepository extends DefaultRepository implements SCIMRepository
 
 		return column_list;
 	}
+	
+//	public List<ResourceColumn> getTableColums(String tableName) throws RepositoryException {
+//		final String selectSQL = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME=?";
+//
+//		Connection connection = null;
+//		PreparedStatement statement = null;
+//		ResultSet resultSet = null;
+//
+//		List<ResourceColumn> column_list = new ArrayList<ResourceColumn>();
+//		try {
+//			connection = getConnection();
+//			statement = connection.prepareStatement(selectSQL);
+//			statement.setString(1, tableName);
+//
+//			resultSet = statement.executeQuery();
+//			ResultSetMetaData meta = resultSet.getMetaData();
+//
+//			while (resultSet.next()) {
+//				ResourceColumn colum = new ResourceColumn();
+//				colum.addSchema(SCIM_Repository_Constans.WOWSTAN_REPOSITORY_MSSQL_COlUMN_URI);
+//				for (int i = 1; i <= meta.getColumnCount(); i++) {
+//					colum.addAttribute(meta.getColumnName(i), resultSet.getString(meta.getColumnName(i)));
+//				}
+//				colum.setId(resultSet.getString("COLUMN_NAME"));
+//				colum.setName(resultSet.getString("COLUMN_NAME"));
+//				column_list.add(colum);
+//			}
+//		} catch (SQLException e) {
+//			logger.error("validate failed : ", e);
+//			throw new RepositoryException(selectSQL, e);
+//		} finally {
+//			DBCP.close(connection, statement, resultSet);
+//		}
+//		logger.info("REPOSITORY VAILDATE : {} ", selectSQL);
+//
+//		return column_list;
+//	}
 	
 	public List<Resource_Object> searchSystemUser(RepositoryOutputMapper outMapper,	List<AttributeValue> attribute_list, int startIndex, int pageCount, int totalCount)  throws RepositoryException{
 		return null;

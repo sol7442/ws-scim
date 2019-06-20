@@ -35,7 +35,7 @@
             <ng-template pTemplate="body" let-column>
                 <tr>
                     <td>{{column.name}}</td>
-                    <td>{{column.attributes.DATA_TYPE}}</td>
+                    <td>{{column.typeName}}</td>
                     <td>
                       <div *ngIf="column.dataMapper">
                         {{column.dataMapper.methodName}}
@@ -48,7 +48,7 @@
                     </td>
                     <td>
                       <div *ngIf="column.attributeSchema">
-                        {{column.attributeSchema.name}}
+                        {{column.attributeSchema}}
                     </div>
                     <td>
                       <div *ngIf="column.attributeSchema">

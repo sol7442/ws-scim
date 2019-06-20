@@ -26,7 +26,7 @@ public class ResourceTable extends SCIM_Object {
 	private ResourceType type = ResourceType.StructuredTable;
 	private Map<String,Object> attributes = new HashMap<String, Object>();
 	private List<ResourceColumn> columns = new ArrayList<ResourceColumn>();
-	
+	private String keyColumn;
 	
 	public Map<String, Object> getAttributes() {
 		return attributes;
@@ -65,7 +65,7 @@ public class ResourceTable extends SCIM_Object {
 	
 	public ResourceColumn getColumn(String name) {
 		for (ResourceColumn column : columns) {
-			if(column.getId().toUpperCase().equals(name.toUpperCase())) {
+			if(column.getName().toUpperCase().equals(name.toUpperCase())) {
 				return column;
 			}
 		}
@@ -85,7 +85,7 @@ public class ResourceTable extends SCIM_Object {
 	
 	public ResourceColumn getPrimaryColumn() {
 		for (ResourceColumn column : columns) {
-			if(column.getType().equals(ResourceType.PrimaryColumn)) {
+			if(column.isPrimary()) {
 				return column;
 			}
 		}
@@ -95,7 +95,7 @@ public class ResourceTable extends SCIM_Object {
 	public List<ResourceColumn> getPrimaryColumns() {
 		List<ResourceColumn> column_list = new ArrayList<ResourceColumn>();
 		for (ResourceColumn column : columns) {
-			if(column.getType().equals(ResourceType.PrimaryColumn)) {
+			if(column.isPrimary()) {
 				column_list.add(column);
 			}
 		}
@@ -117,8 +117,6 @@ public class ResourceTable extends SCIM_Object {
 		query_buffer.append(this.name).append(" ");
 		query_buffer.append("(");
 
-		//logger.debug("create insert query : {}", query_buffer.toString());
-		
 		int append_count = 0;
 		for(int i=0; i<this.columns.size(); i++) {
 			ResourceColumn column = this.columns.get(i);
@@ -126,7 +124,7 @@ public class ResourceTable extends SCIM_Object {
 				if(append_count > 0) {
 					query_buffer.append(",");
 				}
-				query_buffer.append(column.getId());
+				query_buffer.append(column.getName());
 				append_count++;
 			}
 		}
@@ -164,7 +162,7 @@ public class ResourceTable extends SCIM_Object {
 				if(append_count > 0) {
 					query_buffer.append(",");
 				}
-				query_buffer.append(column.getId()).append("=").append("?");
+				query_buffer.append(column.getName()).append("=").append("?");
 				append_count++;
 			}
 		}
@@ -261,6 +259,12 @@ public class ResourceTable extends SCIM_Object {
         	buffer.append(")");
         }
 		return buffer.toString();
+	}
+	public String getKeyColumn() {
+		return keyColumn;
+	}
+	public void setKeyColumn(String keyColumn) {
+		this.keyColumn = keyColumn;
 	}
 
 }

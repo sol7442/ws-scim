@@ -26,6 +26,9 @@ export class SchemaMappingPanelComponent implements OnInit {
   private _selectedAttribute:any;
   private _showMappingDlg:boolean = false;
 
+  private _tables:any[];
+  private _keyColumn:string;
+
   constructor(
     private scimApiService:ScimApiService,
     private alertService:AlertService,
@@ -38,20 +41,36 @@ export class SchemaMappingPanelComponent implements OnInit {
     console.log('got name: ', system);
     this._system = system;
 
-    console.log("call : getSchemaOutputMapper ");      
-    this.scimApiService.getSchemaOutputMapper(this._system.systemId)
-    .pipe(first())
-    .subscribe( result =>{
-      console.log("result : ", result);      
-      if(result.state === "Success"){
-        this._mappers = result.data;
-        console.log("attribute : ", result.data.attributes); 
-      }else{
-        this._schemaAttributes = null;
-      }
-    },error =>{
-        console.log("error : ", error);
-    });
+    console.log("call : getSchemaOutputMapper ");  
+    
+    if(this._system.systemId != undefined){
+      this.scimApiService.getSchemaOutputMapper(this._system.systemId)
+      .pipe(first())
+      .subscribe( result =>{
+        console.log("result : ", result);      
+        if(result.state === "Success"){
+          this._mappers = result.data;
+          console.log("attribute : ", result.data.attributes); 
+        }else{
+          this._schemaAttributes = null;
+        }
+      },error =>{
+          console.log("error : ", error);
+      });
+  
+      this.scimApiService.getTableList(this._system.systemId)
+        .subscribe( result =>{
+          console.log("table list >>>: ", result);
+          if(result.state === "Success"){
+            this._tables = result.data;
+          }else{
+            console.error(result.message);
+            this.alertService.fail(result.message);
+          }
+        },error =>{
+          console.log("login-error : ", error);
+        });
+    }
   }
 
   ngOnInit() {
@@ -66,20 +85,8 @@ export class SchemaMappingPanelComponent implements OnInit {
 
     this._selectedMapper = mapper;
     this._tableName = mapper.table.name;
+    this._keyColumn = mapper.table.keyColumn;
     console.log("selected mapper : ", mapper);
-  }
-
-  loadTable(){
-    this.scimApiService.getTableColumnList(this._system.systemId,this._tableName)
-    .pipe(first())
-    .subscribe( result =>{
-      console.log("result >>>: ", result);
-      if(result.state === "Success"){
-        this._tableColumns = result.data;
-      }
-    },error =>{
-      console.log("error : ", error);
-    });
   }
 
   editMapping(attribute:any){
@@ -101,5 +108,33 @@ export class SchemaMappingPanelComponent implements OnInit {
         console.log("result : ", result);
       });
     }
+  }
+  onSelectTable(event:any){
+    console.log("select table : ", event);
+    this._tableName = event.name;
+    this._keyColumn = ""; 
+  }
+  changeTable(){
+    console.log("table : ", this._tableName);
+    console.log("table : ", this._keyColumn);
+
+    this.scimApiService.getTableColumnList(this._system.systemId,this._tableName,this._keyColumn)
+    .subscribe( result =>{
+      console.log("column list >>>: ", result);
+      this._tableColumns = result.data;  
+    },error =>{
+      console.log("login-error : ", error);
+    });
+
+
+    // this._selectedMapper = mapper;
+    // this._tableName = mapper.table.name;
+    // this._keyColumn = mapper.table.keyColumn;
+    // console.log("selected mapper : ", mapper);
+
+    // this._schemaAttributes.resourceColumn = [];
+  }
+  saveMapper(){
+
   }
 }

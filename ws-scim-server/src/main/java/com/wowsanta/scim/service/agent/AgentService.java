@@ -38,6 +38,7 @@ import com.wowsanta.scim.message.SCIMFindRequest;
 import com.wowsanta.scim.obj.SCIMSystem;
 import com.wowsanta.scim.protocol.ClientReponse;
 import com.wowsanta.scim.protocol.ClientRequest;
+import com.wowsanta.scim.protocol.FrontReqeust;
 import com.wowsanta.scim.protocol.FrontResponse;
 import com.wowsanta.scim.protocol.OutputMapperRequest;
 import com.wowsanta.scim.protocol.ResponseState;
@@ -508,19 +509,30 @@ public class AgentService {
 				FrontResponse front_response = new FrontResponse();
 				RESTClient client = null;
 				try {
-					String systemId = request.params(":systemId");
-					String tableName = request.params(":tableName");
+					
+					FrontReqeust front_request =  FrontReqeust.parse(request.body()); 
+					
+					String systemId  = front_request.getParams().get("systemId");
+					String tableName = front_request.getParams().get("tableName");
+					String keyColumn = front_request.getParams().get("keyColumn");
 					
 					SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
 					String system_url = system.getSystemUrl();
-					String call_url   = system_url + "/repository/table/column/list" + "/" + tableName;
+					String call_url   = system_url + "/repository/table/column/list" + "/" + tableName + "/" + keyColumn;
 					
 					Worker worker = findWorker(request);
 					client = new RESTClient(worker);
 						
 					ClientReponse client_response = client.get(call_url);
-					front_response.setData(client_response);
-					front_response.setState(ResponseState.Success);;
+					if(client_response.getState() == ResponseState.Success) {
+						front_response.setData(client_response.getData());
+						front_response.setState(ResponseState.Success);;
+					}else {
+						front_response.setMessage(client_response.getMessage());
+						front_response.setState(ResponseState.Fail);;
+					}
+					
+					
 					
 				}catch (Exception e) {
 					front_response.setState(ResponseState.Fail);;

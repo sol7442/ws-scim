@@ -87,18 +87,24 @@ public class RepositoryOutputMapper {
 		return gson.toJson(this);
 	}
 	
-	public static RepositoryOutputMapper load(String file_name) throws RepositoryException {
-		RepositoryOutputMapper schema = null;
+	public static RepositoryOutputMapper load(String json_config_file) throws RepositoryException {
+		
+		logger.info("RepositoryOutputMapper LOAD : {} ", json_config_file);
+		
+		RepositoryOutputMapper mapper = null;
 		try {
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			JsonReader reader = new JsonReader(new FileReader(file_name));
-			schema = gson.fromJson(reader,RepositoryOutputMapper.class);
+			JsonReader reader = new JsonReader(new FileReader(json_config_file));
+			mapper = gson.fromJson(reader,RepositoryOutputMapper.class);
 			reader.close();
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
-			throw new RepositoryException("RepositoryOutputMapper LOAD FAILED ", e);
+			throw new RepositoryException("RepositoryInputMapper LOAD FAILED ", e);
+		}finally {
+			logger.debug("RepositoryInputMapper {}", mapper);
 		}
-		return schema;
+		
+		return mapper;
 	}
 
 	public void setTable(ResourceTable table) {
@@ -213,8 +219,10 @@ public class RepositoryOutputMapper {
             	buffer.append(" ");
             	
             	if(tn.getValue() != null ) {
+            		ResourceColumn repository_column = table.getColumn(column.getName());
+            		logger.debug("converter >> " , repository_column.toString(true));
     	        	buffer.append("'");
-    	        	buffer.append(tn.getValue());
+    	        	buffer.append(repository_column.convertMappingData(tn.getValue()));    	        	
     	        	buffer.append("'");
             	}
             	buffer.append(")");	

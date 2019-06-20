@@ -1,6 +1,8 @@
 package com.wowsanta.scim.service.schudler;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -149,10 +151,30 @@ public class SchedulerService {
 			public Object handle(Request request, Response response) throws Exception {
 				FrontResponse front_response = new FrontResponse();
 				try {
-					FrontReqeust front_request = FrontReqeust.parse(request.body());
-					Object scheduler_object = front_request.getParams().get("scheduler");
-					SCIMScheduler scheduler = SCIMScheduler.parse((LinkedTreeMap)scheduler_object);
+					FrontReqeust front_request = FrontReqeust.parse(request.body());					
 					
+					SCIMScheduler scheduler = new SCIMScheduler();
+					scheduler.setSchedulerId(front_request.getParams().get("schedulerId"));
+					scheduler.setSchedulerName(front_request.getParams().get("schedulerName"));
+					scheduler.setSchedulerType(front_request.getParams().get("schedulerType"));
+					scheduler.setSchedulerDesc(front_request.getParams().get("schedulerDesc"));
+					scheduler.setJobClass(front_request.getParams().get("jobClass"));
+					
+					scheduler.setEncode(front_request.getParams().get("encode"));
+					
+					scheduler.setTriggerType(front_request.getParams().get("triggerType"));
+					scheduler.setDayOfMonth(Integer.parseInt(front_request.getParams().get("dayOfMonth")));
+					scheduler.setDayOfWeek(Integer.parseInt(front_request.getParams().get("dayOfWeek")));
+					scheduler.setHourOfDay(Integer.parseInt(front_request.getParams().get("hourOfDay")));
+					scheduler.setMinuteOfHour(Integer.parseInt(front_request.getParams().get("minuteOfHour")));
+				      
+					scheduler.setSourceSystemId(front_request.getParams().get("sourceSystemId"));
+					scheduler.setTargetSystemId(front_request.getParams().get("targetSystemId"));
+					scheduler.setExecuteSystemId(front_request.getParams().get("executeSystemId"));
+					
+					Date exe_date = new Date();
+					scheduler.setLastExecuteDate(exe_date);					
+				      
 					logger.info("create scheduler : {} ", scheduler.toString(true));
 //					
 					SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
@@ -177,8 +199,33 @@ public class SchedulerService {
 				FrontResponse front_response = new FrontResponse();
 				try {
 					FrontReqeust front_request = FrontReqeust.parse(request.body());
-					Object scheduler_object = front_request.getParams().get("scheduler");
-					SCIMScheduler scheduler = SCIMScheduler.parse((LinkedTreeMap)scheduler_object);
+					
+					SCIMScheduler scheduler = new SCIMScheduler();
+					scheduler.setSchedulerId(front_request.getParams().get("schedulerId"));
+					scheduler.setSchedulerName(front_request.getParams().get("schedulerName"));
+					scheduler.setSchedulerType(front_request.getParams().get("schedulerType"));
+					scheduler.setSchedulerDesc(front_request.getParams().get("schedulerDesc"));
+					scheduler.setJobClass(front_request.getParams().get("jobClass"));
+					
+					scheduler.setEncode(front_request.getParams().get("encode"));
+					
+					scheduler.setTriggerType(front_request.getParams().get("triggerType"));
+					scheduler.setDayOfMonth(Integer.parseInt(front_request.getParams().get("dayOfMonth")));
+					scheduler.setDayOfWeek(Integer.parseInt(front_request.getParams().get("dayOfWeek")));
+					scheduler.setHourOfDay(Integer.parseInt(front_request.getParams().get("hourOfDay")));
+					scheduler.setMinuteOfHour(Integer.parseInt(front_request.getParams().get("minuteOfHour")));
+				      
+					scheduler.setSourceSystemId(front_request.getParams().get("sourceSystemId"));
+					scheduler.setTargetSystemId(front_request.getParams().get("targetSystemId"));
+					scheduler.setExecuteSystemId(front_request.getParams().get("executeSystemId"));
+					
+					Date exe_date = null;
+					try {
+						exe_date = new Date(Date.parse(front_request.getParams().get("lastExecuteDate")));
+					}catch(Exception e) {
+						logger.error("{}",e.getMessage(),e);
+					}					
+					scheduler.setLastExecuteDate(exe_date);
 					
 					logger.info("update scheduler : {} ", scheduler.toString(true));
 //					

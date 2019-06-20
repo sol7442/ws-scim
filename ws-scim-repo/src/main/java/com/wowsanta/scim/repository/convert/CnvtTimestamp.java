@@ -31,7 +31,23 @@ public class CnvtTimestamp {
 		logger.debug("J2D : {} > {}",obj,value);
 		return value;
 	}
-	
+	public Object fromString(Object obj) {
+		Timestamp value = null;
+		try {
+			if(obj != null) {
+				if (obj instanceof String) {
+					Date date_value = fmt.parse((String) obj);
+					value = new Timestamp(date_value.getTime());
+				}else {
+					logger.error("instance type {} : {}",obj, obj.getClass().getName());
+				}	
+			}
+		}catch (Exception e) {
+			logger.error("{}",obj, e );
+		}
+		logger.debug("J2D : {} > {}",obj,value);
+		return value;
+	}
 	public Object fromJavaDate(Object obj) {
 		Timestamp value = null;
 		try {

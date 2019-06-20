@@ -12,17 +12,17 @@ import com.google.gson.GsonBuilder;
 public class FrontReqeust {
 	static transient Logger logger = LoggerFactory.getLogger(FrontReqeust.class);
 	private String method;
-	private Map<String,Object> params = new HashMap<String, Object>();
+	private Map<String,String> params = new HashMap<String, String>();
 	public String getMethod() {
 		return method;
 	}
 	public void setMethod(String method) {
 		this.method = method;
 	}
-	public Map<String,Object> getParams() {
+	public Map<String,String> getParams() {
 		return params;
 	}
-	public void setParams(Map<String,Object> params) {
+	public void setParams(Map<String,String> params) {
 		this.params = params;
 	}
 	

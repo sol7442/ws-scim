@@ -22,12 +22,14 @@ export class Scheduler {
     schedulerType:string;
     schedulerDesc:string;
     jobClass:string;
+    triggerType:string;
     dayOfMonth : number;
 	dayOfWeek : number;
 	hourOfDay : number;
 	minuteOfHour : number;
     sourceSystemId:string;
-    tragetSystemId:string;
+    targetSystemId:string;
+    executeSystemId:string;
     lastExecuteDate:string;
     encode:string;
 }

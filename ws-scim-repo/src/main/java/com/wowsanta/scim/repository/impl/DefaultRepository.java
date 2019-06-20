@@ -212,9 +212,9 @@ public abstract class DefaultRepository implements SCIMRepository, SCIMResourceR
 				statement.setObject(index, set_data);
 			}
 			
-			logger.debug("setStatement : {}-{}", set_data, set_data.getClass().getName());
+			logger.debug("setStatement ({}): {}-{}",index, set_data, set_data.getClass().getName());
 		}catch (Exception e) {
-			logger.error(" {} : {}",set_data, e.getMessage(), e);			
+			logger.error("setStatement ({}): {}-{}",index, set_data, e.getMessage(), e);			
 			throw new RepositoryException("setStatement ERROR :" + e.getMessage(), e);
 		}
 	}
@@ -282,24 +282,24 @@ public abstract class DefaultRepository implements SCIMRepository, SCIMResourceR
 		try {
 			connection = getConnection();
 			statement  = connection.prepareStatement(query_string);
-			int setIndex = 1;
-			for(int i=0; i<attribute_list.size(); i++) {
-				AttributeValue value   = attribute_list.get(i);
-				AttributeSchema schema = outMapper.getAttribute(value.getName());
-				DataMapper dataMapper = schema.getDataMapper();
-				
-				Object set_data = null;
-				if(dataMapper != null) {
-					set_data = dataMapper.convert(value.getValue());
-				}else {
-					set_data = value.getValue();
-				}
-
-				if(set_data != null) {
-					setStatement(setIndex,statement, set_data);
-					setIndex++;
-				}
-			}
+//			int setIndex = 1;
+//			for(int i=0; i<attribute_list.size(); i++) {
+//				AttributeValue value   = attribute_list.get(i);
+//				AttributeSchema schema = outMapper.getAttribute(value.getName());
+//				DataMapper dataMapper = schema.getDataMapper();
+//				
+//				Object set_data = null;
+//				if(dataMapper != null) {
+//					set_data = dataMapper.convert(value.getValue());
+//				}else {
+//					set_data = value.getValue();
+//				}
+//
+//				if(set_data != null) {
+//					setStatement(setIndex,statement, set_data);
+//					setIndex++;
+//				}
+//			}
 			
         	resultSet = statement.executeQuery();
 			ResultSetMetaData meta = resultSet.getMetaData();
@@ -327,7 +327,9 @@ public abstract class DefaultRepository implements SCIMRepository, SCIMResourceR
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
 		try {
-
+			logger.info("query  : {}", query_string);					
+			logger.info("params  : {}", id);
+			
 			connection = getConnection();
 			statement  = connection.prepareStatement(query_string);
         	statement.setString(1, id);
@@ -337,12 +339,9 @@ public abstract class DefaultRepository implements SCIMRepository, SCIMResourceR
 			if (resultSet.next()) {
 				resource = newResourceFromResultSet(outMapper, resultSet, meta);
 			}
-
-        	statement.execute();
-        	
-			logger.info("query  : {}", query_string);
-			logger.info("resource : {}", resource);
 			
+			logger.info("resource : {}", resource);
+        	statement.execute();
 		}catch (Exception e) {
 			logger.info("query  : {}", query_string);
 			logger.info("resource : {}", id);
@@ -379,6 +378,10 @@ public abstract class DefaultRepository implements SCIMRepository, SCIMResourceR
 			connection = getConnection();
 			for (ResourceTable table : tables) {
 				final String query_string = table.getInsertQuery(resource);
+				
+				logger.info("query  : {}", query_string);
+				logger.info("resource : {}", resource);
+				
 				try {
 					statement = connection.prepareStatement(query_string);
 					List<ResourceColumn> columns = table.getColumns();
@@ -391,10 +394,7 @@ public abstract class DefaultRepository implements SCIMRepository, SCIMResourceR
 							setIndex++;
 						}
 					}
-					statement.execute();
-
-					logger.info("query  : {}", query_string);
-					logger.info("resource : {}", resource);
+					statement.execute();					
 				}catch (Exception e) {
 					logger.info("query  : {}", query_string);
 					logger.info("resource : {}", resource.toString(true));
@@ -422,10 +422,10 @@ public abstract class DefaultRepository implements SCIMRepository, SCIMResourceR
 		ResultSet resultSet = null;  
 
 		try {
-			
 			connection = getConnection();
 			for (ResourceTable table : tables) {
-				final String query_string =  table.getUpdateQuery(resource);
+				final String query_string =  table.getUpdateQuery(resource);				
+				logger.info("query  : {}", query_string);				
 				try {
 					statement = connection.prepareStatement(query_string);
 					List<ResourceColumn> columns = table.getColumns();
@@ -447,8 +447,7 @@ public abstract class DefaultRepository implements SCIMRepository, SCIMResourceR
 					
 					statement.executeUpdate();
 					
-				}catch (Exception e) {
-					logger.info("query  : {}", query_string);
+				}catch (Exception e) {					
 					logger.info("resource : {}", resource.toString(true));
 					
 					throw new RepositoryException(e.getMessage(),e);
@@ -466,6 +465,9 @@ public abstract class DefaultRepository implements SCIMRepository, SCIMResourceR
 		}
 	}
 	public void updateUser(Resource_Object user_object) throws RepositoryException {
+		if(this.userInputMapper == null) {
+			logger.error("userInputMapper is null ---- ");
+		}
 		List<ResourceTable> tables = this.userInputMapper.getTables();
 		updateResource(tables,user_object );
 	}

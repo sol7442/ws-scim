@@ -18,15 +18,15 @@ import com.wowsanta.scim.util.Random.ORGANIZATION;
 
 public class IM_GroupSchemaMapper_Generator_Test {
 
-	public static final String im_repository_config_file = "../config/backup_conf_20190429/default_oracle_im_repository.json";
-	public static final String group_resource_schema_file = "../config/backup_conf_20190429/default_group_schema.json";
+	public static final String im_repository_config_file = "../config/backup_conf_20190619/default_oracle_im_repository.json";
+	public static final String group_resource_schema_file = "../config/backup_conf_20190619/default_group_schema.json";
 	
-	public static final String im_group_resource_output_mapper_file = "../config/backup_conf_20190429/default_oracle_im_group_resource_output_mapper.json";
-	public static final String im_group_resource_input_mapper_file = "../config/backup_conf_20190429/default_oracle_im_group_resource_input_mapper.json";
+	public static final String im_group_resource_output_mapper_file = "../config/backup_conf_20190619/default_oracle_im_group_resource_output_mapper.json";
+	public static final String im_group_resource_input_mapper_file = "../config/backup_conf_20190619/default_oracle_im_group_resource_input_mapper.json";
 
 	private Logger logger = LoggerFactory.getLogger(IM_GroupSchemaMapper_Generator_Test.class);
 	
-	@Test
+	//@Test
 	public void get_group_by_out_mapper_test() {
 		try {
 			
@@ -118,23 +118,13 @@ public class IM_GroupSchemaMapper_Generator_Test {
 		}
 	}
 
-	//@Test
+	@Test
 	public void gen_im_group_input_out_mapper_test() {
 		try {
 			ResourceTypeSchema group_schema = ResourceTypeSchema.load(group_resource_schema_file);
-			//System.out.println(group_schema.toString(true));
 			
-			SCIMRepositoryManager repository_manager = SCIMRepositoryManager.load(im_repository_config_file);
-			repository_manager.initailze();
-			
-			OracleRepository repository = (OracleRepository) repository_manager.getResourceRepository();
-			
-//			RepositoryOutputMapper group_resource_output_mapper = RepositoryOutputMapper.load(im_group_resource_output_mapper_file);
-//			RepositoryInputMapper group_resource_input_mapper = RepositoryInputMapper.load(im_group_resource_input_mapper_file);
-//			repository.setGrouptOutputMapper(group_resource_output_mapper);
-//			repository.setGroupInputMapper(group_resource_input_mapper);
-			
-			repository.initialize();
+			SCIMRepositoryManager.load(im_repository_config_file).initailze();
+			SCIMRepositoryController repository = (SCIMRepositoryController)SCIMRepositoryManager.getInstance().getResourceRepository();
 			
 			RepositoryInputMapper group_resource_input_mapper = new RepositoryInputMapper();
 
@@ -144,18 +134,17 @@ public class IM_GroupSchemaMapper_Generator_Test {
 				//System.out.println(table.getName());
 				if (table.getName().equals("SCIM_GROUP")) {
 					table.setIndex(0);			
-					List<ResourceColumn> columns = repository.getTableColums("SCIM_GROUP");
+					List<ResourceColumn> columns = repository.getTableColums("SCIM_GROUP","GROUPID");
 					for (ResourceColumn column : columns) {
 						//System.out.println("colum name " + column.getName());
 						if(column.getName().equals("GROUPID")) {
 							AttributeSchema attribute = group_schema.getAttribute("id");
-							column.setAttributeSchema(attribute);
-							column.setType(ResourceType.PrimaryColumn);
+							column.setAttributeSchema(attribute.getName());;
 							
 							logger.info("set {}-{}",table.getName(),column.getName() );
 						}else if(column.getName().equals("GROUPNAME")) {
 							AttributeSchema attribute = group_schema.getAttribute("organizationName");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());;
 							logger.info("set {}-{}",table.getName(),column.getName() );
 						}else {
 							logger.info("skip {}-{}",table.getName(),column.getName() );
@@ -166,16 +155,15 @@ public class IM_GroupSchemaMapper_Generator_Test {
 					System.out.println("set " + table.getName());
 				}else if (table.getName().equals("SCIM_GROUP_META")) {
 					table.setIndex(1);			
-					List<ResourceColumn> columns = repository.getTableColums("SCIM_GROUP_META");
+					List<ResourceColumn> columns = repository.getTableColums("SCIM_GROUP_META","GROUPID");
 					for (ResourceColumn column : columns) {
 						if(column.getName().equals("GROUPID")) {
 							AttributeSchema attribute = group_schema.getAttribute("id");
-							column.setAttributeSchema(attribute);
-							column.setType(ResourceType.PrimaryColumn);
+							column.setAttributeSchema(attribute.getName());;
 							logger.info("set {}-{}",table.getName(),column.getName() );
 						}else if(column.getName().equals("EXPIREDATE")) {
 							AttributeSchema attribute = group_schema.getAttribute("expireDate");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());;
 							
 							DataMapper dataMapper = new DataMapper();
 							dataMapper.setClassName(DateConverter.class.getCanonicalName());
@@ -184,7 +172,7 @@ public class IM_GroupSchemaMapper_Generator_Test {
 							logger.info("set {}-{}",table.getName(),column.getName() );
 						}else if(column.getName().equals("EXPIREDATE")) {
 							AttributeSchema attribute = group_schema.getAttribute("expireDate");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());;
 							
 							DataMapper dataMapper = new DataMapper();
 							dataMapper.setClassName(DateConverter.class.getCanonicalName());
@@ -193,7 +181,7 @@ public class IM_GroupSchemaMapper_Generator_Test {
 							logger.info("set {}-{}",table.getName(),column.getName() );
 						}else if(column.getName().equals("CREATEDATE")) {
 							AttributeSchema attribute = group_schema.getAttribute("createDate");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());;
 							
 							DataMapper dataMapper = new DataMapper();
 							dataMapper.setClassName(DateConverter.class.getCanonicalName());
@@ -202,7 +190,7 @@ public class IM_GroupSchemaMapper_Generator_Test {
 							logger.info("set {}-{}",table.getName(),column.getName() );
 						}else if(column.getName().equals("MODIFYDATE")) {
 							AttributeSchema attribute = group_schema.getAttribute("modifyDate");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());;
 							
 							DataMapper dataMapper = new DataMapper();
 							dataMapper.setClassName(DateConverter.class.getCanonicalName());
@@ -212,7 +200,7 @@ public class IM_GroupSchemaMapper_Generator_Test {
 							logger.info("set {}-{}",table.getName(),column.getName() );
 						}else if(column.getName().equals("ACTIVE")) {
 							AttributeSchema attribute = group_schema.getAttribute("active");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());;
 							
 							logger.info("set {}-{}",table.getName(),column.getName() );
 						}else {
@@ -226,32 +214,31 @@ public class IM_GroupSchemaMapper_Generator_Test {
 					System.out.println("set " + table.getName());
 				}else if(table.getName().equals("SCIM_GROUP_PROFILE")) {
 					table.setIndex(1);			
-					List<ResourceColumn> columns = repository.getTableColums("SCIM_GROUP_PROFILE");
+					List<ResourceColumn> columns = repository.getTableColums("SCIM_GROUP_PROFILE","GROUPID");
 					for (ResourceColumn column : columns) {
 						if(column.getName().equals("GROUPID")) {
 							AttributeSchema attribute = group_schema.getAttribute("id");
-							column.setAttributeSchema(attribute);
-							column.setType(ResourceType.PrimaryColumn);
+							column.setAttributeSchema(attribute.getName());;
 							logger.info("set {}-{}",table.getName(),column.getName() );
 
 						}else if(column.getName().equals("GROUPPATH")) {
 							AttributeSchema attribute = group_schema.getAttribute("organizationPath");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());;
 							logger.info("set {}-{}",table.getName(),column.getName() );
 
 						}else if(column.getName().equals("GROUPDESC")) {
 							AttributeSchema attribute = group_schema.getAttribute("organizationDescription");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());;
 							logger.info("set {}-{}",table.getName(),column.getName() );
 
 						}else if(column.getName().equals("PARENTID")) {
 							AttributeSchema attribute = group_schema.getAttribute("organizationParent");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());;
 							logger.info("set {}-{}",table.getName(),column.getName() );
 
 						}else if(column.getName().equals("GROUPCODE")) {
 							AttributeSchema attribute = group_schema.getAttribute("organizationCode");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());;
 							logger.info("set {}-{}",table.getName(),column.getName() );
 
 						}else {
@@ -277,7 +264,7 @@ public class IM_GroupSchemaMapper_Generator_Test {
 			for (ResourceTable table : table_list) {
 				if (table.getName().equals("SCIM_GROUP_INFO")) {
 					table.setIndex(0);	
-					List<ResourceColumn> columns = repository.getTableColums("SCIM_GROUP_INFO");
+					List<ResourceColumn> columns = repository.getTableColums("SCIM_GROUP_INFO","GROUPID");
 					for (ResourceColumn colmun : columns) {
 						logger.info("{}-{}", table.getName(),colmun.getName());
 					}

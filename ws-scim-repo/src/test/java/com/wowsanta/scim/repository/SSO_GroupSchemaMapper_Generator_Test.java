@@ -18,11 +18,11 @@ import com.wowsanta.scim.util.Random.ORGANIZATION;
 
 public class SSO_GroupSchemaMapper_Generator_Test {
 
-	public static final String sso_repository_config_file = "../config/backup_conf_20190429/default_oracle_sso_repository.json";
-	public static final String group_resource_schema_file = "../config/backup_conf_20190429/default_group_schema.json";
+	public static final String sso_repository_config_file = "../config/backup_conf_20190619/default_oracle_sso_repository.json";
+	public static final String group_resource_schema_file = "../config/backup_conf_20190619/default_group_schema.json";
 	
-	public static final String sso_group_resource_output_mapper_file = "../config/backup_conf_20190429/default_oracle_sso_group_resource_output_mapper.json";
-	public static final String sso_group_resource_input_mapper_file = "../config/backup_conf_20190429/default_oracle_sso_group_resource_input_mapper.json";
+	public static final String sso_group_resource_output_mapper_file = "../config/backup_conf_20190619/default_oracle_sso_group_resource_output_mapper.json";
+	public static final String sso_group_resource_input_mapper_file = "../config/backup_conf_20190619/default_oracle_sso_group_resource_input_mapper.json";
 
 	private Logger logger = LoggerFactory.getLogger(SSO_GroupSchemaMapper_Generator_Test.class);
 	
@@ -62,6 +62,8 @@ public class SSO_GroupSchemaMapper_Generator_Test {
 	public void set_group_by_input_mapper_test() {
 
 		try {
+			
+			
 			RepositoryInputMapper group_resource_input_mapper = RepositoryInputMapper
 					.load(sso_group_resource_input_mapper_file);
 
@@ -102,12 +104,18 @@ public class SSO_GroupSchemaMapper_Generator_Test {
 	@Test
 	public void gen_sso_group_input_out_mapper_test() {
 		try {
+			
+			SCIMRepositoryManager.load(sso_repository_config_file).initailze();
+			SCIMRepositoryController repository = (SCIMRepositoryController)SCIMRepositoryManager.getInstance().getResourceRepository();
+			RepositoryInputMapper group_resource_input_mapper = new RepositoryInputMapper();
+			
+			
 			ResourceTypeSchema group_schema = ResourceTypeSchema.load(group_resource_schema_file);
 			//System.out.println(group_schema.toString(true));
 			
-			OracleRepository repository = OracleRepository.load(sso_repository_config_file);
-			repository.initialize();
-			RepositoryInputMapper group_resource_input_mapper = new RepositoryInputMapper();
+//			OracleRepository repository = OracleRepository.load(sso_repository_config_file);
+//			repository.initialize();
+//			RepositoryInputMapper group_resource_input_mapper = new RepositoryInputMapper();
 
 			List<ResourceTable> table_list = repository.getTables();
 			System.out.println("table list=====");
@@ -115,17 +123,18 @@ public class SSO_GroupSchemaMapper_Generator_Test {
 				//System.out.println(table.getName());
 				if (table.getName().equals("WA3_ORG")) {
 					table.setIndex(0);			
-					List<ResourceColumn> columns = repository.getTableColums("WA3_ORG");
+					List<ResourceColumn> columns = repository.getTableColums("WA3_ORG","ID");
 					for (ResourceColumn column : columns) {
 						//System.out.println("colum name " + column.getName());
 						if(column.getName().equals("ID")) {
 							AttributeSchema attribute = group_schema.getAttribute("id");
-							column.setAttributeSchema(attribute);
-							column.setType(ResourceType.PrimaryColumn);
+							column.setAttributeSchema(attribute.getName());
+							column.setPrimary(true);
+							//column.setType(ResourceType.PrimaryColumn);
 							
 						}else if(column.getName().equals("NAME")) {
 							AttributeSchema attribute = group_schema.getAttribute("organizationName");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 						
 						}else if(column.getName().equals("CREATOR")) {
 							column.setDefaultValue("im-system");
@@ -135,15 +144,15 @@ public class SSO_GroupSchemaMapper_Generator_Test {
 						
 						}else if(column.getName().equals("PARENT_ID")) {
 							AttributeSchema attribute = group_schema.getAttribute("organizationParent");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 						
 						}else if(column.getName().equals("INFO")) {
 							AttributeSchema attribute = group_schema.getAttribute("organizationDescription");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 						
 						}else if(column.getName().equals("PATH_ID")) {
 							AttributeSchema attribute = group_schema.getAttribute("organizationPath");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 							
 							DataMapper dataMapper = new DataMapper();
 							dataMapper.setClassName("com.wowsanta.scim.repository.convert.CustomConverter");
@@ -152,7 +161,7 @@ public class SSO_GroupSchemaMapper_Generator_Test {
 						
 						}else if(column.getName().equals("CREATE_TIME")) {
 							AttributeSchema attribute = group_schema.getAttribute("createDate");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 							
 							DataMapper dataMapper = new DataMapper();
 							dataMapper.setClassName(DateConverter.class.getCanonicalName());
@@ -160,7 +169,7 @@ public class SSO_GroupSchemaMapper_Generator_Test {
 							column.setDataMapper(dataMapper);
 						}else if(column.getName().equals("MODIFY_TIME")) {
 							AttributeSchema attribute = group_schema.getAttribute("modifyDate");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 							
 							DataMapper dataMapper = new DataMapper();
 							dataMapper.setClassName(DateConverter.class.getCanonicalName());
@@ -193,13 +202,14 @@ public class SSO_GroupSchemaMapper_Generator_Test {
 			for (ResourceTable table : table_list) {
 				if (table.getName().equals("WA3_ORG")) {
 					table.setIndex(0);	
-					List<ResourceColumn> columns = repository.getTableColums("WA3_ORG");
+					List<ResourceColumn> columns = repository.getTableColums("WA3_ORG","ID");
 					for (ResourceColumn colmun : columns) {
 						logger.info("{}-{}", table.getName(),colmun.getName());
 					}
 					
 					table.setColumns(columns);
 					out_table = table;
+					out_table.setKeyColumn("ID");
 				}
 			}
 					

@@ -13,7 +13,7 @@ import { AlertService } from '../../service/alert.service';
 export class SchemaMappingDlgComponent implements OnInit {
 
   private _displayDialog:boolean = false;
-  private _system:any;
+  //private _system:any;
   private _attribute:any = {};  
   private _tables:any={};
   private _selectedTable:any={};
@@ -36,32 +36,32 @@ export class SchemaMappingDlgComponent implements OnInit {
     this._displayDialog = display;
     this.displayChange.emit(this._displayDialog);
 
-    if(display == true){
-      this.scimApiService.getTableList(this._system.systemId)
-      .subscribe( result =>{
-        console.log("table list >>>: ", result);
-        if(result.state === "Success"){
-          this._tables = result.data;
-        }else{
-          console.error(result.message);
-          this.alertService.fail(result.message);
-        }
-      },error =>{
-        console.log("login-error : ", error);
-      });
-    }else{
-      this._dataMapper = {};
-      this._selectedTable = {};
-      this._selectedColumn = {};
-    }
+    // if(display == true){
+    //   this.scimApiService.getTableList(this._system.systemId)
+    //   .subscribe( result =>{
+    //     console.log("table list >>>: ", result);
+    //     if(result.state === "Success"){
+    //       this._tables = result.data;
+    //     }else{
+    //       console.error(result.message);
+    //       this.alertService.fail(result.message);
+    //     }
+    //   },error =>{
+    //     console.log("login-error : ", error);
+    //   });
+    // }else{
+    //   this._dataMapper = {};
+    //   this._selectedTable = {};
+    //   this._selectedColumn = {};
+    // }
   }
   get display(){
     return this._displayDialog;
   }
    
   @Input()
-  set system(system:any){
-    this._system = system;
+  set columns(columns:any[]){
+    this._columns = columns;
   }
   @Input()  
   set attribute(attribute:any){
@@ -72,7 +72,7 @@ export class SchemaMappingDlgComponent implements OnInit {
         this._dataMapper = {};
       }
 
-      console.log("system", this._system);
+      //console.log("system", this._system);
       console.log("dataMapper", this._dataMapper);
     }
   }
@@ -113,15 +113,15 @@ export class SchemaMappingDlgComponent implements OnInit {
 
   onSelectTable(event:any){
     console.log("event",event);
-    this._selectedTable = event.value;
-    this.scimApiService.getTableColumnList(this._system.systemId,this._selectedTable.name)
-    .subscribe( result =>{
-      console.log("column list >>>: ", result);
-      this._columns = result.data.data;
+    // this._selectedTable = event.value;
+    // this.scimApiService.getTableColumnList(this._system.systemId,this._selectedTable.name)
+    // .subscribe( result =>{
+    //   console.log("column list >>>: ", result);
+    //   this._columns = result.data.data;
 
-    },error =>{
-      console.log("login-error : ", error);
-    });
+    // },error =>{
+    //   console.log("login-error : ", error);
+    // });
 
   }
 

@@ -20,15 +20,15 @@ import com.wowsanta.scim.util.Random.POSITION;
 
 public class IM_UserSchemaMapper_Generator_Test {
 
-	public static final String im_repository_config_file = "../config/backup_conf_20190429/default_oracle_im_repository.json";
-	public static final String user_resource_schema_file = "../config/backup_conf_20190429/default_user_schema.json";
+	public static final String im_repository_config_file = "../config/backup_conf_20190619/default_oracle_im_repository.json";
+	public static final String user_resource_schema_file = "../config/backup_conf_20190619/default_user_schema.json";
 	
-	public static final String im_user_resource_output_mapper_file = "../config/backup_conf_20190429/default_oracle_im_user_resource_output_mapper.json";
-	public static final String im_user_resource_output_schema_file = "../config/backup_conf_20190429/default_oracle_im_user_resource_output_schema.json";
-	public static final String im_user_resource_input_mapper_file = "../config/backup_conf_20190429/default_oracle_im_user_resource_input_mapper.json";
-	public static final String im_user_resource_input_schema_file = "../config/backup_conf_20190429/default_oracle_im_user_resource_input_schema.json";
+	public static final String im_user_resource_output_mapper_file = "../config/backup_conf_20190619/default_oracle_im_user_resource_output_mapper.json";
+	public static final String im_user_resource_output_schema_file = "../config/backup_conf_20190619/default_oracle_im_user_resource_output_schema.json";
+	public static final String im_user_resource_input_mapper_file = "../config/backup_conf_20190619/default_oracle_im_user_resource_input_mapper.json";
+	public static final String im_user_resource_input_schema_file = "../config/backup_conf_20190619/default_oracle_im_user_resource_input_schema.json";
 
-	@Test
+	//@Test
 	public void get_user_by_out_mapper_test() {
 		try {
 			GsonBuilder builder = new GsonBuilder().disableHtmlEscaping();
@@ -137,14 +137,13 @@ public class IM_UserSchemaMapper_Generator_Test {
 		}
 	}
 
-	//@Test
+	@Test
 	public void gen_im_user_input_out_mapper_test() {
 		try {
 			ResourceTypeSchema user_schema = ResourceTypeSchema.load(user_resource_schema_file);
-			//System.out.println(user_schema.toString(true));
 			
-			OracleRepository repository = OracleRepository.load(im_repository_config_file);
-			repository.initialize();
+			SCIMRepositoryManager.load(im_repository_config_file).initailze();
+			SCIMRepositoryController repository = (SCIMRepositoryController)SCIMRepositoryManager.getInstance().getResourceRepository();
 			RepositoryInputMapper user_resource_input_mapper = new RepositoryInputMapper();
 
 			List<ResourceTable> table_list = repository.getTables();
@@ -153,17 +152,16 @@ public class IM_UserSchemaMapper_Generator_Test {
 				//System.out.println(table);
 				if (table.getName().equals("SCIM_USER")) {
 					table.setIndex(0);			
-					List<ResourceColumn> columns = repository.getTableColums("SCIM_USER");
+					List<ResourceColumn> columns = repository.getTableColums("SCIM_USER","USERID");
 					for (ResourceColumn column : columns) {
 						System.out.println("colum name " + column.getName());
 						if(column.getName().equals("USERID")) {
 							AttributeSchema attribute = user_schema.getAttribute("id");
-							column.setAttributeSchema(attribute);
-							column.setType(ResourceType.PrimaryColumn);
+							column.setAttributeSchema(attribute.getName());
 							
 						}else if(column.getName().equals("USERNAME")) {
 							AttributeSchema attribute = user_schema.getAttribute("name");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 						}else {
 							System.out.println("not used colum name " + column.getName());
 						}
@@ -172,17 +170,16 @@ public class IM_UserSchemaMapper_Generator_Test {
 					user_resource_input_mapper.addTable(table);
 				}else if (table.getName().equals("SCIM_USER_META")) {
 					table.setIndex(1);			
-					List<ResourceColumn> columns = repository.getTableColums("SCIM_USER_META");
+					List<ResourceColumn> columns = repository.getTableColums("SCIM_USER_META","USERID");
 					for (ResourceColumn column : columns) {
 						System.out.println("colum name " + column.getName());
 						if(column.getName().equals("USERID")) {
 							AttributeSchema attribute = user_schema.getAttribute("id");
-							column.setAttributeSchema(attribute);
-							column.setType(ResourceType.PrimaryColumn);
+							column.setAttributeSchema(attribute.getName());
 							
 						}else if(column.getName().equals("EXPIREDATE")) {
 							AttributeSchema attribute = user_schema.getAttribute("expireDate");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 							
 							DataMapper dataMapper = new DataMapper();
 							dataMapper.setClassName(DateConverter.class.getCanonicalName());
@@ -191,7 +188,7 @@ public class IM_UserSchemaMapper_Generator_Test {
 							
 						}else if(column.getName().equals("EXPIREDATE")) {
 							AttributeSchema attribute = user_schema.getAttribute("expireDate");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 							
 							DataMapper dataMapper = new DataMapper();
 							dataMapper.setClassName(DateConverter.class.getCanonicalName());
@@ -200,7 +197,7 @@ public class IM_UserSchemaMapper_Generator_Test {
 							
 						}else if(column.getName().equals("CREATEDATE")) {
 							AttributeSchema attribute = user_schema.getAttribute("createDate");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 							
 							DataMapper dataMapper = new DataMapper();
 							dataMapper.setClassName(DateConverter.class.getCanonicalName());
@@ -209,7 +206,7 @@ public class IM_UserSchemaMapper_Generator_Test {
 							
 						}else if(column.getName().equals("MODIFYDATE")) {
 							AttributeSchema attribute = user_schema.getAttribute("modifyDate");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 							
 							DataMapper dataMapper = new DataMapper();
 							dataMapper.setClassName(DateConverter.class.getCanonicalName());
@@ -217,7 +214,7 @@ public class IM_UserSchemaMapper_Generator_Test {
 							column.setDataMapper(dataMapper);
 						}else if(column.getName().equals("ACTIVE")) {
 							AttributeSchema attribute = user_schema.getAttribute("active");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 							
 //							DataMapper dataMapper = new DataMapper();
 //							dataMapper.setClassName(BooleanConverter.class.getCanonicalName());
@@ -234,50 +231,49 @@ public class IM_UserSchemaMapper_Generator_Test {
 					user_resource_input_mapper.addTable(table);
 				}else if(table.getName().equals("SCIM_USER_PROFILE")) {
 					table.setIndex(1);			
-					List<ResourceColumn> columns = repository.getTableColums("SCIM_USER_PROFILE");
+					List<ResourceColumn> columns = repository.getTableColums("SCIM_USER_PROFILE","USERID");
 					for (ResourceColumn column : columns) {
 						System.out.println("colum name " + column.getName());
 						if(column.getName().equals("USERID")) {
 							AttributeSchema attribute = user_schema.getAttribute("id");
-							column.setAttributeSchema(attribute);
-							column.setType(ResourceType.PrimaryColumn);
+							column.setAttributeSchema(attribute.getName());
 							
 						}else if(column.getName().equals("RANKNAME")) {
 							AttributeSchema attribute = user_schema.getAttribute("rankName");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 						}else if(column.getName().equals("RANKCODE")) {
 							AttributeSchema attribute = user_schema.getAttribute("rankCode");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 						}else if(column.getName().equals("POSITIONNAME")) {
 							AttributeSchema attribute = user_schema.getAttribute("positionName");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 						}else if(column.getName().equals("POSITIONCODE")) {
 							AttributeSchema attribute = user_schema.getAttribute("positionCode");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 						}else if(column.getName().equals("JOBNAME")) {
 							AttributeSchema attribute = user_schema.getAttribute("jobName");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 						}else if(column.getName().equals("JOBCODE")) {
 							AttributeSchema attribute = user_schema.getAttribute("jobCode");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 						}else if(column.getName().equals("ORGANIZATIONNAME")) {
 							AttributeSchema attribute = user_schema.getAttribute("organizationName");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 							column.setDefaultValue("현대백화점그룹");
 						}else if(column.getName().equals("ORGANIZATIONCODE")) {
 							AttributeSchema attribute = user_schema.getAttribute("organizationCode");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 							column.setDefaultValue("AAAA");
 						}else if(column.getName().equals("ORGANIZATIONPATH")) {
 							AttributeSchema attribute = user_schema.getAttribute("organizationPath");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 							column.setDefaultValue("AAAA");
 						}else if(column.getName().equals("EMPLOYEENUMBER")) {
 							AttributeSchema attribute = user_schema.getAttribute("employeeNumber");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 						}else if(column.getName().equals("RETIREDATE")) {
 							AttributeSchema attribute = user_schema.getAttribute("retireDate");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 							
 							DataMapper dataMapper = new DataMapper();
 							dataMapper.setClassName(DateConverter.class.getCanonicalName());
@@ -286,7 +282,7 @@ public class IM_UserSchemaMapper_Generator_Test {
 							
 						}else if(column.getName().equals("ENTERDATE")) {
 							AttributeSchema attribute = user_schema.getAttribute("joinDate");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 							
 							DataMapper dataMapper = new DataMapper();
 							dataMapper.setClassName(DateConverter.class.getCanonicalName());
@@ -317,7 +313,7 @@ public class IM_UserSchemaMapper_Generator_Test {
 			for (ResourceTable table : table_list) {
 				if (table.getName().equals("SCIM_USER_INFO")) {
 					table.setIndex(0);	
-					List<ResourceColumn> columns = repository.getTableColums("SCIM_USER_INFO");
+					List<ResourceColumn> columns = repository.getTableColums("SCIM_USER_INFO","USERID");
 					table.setColumns(columns);
 					out_table = table;
 				}

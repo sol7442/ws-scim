@@ -3,10 +3,22 @@
         <div class="shadow-form-box">
           <table class="input-form">
             <tr>
-              <td class="form-label"><label>가져오기 매핑 파일</label></td>
+              <td class="form-label"><label>가져오기 매핑</label></td>
               <td class="form-input">
                   <p-dropdown [options]="_mappers" (onChange)="onSelectMapper($event.value)" placeholder="Select a Mapper" optionLabel="name"></p-dropdown>
               </td>
+              <td class="form-label"><label>TABLE 변경</label></td>
+              <td class="form-input">
+                  <p-dropdown [options]="_tables" (onChange)="onSelectTable($event.value)" placeholder="Select a Table" optionLabel="name"></p-dropdown>
+              </td>
+              <td class="form-label"><label>Key Column</label></td>
+              <td class="form-input"><input [(ngModel)]="_keyColumn" class="input-text"  type="text" size="10" ></td>
+              <td class="form-button">
+                <button type="button" pButton label="변경" (click)="changeTable()"></button>
+              </td>              
+              <td class="form-button">
+                <button type="button" pButton label="저장" (click)="saveMapper()"></button>
+              </td>              
               <td class="form-auto"></td>
             </tr>                    
           </table>
@@ -46,7 +58,7 @@
                     </td>
                     <td>
                       <div *ngIf="attribute.resourceColumn">
-                        {{attribute.resourceColumn.attributes.DATA_TYPE}}
+                        {{attribute.resourceColumn.typeName}}
                     </div>
                   </td>
                     <td style="text-align: center"><button type="button" pButton label="변경" (click)="editMapping(attribute)"></button></td>
@@ -55,4 +67,4 @@
         </p-table>
     </p-panel> 
 </p>
-<app-schema-mapping-dlg [(display)]="_showMappingDlg" [attribute]="_selectedAttribute" [system]="_system" (result)="onEditMappingResult($event)"></app-schema-mapping-dlg>
+<app-schema-mapping-dlg [(display)]="_showMappingDlg" [attribute]="_selectedAttribute" [columns]="_tableColumns" (result)="onEditMappingResult($event)"></app-schema-mapping-dlg>

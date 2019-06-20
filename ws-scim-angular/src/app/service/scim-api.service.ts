@@ -120,8 +120,15 @@ export class ScimApiService {
   createSystem(system:System){
     let request = new FrontRequest();
     request.method = "PUT";
-    request.params = {'system':system}
+    request.params = {
+      'systemId':system.systemId,
+      'systemName':system.systemName,
+      'systemDesc':system.systemDesc,
+      'systemType':system.systemType,
+      'systemUrl':system.systemUrl,
+    };
 
+    console.log("system : ", system);
     let api_url = '/system/';
     return this.http.put<any>(api_url, JSON.stringify(request))
     .pipe(map( result =>{
@@ -131,8 +138,13 @@ export class ScimApiService {
   updateSystem(system:System){
     let request = new FrontRequest();
     request.method = "POST";
-    request.params = {'system':system}
-
+    request.params = {
+      'systemId':system.systemId,
+      'systemName':system.systemName,
+      'systemDesc':system.systemDesc,
+      'systemType':system.systemType,
+      'systemUrl':system.systemUrl,
+    };    
     let api_url = '/system/';
     return this.http.post<any>(api_url, JSON.stringify(request))
     .pipe(map( result =>{
@@ -180,7 +192,25 @@ export class ScimApiService {
   createScheduler(scheduler:Scheduler){
     let request = new FrontRequest();
     request.method = "PUT";
-    request.params = {'scheduler':scheduler}
+    request.params = {
+      'schedulerId':scheduler.schedulerId,
+      'schedulerName':scheduler.schedulerName,
+      'schedulerType':scheduler.schedulerType,
+      'schedulerDesc':scheduler.schedulerDesc,
+      'jobClass':scheduler.jobClass,
+      'encode':scheduler.encode,
+      'triggerType':scheduler.triggerType,
+      'dayOfMonth':"'"+scheduler.dayOfMonth+"'",
+      'dayOfWeek':"'"+scheduler.dayOfWeek+"'",
+      'hourOfDay':"'"+scheduler.hourOfDay+"'",
+      'minuteOfHour':"'"+scheduler.minuteOfHour+"'",
+      'sourceSystemId':scheduler.sourceSystemId,
+      'targetSystemId':scheduler.targetSystemId,
+      'executeSystemId':scheduler.executeSystemId,
+      'lastExecuteDate':scheduler.lastExecuteDate
+    }
+
+    console.log("scheduler",scheduler);
 
     let api_url = '/scheduler/';
     return this.http.put<any>(api_url, JSON.stringify(request))
@@ -192,7 +222,27 @@ export class ScimApiService {
   updateScheduler(scheduler:Scheduler){
     let request = new FrontRequest();
     request.method = "POST";
-    request.params = {'scheduler':scheduler}
+    request.params = {
+      'schedulerId':scheduler.schedulerId,
+      'schedulerName':scheduler.schedulerName,
+      'schedulerType':scheduler.schedulerType,
+      'schedulerDesc':scheduler.schedulerDesc,
+      'jobClass':scheduler.jobClass,
+      'encode':scheduler.encode,
+      'triggerType':scheduler.triggerType,
+      'dayOfMonth':scheduler.dayOfMonth,
+      'dayOfWeek':scheduler.dayOfWeek,
+      'hourOfDay':scheduler.hourOfDay,
+      'minuteOfHour':scheduler.minuteOfHour,
+      'sourceSystemId':scheduler.sourceSystemId,
+      'targetSystemId':scheduler.targetSystemId,
+      'executeSystemId':scheduler.executeSystemId,
+      'lastExecuteDate':scheduler.lastExecuteDate
+    }
+    
+    
+
+    console.log("scheduler",scheduler);
 
     let api_url = '/scheduler/';
     return this.http.post<any>(api_url, JSON.stringify(request))
@@ -441,12 +491,22 @@ export class ScimApiService {
       return result;
     })); 
   }
-  getTableColumnList(systemId:string, tableId:string){
-    let api_url = '/agent/repository/table/column/list/' + systemId + "/" + tableId;
-    return this.http.get<any>(api_url,
-      {
-        headers:new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8')
-      })
+  getTableColumnList(systemId:string, tableName:string, keyColumn:string){
+
+    let request = new FrontRequest();
+    request.method = "PUT";
+    request.params = {'systemId':systemId, 'tableName':tableName, 'keyColumn':keyColumn}
+
+
+    // let api_url = '/system/';
+    // return this.http.put<any>(api_url, JSON.stringify(request))
+    // .pipe(map( result =>{
+    //   return result;
+    // }));
+
+
+    let api_url = '/agent/repository/table/column/list';
+    return this.http.post<any>(api_url, JSON.stringify(request))
     .pipe(map( result =>{
       return result;
     })); 

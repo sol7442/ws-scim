@@ -20,15 +20,15 @@ import com.wowsanta.scim.util.Random.POSITION;
 
 public class SSO_UserSchemaMapper_Generator_Test {
 
-	public static final String sso_repository_config_file = "../config/backup_conf_20190429/default_oracle_sso_repository.json";
-	public static final String user_resource_schema_file = "../config/backup_conf_20190429/default_user_schema.json";
+	public static final String sso_repository_config_file = "../config/backup_conf_20190619/default_oracle_sso_repository.json";
+	public static final String user_resource_schema_file = "../config/backup_conf_20190619/default_user_schema.json";
 	
-	public static final String sso_user_resource_output_mapper_file = "../config/backup_conf_20190429/default_oracle_sso_user_resource_output_mapper.json";
-	public static final String sso_user_resource_output_schema_file = "../config/backup_conf_20190429/default_oracle_sso_user_resource_output_schema.json";
-	public static final String sso_user_resource_input_mapper_file = "../config/backup_conf_20190429/default_oracle_sso_user_resource_input_mapper.json";
-	public static final String sso_user_resource_input_schema_file = "../config/backup_conf_20190429/default_oracle_sso_user_resource_input_schema.json";
+	public static final String sso_user_resource_output_mapper_file = "../config/backup_conf_20190619/default_oracle_sso_user_resource_output_mapper.json";
+	public static final String sso_user_resource_output_schema_file = "../config/backup_conf_20190619/default_oracle_sso_user_resource_output_schema.json";
+	public static final String sso_user_resource_input_mapper_file = "../config/backup_conf_20190619/default_oracle_sso_user_resource_input_mapper.json";
+	public static final String sso_user_resource_input_schema_file = "../config/backup_conf_20190619/default_oracle_sso_user_resource_input_schema.json";
 
-	@Test
+	//@Test
 	public void get_user_by_out_mapper_test() {
 		try {
 			GsonBuilder builder = new GsonBuilder().disableHtmlEscaping();
@@ -135,14 +135,15 @@ public class SSO_UserSchemaMapper_Generator_Test {
 		}
 	}
 
-	//@Test
+	@Test
 	public void gen_sso_user_input_out_mapper_test() {
 		try {
 			ResourceTypeSchema user_schema = ResourceTypeSchema.load(user_resource_schema_file);
 			//System.out.println(user_schema.toString(true));
 			
-			OracleRepository repository = OracleRepository.load(sso_repository_config_file);
-			repository.initialize();
+			//OracleRepository repository = OracleRepository.load(sso_repository_config_file);
+			SCIMRepositoryManager.load(sso_repository_config_file).initailze();
+			SCIMRepositoryController repository = (SCIMRepositoryController)SCIMRepositoryManager.getInstance().getResourceRepository();
 			RepositoryInputMapper user_resource_input_mapper = new RepositoryInputMapper();
 
 			List<ResourceTable> table_list = repository.getTables();
@@ -151,16 +152,17 @@ public class SSO_UserSchemaMapper_Generator_Test {
 				//System.out.println(table);
 				if (table.getName().equals("WA3_USER")) {
 					table.setIndex(0);			
-					List<ResourceColumn> columns = repository.getTableColums("WA3_USER");
+					List<ResourceColumn> columns = repository.getTableColums("WA3_USER","ID");
 					for (ResourceColumn column : columns) {
 						if(column.getName().equals("ID")) {
 							AttributeSchema attribute = user_schema.getAttribute("id");
-							column.setAttributeSchema(attribute);
-							column.setType(ResourceType.PrimaryColumn);
+							column.setAttributeSchema(attribute.getName());
+							column.setPrimary(true);
+							table.setKeyColumn(column.getName());
 							
 						}else if(column.getName().equals("NAME")) {
 							AttributeSchema attribute = user_schema.getAttribute("name");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 						}else if(column.getName().equals("CREATOR")) {
 							column.setDefaultValue("im-system");
 						}else if(column.getName().equals("MODIFIER")) {
@@ -169,10 +171,10 @@ public class SSO_UserSchemaMapper_Generator_Test {
 							column.setDefaultValue("RootID");
 						}else if(column.getName().equals("ORG_ID")) {
 							AttributeSchema attribute = user_schema.getAttribute("organizationCode");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 						}else if(column.getName().equals("PATH_ID")) {
 							AttributeSchema attribute = user_schema.getAttribute("organizationPath");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 							
 							DataMapper dataMapper = new DataMapper();
 							dataMapper.setClassName("com.wowsanta.scim.repository.convert.CustomConverter");
@@ -180,17 +182,17 @@ public class SSO_UserSchemaMapper_Generator_Test {
 							column.setDataMapper(dataMapper);
 							
 						}else if(column.getName().equals("PWD_MUST_CHANGE")) {
-							column.setDefaultValue(1);
+							column.setDefaultValue("1");
 						}else if(column.getName().equals("PWD_RETRY_COUNT")) {
-							column.setDefaultValue(3);
+							column.setDefaultValue("3");
 						}else if(column.getName().equals("PWD_RETRY_TIME")) {
-							column.setDefaultValue(3);
+							column.setDefaultValue("3");
 						}else if(column.getName().equals("ACCESS_ALLOW")) {
-							column.setDefaultValue(1);
+							column.setDefaultValue("1");
 						}else if(column.getName().equals("DISABLED")) {
-							column.setDefaultValue(1);
+							column.setDefaultValue("1");
 						}else if(column.getName().equals("LOCKED")) {
-							column.setDefaultValue(1);
+							column.setDefaultValue("1");
 						}else if(column.getName().equals("VALID_FROM")) {
 							DataMapper dataMapper = new DataMapper();
 							dataMapper.setClassName(DateConverter.class.getCanonicalName());
@@ -198,7 +200,7 @@ public class SSO_UserSchemaMapper_Generator_Test {
 							column.setDataMapper(dataMapper);
 							
 						}else if(column.getName().equals("VALID_TO")) {
-							column.setDefaultValue(Long.MAX_VALUE);
+							column.setDefaultValue(String.valueOf(Long.MAX_VALUE));
 						}else if(column.getName().equals("LAST_LOGON_TIME")) {
 							DataMapper dataMapper = new DataMapper();
 							dataMapper.setClassName(DateConverter.class.getCanonicalName());
@@ -206,7 +208,7 @@ public class SSO_UserSchemaMapper_Generator_Test {
 							column.setDataMapper(dataMapper);
 						}else if(column.getName().equals("CREATE_TIME")) {
 							AttributeSchema attribute = user_schema.getAttribute("createDate");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 							
 							DataMapper dataMapper = new DataMapper();
 							dataMapper.setClassName(DateConverter.class.getCanonicalName());
@@ -214,7 +216,7 @@ public class SSO_UserSchemaMapper_Generator_Test {
 							column.setDataMapper(dataMapper);
 						}else if(column.getName().equals("MODIFY_TIME")) {
 							AttributeSchema attribute = user_schema.getAttribute("modifyDate");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
 							
 							DataMapper dataMapper = new DataMapper();
 							dataMapper.setClassName(DateConverter.class.getCanonicalName());
@@ -230,16 +232,18 @@ public class SSO_UserSchemaMapper_Generator_Test {
 					user_resource_input_mapper.addTable(table);
 				}else if (table.getName().equals("WA3_ORG_USER")) {
 					table.setIndex(1);			
-					List<ResourceColumn> columns = repository.getTableColums("WA3_ORG_USER");
+					List<ResourceColumn> columns = repository.getTableColums("WA3_ORG_USER","USER_ID");
 					for (ResourceColumn column : columns) {
 						if(column.getName().equals("USER_ID")) {
 							AttributeSchema attribute = user_schema.getAttribute("id");
-							column.setAttributeSchema(attribute);
-							column.setType(ResourceType.PrimaryColumn);
+							column.setAttributeSchema(attribute.getName());
+							column.setPrimary(true);
+							table.setKeyColumn(column.getName());
 							
 						}else if(column.getName().equals("ORG_ID")) {
 							AttributeSchema attribute = user_schema.getAttribute("organizationCode");
-							column.setAttributeSchema(attribute);
+							column.setAttributeSchema(attribute.getName());
+							column.setPrimary(true);
 						}else if(column.getName().equals("VALID_FROM")) {
 							
 							DataMapper dataMapper = new DataMapper();
@@ -248,7 +252,7 @@ public class SSO_UserSchemaMapper_Generator_Test {
 							column.setDataMapper(dataMapper);
 							
 						}else if(column.getName().equals("VALID_TO")) {
-							column.setDefaultValue(Integer.MAX_VALUE);
+							column.setDefaultValue(String.valueOf(Integer.MAX_VALUE));
 						}else {
 							System.out.println("not used colum name " + column.getName());
 						}
@@ -276,9 +280,10 @@ public class SSO_UserSchemaMapper_Generator_Test {
 			for (ResourceTable table : table_list) {
 				if (table.getName().equals("WA3_USER")) {
 					table.setIndex(0);	
-					List<ResourceColumn> columns = repository.getTableColums("WA3_USER");
+					List<ResourceColumn> columns = repository.getTableColums("WA3_USER", "ID");
 					table.setColumns(columns);
 					out_table = table;
+					out_table.setKeyColumn("ID");
 				}
 			}
 					

@@ -1,0 +1,805 @@
+{
+  "tables": [
+    {
+      "name": "WA3_ORG_USER",
+      "index": 1,
+      "type": "StructuredTable",
+      "attributes": {
+        "TNAME": "WA3_ORG_USER",
+        "TABTYPE": "TABLE"
+      },
+      "columns": [
+        {
+          "name": "USER_ID",
+          "label": "USER_ID",
+          "precision": 64,
+          "displaySize": 64,
+          "type": 12,
+          "typeName": "VARCHAR2",
+          "className": "java.lang.String",
+          "isNullable": 0,
+          "autoIncrement": false,
+          "caseSensitive": true,
+          "currency": false,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": true,
+          "attributeSchema": "id",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "ORG_ID",
+          "label": "ORG_ID",
+          "precision": 64,
+          "displaySize": 64,
+          "type": 12,
+          "typeName": "VARCHAR2",
+          "className": "java.lang.String",
+          "isNullable": 0,
+          "autoIncrement": false,
+          "caseSensitive": true,
+          "currency": false,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": true,
+          "attributeSchema": "organizationCode",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "VALID_FROM",
+          "label": "VALID_FROM",
+          "precision": 13,
+          "displaySize": 14,
+          "type": 2,
+          "typeName": "NUMBER",
+          "className": "java.math.BigDecimal",
+          "isNullable": 0,
+          "autoIncrement": false,
+          "caseSensitive": false,
+          "currency": true,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "dataMapper": {
+            "className": "com.wowsanta.scim.repository.convert.DateConverter",
+            "methodName": "stringToLongDefaultCurrenttime"
+          },
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "VALID_TO",
+          "label": "VALID_TO",
+          "precision": 13,
+          "displaySize": 14,
+          "type": 2,
+          "typeName": "NUMBER",
+          "className": "java.math.BigDecimal",
+          "isNullable": 0,
+          "autoIncrement": false,
+          "caseSensitive": false,
+          "currency": true,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "defaultValue": "2147483647",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        }
+      ],
+      "keyColumn": "USER_ID",
+      "id": "WA3_ORG_USER",
+      "schemas": [
+        "urn:com:wowsanta:scim:2.0:repository:mssql:table"
+      ]
+    },
+    {
+      "name": "WA3_USER",
+      "index": 0,
+      "type": "StructuredTable",
+      "attributes": {
+        "TNAME": "WA3_USER",
+        "TABTYPE": "TABLE"
+      },
+      "columns": [
+        {
+          "name": "ID",
+          "label": "ID",
+          "precision": 64,
+          "displaySize": 64,
+          "type": 12,
+          "typeName": "VARCHAR2",
+          "className": "java.lang.String",
+          "isNullable": 0,
+          "autoIncrement": false,
+          "caseSensitive": true,
+          "currency": false,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": true,
+          "attributeSchema": "id",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "NAME",
+          "label": "NAME",
+          "precision": 64,
+          "displaySize": 64,
+          "type": 12,
+          "typeName": "VARCHAR2",
+          "className": "java.lang.String",
+          "isNullable": 0,
+          "autoIncrement": false,
+          "caseSensitive": true,
+          "currency": false,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "attributeSchema": "name",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "RRN",
+          "label": "RRN",
+          "precision": 64,
+          "displaySize": 64,
+          "type": 12,
+          "typeName": "VARCHAR2",
+          "className": "java.lang.String",
+          "isNullable": 1,
+          "autoIncrement": false,
+          "caseSensitive": true,
+          "currency": false,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "EMAIL",
+          "label": "EMAIL",
+          "precision": 256,
+          "displaySize": 256,
+          "type": 12,
+          "typeName": "VARCHAR2",
+          "className": "java.lang.String",
+          "isNullable": 1,
+          "autoIncrement": false,
+          "caseSensitive": true,
+          "currency": false,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "CREATOR",
+          "label": "CREATOR",
+          "precision": 64,
+          "displaySize": 64,
+          "type": 12,
+          "typeName": "VARCHAR2",
+          "className": "java.lang.String",
+          "isNullable": 1,
+          "autoIncrement": false,
+          "caseSensitive": true,
+          "currency": false,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "defaultValue": "im-system",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "MODIFIER",
+          "label": "MODIFIER",
+          "precision": 64,
+          "displaySize": 64,
+          "type": 12,
+          "typeName": "VARCHAR2",
+          "className": "java.lang.String",
+          "isNullable": 1,
+          "autoIncrement": false,
+          "caseSensitive": true,
+          "currency": false,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "defaultValue": "im-system",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "INFO",
+          "label": "INFO",
+          "precision": 512,
+          "displaySize": 512,
+          "type": 12,
+          "typeName": "VARCHAR2",
+          "className": "java.lang.String",
+          "isNullable": 1,
+          "autoIncrement": false,
+          "caseSensitive": true,
+          "currency": false,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "DIV_ID",
+          "label": "DIV_ID",
+          "precision": 64,
+          "displaySize": 64,
+          "type": 12,
+          "typeName": "VARCHAR2",
+          "className": "java.lang.String",
+          "isNullable": 0,
+          "autoIncrement": false,
+          "caseSensitive": true,
+          "currency": false,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "defaultValue": "RootID",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "ORG_ID",
+          "label": "ORG_ID",
+          "precision": 64,
+          "displaySize": 64,
+          "type": 12,
+          "typeName": "VARCHAR2",
+          "className": "java.lang.String",
+          "isNullable": 0,
+          "autoIncrement": false,
+          "caseSensitive": true,
+          "currency": false,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "attributeSchema": "organizationCode",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "PATH_ID",
+          "label": "PATH_ID",
+          "precision": 512,
+          "displaySize": 512,
+          "type": 12,
+          "typeName": "VARCHAR2",
+          "className": "java.lang.String",
+          "isNullable": 0,
+          "autoIncrement": false,
+          "caseSensitive": true,
+          "currency": false,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "attributeSchema": "organizationPath",
+          "dataMapper": {
+            "className": "com.wowsanta.scim.repository.convert.CustomConverter",
+            "methodName": "OrgPathConverter"
+          },
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "PWD1",
+          "label": "PWD1",
+          "precision": 256,
+          "displaySize": 256,
+          "type": 12,
+          "typeName": "VARCHAR2",
+          "className": "java.lang.String",
+          "isNullable": 1,
+          "autoIncrement": false,
+          "caseSensitive": true,
+          "currency": false,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "PWD2",
+          "label": "PWD2",
+          "precision": 256,
+          "displaySize": 256,
+          "type": 12,
+          "typeName": "VARCHAR2",
+          "className": "java.lang.String",
+          "isNullable": 1,
+          "autoIncrement": false,
+          "caseSensitive": true,
+          "currency": false,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "PWD_MUST_CHANGE",
+          "label": "PWD_MUST_CHANGE",
+          "precision": 10,
+          "displaySize": 11,
+          "type": 2,
+          "typeName": "NUMBER",
+          "className": "java.math.BigDecimal",
+          "isNullable": 0,
+          "autoIncrement": false,
+          "caseSensitive": false,
+          "currency": true,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "defaultValue": "1",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "PWD_CHANGE_TIME",
+          "label": "PWD_CHANGE_TIME",
+          "precision": 38,
+          "displaySize": 39,
+          "type": 2,
+          "typeName": "NUMBER",
+          "className": "java.math.BigDecimal",
+          "isNullable": 1,
+          "autoIncrement": false,
+          "caseSensitive": false,
+          "currency": true,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "PWD_RETRY_COUNT",
+          "label": "PWD_RETRY_COUNT",
+          "precision": 10,
+          "displaySize": 11,
+          "type": 2,
+          "typeName": "NUMBER",
+          "className": "java.math.BigDecimal",
+          "isNullable": 0,
+          "autoIncrement": false,
+          "caseSensitive": false,
+          "currency": true,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "defaultValue": "3",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "PWD_RETRY_TIME",
+          "label": "PWD_RETRY_TIME",
+          "precision": 38,
+          "displaySize": 39,
+          "type": 2,
+          "typeName": "NUMBER",
+          "className": "java.math.BigDecimal",
+          "isNullable": 0,
+          "autoIncrement": false,
+          "caseSensitive": false,
+          "currency": true,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "defaultValue": "3",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "ACCOUNT_PROFILE",
+          "label": "ACCOUNT_PROFILE",
+          "precision": -1,
+          "displaySize": 4000,
+          "type": 2005,
+          "typeName": "CLOB",
+          "className": "oracle.jdbc.OracleClob",
+          "isNullable": 1,
+          "autoIncrement": false,
+          "caseSensitive": true,
+          "currency": false,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": false,
+          "primary": false,
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "ACCESS_ALLOW",
+          "label": "ACCESS_ALLOW",
+          "precision": 10,
+          "displaySize": 11,
+          "type": 2,
+          "typeName": "NUMBER",
+          "className": "java.math.BigDecimal",
+          "isNullable": 0,
+          "autoIncrement": false,
+          "caseSensitive": false,
+          "currency": true,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "defaultValue": "1",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "DISABLED",
+          "label": "DISABLED",
+          "precision": 10,
+          "displaySize": 11,
+          "type": 2,
+          "typeName": "NUMBER",
+          "className": "java.math.BigDecimal",
+          "isNullable": 0,
+          "autoIncrement": false,
+          "caseSensitive": false,
+          "currency": true,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "defaultValue": "1",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "DISABLED_REASON",
+          "label": "DISABLED_REASON",
+          "precision": 512,
+          "displaySize": 512,
+          "type": 12,
+          "typeName": "VARCHAR2",
+          "className": "java.lang.String",
+          "isNullable": 1,
+          "autoIncrement": false,
+          "caseSensitive": true,
+          "currency": false,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "LOCKED",
+          "label": "LOCKED",
+          "precision": 10,
+          "displaySize": 11,
+          "type": 2,
+          "typeName": "NUMBER",
+          "className": "java.math.BigDecimal",
+          "isNullable": 0,
+          "autoIncrement": false,
+          "caseSensitive": false,
+          "currency": true,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "defaultValue": "1",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "LOGIN_POLICY_ID",
+          "label": "LOGIN_POLICY_ID",
+          "precision": 38,
+          "displaySize": 39,
+          "type": 2,
+          "typeName": "NUMBER",
+          "className": "java.math.BigDecimal",
+          "isNullable": 1,
+          "autoIncrement": false,
+          "caseSensitive": false,
+          "currency": true,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "VALID_FROM",
+          "label": "VALID_FROM",
+          "precision": 38,
+          "displaySize": 39,
+          "type": 2,
+          "typeName": "NUMBER",
+          "className": "java.math.BigDecimal",
+          "isNullable": 0,
+          "autoIncrement": false,
+          "caseSensitive": false,
+          "currency": true,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "dataMapper": {
+            "className": "com.wowsanta.scim.repository.convert.DateConverter",
+            "methodName": "currentTimeToLong"
+          },
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "VALID_TO",
+          "label": "VALID_TO",
+          "precision": 38,
+          "displaySize": 39,
+          "type": 2,
+          "typeName": "NUMBER",
+          "className": "java.math.BigDecimal",
+          "isNullable": 0,
+          "autoIncrement": false,
+          "caseSensitive": false,
+          "currency": true,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "defaultValue": "9223372036854775807",
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "LAST_LOGON_TIME",
+          "label": "LAST_LOGON_TIME",
+          "precision": 38,
+          "displaySize": 39,
+          "type": 2,
+          "typeName": "NUMBER",
+          "className": "java.math.BigDecimal",
+          "isNullable": 0,
+          "autoIncrement": false,
+          "caseSensitive": false,
+          "currency": true,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "dataMapper": {
+            "className": "com.wowsanta.scim.repository.convert.DateConverter",
+            "methodName": "stringToLongDefaultCurrenttime"
+          },
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "LAST_LOGON_IP",
+          "label": "LAST_LOGON_IP",
+          "precision": 20,
+          "displaySize": 20,
+          "type": 12,
+          "typeName": "VARCHAR2",
+          "className": "java.lang.String",
+          "isNullable": 1,
+          "autoIncrement": false,
+          "caseSensitive": true,
+          "currency": false,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "ORG_DELAY_INFO",
+          "label": "ORG_DELAY_INFO",
+          "precision": 64,
+          "displaySize": 64,
+          "type": 12,
+          "typeName": "VARCHAR2",
+          "className": "java.lang.String",
+          "isNullable": 1,
+          "autoIncrement": false,
+          "caseSensitive": true,
+          "currency": false,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "CREATE_TIME",
+          "label": "CREATE_TIME",
+          "precision": 38,
+          "displaySize": 39,
+          "type": 2,
+          "typeName": "NUMBER",
+          "className": "java.math.BigDecimal",
+          "isNullable": 1,
+          "autoIncrement": false,
+          "caseSensitive": false,
+          "currency": true,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "attributeSchema": "createDate",
+          "dataMapper": {
+            "className": "com.wowsanta.scim.repository.convert.DateConverter",
+            "methodName": "stringToLongDefaultCurrenttime"
+          },
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        },
+        {
+          "name": "MODIFY_TIME",
+          "label": "MODIFY_TIME",
+          "precision": 38,
+          "displaySize": 39,
+          "type": 2,
+          "typeName": "NUMBER",
+          "className": "java.math.BigDecimal",
+          "isNullable": 1,
+          "autoIncrement": false,
+          "caseSensitive": false,
+          "currency": true,
+          "definitelyWritable": false,
+          "readOnly": false,
+          "signed": true,
+          "writable": true,
+          "searchable": true,
+          "primary": false,
+          "attributeSchema": "modifyDate",
+          "dataMapper": {
+            "className": "com.wowsanta.scim.repository.convert.DateConverter",
+            "methodName": "stringToLongDefaultCurrenttime"
+          },
+          "schemas": [
+            "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
+          ]
+        }
+      ],
+      "keyColumn": "ID",
+      "id": "WA3_USER",
+      "schemas": [
+        "urn:com:wowsanta:scim:2.0:repository:mssql:table"
+      ]
+    }
+  ]
+}

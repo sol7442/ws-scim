@@ -59,12 +59,14 @@ public class RepositoryService {
 				ClientReponse client_response = new ClientReponse();
 				try {
 					String tableName = request.params(":tableName");
+					String keyColumn = request.params(":keyColumn");
+					
 					logger.info("RepositoryService.getTableColumnList params : {} ", tableName);
 
 					
 					SCIMRepositoryController repository = (SCIMRepositoryController) SCIMRepositoryManager.getInstance().getResourceRepository();
 					
-					List<ResourceColumn> columns = repository.getTableColums(tableName);
+					List<ResourceColumn> columns = repository.getTableColums(tableName,keyColumn);
 					for (ResourceColumn column : columns) {
 						logger.debug("column : {}", column);
 					}

@@ -86,8 +86,9 @@ public class AnalysisJob_SingleSignOn extends SCIMJob {
 			if(last_exec_date == null) {
 				where = "IsUse eq 'Y'";
 			}else {
-				SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				where = "modifyDate ge " + last_exec_date.getTime(); //'"+ //transFormat.format(last_exec_date) +"'";
+				//SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				final SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+				where = "modifyDate ge " + fmt.format(last_exec_date);//.getTime(); //'"+ //transFormat.format(last_exec_date) +"'";
 			}
 		}catch (Exception e) {
 			logger.error(e.getMessage() + " : {} ", last_exec_date, e);

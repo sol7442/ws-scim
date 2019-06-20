@@ -42,9 +42,14 @@ public class SystemService {
 				FrontResponse front_response = new FrontResponse();
 				try {
 					FrontReqeust front_request = FrontReqeust.parse(request.body());
-					Object system_object = front_request.getParams().get("system");
-					SCIMSystem system = SCIMSystem.parse((LinkedTreeMap)system_object);
+					SCIMSystem system = new SCIMSystem();
 					
+					system.setSystemId(front_request.getParams().get("systemId"));
+					system.setSystemName(front_request.getParams().get("systemName"));
+					system.setSystemDesc(front_request.getParams().get("systemDesc"));
+					system.setSystemType(front_request.getParams().get("systemType"));
+					system.setSystemUrl(front_request.getParams().get("systemUrl"));
+										
 					logger.info("create system : {} ", system.toString(true));
 					
 					SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
@@ -69,8 +74,12 @@ public class SystemService {
 				FrontResponse front_response = new FrontResponse();
 				try {
 					FrontReqeust front_request = FrontReqeust.parse(request.body());
-					Object system_object_string = front_request.getParams().get("system");
-					SCIMSystem system = SCIMSystem.parse((LinkedTreeMap) system_object_string);
+					SCIMSystem system = new SCIMSystem();
+					system.setSystemId(front_request.getParams().get("systemId"));
+					system.setSystemName(front_request.getParams().get("systemName"));
+					system.setSystemDesc(front_request.getParams().get("systemDesc"));
+					system.setSystemType(front_request.getParams().get("systemType"));
+					system.setSystemUrl(front_request.getParams().get("systemUrl"));
 					
 					logger.info("update system : {} ", system.toString(true));
 					

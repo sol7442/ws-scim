@@ -8,6 +8,6 @@
   "keyStorePath": "../config/wowsanta.jks",
   "keyStorePassword": "wowsanta",
   "routerClass": "com.wowsanta.scim.server.ScimServerRouter",
-  "repositoryConfig":"../config/backup_conf_20190429/default_oracle_im_repository.json",
+  "repositoryConfig":"../config/backup_conf_20190619/default_oracle_im_repository.json",
   "serviceProviderConfig":"../config/im_scim-service-provider.json"
 }

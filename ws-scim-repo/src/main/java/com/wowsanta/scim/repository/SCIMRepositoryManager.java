@@ -132,43 +132,53 @@ public class SCIMRepositoryManager {
 			repository.initialize();
 			this.resourceRepository = repository;
 			
-			
 			if(resourceRepositoryConfig.getUserOutputMapper() != null) {
 				RepositoryOutputMapper user_resource_output_mapper = RepositoryOutputMapper.load(resourceRepositoryConfig.getUserOutputMapper());
 				repository.setUserOutputMapper(  user_resource_output_mapper);
-				
-				logger.info("Resource Repository VALIDATE : {} ", resourceRepositoryConfig.getUserOutputMapper() );
-				int totalCount = repository.getUserCount(null);
-				List<Resource_Object> user_list = repository.searchUser(null,0,1,totalCount);
-				if(user_list.size() > 0) {
-					logger.info("Resource Repository VALIDATE Result : {}", user_list.get(0));	
-				}
-				
+
+				logger.info("setUserOutputMapper : {}", resourceRepositoryConfig.getUserOutputMapper());
 			}
 			
 			if(resourceRepositoryConfig.getUserInputMapper() != null) {
 				RepositoryInputMapper  user_resource_input_mapper = RepositoryInputMapper.load(resourceRepositoryConfig.getUserInputMapper());
 				repository.setUserInputMapper(   user_resource_input_mapper);
+				
+				logger.info("setUserInputMapper : {}", resourceRepositoryConfig.getUserInputMapper());
 			}
 			
 			if(resourceRepositoryConfig.getGroupOutputMapper() != null) {
 				RepositoryOutputMapper group_resource_output_mapper = RepositoryOutputMapper.load(resourceRepositoryConfig.getGroupOutputMapper());
 				repository.setGrouptOutputMapper(group_resource_output_mapper);
 				
+				logger.info("setGrouptOutputMapper : {}", resourceRepositoryConfig.getGroupOutputMapper());
+			}
+
+			if(resourceRepositoryConfig.getGroupInputMapper() != null) {
+				RepositoryInputMapper  group_resource_input_mapper = RepositoryInputMapper.load(resourceRepositoryConfig.getGroupInputMapper());
+				repository.setGroupInputMapper (group_resource_input_mapper);
+				
+				logger.info("setGroupInputMapper : {}", resourceRepositoryConfig.getGroupInputMapper());
+			}
+			
+			
+			if(resourceRepositoryConfig.getGroupOutputMapper() != null) {
 				logger.info("Resource Repository VALIDATE GROUP : {} ", resourceRepositoryConfig.getGroupOutputMapper());
+				
 				int total_count = repository.getGroupCount(null);
 				List<Resource_Object> group_list = repository.searchGroup("",0,1,total_count);
 				if(group_list.size() > 0) {
 					logger.info("Resource Repository VALIDATE Result : {}", group_list.get(0));
 				}
-				
-			}
-
-			if(resourceRepositoryConfig.getGroupInputMapper() != null) {
-				RepositoryInputMapper  group_resource_input_mapper = RepositoryInputMapper.load(resourceRepositoryConfig.getGroupInputMapper());
-				repository.setGroupInputMapper  (group_resource_input_mapper);
 			}
 			
+			if(resourceRepositoryConfig.getUserOutputMapper() != null) {
+				logger.info("Resource Repository VALIDATE : {} ", resourceRepositoryConfig.getUserOutputMapper() );
+				int totalCount = repository.getUserCount(null);
+				List<Resource_Object> user_list = repository.searchUser(null,0,1,totalCount);
+				if(user_list.size() > 0) {
+					logger.info("Resource Repository VALIDATE Result : {}", user_list.get(0));	
+				}
+			}
 			
 		}catch (Exception e) {
 			logger.error("Repository Validate Faeild {}", e.getMessage(), e);
