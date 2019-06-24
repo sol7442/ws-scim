@@ -35,6 +35,7 @@ import {AdminInfoDlgComponent} from './common/admin-info-dlg/admin-info-dlg.comp
 import {SystemInfoDlgComponent} from './common/system-info-dlg/system-info-dlg.component'
 import {SchedulerInfoDlgComponent} from './common/scheduler-info-dlg/scheduler-info-dlg.component'
 import {SchedulerHistoryDlgComponent} from './common/scheduler-history-dlg/scheduler-history-dlg.component'
+import {ConnectionPanelComponent} from './common/connection-panel/connection-panel.component'
 
 import {TabMenuComponent} from './menu/tab-menu/tab-menu.component';
 import {TitleComponent} from './title/title.component';
@@ -81,7 +82,7 @@ import 'rxjs/Rx';
       AppComponent,AlertComponent,TabMenuComponent,TitleComponent,
       SchemaMappingPanelComponent,SchemaMappingDlgComponent,
       RepositoryMappingPanelComponent,RepositoryMappingDlgComponent,
-      SchedulerListPanelComponent,
+      SchedulerListPanelComponent,ConnectionPanelComponent,
       AdminInfoDlgComponent,SystemInfoDlgComponent,SchedulerInfoDlgComponent,SchedulerHistoryDlgComponent,
       SystemManagementComponent,HrsystemManagementComponent,
       AccountComponent,SystemAccountComponent,ImAccountComponent,

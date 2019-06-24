@@ -26,7 +26,7 @@
           "signed": true,
           "writable": true,
           "searchable": true,
-          "primary": false,
+          "primary": true,
           "attributeSchema": "id",
           "schemas": [
             "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
@@ -175,7 +175,7 @@
           "signed": true,
           "writable": true,
           "searchable": true,
-          "primary": false,
+          "primary": true,
           "attributeSchema": "id",
           "schemas": [
             "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"
@@ -317,7 +317,7 @@
           "signed": true,
           "writable": true,
           "searchable": true,
-          "primary": false,
+          "primary": true,
           "attributeSchema": "id",
           "schemas": [
             "urn:com:wowsanta:scim:2.0:repository:oracle:colunm"

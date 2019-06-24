@@ -198,7 +198,6 @@ public class DateConverter {
 	public Object javaDateToSqlDate(Object object) {
 		java.sql.Date sql_date = null;
 		if(object != null) {
-			System.out.println(object.getClass().getCanonicalName());
 			if (object instanceof java.util.Date){
 				java.util.Date date = (java.util.Date) object;
 				sql_date = new java.sql.Date(date.getTime());

@@ -110,8 +110,6 @@ public class FilterParser
                     next = parseNode( pos, filter );
             }
 
-            //System.out.println("====\n" + next + "\n======");
-
             node = addChildNode( node, next );
         }
 
@@ -261,8 +259,6 @@ public class FilterParser
 
             if ( c == '"' || c == '\''   )
             {
-            	//System.out.println(sb.toString() + " : {},{},{}" + isEscaped + "," +foundNonSpace + "," + startQuote + "," + endQuote);
-
                 if ( !isEscaped )
                 {
                     if ( startQuote )
@@ -281,7 +277,6 @@ public class FilterParser
             switch ( c )
             {
                 case ' ':
-                	//System.out.println(sb.toString() + " : {},{},{}" + isEscaped + "," +foundNonSpace + "," + startQuote + "," + endQuote);
                 	if ( !foundNonSpace || ( startQuote && !endQuote ) )
                 	{
                 		sb.append( c );

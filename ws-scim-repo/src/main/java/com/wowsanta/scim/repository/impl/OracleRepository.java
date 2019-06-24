@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,6 +19,7 @@ import com.wowsanta.scim.repo.rdb.DBCP;
 import com.wowsanta.scim.repository.AttributeSchema;
 import com.wowsanta.scim.repository.AttributeValue;
 import com.wowsanta.scim.repository.DataMapper;
+import com.wowsanta.scim.repository.RepositoryData;
 import com.wowsanta.scim.repository.RepositoryException;
 import com.wowsanta.scim.repository.RepositoryOutputMapper;
 import com.wowsanta.scim.repository.ResourceColumn;
@@ -29,6 +32,7 @@ import oracle.net.aso.c;
 
 public class OracleRepository extends DefaultRepository implements SCIMRepositoryController{
 
+	
 	public static OracleRepository load(String json_config_file) throws RepositoryException {
 		logger.info("REPOSITORY LOAD : {} ", json_config_file);
 		try {
@@ -81,7 +85,7 @@ public class OracleRepository extends DefaultRepository implements SCIMRepositor
 	}
 
 	public  List<ResourceColumn> getTableColums(String tableName, String keyColumn) throws RepositoryException{
-		final String selectSQL = "SELECT * FROM " + tableName + " WHERE ROWNUM = 1 ORDER BY " + keyColumn +" DESC";
+		final String selectSQL = "SELECT * FROM " + tableName;// + " WHERE ROWNUM = 1 ORDER BY " + keyColumn +" DESC";
 
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -126,6 +130,40 @@ public class OracleRepository extends DefaultRepository implements SCIMRepositor
 		logger.info("REPOSITORY VAILDATE : {} ", selectSQL);
 
 		return column_list;
+	}
+	
+	public List<Map<String,Object>> excuteQuery(String query)throws RepositoryException{
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+
+		List<Map<String,Object>> result = new ArrayList<Map<String,Object>>();
+		
+		try {
+			connection = getConnection();
+			statement = connection.prepareStatement(query);
+			resultSet = statement.executeQuery();
+			
+			ResultSetMetaData meta = resultSet.getMetaData();
+			while(resultSet.next()) {
+				Map<String,Object> result_data = new HashMap<String,Object>();
+				for(int i=1; i <= meta.getColumnCount(); i++) {
+					result_data.put(meta.getColumnLabel(i), resultSet.getObject(i));
+				}
+				
+				result.add(result_data);
+			}
+			
+		} catch (SQLException e) {
+			logger.error("validate failed : ", e);
+			throw new RepositoryException(query, e);
+		} finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+		logger.info("REPOSITORY VAILDATE : {} ", query);
+
+		return result;
 	}
 	
 	public List<Resource_Object> searchSystemUser(RepositoryOutputMapper outMapper,	List<AttributeValue> attribute_list, int startIndex, int pageCount, int totalCount)  throws RepositoryException{

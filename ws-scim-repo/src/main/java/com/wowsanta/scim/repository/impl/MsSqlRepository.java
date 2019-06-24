@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -128,42 +129,40 @@ public class MsSqlRepository extends DefaultRepository implements SCIMRepository
 		return column_list;
 	}
 	
-//	public List<ResourceColumn> getTableColums(String tableName) throws RepositoryException {
-//		final String selectSQL = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME=?";
-//
-//		Connection connection = null;
-//		PreparedStatement statement = null;
-//		ResultSet resultSet = null;
-//
-//		List<ResourceColumn> column_list = new ArrayList<ResourceColumn>();
-//		try {
-//			connection = getConnection();
-//			statement = connection.prepareStatement(selectSQL);
-//			statement.setString(1, tableName);
-//
-//			resultSet = statement.executeQuery();
-//			ResultSetMetaData meta = resultSet.getMetaData();
-//
-//			while (resultSet.next()) {
-//				ResourceColumn colum = new ResourceColumn();
-//				colum.addSchema(SCIM_Repository_Constans.WOWSTAN_REPOSITORY_MSSQL_COlUMN_URI);
-//				for (int i = 1; i <= meta.getColumnCount(); i++) {
-//					colum.addAttribute(meta.getColumnName(i), resultSet.getString(meta.getColumnName(i)));
-//				}
-//				colum.setId(resultSet.getString("COLUMN_NAME"));
-//				colum.setName(resultSet.getString("COLUMN_NAME"));
-//				column_list.add(colum);
-//			}
-//		} catch (SQLException e) {
-//			logger.error("validate failed : ", e);
-//			throw new RepositoryException(selectSQL, e);
-//		} finally {
-//			DBCP.close(connection, statement, resultSet);
-//		}
-//		logger.info("REPOSITORY VAILDATE : {} ", selectSQL);
-//
-//		return column_list;
-//	}
+	public List<Map<String,Object>> excuteQuery(String query)throws RepositoryException{
+		
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+
+		List<Map<String,Object>> result = new ArrayList<Map<String,Object>>();
+		
+		try {
+			connection = getConnection();
+			statement = connection.prepareStatement(query);
+			resultSet = statement.executeQuery();
+			
+			ResultSetMetaData meta = resultSet.getMetaData();
+			while(resultSet.next()) {
+				Map<String,Object> result_data = new HashMap<String,Object>();
+				for(int i=1; i < meta.getColumnCount(); i++) {
+					result_data.put(meta.getColumnLabel(i), resultSet.getObject(i));
+				}
+				
+				result.add(result_data);
+			}
+			
+		} catch (SQLException e) {
+			logger.error("validate failed : ", e);
+			throw new RepositoryException(query, e);
+		} finally {
+			DBCP.close(connection, statement, resultSet);
+		}
+		logger.info("REPOSITORY VAILDATE : {} ", query);
+
+		return result;
+	}
+	
 	
 	public List<Resource_Object> searchSystemUser(RepositoryOutputMapper outMapper,	List<AttributeValue> attribute_list, int startIndex, int pageCount, int totalCount)  throws RepositoryException{
 		return null;

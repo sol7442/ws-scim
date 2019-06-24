@@ -1,6 +1,15 @@
 package com.wowsanta.scim.repository.convert;
 
 public class BooleanConverter {
+	public Object workToInteger(Object yn) {
+		if (yn instanceof String) {
+			String yn_string = (String) yn;
+			return yn_string.toUpperCase().equals("재직") ? 1:0;
+		}else {
+			return 0;
+		}
+	}
+	
 	public Object ynToInteger(Object yn) {
 		if (yn instanceof String) {
 			String yn_string = (String) yn;

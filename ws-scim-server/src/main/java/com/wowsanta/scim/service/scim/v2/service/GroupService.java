@@ -102,9 +102,8 @@ public class GroupService {
 					
 					List<Resource_Object> group_list = resource_repository.searchGroup(find.getWhere(), start_index, page_count, total_count);
 					logger.info("find group size : {}", group_list.size());
-					for (Resource_Object group : group_list) {
-						System.out.println("find group >> " + group);//TODO 변환.
-					}
+//					for (Resource_Object group : group_list) {
+//					}
 					
 					result.setResources(group_list); //TODO
 					result.setTotalResults(total_count);

@@ -766,7 +766,6 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMSys
 //        		}else if(key.equals("groupCode")) {
 //        			im_user.setGroupCode(resultSet.getString("pvalue"));
 //        		}else {
-//        			System.out.println("key ??" + key + ">> " + resultSet.getString("pvalue"));
 //        		}
 //        	}
 //        	
@@ -1610,7 +1609,6 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMSys
 //        	statement.execute();
 //	    } catch (SQLException e) {
 //	    	throw new SCIMException("ADD AUDIT DATA FAILED : " + insertSQL , e);
-////	    	System.out.println(">>>>>>> L : " +  e.getMessage());
 ////	    	if (e instanceof SQLIntegrityConstraintViolationException) {
 ////				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
 ////			}else {
@@ -1896,7 +1894,6 @@ public class IMSystemRepository extends AbstractRDBRepository implements SCIMSys
 //        	statement.execute();
 //	    } catch (SQLException e) {
 //	    	throw new SCIMException("ADD AUDIT DATA FAILED : " + insertSQL , e);
-////	    	System.out.println(">>>>>>> L : " +  e.getMessage());
 ////	    	if (e instanceof SQLIntegrityConstraintViolationException) {
 ////				throw new SCIMException(e.getMessage(),RESULT_DUPLICATE_ENTRY);
 ////			}else {

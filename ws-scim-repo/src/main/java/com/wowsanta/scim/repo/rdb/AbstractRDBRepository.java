@@ -41,7 +41,6 @@ public abstract class AbstractRDBRepository extends AbstractSCIMRepository {
 	
 //	@Override
 //	public void fromJson(JsonObject jsonObject)throws SCIMException{
-//		System.out.println("jsonObject : " + jsonObject);
 //		setClassName(jsonObject.get("className").getAsString());
 //		setType(jsonObject.get("type").getAsString());
 //				
@@ -168,8 +167,6 @@ public abstract class AbstractRDBRepository extends AbstractSCIMRepository {
 		}
 	}
 	public boolean toBoolean(String yn) {
-		
-		System.out.println("active : " + yn);
 		if(yn.equals("Y")) {
 			return true;
 		}else {

@@ -67,8 +67,9 @@ public class ScimAgentRouter implements ServiceRouter  {
 	
 	private void repository() {
 		path("/repository", () -> {
-			get("/table/list"								,repositoryService.getTableList(), new JsonTransformer());
-			get("/table/column/list/:tableName/:keyColumn"	,repositoryService.getTableColumnList(), new JsonTransformer());
+			get("/table/list"					,repositoryService.getTableList(), new JsonTransformer());
+			get("/table/column/list/:tableName"	,repositoryService.getTableColumnList(), new JsonTransformer());
+			post("/query"						,repositoryService.getQueryResult(), new JsonTransformer());
 		});//()repository/table/list		
 	}
 

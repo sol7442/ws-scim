@@ -98,9 +98,9 @@ public class UserService {
 					List<Resource_Object> user_list = resource_repository.searchUser(find.getWhere(), start_index, page_count, total_count);
 					logger.info("find user size : {}", user_list.size());
 					for (Resource_Object scim_User : user_list) {
-						System.out.println("find user >> " + scim_User);//TODO 변환.
+						logger.info("find user >> " + scim_User);
 					}
-					
+
 					result.setResources(user_list); //TODO
 					result.setTotalResults(total_count);
 					

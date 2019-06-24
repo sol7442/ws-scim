@@ -114,7 +114,6 @@ public class DaemonWatcher extends Thread {
 				}
 			}
 			logger.debug("watcher thread.. finish");
-			System.out.println("watcher thread end..");
 	}
 
 	public void setDaemon(WowsataDaemon daemon) {

@@ -220,6 +220,7 @@ public class ScimServerRouter implements ServiceRouter  {
 			
 			get("/repository/table/list/:systemId" 		,agentService.getTableList(), new JsonTransformer());
 			post("/repository/table/column/list" 		,agentService.getColumnList(), new JsonTransformer());
+			post("/repository/query" 					,agentService.getQueryResult(), new JsonTransformer());
 			
 			get("/log/list/:systemId"   				 ,agentService.getLogFileList(), new JsonTransformer());
 			get("/log/file/:systemId/name/:fileName"   	 ,agentService.getLogFile() );

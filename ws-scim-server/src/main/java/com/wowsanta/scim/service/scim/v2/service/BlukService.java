@@ -161,7 +161,6 @@ public class BlukService {
 //					String path = operation.getPath();
 //					String method = operation.getMethod();
 //					
-//System.out.println("bulk-request-op : " + operation);
 //
 //					SCIMBulkOperation result = null;
 //					if (path.equals(SCIMConstants.USER_ENDPOINT)) {
@@ -174,12 +173,10 @@ public class BlukService {
 //						} else if (SCIMDefinitions.MethodType.DELETE.toString().equals(method)) {
 //							result = deleteUser(operation);
 //						} else {
-//							System.out.println("--------un : " + method);
 //						}
 //					} else {
 //
 //					}
-//System.out.println("bulk result >>> " + result);
 //					if (result != null) {
 //						scim_bluk_response.addOperation(result);
 //					}
@@ -214,13 +211,11 @@ public class BlukService {
 //				if(response != null) {
 //					response_opersations = response.getOperations();
 //				}
-//				System.out.println("response_opersations >>> " +  response_opersations);
 //				
 //				for (SCIMBulkOperation request_operation : request.getOperations()) {
 //					
 //					SCIMBulkOperation response_operation = findResonseOperation(response_opersations, request_operation);
 //
-//					System.out.println("response : " + response_operation);
 //					
 ////					system_repository.addOperationResult(
 ////							request.getRequestId(),
@@ -427,7 +422,6 @@ public class BlukService {
 //		List<SCIMBulkOperation> operation_result_list = new ArrayList<SCIMBulkOperation>();
 //		for (SCIMBulkOperation operation : request_operations) {
 //			
-//System.out.println("bulk-request-op : " + operation);
 //			String path 			= operation.getPath();
 //			String method 			= operation.getMethod();
 //			
@@ -463,7 +457,6 @@ public class BlukService {
 //				operation_result.setResponse(e.getError());
 //				
 //			}finally {
-//				System.out.println("bulk result >>> " + operation_result);
 //				operation_result_list.add(operation_result);
 //			}
 //		}

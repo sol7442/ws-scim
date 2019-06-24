@@ -210,7 +210,6 @@ public class ResourceSyncJob_Groupware extends SCIMJob {
 					audit.setDetail(e.getMessage());
 					audit.setResult("FAILED");
 					logger.error(e.getMessage(),e);
-					System.out.println(e.getMessage());
 				}
 
 				logger.info("Syn {},{},{},{}\n{} ",audit.getResourceType(),audit.getMethod(),audit.getResult(),audit.getDetail(),resource);

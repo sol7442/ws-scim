@@ -82,7 +82,6 @@ public class ConfigService {
 //					SCIMRepository newRepository = (SCIMRepository) Class.forName(class_name).newInstance();
 //					newRepository.fromJson(jsonObject);
 //					
-//					System.out.println("newRepository" + newRepository) ;
 //					newRepository.initialize();
 //					if(newRepository.validate()) {
 //						SCIMRepositoryManager.getInstance().setResourceRepository((SCIMResourceRepository) newRepository);

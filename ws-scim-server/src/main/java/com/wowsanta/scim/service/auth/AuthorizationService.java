@@ -39,7 +39,6 @@ public class AuthorizationService {
 				if(request.uri().startsWith("/agent/library/")){
 					String auth_token = request.headers("Authorization");
 					logger.debug("library path ... skip... Authorization > {} " ,auth_token);
-					System.out.println("library path ... skip... Authorization >> " + auth_token);
 					return;
 				}
 				
@@ -47,7 +46,6 @@ public class AuthorizationService {
 					String auth_token = request.headers("Authorization");
 					if(auth_token == null) {
 						logger.debug("config path ... skip... Authorization > {} " ,auth_token);
-						System.out.println("config path ... skip... Authorization >> " + auth_token);
 						return;
 					}
 				}
@@ -55,7 +53,6 @@ public class AuthorizationService {
 				if(request.uri().startsWith("/library")){
 					String auth_token = request.headers("Authorization");
 					logger.debug("library path ... skip... Authorization > {} " ,auth_token);
-					System.out.println("library path ... skip... Authorization >> " + auth_token);
 					return;
 				}
 				
@@ -63,7 +60,6 @@ public class AuthorizationService {
 					String auth_token = request.headers("Authorization");
 					if(auth_token == null) {
 						logger.debug("config path ... skip... Authorization > {} " ,auth_token);
-						System.out.println("config path ... skip... Authorization >> " + auth_token);
 						return;
 					}
 				}

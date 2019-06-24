@@ -58,13 +58,12 @@ public class RESTClientPool {
 		if(this.client == null) {
 			build();
 		}
-		
 		return this.client;
 	}
 	
 	private void build() {
 	    try {
-	    	System.out.println("build client ------<<");
+	    	
 	    	SSLContextBuilder builder = new SSLContextBuilder();
 	    	builder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
 	    	SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(builder.build(),SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
@@ -128,13 +127,11 @@ public class RESTClientPool {
 	}
 
 	public void close() {
-		System.out.println("client close ..............................");
 //		try {
 //			this.client.close();
 //		} catch (IOException e) {
 //			e.printStackTrace();
 //		}finally {
-//			System.out.println("client close ..............................");
 //			this.client = null;
 //		}
 	}

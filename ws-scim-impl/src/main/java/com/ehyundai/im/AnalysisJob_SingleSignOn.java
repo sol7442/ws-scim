@@ -94,14 +94,6 @@ public class AnalysisJob_SingleSignOn extends SCIMJob {
 			logger.error(e.getMessage() + " : {} ", last_exec_date, e);
 			where = "IsUse eq 'Y'";
 		}
-//		
-//		String where = "";
-//		Date last_exec_date = scheduler.getLastExecuteDate();
-//		if(last_exec_date == null) {
-//			where = "";
-//		}else {
-//			where = " where MODIFY_TIME BETWEEN "+ last_exec_date.getTime()+" AND "+ new Date().getTime() +"";
-//		}
 		return where;
 	}
 	private void sync(String systemId, SCIMListResponse find_res, SCIMAudit audit, SCIMSchedulerHistory history) throws SCIMException {

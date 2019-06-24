@@ -51,8 +51,6 @@ public class SCIMBulkResponse extends SCIM_Object {
 //	@Override
 //	public JsonObject parse(String json_str) {
 //		
-//		System.out.println(json_str);
-//		
 //		JsonObject json_obj = super.parse(json_str);
 //		
 //		JsonArray json_operations = json_obj.get("Operations").getAsJsonArray();

@@ -30,7 +30,6 @@ public class SCIMLogger {
 //	}
 //
 //	public static void access(String msg, Object ... params) {
-//		System.out.println("access----- : ");
 //		access.info(msg, params);
 //	}
 //	

@@ -45,8 +45,6 @@ public class AccountService {
 				
 				List<Resource_Object> user_list = resource_repository.searchUser(null,0,0, resource_repository.getUserCount(null));
 				
-				System.out.println("user_list : " + user_list.size());
-				
 				return user_list;
 			}
 		};

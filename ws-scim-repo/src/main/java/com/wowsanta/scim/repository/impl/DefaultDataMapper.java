@@ -41,15 +41,8 @@ public class DefaultDataMapper {
 	}
 	
 	public Object javaDateToSql(Object data) {
-		System.out.println("data class : " + data.getClass().getCanonicalName());
 		java.util.Date java_date = (java.util.Date) data;
-
-		System.out.println(java_date);
-
 		java.sql.Date sql_date = (java.sql.Date) java_date;
-		
-		System.out.println(sql_date);
-		
 		return sql_date;
 	}
 	public Object javaDateToLong(Object data) {

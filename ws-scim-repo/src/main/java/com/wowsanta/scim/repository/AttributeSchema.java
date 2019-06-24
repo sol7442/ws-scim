@@ -216,7 +216,6 @@ public class AttributeSchema  {
 	}
 	public void setResourceColumn(ResourceColumn column) {
 		this.resourceColumn = column;
-		System.out.println("logger : " + logger);
 		logger.info("set {}-{}", this.name, column.getName() );
 	}
 	public ResourceColumn getResourceColumn() {

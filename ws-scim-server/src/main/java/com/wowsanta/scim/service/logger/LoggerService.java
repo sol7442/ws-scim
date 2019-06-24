@@ -55,7 +55,6 @@ public class LoggerService {
 
 				logger.debug("log fileName >> : {}", fileName);
 				
-				System.out.println("file fileName >> " + fileName);
 
 				
 				String log_path = System.getProperty("logback.path");
@@ -63,17 +62,13 @@ public class LoggerService {
 				File[] log_files = log_dir.listFiles();
 				File request_file = null;
 				for (File file : log_files) {
-					//System.out.println("file list --> " + file.getName());
 					if(file.getName().equals(fileName)) {
-						System.out.println("find file --> " + file);
 						request_file = file;
 						break;
 					}
 				}
 				
-				System.out.println("file ?? >> " + request_file);
 				if(request_file != null) {
-					System.out.println("...write file...: " + fileName);
 			        response.header("Content-Disposition", String.format("attachment; filename=", fileName));
 			        response.raw().setContentType("application/octet-stream");
 			        response.raw().setContentLength((int) request_file.length());

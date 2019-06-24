@@ -376,38 +376,40 @@ public abstract class DefaultRepository implements SCIMRepository, SCIMResourceR
 		
 		try {
 			connection = getConnection();
+			connection.setAutoCommit(false);
+			
 			for (ResourceTable table : tables) {
 				final String query_string = table.getInsertQuery(resource);
-				
 				logger.info("query  : {}", query_string);
 				logger.info("resource : {}", resource);
 				
-				try {
-					statement = connection.prepareStatement(query_string);
-					List<ResourceColumn> columns = table.getColumns();
-					int setIndex = 1;
-					for(int i=0; i<columns.size(); i++) {
-						ResourceColumn column = columns.get(i);
-						Object set_data = column.convertMappingData(resource);
-						if( set_data != null) {
-							setStatement(setIndex,statement, set_data);
-							setIndex++;
-						}
+				statement = connection.prepareStatement(query_string);
+				List<ResourceColumn> columns = table.getColumns();
+				int setIndex = 1;
+				for(int i=0; i<columns.size(); i++) {
+					ResourceColumn column = columns.get(i);
+					Object set_data = column.convertMappingData(resource);
+					if( set_data != null) {
+						setStatement(setIndex,statement, set_data);
+						setIndex++;
 					}
-					statement.execute();					
-				}catch (Exception e) {
-					logger.info("query  : {}", query_string);
-					logger.info("resource : {}", resource.toString(true));
-					throw new RepositoryException(e.getMessage(), e);
-				}finally {
-		        	statement.close();
 				}
+				boolean result = statement.execute();
+	        	statement.close();
+	        	logger.info("query : {} : {} ", query_string, result);
 			}
-			
+			connection.commit();
 		}catch (Exception e) {
-			logger.error("{}",e.getMessage(),e);
+			logger.error("{}", e.getMessage(),e);
+			try {
+				logger.error("rollback : {}", resource);
+				connection.rollback();
+			} catch (SQLException e1) {
+				logger.info("{}", e1.getMessage(),e1);
+			}
 			throw new RepositoryException(e.getMessage(),e);
 		}finally {
+			
 			close(connection, statement, resultSet);
 		}
 	}
@@ -423,43 +425,46 @@ public abstract class DefaultRepository implements SCIMRepository, SCIMResourceR
 
 		try {
 			connection = getConnection();
+			connection.setAutoCommit(false);
+						
 			for (ResourceTable table : tables) {
 				final String query_string =  table.getUpdateQuery(resource);				
-				logger.info("query  : {}", query_string);				
-				try {
-					statement = connection.prepareStatement(query_string);
-					List<ResourceColumn> columns = table.getColumns();
-					int setIndex = 1;
-					for(int i=0; i<columns.size(); i++) {
-						ResourceColumn column = columns.get(i);
-						Object set_data = column.convertMappingData(resource);
-						if(set_data != null) {
-							setStatement(setIndex,statement, set_data);
-							setIndex++;
-						}
-					}
-					
-					List<ResourceColumn> column_list = table.getPrimaryColumns();
-					for (ResourceColumn column : column_list) {
-						setStatement(setIndex,statement, column.convertMappingData(resource));
+				logger.info("query : {}", query_string);
+				logger.info("resource : {}", resource);
+				
+				statement = connection.prepareStatement(query_string);
+				List<ResourceColumn> columns = table.getColumns();
+				int setIndex = 1;
+				for(int i=0; i<columns.size(); i++) {
+					ResourceColumn column = columns.get(i);
+					Object set_data = column.convertMappingData(resource);
+					if(set_data != null) {
+						setStatement(setIndex,statement, set_data);
 						setIndex++;
 					}
-					
-					statement.executeUpdate();
-					
-				}catch (Exception e) {					
-					logger.info("resource : {}", resource.toString(true));
-					
-					throw new RepositoryException(e.getMessage(),e);
-				}finally {
-					logger.info("query  : {}", query_string);
-					logger.info("resource : {}", resource);
-					
-					statement.close();
 				}
+				
+				List<ResourceColumn> column_list = table.getPrimaryColumns();
+				for (ResourceColumn column : column_list) {
+					setStatement(setIndex,statement, column.convertMappingData(resource));
+					setIndex++;
+				}
+				int result = statement.executeUpdate();
+				statement.close();
+				
+				logger.info("query : {} : {} ", query_string, result);
 			}
+			connection.commit();
 		}catch (Exception e) {
-			throw new RepositoryException("",e);
+			logger.error("{}", e.getMessage(),e);
+			try {
+				logger.error("rollback : {}", resource);
+				connection.rollback();
+			} catch (SQLException e1) {
+				logger.error("{}", e1.getMessage(),e1);
+			}
+			
+			throw new RepositoryException(e.getMessage(),e);
 		}finally {
 			close(connection, statement, resultSet);
 		}

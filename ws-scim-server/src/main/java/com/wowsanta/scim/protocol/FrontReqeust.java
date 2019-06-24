@@ -19,6 +19,12 @@ public class FrontReqeust {
 	public void setMethod(String method) {
 		this.method = method;
 	}
+	public void putParam(String key, String value) {
+		this.params.put(key, value);
+	}
+	public String getParam(String key) {
+		return this.params.get(key);
+	}
 	public Map<String,String> getParams() {
 		return params;
 	}

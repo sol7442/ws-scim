@@ -13,6 +13,24 @@ export class ScimApiService {
   constructor(private http: HttpClient) { }
   
 
+
+  executeQuery(systemId:string,query:string){
+    let request = new FrontRequest();
+    request.method = "POST";
+    request.params = {
+      'systemId':systemId,
+      'query':query
+    };
+
+    console.log("request : ", request);
+
+    let api_url = '/agent/repository/query';
+    return this.http.post<any>(api_url, JSON.stringify(request))
+    .pipe(map( result =>{
+      return result;
+    }));
+  }
+
   updateSchemaOutputMapper(systemId:string, mapper:any){
 
     let _request:MapperRequest = new MapperRequest();

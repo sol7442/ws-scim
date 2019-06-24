@@ -39,6 +39,8 @@
     </p-footer>
 </p-panel>
 
+<app-connection-panel [system]="this.selectedSystem"></app-connection-panel>
+
 <p-panel header="환경설정"  [toggleable]="true" [collapsed]="true">
     <table>
         <tr><td>+ {{this.selectedSystem.systemName}}</td></tr>
@@ -50,11 +52,11 @@
         </tr>
         <tr>
             <td colspan="4">
-                    <div class="grandparent" style="width:calc(100vw - 280px); height: calc(100vh - 650px); overflow: scroll; background: gray">
-                        <div class="parent" style="display: inline-block;" >
-                            <pre>{{configFile}}</pre>
-                        </div>
+                <div class="grandparent" style="width:calc(100vw - 280px); height: calc(100vh - 650px); overflow: scroll; background: gray">
+                    <div class="parent" style="display: inline-block;" >
+                        <pre>{{configFile}}</pre>
                     </div>
+                </div>
             </td>
         </tr>
     </table>

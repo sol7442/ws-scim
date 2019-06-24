@@ -35,7 +35,6 @@ public class DaemonConfiguration extends WowsantaJson{
 		File dist_path = new File(this.distPath);
 		File[] library_list = dist_path.listFiles();
 		
-		System.out.println(".....................");
 		for (File file : library_list) {
 			if(librayList.contains(file.getName())) {
 				try {
@@ -45,7 +44,7 @@ public class DaemonConfiguration extends WowsantaJson{
 				}
 			};
 		}
-		System.out.println(".....................");
+
 		return buffer.toString();
 	}
 	

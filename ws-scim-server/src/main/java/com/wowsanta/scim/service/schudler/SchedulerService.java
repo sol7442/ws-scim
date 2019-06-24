@@ -100,8 +100,6 @@ public class SchedulerService {
 				SCIMSystemRepository system_repository = SCIMRepositoryManager.getInstance().getSystemRepository();
 				List<SCIMScheduler> scheduler_list = system_repository.getSchdulerBySystemId(systemId);
 				
-				System.out.println("scheduler_list : " + scheduler_list.size());
-				
 				return scheduler_list;
 			}
 			

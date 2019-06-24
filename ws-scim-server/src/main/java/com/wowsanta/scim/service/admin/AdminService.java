@@ -8,8 +8,6 @@ public class AdminService implements SCIMAdminService {
 //	public SCIMResponse login(SCIMRequest request) {
 //		LoginRequest login_request = (LoginRequest)request;
 //		
-//		System.out.println("id : " + login_request.getId());
-//		System.out.println("pw : " + login_request.getPw());
 //		
 //		LoginResponse result = new LoginResponse();
 //		result.setCode(100);

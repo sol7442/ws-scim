@@ -1,0 +1,34 @@
+<!--p-panel header="시스템 연결정보" [toggleable]="true" [collapsed]="true">
+  <div >
+      connection info....
+  </div>
+  <p-footer>
+      <table>
+          <tr>
+              <td><button type="button" pButton label="테스트" ></button></td>
+              <td><button type="button" pButton label="저장" ></button></td>
+          </tr>
+      </table>
+  </p-footer>
+</p-panel-->
+<p-panel header="레포지토리 쿼리" [toggleable]="true" [collapsed]="true">
+  <div >
+    <table class="input-form">
+      <tr>
+        <td class="form-label"><label>Query</label></td>
+        <td class="form-input"><input class="input-text" [(ngModel)]="_query" type="text" size="120" ></td>
+        <td class="form-button"><button type="button" pButton label="실행" (click)="executeQuery()"></button></td>
+        <td class="form-auto"></td>
+      </tr>
+      <tr>
+          <td colspan="4">
+              <div class="grandparent" style="width:calc(100vw - 280px); height: calc(100vh - 650px); overflow: scroll; background: gray">
+                  <div class="parent" style="display: inline-block;" >
+                      <pre>{{_result}}</pre>
+                  </div>
+              </div>
+          </td>
+      </tr>
+    </table>    
+  </div>
+</p-panel>

@@ -88,7 +88,6 @@ public class BlukControl {
 							operation_result.setResponse(SCIMError.InternalServerError);
 							
 						}finally {
-							System.out.println("bulk result >>> " + operation_result);
 							operation_result_list.add(operation_result);
 						}
 					}
@@ -192,7 +191,6 @@ public class BlukControl {
 					SCIMResourceGetterRepository res_repo  = (SCIMResourceGetterRepository)SCIMRepositoryManager.getInstance().getResourceRepository();
 					List<SCIMUser> user_list = res_repo.getAllUsers();
 					
-					System.out.println("user size : " + user_list.size());
 					
 					for (SCIMUser scimUser : user_list) {
 //						User user = (User) scimUser;

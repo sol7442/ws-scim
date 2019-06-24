@@ -1,0 +1,20 @@
+table.input-form{
+    table-layout: auto;
+    width: 100%;
+}
+td.form-label{
+    width: 130px;
+    text-align: left;
+}
+td.form-input{
+    width: 250px;
+    text-align: left;
+}
+td.form-button{
+    width: 100px;
+    text-align: center;
+}
+td.form-auto{
+    width:auto;
+    text-align: center;
+}

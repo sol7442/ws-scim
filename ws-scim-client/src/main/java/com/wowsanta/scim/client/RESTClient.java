@@ -39,6 +39,7 @@ import com.wowsanta.scim.message.SCIMFindRequest;
 import com.wowsanta.scim.message.SCIMListResponse;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.protocol.ClientReponse;
+import com.wowsanta.scim.protocol.ClientRequest;
 import com.wowsanta.scim.protocol.JsonRequest;
 import com.wowsanta.scim.resource.user.LoginUser;
 import com.wowsanta.scim.resource.worker.Worker;
@@ -165,6 +166,45 @@ public class RESTClient {
 		return response;
 	}
 	
+
+	public ClientReponse post(String url, ClientRequest client_request) throws SCIMException {
+		try {
+			HttpPost post = new HttpPost(url);
+			post.addHeader("Content-Type", "application/json");
+			if(worker != null) {
+				post.addHeader("Authorization", RESTClientPool.getInstance().generateAuthorizationToken(worker, 1000*60));
+			}
+			post.setEntity(new StringEntity(client_request.toString()));
+			
+			HttpResponse http_response = execute(post);
+			int http_res_code = http_response.getStatusLine().getStatusCode();
+			StringBuilder buffer = new StringBuilder();
+			if( http_res_code >= SCIMConstants.HtppConstants.OK && http_res_code <= SCIMConstants.HtppConstants.IM_Used) {
+				try {
+					HttpEntity entity = http_response.getEntity();
+					InputStream content = entity.getContent();
+					BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+					String line;
+					while ((line = reader.readLine()) != null) {
+						buffer.append(line);
+					}
+				} catch (Exception e) {
+					logger.error("response read error : {}, ", e.getMessage(), e);
+					throw new SCIMException("RESULT READ ERROR", e);
+				}
+				
+				Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+				return gson.fromJson(buffer.toString(), ClientReponse.class); 
+			}else {
+				logger.error("response string : {}, ", EntityUtils.toString(http_response.getEntity()));
+				throw new SCIMException("HTTP ERROR : " + url, SCIMError.InternalServerError);
+			}
+		} catch (Exception e) {
+			logger.error("{}, ", e.getMessage(),e);
+			throw new SCIMException("HTTP ERROR : " + url, SCIMError.InternalServerError);
+		}
+	}
+	
 	public HttpResponse post(String url, JsonRequest request) throws SCIMException {
 		try {
 			HttpPost post = new HttpPost(url);
@@ -225,8 +265,6 @@ public class RESTClient {
 			if(worker != null) {
 				post.addHeader("Authorization", RESTClientPool.getInstance().generateAuthorizationToken(worker, 1000*60));
 			}
-
-			System.out.println("request data : " + request.toString()); 
 			
 			post.setEntity(new StringEntity(request.toString(),"UTF-8"));
 			return execute(post);
@@ -388,7 +426,6 @@ public class RESTClient {
 			
 			HttpResponse response = execute(post);
 			
-			System.out.println(response.toString());
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -440,6 +477,8 @@ public class RESTClient {
 	public void close() {
 		RESTClientPool.getInstance().close();
 	}
+
+
 
 
 	

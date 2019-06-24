@@ -89,9 +89,6 @@ public class SCIMScheduler  {
 		
 		if(scheduler_object.get("lastExecuteDate") != null) {
 			Object date_object = scheduler_object.get("lastExecuteDate");
-			System.out.println(date_object.getClass().getName());
-			System.out.println(date_object);
-			
 			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy hh:mm:ss a",Locale.US);
 			try {
 				scheduler.lastExecuteDate = sdf.parse((String) date_object);

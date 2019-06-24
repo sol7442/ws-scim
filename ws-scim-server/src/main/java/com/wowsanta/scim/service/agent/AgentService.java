@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletException;
@@ -44,6 +45,7 @@ import com.wowsanta.scim.protocol.OutputMapperRequest;
 import com.wowsanta.scim.protocol.ResponseState;
 import com.wowsanta.scim.repository.AbstractSCIMRepository;
 import com.wowsanta.scim.repository.RepositoryOutputMapper;
+import com.wowsanta.scim.repository.SCIMRepositoryController;
 import com.wowsanta.scim.repository.SCIMRepositoryManager;
 import com.wowsanta.scim.resource.user.LoginUser;
 import com.wowsanta.scim.resource.worker.Worker;
@@ -88,22 +90,18 @@ public class AgentService {
 						
 						throw new SCIMException(error);
 					}
-					System.out.println("request body : " + request.body());
 					
 					JsonObject jsonObject = new JsonParser().parse(request.body()).getAsJsonObject();
 					
-					System.out.println("change repository : " + jsonObject);
 					
 					String system_url = system.getSystemUrl();
 					String call_url   = system_url + "/config/repository";
 							
-					System.out.println("post url : " + call_url);
 					Worker worker = findWorker(request);
 					RESTClient clinent = new RESTClient(worker);
 					
 					String result = clinent.post2(call_url,jsonObject);
 					
-					System.out.println("post result : " + result);
 
 					
 					return "OK";
@@ -133,13 +131,11 @@ public class AgentService {
 				String call_url   = system_url + "/config/library";
 				
 				String scim_library = System.getProperty("scim.library");
-				System.out.println("scim_library" +  scim_library);
 				
 				Path library_path = Paths.get(scim_library);
 				File library_dir  = library_path.toFile();
-				for (File libray_file : library_dir.listFiles()) {
-					System.out.println(libray_file.getCanonicalPath());
-				}
+//				for (File libray_file : library_dir.listFiles()) {
+//				}
 				
 				return library_dir.list();
 			}
@@ -236,7 +232,6 @@ public class AgentService {
 						worker = new Worker();
 						worker.setWorkerId("sys-operator");
 						worker.setWorkerType("Admin");
-	                	System.out.println("- default worker >>" + worker);
 					}
 					
 					
@@ -447,7 +442,6 @@ public class AgentService {
 						worker = new Worker();
 						worker.setWorkerId("sys-operator");
 						worker.setWorkerType("Admin");
-	                	System.out.println("- default worker >>" + worker);
 					}
 					
 					String post_url   = system_url + "/config/";
@@ -514,25 +508,30 @@ public class AgentService {
 					
 					String systemId  = front_request.getParams().get("systemId");
 					String tableName = front_request.getParams().get("tableName");
-					String keyColumn = front_request.getParams().get("keyColumn");
+					//String keyColumn = front_request.getParams().get("keyColumn");
 					
 					SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
 					String system_url = system.getSystemUrl();
-					String call_url   = system_url + "/repository/table/column/list" + "/" + tableName + "/" + keyColumn;
+					String call_url   = system_url + "/repository/table/column/list" + "/" + tableName ;//+ "/" + keyColumn;
 					
 					Worker worker = findWorker(request);
 					client = new RESTClient(worker);
-						
-					ClientReponse client_response = client.get(call_url);
-					if(client_response.getState() == ResponseState.Success) {
-						front_response.setData(client_response.getData());
-						front_response.setState(ResponseState.Success);;
-					}else {
-						front_response.setMessage(client_response.getMessage());
+					
+					try {
+						ClientReponse client_response = client.get(call_url);
+						if(client_response.getState() == ResponseState.Success) {
+							front_response.setData(client_response.getData());
+							front_response.setState(ResponseState.Success);;
+						}else {
+							front_response.setMessage(client_response.getMessage());
+							front_response.setState(ResponseState.Fail);;
+						}						
+					}catch (Exception e) {
+						front_response.setMessage(e.getMessage());
 						front_response.setState(ResponseState.Fail);;
+						
+						logger.error("{}",e.getMessage(),e);
 					}
-					
-					
 					
 				}catch (Exception e) {
 					front_response.setState(ResponseState.Fail);;
@@ -565,7 +564,6 @@ public class AgentService {
 					ClientReponse client_response = client.get(call_url);
 					if(client_response != null) {
 						
-						System.out.println(client_response.getData());
 						
 						front_response.setData(client_response.getData());
 						front_response.setState(ResponseState.Success);	
@@ -596,7 +594,6 @@ public class AgentService {
 					
 					OutputMapperRequest mapper_request = WowsantaJson.parse(request.body(),OutputMapperRequest.class);
 					
-					System.out.println(mapper_request.toString(true));
 					
 					SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
 					String system_url = system.getSystemUrl();
@@ -618,7 +615,6 @@ public class AgentService {
 						front_response.setMessage("service response is null");
 					}
 					
-					System.out.println(client_response.toString(true));
 				}catch (Exception e) {
 					logger.error("{}",e.getMessage(), e);
 					front_response.setState(ResponseState.Fail);
@@ -651,6 +647,71 @@ public class AgentService {
 					}else {
 						front_response.setState(ResponseState.Fail);
 						front_response.setMessage("service response is null");
+					}
+					
+				}catch (Exception e) {
+					logger.error("{}",e.getMessage(), e);
+					front_response.setState(ResponseState.Fail);
+					front_response.setMessage(e.getMessage());
+				}
+				return front_response;
+			}
+		};
+	}
+
+	public Route getQueryResult() {
+		return new Route() {
+			@Override
+			public Object handle(Request request, Response response) throws Exception {
+				FrontResponse front_response = new FrontResponse();
+				RESTClient client = null;
+
+				try {
+					//String systemId = request.params("systemId");
+					FrontReqeust front_request = FrontReqeust.parse(request.body());
+					logger.info("getQueryResult : {}",front_request);
+
+					String systemId = front_request.getParam("systemId");
+					String query = front_request.getParam("query");
+					logger.info("systemId : {}",systemId);
+					logger.info("query    : {}",query);
+					
+					SCIMSystem system = SCIMRepositoryManager.getInstance().getSystemRepository().getSystemById(systemId);
+					if(system == null) {
+						throw new Exception("system not found - system id : " + systemId);
+					}
+					
+					String system_url = system.getSystemUrl();
+					
+					String call_url   = system_url + "/repository/query";
+					Worker worker = findWorker(request);
+					client = new RESTClient(worker);
+					
+					try {
+						ClientRequest client_request = new ClientRequest();
+						client_request.putParam("query", query);
+						
+						ClientReponse client_response = client.post(call_url,client_request);
+						if(client_response != null) {
+							List<Map<String,Object>> result = (List<Map<String,Object>>)client_response.getData();
+							for (Map<String, Object> map : result) {
+								Set<String> keys = map.keySet();
+								for (String key : keys) {
+									logger.debug("key : {} : {} ",key, map.get(key));
+								}
+							}
+							
+							front_response.setData(result);
+							front_response.setState(ResponseState.Success);	
+						}else {
+							front_response.setState(ResponseState.Fail);
+							front_response.setMessage("service response is null");
+						}
+					}catch (Exception e) {
+						front_response.setState(ResponseState.Fail);
+						front_response.setMessage(e.getMessage());
+						
+						logger.error("{}",e.getMessage(),e);
 					}
 					
 				}catch (Exception e) {
