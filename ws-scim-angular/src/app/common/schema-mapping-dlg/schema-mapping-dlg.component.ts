@@ -81,8 +81,12 @@ export class SchemaMappingDlgComponent implements OnInit {
   @Output() displayChange = new EventEmitter();
 
   okClose(){
-    if(this._dataMapper.className != ""){
+    if(this._dataMapper.className != undefined){
+      console.log("datamapper 1 ", this._dataMapper.className);
       this._attribute.dataMapper = this._dataMapper;
+    }else{
+      console.log("datamapper 2",this._dataMapper.className);
+      this._attribute.dataMapper = undefined;
     }
     if(this._selectedColumn != "" ){
       this._attribute.resourceColumn = this._selectedColumn;
@@ -113,16 +117,6 @@ export class SchemaMappingDlgComponent implements OnInit {
 
   onSelectTable(event:any){
     console.log("event",event);
-    // this._selectedTable = event.value;
-    // this.scimApiService.getTableColumnList(this._system.systemId,this._selectedTable.name)
-    // .subscribe( result =>{
-    //   console.log("column list >>>: ", result);
-    //   this._columns = result.data.data;
-
-    // },error =>{
-    //   console.log("login-error : ", error);
-    // });
-
   }
 
   onSelectColumn(event:any){

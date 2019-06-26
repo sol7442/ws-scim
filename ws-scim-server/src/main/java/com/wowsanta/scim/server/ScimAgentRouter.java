@@ -95,21 +95,7 @@ public class ScimAgentRouter implements ServiceRouter  {
 			get("/file/:fileName"	,loggerService.getSystemLogFile());
 		});
 	}
-//	
-//	private void config() {
-//		logger.info("-config");
-//		path("/config", () -> {	
-//			get("/service"   	,configService.getSystemInfo(), new JsonTransformer());
-//			post("/service"   	,configService.setSystemInfo(), new JsonTransformer());
-//			get("/repository"  	,configService.getRepositoryInfo(), new JsonTransformer());
-//			post("/repository" 	,configService.setRepositoryInfo(), new JsonTransformer());
-//			get("/library" 			,configService.setRepositoryInfo(), new JsonTransformer());
-//			put("/library" 			,configService.setRepositoryInfo(), new JsonTransformer());
-//			post("/library" 		,configService.setRepositoryInfo(), new JsonTransformer());			
-//			delete("/library" 		,configService.setRepositoryInfo(), new JsonTransformer());
-//			patch("/library" 		,configService.patchLibrary(), new JsonTransformer());
-//		});
-//	}
+
 	private void schema() {
 		path("/schema", () -> {			
 			get("/:fileName"   		,schemaService.getSchemaFile(), new JsonTransformer());

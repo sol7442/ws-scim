@@ -26,8 +26,8 @@ import com.wowsanta.scim.resource.worker.Worker;
 import com.wowsanta.scim.scheduler.SCIMJob;
 import com.wowsanta.scim.scheduler.SCIMScheduler;
 
-public class AnalysisJob_SingleSignOn extends SCIMJob {
-	Logger logger = LoggerFactory.getLogger(AnalysisJob_SingleSignOn.class);
+public class AnalysisJob_Common extends SCIMJob {
+	Logger logger = LoggerFactory.getLogger(AnalysisJob_Common.class);
 	Logger audit_logger  = LoggerFactory.getLogger("audit");
 
 	@Override

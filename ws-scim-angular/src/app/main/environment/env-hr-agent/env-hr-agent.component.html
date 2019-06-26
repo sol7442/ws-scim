@@ -38,6 +38,7 @@
         </table>
     </p-footer>
 </p-panel>
+<app-connection-panel [system]="this.selectedSystem"></app-connection-panel>
 <p-panel header="환경설정"  [toggleable]="true" [collapsed]="true">
     <table>
         <tr><td>+ {{this.selectedSystem.systemName}}</td></tr>

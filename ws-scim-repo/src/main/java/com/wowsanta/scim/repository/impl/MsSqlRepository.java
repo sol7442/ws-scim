@@ -83,7 +83,7 @@ public class MsSqlRepository extends DefaultRepository implements SCIMRepository
 	}
 
 	public  List<ResourceColumn> getTableColums(String tableName, String keyColumn) throws RepositoryException{
-		final String selectSQL = "SELECT * FROM "+tableName+" ORDER BY "+ keyColumn +" DESC OFFSET 0 ROWS FETCH NEXT 1 ROWS ONLY ;";
+		final String selectSQL = "SELECT * FROM " + tableName;
 
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -98,6 +98,7 @@ public class MsSqlRepository extends DefaultRepository implements SCIMRepository
 			int column_count = meta.getColumnCount();
 			for(int i=1; i<=column_count; i++) {
 				ResourceColumn colum = new ResourceColumn();
+				colum.addSchema(SCIM_Repository_Constans.WOWSTAN_REPOSITORY_ORACLE_COlUMN_URI);
 				
 				colum.setName(meta.getColumnName(i));
 				colum.setLabel(meta.getColumnLabel(i));
@@ -145,7 +146,7 @@ public class MsSqlRepository extends DefaultRepository implements SCIMRepository
 			ResultSetMetaData meta = resultSet.getMetaData();
 			while(resultSet.next()) {
 				Map<String,Object> result_data = new HashMap<String,Object>();
-				for(int i=1; i < meta.getColumnCount(); i++) {
+				for(int i=1; i <= meta.getColumnCount(); i++) {
 					result_data.put(meta.getColumnLabel(i), resultSet.getObject(i));
 				}
 				
@@ -158,7 +159,7 @@ public class MsSqlRepository extends DefaultRepository implements SCIMRepository
 		} finally {
 			DBCP.close(connection, statement, resultSet);
 		}
-		logger.info("REPOSITORY VAILDATE : {} ", query);
+		logger.info("Query Result : {} ", result.size());
 
 		return result;
 	}
@@ -176,11 +177,11 @@ public class MsSqlRepository extends DefaultRepository implements SCIMRepository
 			return new ArrayList<Resource_Object>();
 		}
 		
-		ResourceColumn primaryColumn = null;
-		AttributeSchema key_attribute = outMapper.getKeyAttribte();
-		if(key_attribute != null) {
-			primaryColumn = key_attribute.getResourceColumn();
-		}
+//		AttributeSchema key_attribute = outMapper.getKeyAttribte();
+//		if(key_attribute != null) {
+//			primaryColumn = key_attribute.getResourceColumn();
+//		}
+		ResourceColumn primaryColumn = outMapper.getTable().getPrimaryColumn();
 		
 		StringBuffer sqlBuffer = new StringBuffer();
 		sqlBuffer.append(outMapper.getSearchQuery(filter)).append(" ");
@@ -205,12 +206,12 @@ public class MsSqlRepository extends DefaultRepository implements SCIMRepository
 			return new ArrayList<Resource_Object>();
 		}
 		
-		ResourceColumn primaryColumn = null;
-		AttributeSchema key_attribute = this.userOutputMapper.getKeyAttribte();
-		if(key_attribute != null) {
-			primaryColumn = key_attribute.getResourceColumn();
-		}
-		
+//		ResourceColumn primaryColumn = null;
+//		AttributeSchema key_attribute = this.userOutputMapper.getKeyAttribte();
+//		if(key_attribute != null) {
+//			primaryColumn = key_attribute.getResourceColumn();
+//		}
+		ResourceColumn primaryColumn = this.userOutputMapper.getTable().getPrimaryColumn();
 		StringBuffer sqlBuffer = new StringBuffer();
 		sqlBuffer.append(this.userOutputMapper.getSearchQuery(filter)).append(" ");
 		
@@ -261,17 +262,17 @@ public class MsSqlRepository extends DefaultRepository implements SCIMRepository
 			return new ArrayList<Resource_Object>();
 		}
 		
-	    ResourceColumn primaryColumn = null;
-		AttributeSchema key_attribute = this.groupOutputMapper.getKeyAttribte();
-		if(key_attribute != null) {
-			primaryColumn = key_attribute.getResourceColumn();
-		}
-		
+//	    ResourceColumn primaryColumn = null;
+//		AttributeSchema key_attribute = this.groupOutputMapper.getKeyAttribte();
+//		if(key_attribute != null) {
+//			primaryColumn = key_attribute.getResourceColumn();
+//		}
+		ResourceColumn primaryColumn = this.groupOutputMapper.getTable().getPrimaryColumn();
 		StringBuffer sqlBuffer = new StringBuffer();
 		sqlBuffer.append(this.groupOutputMapper.getSearchQuery(filter)).append(" ");
 		
 		sqlBuffer.append("ORDER BY").append(" ");
-		sqlBuffer.append(primaryColumn.getId()).append(" ");
+		sqlBuffer.append(primaryColumn.getName()).append(" ");
 		
 		sqlBuffer.append("DESC").append(" ");
 		sqlBuffer.append("OFFSET ").append(startIndex).append(" ROWS").append(" ");

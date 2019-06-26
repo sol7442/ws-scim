@@ -85,7 +85,7 @@ public class OracleRepository extends DefaultRepository implements SCIMRepositor
 	}
 
 	public  List<ResourceColumn> getTableColums(String tableName, String keyColumn) throws RepositoryException{
-		final String selectSQL = "SELECT * FROM " + tableName;// + " WHERE ROWNUM = 1 ORDER BY " + keyColumn +" DESC";
+		final String selectSQL = "SELECT * FROM " + tableName;
 
 		Connection connection = null;
 		PreparedStatement statement = null;

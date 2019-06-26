@@ -177,12 +177,11 @@ public class ResourceColumn extends SCIM_Object {
 					convert_data = data;
 				}
 			}
-			
-		}catch (Exception e) {
-			logger.error("{} : {}",this.id,e.getMessage(),e);
-		}finally {
 			logger.debug("convert {} : {} > {} ", this.id, data,convert_data);
+		}catch (Exception e) {
+			logger.info("convert {} : {} > {} ", this.id, data, e.getMessage());
 		}
+		
 		return convert_data;
 	}
 	private Object convertByCustomMethod(Object data) throws RepositoryException {
@@ -202,8 +201,7 @@ public class ResourceColumn extends SCIM_Object {
 			}
 			
 		}catch (Exception e) {
-			logger.error("{} - {} : {}",this.id, this.dataMapper, data, e);
-			throw new RepositoryException(e.getMessage(), e);
+			logger.info("convert {} : {} > {} ", this.id, data, e.getMessage());
 		}
 		return convert_data;
 	}

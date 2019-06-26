@@ -24,10 +24,6 @@ public class AuthorizationService {
 			
 			@Override
 			public void handle(Request request, Response response) throws Exception {
-				logger.info("contentType : " + request.uri());
-				logger.info("contentType : " + request.contentType());
-				
-				
 				if(request.uri().equals("/login")){
 					return;
 				}
@@ -73,7 +69,7 @@ public class AuthorizationService {
 						SCIMJWTToken verify_token = new SCIMJWTToken();
 						login_user = verify_token.verify(auth_token);
 						
-						logger.debug("Authorization User > {} " , login_user);
+						logger.info("Authorization User > {} " , login_user);
 						if(login_user != null) {
 							request.session(true).attribute("loginUser",login_user);
 						}

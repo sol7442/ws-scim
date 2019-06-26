@@ -63,11 +63,14 @@ public class ResourceSyncJob_Groupware extends SCIMJob {
 			SCIMAudit audit = makeAuditObject(scheduler, worker);
 			SCIMSchedulerHistory history = makeHistoryObject(scheduler, audit);
 
-			
+			Date start_date = new Date();
+			logger.info("Sync Groupware : {} ====================================================================================================================================================", start_date);
 			syn_group(worker, scheduler,audit, history );
 			syn_user(worker, scheduler, audit, history);
-			
+			Date end_date = new Date();
+			logger.info("=duration[{}]=====================================",(end_date.getTime() - start_date.getTime()));
 			logger.info("Sync Groupware Result : {} ", history);
+			logger.info("========================================================================================================================================================================");
 			
 			system_repository.addSchedulerHistory(history);
 			
@@ -111,8 +114,10 @@ public class ResourceSyncJob_Groupware extends SCIMJob {
 			List<Resource_Object> user_list =  find_res.getResources();
 			for (Resource_Object resource : user_list) {
 				try {
-					String userId = (String) resource.get("id");
 					
+					logger.info("- sync [{}]-------------------------",resource.get("id"));
+					
+					String userId = (String) resource.get("id");
 					Resource_Object old_user = resource_repository.getUser(userId);
 					logger.info("check user duplication {} - {}", userId, old_user);	
 
@@ -145,9 +150,11 @@ public class ResourceSyncJob_Groupware extends SCIMJob {
 					logger.error(e.getMessage(),e);
 				}
 				
-				logger.info("Syn {},{},{},{}\n{} ",audit.getResourceType(),audit.getMethod(),audit.getResult(),audit.getDetail(),resource);
+				
 				system_repository.addAudit(audit);
 				history.addAudit(audit);	
+				
+				logger.info("Syn {},{},{},{}\n{} ",audit.getResourceType(),audit.getMethod(),audit.getResult(),audit.getDetail(),resource);
 			}
 			
 		}catch (Exception e) {
@@ -176,13 +183,15 @@ public class ResourceSyncJob_Groupware extends SCIMJob {
 			logger.debug("request body : \n{}", req_msg.toString());
 			
 			RESTClient client = new RESTClient(worker);
-			SCIMListResponse find_res = client.post_find(find_request_url, req_msg,"UTF-8");// "UTF-8");
-			
+//			SCIMListResponse find_res = client.post_find(find_request_url, req_msg,"EUC-KR");// "UTF-8");
+			SCIMListResponse find_res = client.post_find(find_request_url, req_msg,scheduler.getEncode());
+
 			logger.info("Syn ListResponse : count : {} ", find_res.getTotalResults());	
 			
 			List<Resource_Object> group_list =  find_res.getResources();
 			for (Resource_Object resource : group_list) {
 				try {
+					logger.info("- sync [{}]-------------------------",resource.get("id"));
 					Resource_Object old_group = resource_repository.getGroup((String) resource.get("id"));
 					logger.info("check group duplication {} - {}", resource.get("id"), old_group);	
 
@@ -205,16 +214,17 @@ public class ResourceSyncJob_Groupware extends SCIMJob {
 						
 						resource_repository.updateGroup(resource);
 					}
-					audit.setResult("SUCCESS");					
+					audit.setResult("SUCCESS");
 				}catch (Exception e) {
 					audit.setDetail(e.getMessage());
 					audit.setResult("FAILED");
 					logger.error(e.getMessage(),e);
 				}
-
-				logger.info("Syn {},{},{},{}\n{} ",audit.getResourceType(),audit.getMethod(),audit.getResult(),audit.getDetail(),resource);
+				
 				system_repository.addAudit(audit);
-				history.addAudit(audit);	
+				history.addAudit(audit);
+				
+				logger.info("Syn {},{},{},{}\n{} ",audit.getResourceType(),audit.getMethod(),audit.getResult(),audit.getDetail(),resource);
 			}
 			
 		}catch (Exception e) {
@@ -306,20 +316,18 @@ public class ResourceSyncJob_Groupware extends SCIMJob {
 	}
 
 	private String getWhereStatement(SCIMScheduler scheduler) {
-		
 		String where = "";
-		
 		Date last_exec_date = scheduler.getLastExecuteDate();
 		try {
 			if(last_exec_date == null) {
-				where = "active eq 'Y'";
+				where = "acitve eq 1";
 			}else {
 				SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				where = "modifyDate ge '"+ transFormat.format(last_exec_date) +"'";
 			}
 		}catch (Exception e) {
 			logger.error(e.getMessage() + " : {} ", last_exec_date, e);
-			where = "IsUse eq 'Y'";
+			where = "acitve eq 1";
 		}
 		
 		return where;

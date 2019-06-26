@@ -1,6 +1,11 @@
 package com.wowsanta.scim.repository.convert;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class BooleanConverter {
+	static Logger logger = LoggerFactory.getLogger(BooleanConverter.class);
+	
 	public Object workToInteger(Object yn) {
 		if (yn instanceof String) {
 			String yn_string = (String) yn;
@@ -11,12 +16,24 @@ public class BooleanConverter {
 	}
 	
 	public Object ynToInteger(Object yn) {
-		if (yn instanceof String) {
-			String yn_string = (String) yn;
-			return yn_string.toUpperCase().equals("Y") ? 1:0;
-		}else {
-			return 0;
+		int value = 0;
+		try {
+			if(yn != null) {
+				if (yn instanceof String) {
+					String yn_string = (String) yn;
+					value = yn_string.toUpperCase().equals("Y") ? 1:0;
+					logger.debug("{}>{}",yn,value);
+				}else {
+					value = 0;
+				}
+			}else {
+				logger.debug("value is null");
+			}
+			
+		}catch(Exception e) {
+			logger.error("{}",e.getMessage(),e);
 		}
+		return value;
 	}
 	
 	public Object integerToYnDefaultY(Object yn) {

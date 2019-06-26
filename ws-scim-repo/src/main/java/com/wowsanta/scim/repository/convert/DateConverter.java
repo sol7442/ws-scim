@@ -171,8 +171,8 @@ public class DateConverter {
 				Date java_date = fmt.parse((String) object);
 				time_stamp = new java.sql.Timestamp(java_date.getTime());	
 			}
-		} catch (ParseException e) {
-			logger.error("convert fail {}", e.getMessage(), e);
+		} catch (Exception e) {
+			logger.info("date convert {} > {}",object, e.getMessage());
 		}
 		logger.debug("date convert {} > {}",object, time_stamp);
 		return time_stamp;

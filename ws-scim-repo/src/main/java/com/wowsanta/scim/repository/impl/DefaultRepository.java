@@ -341,7 +341,6 @@ public abstract class DefaultRepository implements SCIMRepository, SCIMResourceR
 			}
 			
 			logger.info("resource : {}", resource);
-        	statement.execute();
 		}catch (Exception e) {
 			logger.info("query  : {}", query_string);
 			logger.info("resource : {}", id);

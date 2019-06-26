@@ -165,7 +165,7 @@ public class SCIMRepositoryManager {
 				logger.info("Resource Repository VALIDATE GROUP : {} ", resourceRepositoryConfig.getGroupOutputMapper());
 				
 				int total_count = repository.getGroupCount(null);
-				List<Resource_Object> group_list = repository.searchGroup("",0,1,total_count);
+				List<Resource_Object> group_list = repository.searchGroup(null,0,1,total_count);
 				if(group_list.size() > 0) {
 					logger.info("Resource Repository VALIDATE Result : {}", group_list.get(0));
 				}
