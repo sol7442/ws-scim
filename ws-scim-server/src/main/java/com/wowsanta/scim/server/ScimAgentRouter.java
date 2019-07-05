@@ -106,19 +106,19 @@ public class ScimAgentRouter implements ServiceRouter  {
 	}
 	private void scim_v2() {		
 		path("/scim/" + SCIMConstants.VERSION, () -> {
-			get    ("/Users/:userId",userService.getUser(), new JsonTransformer());
-			put    ("/Users",userService.create(), new JsonTransformer());
-			post   ("/Users",userService.updateUser(), new JsonTransformer());
-			post   ("/Users/search",userService.search(), new JsonTransformer());
-			post   ("/Users/find",userService.find(), new JsonTransformer());
-			patch  ("/Users",userService.patch(), new JsonTransformer());
+			get    ("/Users/:userId"		,userService.getUser(), new JsonTransformer());
+			put    ("/Users"				,userService.create(), new JsonTransformer());
+			post   ("/Users"				,userService.updateUser(), new JsonTransformer());
+			post   ("/Users/search"			,userService.search(), new JsonTransformer());
+			post   ("/Users/find"			,userService.find(), new JsonTransformer());
+			patch  ("/Users"				,userService.patch(), new JsonTransformer());
 			
-			get    ("/Groups/:userId",	groupService.getGroup(), 	new JsonTransformer());
-			put    ("/Groups",			groupService.createGroup(), new JsonTransformer());
-			post   ("/Groups",			groupService.updateGroup(), new JsonTransformer());
-			post   ("/Groups/search",	groupService.searchGroup(), new JsonTransformer());
-			post   ("/Groups/find",		groupService.findGroup(), 	new JsonTransformer());
-			patch  ("/Groups",			groupService.patchGroup(),	new JsonTransformer());
+			get    ("/Groups/:userId"		,groupService.getGroup(), 	new JsonTransformer());
+			put    ("/Groups"				,groupService.createGroup(), new JsonTransformer());
+			post   ("/Groups"				,groupService.updateGroup(), new JsonTransformer());
+			post   ("/Groups/search"		,groupService.searchGroup(), new JsonTransformer());
+			post   ("/Groups/find"			,groupService.findGroup(), 	new JsonTransformer());
+			patch  ("/Groups"				,groupService.patchGroup(),	new JsonTransformer());
 			
 			post   ("/Bulk",blukService.post(), new JsonTransformer());
 		});
