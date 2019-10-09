@@ -28,6 +28,7 @@ import com.wowsanta.scim.obj.SCIMSystem;
 import com.wowsanta.scim.obj.SCIMUser;
 import com.wowsanta.scim.obj.SCIMUserMeta;
 import com.wowsanta.scim.resource.user.LoginUser;
+import com.wowsanta.scim.resource.user.LoginUserType;
 import com.wowsanta.scim.resource.worker.Worker;
 import com.wowsata.util.json.WowsantaJson;
 
@@ -229,7 +230,7 @@ public class SCIMScheduler  {
 			
 			Worker worker = new Worker();
 			worker.setWorkerId(this.schedulerId);
-			worker.setWorkerType("SCHEDULER");
+			worker.setWorkerType(LoginUserType.SCHEDULER.toString());
 			
 			job_detail.getJobDataMap().put("schedulerInfo", this);
 			job_detail.getJobDataMap().put("workerInfo", worker);
